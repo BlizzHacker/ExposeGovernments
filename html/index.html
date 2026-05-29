@@ -426,17 +426,39 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:2rem 1re
 <section id="court" class="section">
   <div class="sec-hdr"><span class="sec-icon">⚖️</span><h2 class="sec-title">Court Records Search</h2></div>
   <div class="search-box">
-    <h3>Search Oklahoma State Courts Network (OSCN)</h3>
-    <p style="color:var(--text2);font-size:.85rem;margin-bottom:1rem">Search official Oklahoma court cases. Results open in a new tab on OSCN.net.</p>
-    <form onsubmit="searchOSCN(event)">
+    <h3>Search Oklahoma Court Cases</h3>
+    <p style="color:var(--text2);font-size:.85rem;margin-bottom:1rem">Search Oklahoma court records from multiple sources. Results appear below — no redirects.</p>
+    <form onsubmit="searchCourt(event)" id="court-search-form">
       <div class="form-row">
         <div><label>Last Name *</label><input type="text" id="osc-last" placeholder="e.g. Smith" required></div>
         <div><label>First Name</label><input type="text" id="osc-first" placeholder="e.g. John"></div>
         <div><label>Case Number</label><input type="text" id="osc-case" placeholder="e.g. CF-2024-123"></div>
       </div>
-      <button type="submit" class="search-btn">Search OSCN →</button>
+      <div class="form-row" style="margin-top:.5rem">
+        <div><label>County</label>
+          <select id="osc-county">
+            <option value="ottawa">Ottawa County</option>
+            <option value="oklahoma">Oklahoma County</option>
+            <option value="tulsa">Tulsa County</option>
+            <option value="cleveland">Cleveland County</option>
+            <option value="comanche">Comanche County</option>
+            <option value="canadian">Canadian County</option>
+            <option value="payne">Payne County</option>
+            <option value="pottawatomie">Pottawatomie County</option>
+            <option value="creek">Creek County</option>
+            <option value="rogers">Rogers County</option>
+            <option value="wagoner">Wagoner County</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="search-btn" id="court-search-btn">🔍 Search Court Records</button>
     </form>
-    <p style="margin-top:.75rem;font-size:.8rem;color:var(--text2)">💡 Search by last name + first name for best results. <a href="https://www.oscn.net/applications/oscn/index.asp?ftdb=STOKCV01&level=1" target="_blank">Advanced Search →</a></p>
+    <div id="court-results" style="margin-top:1.5rem"></div>
+    <div style="margin-top:1rem;padding:1rem;background:rgba(255,255,255,0.05);border-radius:8px;font-size:.82rem;color:var(--text2)">
+      <strong>Sources:</strong> CourtListener (appellate/Supreme Court) | 
+      <a href="https://www.oscn.net/applications/oscn/index.asp?ftdb=STOKCV01&level=1" target="_blank" style="color:var(--accent)">OSCN Direct Search →</a>
+      <br><small>OSCN trial court records may require solving a CAPTCHA. Use the direct links above for county-level trial court cases.</small>
+    </div>
   </div>
 </section>
 
@@ -707,7 +729,94 @@ function toggleDrawer(){document.getElementById('drawer').classList.toggle('open
 function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('show');document.getElementById('ham').classList.remove('active')}
 
 // OSCN SEARCH
-function searchOSCN(e){e.preventDefault();const l=document.getElementById('osc-last').value,f=document.getElementById('osc-first').value,c=document.getElementById('osc-case').value;let u;if(c){u='https://www.oscn.net/dockets/GetCaseInformation.aspx?db=ottawa&number='+encodeURIComponent(c)}else if(l){u='https://www.oscn.net/applications/oscn/index.asp?ftdb=STOKCV01&level=1&lname='+encodeURIComponent(l);if(f)u+='&fname='+encodeURIComponent(f)}window.open(u,'_blank')}
+async function searchCourt(e){
+  e.preventDefault();
+  var btn=document.getElementById('court-search-btn');
+  var resultsDiv=document.getElementById('court-results');
+  var last=document.getElementById('osc-last').value.trim();
+  var first=document.getElementById('osc-first').value.trim();
+  var caseNum=document.getElementById('osc-case').value.trim();
+  var county=document.getElementById('osc-county').value;
+  
+  if(!last && !caseNum){alert('Enter a last name or case number');return}
+  
+  btn.disabled=true;btn.textContent='Searching...';
+  resultsDiv.innerHTML='<div style="text-align:center;padding:2rem"><div class="spinner"></div><p>Searching court records...</p></div>';
+  
+  try{
+    var params=new URLSearchParams();
+    if(last)params.set('last',last);
+    if(first)params.set('first',first);
+    if(caseNum)params.set('case',caseNum);
+    params.set('county',county);
+    
+    var resp=await fetch('/api/court/search?'+params.toString());
+    var data=await resp.json();
+    
+    if(!data.success){resultsDiv.innerHTML='<p style="color:#ff6b6b">Error: '+(data.error||'Unknown error')+'</p>';btn.disabled=false;btn.textContent='Search Court Records';return}
+    
+    var html='';
+    html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">';
+    html+='<h4 style="margin:0">Results for &quot;'+data.query+'&quot; <span style="color:var(--text2);font-weight:normal">('+data.courtlistener_total+' cases found)</span></h4>';
+    html+='<div style="display:flex;gap:.5rem;flex-wrap:wrap">';
+    if(data.oscn_urls && data.oscn_urls.name_search){
+      html+='<a href="'+data.oscn_urls.name_search+'" target="_blank" style="background:var(--accent);color:#fff;padding:.4rem .8rem;border-radius:6px;font-size:.8rem;text-decoration:none">OSCN Trial Court</a>';
+    }
+    if(data.oscn_urls && data.oscn_urls.docket_search){
+      html+='<a href="'+data.oscn_urls.docket_search+'" target="_blank" style="background:rgba(255,255,255,0.1);color:var(--text);padding:.4rem .8rem;border-radius:6px;font-size:.8rem;text-decoration:none;border:1px solid rgba(255,255,255,0.2)">OSCN Docket</a>';
+    }
+    html+='</div></div>';
+    
+    if(data.results && data.results.length > 0){
+      html+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.85rem">';
+      html+='<thead><tr style="border-bottom:2px solid rgba(255,255,255,0.2)">';
+      html+='<th style="padding:.6rem;text-align:left">Case Name</th>';
+      html+='<th style="padding:.6rem;text-align:left">Citation</th>';
+      html+='<th style="padding:.6rem;text-align:left">Date Filed</th>';
+      html+='<th style="padding:.6rem;text-align:left">Docket #</th>';
+      html+='<th style="padding:.6rem;text-align:left">Status</th>';
+      html+='<th style="padding:.6rem;text-align:center">Link</th>';
+      html+='</tr></thead><tbody>';
+      
+      for(var i=0;i<data.results.length;i++){
+        var r=data.results[i];
+        var bg = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
+        html+='<tr style="background:'+bg+';border-bottom:1px solid rgba(255,255,255,0.08)">';
+        html+='<td style="padding:.6rem;font-weight:500">'+(r.case_name||'N/A')+'</td>';
+        html+='<td style="padding:.6rem;color:var(--text2)">'+(r.citation||'')+'</td>';
+        html+='<td style="padding:.6rem;color:var(--text2)">'+(r.date_filed||'')+'</td>';
+        html+='<td style="padding:.6rem;color:var(--text2);font-family:monospace">'+(r.docket_number||'')+'</td>';
+        html+='<td style="padding:.6rem">'+(r.status?'<span style="background:rgba(0,200,100,0.15);color:#4ade80;padding:2px 8px;border-radius:4px;font-size:.75rem">'+r.status+'</span>':'')+'</td>';
+        html+='<td style="padding:.6rem;text-align:center"><a href="'+(r.url||'#')+'" target="_blank" style="color:var(--accent);text-decoration:none">View</a></td>';
+        html+='</tr>';
+      }
+      
+      html+='</tbody></table></div>';
+    } else {
+      html+='<p style="text-align:center;padding:2rem;color:var(--text2)">No appellate cases found. Use the OSCN links above to search trial court records.</p>';
+    }
+    
+    html+='<div style="margin-top:1.5rem;padding:1rem;background:rgba(255,165,0,0.08);border:1px solid rgba(255,165,0,0.2);border-radius:8px">';
+    html+='<h5 style="margin:0 0 .5rem 0;color:#ffa500">Trial Court Records (OSCN)</h5>';
+    html+='<p style="margin:0;font-size:.82rem;color:var(--text2)">The results above are from appellate/Supreme Court cases. For <strong>trial court</strong> records (Ottawa County district court), use these direct OSCN links:</p>';
+    html+='<div style="display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap">';
+    if(data.oscn_urls){
+      for(var key in data.oscn_urls){
+        if(key==='search_page')continue;
+        var label=key.replace(/_/g,' ');
+        html+='<a href="'+data.oscn_urls[key]+'" target="_blank" style="background:rgba(255,165,0,0.15);color:#ffa500;padding:.4rem .8rem;border-radius:6px;font-size:.8rem;text-decoration:none">'+label+'</a>';
+      }
+    }
+    html+='</div>';
+    html+='<p style="margin:.5rem 0 0 0;font-size:.75rem;color:var(--text2)">OSCN requires solving a CAPTCHA for automated access. These links open in a new tab.</p>';
+    html+='</div>';
+    
+    resultsDiv.innerHTML=html;
+  }catch(err){
+    resultsDiv.innerHTML='<p style="color:#ff6b6b">Search failed: '+err.message+'</p>';
+  }
+  btn.disabled=false;btn.textContent='Search Court Records';
+}else if(l){u='https://www.oscn.net/applications/oscn/index.asp?ftdb=STOKCV01&level=1&lname='+encodeURIComponent(l);if(f)u+='&fname='+encodeURIComponent(f)}window.open(u,'_blank')}
 
 // RSS FEED
 async function loadFeed(){
