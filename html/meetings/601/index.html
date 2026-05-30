@@ -1,218 +1,364 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami Special Utility Authority (MSUA) - Apr  1, 2025 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami Special Utility Authority (MSUA)</h1>
-<div class="meta">📅 Apr  1, 2025 | Clip #601</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (2)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami Special Utility Authority (MSUA)</h1>
+<div class="meeting-meta">
+<span>📅 Apr  1, 2025</span>
+<span>⏱️ 00h 08m</span>
+<span>🔖 Clip #601</span>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
 </div>
-</section>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/601" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
-<div class="seg"><a href="#" onclick="seekTo(3.66); return false;" class="ts">[00:03]</a> Let&#x27;s pray, Father God, we love you, God, we&#x27;re so grateful for this community that you</div>
-<div class="seg"><a href="#" onclick="seekTo(9.12); return false;" class="ts">[00:09]</a> place us in. God, I&#x27;m thankful for the leadership that we have and I just pray for your peace</div>
-<div class="seg"><a href="#" onclick="seekTo(15.04); return false;" class="ts">[00:15]</a> and your prosperity for all of us. God, you place these people in their position to lead us well</div>
-<div class="seg"><a href="#" onclick="seekTo(20.96); return false;" class="ts">[00:20]</a> and God, I just pray that you remind them of that but also give them the courage and confidence</div>
-<div class="seg"><a href="#" onclick="seekTo(26.16); return false;" class="ts">[00:26]</a> that they need to make good decisions and that&#x27;d be for the betterment of all of us. God,</div>
-<div class="seg"><a href="#" onclick="seekTo(30.8); return false;" class="ts">[00:30]</a> we just pray that mine was a great place to grow up, raise a family and to retire in all those</div>
-<div class="seg"><a href="#" onclick="seekTo(37.36); return false;" class="ts">[00:37]</a> things and Father, you can do that for us. We love you, we pray that we become more like Jesus</div>
-<div class="seg"><a href="#" onclick="seekTo(42.64); return false;" class="ts">[00:42]</a> every day. It&#x27;s in His name we pray. Amen. Amen. I pledge allegiance to the flag of the United States</div>
-<div class="seg"><a href="#" onclick="seekTo(49.95); return false;" class="ts">[00:49]</a> of America and to the Republic for which it spans one nation under God in the visible</div>
-<div class="seg"><a href="#" onclick="seekTo(57.07); return false;" class="ts">[00:57]</a> with liberty and justice for all of us. For a public embedment, it&#x27;s good that personal appearances</div>
-<div class="seg"><a href="#" onclick="seekTo(73.62); return false;" class="ts">[01:13]</a> five points list. Most to a proof. Second, he stepped like Barnes. I&#x27;ve Joins, I don&#x27;t know.</div>
-<div class="seg"><a href="#" onclick="seekTo(84.77); return false;" class="ts">[01:24]</a> Six minutes from the March 25th, 2025, regular meeting.</div>
-<div class="seg"><a href="#" onclick="seekTo(87.89); return false;" class="ts">[01:27]</a> Much to proof. Second, he stepped like Barnes, I&#x27;ve Joins, I don&#x27;t know. Hi. Parker.</div>
-<div class="seg"><a href="#" onclick="seekTo(97.01); return false;" class="ts">[01:37]</a> I&#x27;m seven, budget, budget, budget, amendment 25-20.</div>
-<div class="seg"><a href="#" onclick="seekTo(105.26); return false;" class="ts">[01:45]</a> So, you&#x27;ll see three minutes tonight. This is the first one. This essentially, it moves money</div>
-<div class="seg"><a href="#" onclick="seekTo(111.5); return false;" class="ts">[01:51]</a> to cover an under-budgeted OWRB loan payment. The information came in light. It was not budgeted.</div>
-<div class="seg"><a href="#" onclick="seekTo(118.78); return false;" class="ts">[01:58]</a> So, second. Thanks. Thank you, Jen. All right. Barnes, I&#x27;m Darryle Cole. Hi. Parker.</div>
-<div class="seg"><a href="#" onclick="seekTo(139.95); return false;" class="ts">[02:19]</a> Hey, the discussion about the possible action regarding amendment.</div>
-<div class="seg"><a href="#" onclick="seekTo(143.9); return false;" class="ts">[02:23]</a> C-23-0-8C with B-3 construction.</div>
-<div class="seg"><a href="#" onclick="seekTo(151.74); return false;" class="ts">[02:31]</a> And C-Z-23-0-8C with Stel and Brown Reynolds.</div>
-<div class="seg"><a href="#" onclick="seekTo(155.98); return false;" class="ts">[02:35]</a> So, these are the tipping and transport fees for some of the ways the original contracts were lit in between</div>
-<div class="seg"><a href="#" onclick="seekTo(165.02); return false;" class="ts">[02:45]</a> the city of Miami and the companies. So, it&#x27;s actually between MSUA and the companies.</div>
-<div class="seg"><a href="#" onclick="seekTo(172.93); return false;" class="ts">[02:52]</a> So, we are drafted in amendment and I believe the companies have agreed to it.</div>
-<div class="seg"><a href="#" onclick="seekTo(180.0); return false;" class="ts">[03:00]</a> the companies of R&amp;D agree to it. It&#x27;s just changing the name to MSU on the contract or the parties.</div>
-<div class="seg"><a href="#" onclick="seekTo(198.75); return false;" class="ts">[03:18]</a> Hi, Parker.</div>
-<div class="seg"><a href="#" onclick="seekTo(199.75); return false;" class="ts">[03:19]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(200.75); return false;" class="ts">[03:20]</a> Now in contract amendments with Republic Services, also known as BFI,</div>
-<div class="seg"><a href="#" onclick="seekTo(205.85); return false;" class="ts">[03:25]</a> Voice Services, C-23-080,</div>
-<div class="seg"><a href="#" onclick="seekTo(208.85); return false;" class="ts">[03:28]</a> Services C-23-280 and B-3 construction C-23-080.</div>
-<div class="seg"><a href="#" onclick="seekTo(216.23); return false;" class="ts">[03:36]</a> This will be the last year that we renew on the contract that was made a couple of years ago.</div>
-<div class="seg"><a href="#" onclick="seekTo(222.23); return false;" class="ts">[03:42]</a> This will go through April 30th, the 2026.</div>
-<div class="seg"><a href="#" onclick="seekTo(227.23); return false;" class="ts">[03:47]</a> Stella, environmental who halls all of the solid waste,</div>
-<div class="seg"><a href="#" onclick="seekTo(231.23); return false;" class="ts">[03:51]</a> they deliberate to BFI and what we call Republic Services.</div>
-<div class="seg"><a href="#" onclick="seekTo(237.23); return false;" class="ts">[03:57]</a> They were trying to increase it by 5.2%.</div>
-<div class="seg"><a href="#" onclick="seekTo(241.23); return false;" class="ts">[04:01]</a> They ended up settling with a 3% increase.</div>
-<div class="seg"><a href="#" onclick="seekTo(245.23000000000002); return false;" class="ts">[04:05]</a> We want to continue with the M-right now.</div>
-<div class="seg"><a href="#" onclick="seekTo(250.06); return false;" class="ts">[04:10]</a> Back when they won the bid, they won, and they said it&#x27;s about 95 cents less per ton.</div>
-<div class="seg"><a href="#" onclick="seekTo(260.58); return false;" class="ts">[04:20]</a> We just to give you an idea of this year, we&#x27;re at 12,615 tons,</div>
-<div class="seg"><a href="#" onclick="seekTo(266.58); return false;" class="ts">[04:26]</a> 5 March from July 1 through March 1.</div>
-<div class="seg"><a href="#" onclick="seekTo(272.64); return false;" class="ts">[04:32]</a> We hall a lot of solid waste, but the 3% increase will only increase by 79 cents.</div>
-<div class="seg"><a href="#" onclick="seekTo(280.64); return false;" class="ts">[04:40]</a> We&#x27;re getting back up to where we close to about where we broke in before we got the contract.</div>
-<div class="seg"><a href="#" onclick="seekTo(286.64); return false;" class="ts">[04:46]</a> B-3 construction, that&#x27;s where we take our demolition material and the price will stay the same with them.</div>
-<div class="seg"><a href="#" onclick="seekTo(295.40999999999997); return false;" class="ts">[04:55]</a> We actually haven&#x27;t used them this year because we&#x27;re not as heavy into knocking down homes</div>
-<div class="seg"><a href="#" onclick="seekTo(301.57); return false;" class="ts">[05:01]</a> and things like that.</div>
-<div class="seg"><a href="#" onclick="seekTo(303.57); return false;" class="ts">[05:03]</a> So if you want to, they know with them.</div>
-<div class="seg"><a href="#" onclick="seekTo(308.16999999999996); return false;" class="ts">[05:08]</a> BFI services, they ask for a 4.44% increase.</div>
-<div class="seg"><a href="#" onclick="seekTo(314.16999999999996); return false;" class="ts">[05:14]</a> They settle for a 3% as well.</div>
-<div class="seg"><a href="#" onclick="seekTo(318.26); return false;" class="ts">[05:18]</a> It&#x27;s actually a 69-cent cost increase per ton.</div>
-<div class="seg"><a href="#" onclick="seekTo(323.58000000000004); return false;" class="ts">[05:23]</a> Back when we, before we got the contract going, they were at 451 per ton.</div>
-<div class="seg"><a href="#" onclick="seekTo(330.13); return false;" class="ts">[05:30]</a> And they ended up dropping that to 25-20 when we got the contract going a couple of years ago.</div>
-<div class="seg"><a href="#" onclick="seekTo(337.13); return false;" class="ts">[05:37]</a> So it&#x27;s the 69-cent increase.</div>
-<div class="seg"><a href="#" onclick="seekTo(341.61); return false;" class="ts">[05:41]</a> It still makes it a great savings compared to what we&#x27;ve won.</div>
-<div class="seg"><a href="#" onclick="seekTo(347.63); return false;" class="ts">[05:47]</a> So we recommend renewing all of these contracts as the current market cost has increased,</div>
-<div class="seg"><a href="#" onclick="seekTo(355.63); return false;" class="ts">[05:55]</a> but it&#x27;s still better to take this and go back out to bed again.</div>
-<div class="seg"><a href="#" onclick="seekTo(360.5); return false;" class="ts">[06:00]</a> and we will have to at the end of this one here.</div>
-<div class="seg"><a href="#" onclick="seekTo(364.7); return false;" class="ts">[06:04]</a> 25?</div>
-<div class="seg"><a href="#" onclick="seekTo(367.4); return false;" class="ts">[06:07]</a> Tell them we&#x27;re in budget for this every year.</div>
-<div class="seg"><a href="#" onclick="seekTo(369.4); return false;" class="ts">[06:09]</a> 1.1 million.</div>
-<div class="seg"><a href="#" onclick="seekTo(371.2); return false;" class="ts">[06:11]</a> I know it&#x27;s right there.</div>
-<div class="seg"><a href="#" onclick="seekTo(376.42); return false;" class="ts">[06:16]</a> It says 1.1 million.</div>
-<div class="seg"><a href="#" onclick="seekTo(377.42); return false;" class="ts">[06:17]</a> I don&#x27;t check with Terry.</div>
-<div class="seg"><a href="#" onclick="seekTo(378.42); return false;" class="ts">[06:18]</a> What is 1.1 million?</div>
-<div class="seg"><a href="#" onclick="seekTo(379.42); return false;" class="ts">[06:19]</a> So this looks like it&#x27;s going to take us up to 1.3.</div>
-<div class="seg"><a href="#" onclick="seekTo(382.42); return false;" class="ts">[06:22]</a> So we&#x27;re going to have to do budget amendments to take care of the overageer.</div>
-<div class="seg"><a href="#" onclick="seekTo(385.62); return false;" class="ts">[06:25]</a> Hopefully we will be able to stay in that 1.1.</div>
-<div class="seg"><a href="#" onclick="seekTo(389.42); return false;" class="ts">[06:29]</a> I&#x27;m going to make it next year.</div>
-<div class="seg"><a href="#" onclick="seekTo(390.42); return false;" class="ts">[06:30]</a> We&#x27;re working on next year&#x27;s budget right now.</div>
-<div class="seg"><a href="#" onclick="seekTo(392.42); return false;" class="ts">[06:32]</a> So we budgeted more money in our tipping fees to kind of for this.</div>
-<div class="seg"><a href="#" onclick="seekTo(395.62); return false;" class="ts">[06:35]</a> So you said it was we&#x27;re at 12,000.</div>
-<div class="seg"><a href="#" onclick="seekTo(398.78); return false;" class="ts">[06:38]</a> 12,615 tons right now.</div>
-<div class="seg"><a href="#" onclick="seekTo(404.7); return false;" class="ts">[06:44]</a> So we take 50,000 a year.</div>
-<div class="seg"><a href="#" onclick="seekTo(408.7); return false;" class="ts">[06:48]</a> Is that pretty good?</div>
-<div class="seg"><a href="#" onclick="seekTo(409.7); return false;" class="ts">[06:49]</a> We take what?</div>
-<div class="seg"><a href="#" onclick="seekTo(410.3); return false;" class="ts">[06:50]</a> 22 tons, 22,000 tons.</div>
-<div class="seg"><a href="#" onclick="seekTo(412.5); return false;" class="ts">[06:52]</a> Things are high.</div>
-<div class="seg"><a href="#" onclick="seekTo(413.3); return false;" class="ts">[06:53]</a> That are lower.</div>
-<div class="seg"><a href="#" onclick="seekTo(414.3); return false;" class="ts">[06:54]</a> Yeah.</div>
-<div class="seg"><a href="#" onclick="seekTo(415.49); return false;" class="ts">[06:55]</a> Really.</div>
-<div class="seg"><a href="#" onclick="seekTo(415.89); return false;" class="ts">[06:55]</a> So is the reason that we took more in the...</div>
-<div class="seg"><a href="#" onclick="seekTo(419.29); return false;" class="ts">[06:59]</a> Because if you do the math in your extrapolate,</div>
-<div class="seg"><a href="#" onclick="seekTo(422.49); return false;" class="ts">[07:02]</a> we&#x27;re in the first quarter and we&#x27;ve taken 12,000 tons already.</div>
-<div class="seg"><a href="#" onclick="seekTo(425.29); return false;" class="ts">[07:05]</a> That&#x27;s 50,000 tons for the year.</div>
-<div class="seg"><a href="#" onclick="seekTo(434.71); return false;" class="ts">[07:14]</a> You&#x27;re saying the first quarter.</div>
-<div class="seg"><a href="#" onclick="seekTo(436.58); return false;" class="ts">[07:16]</a> That&#x27;s what he said.</div>
-<div class="seg"><a href="#" onclick="seekTo(438.82); return false;" class="ts">[07:18]</a> You said so far this year up to March.</div>
-<div class="seg"><a href="#" onclick="seekTo(440.42); return false;" class="ts">[07:20]</a> We&#x27;ve hauled 12,600 tons.</div>
-<div class="seg"><a href="#" onclick="seekTo(442.62); return false;" class="ts">[07:22]</a> It&#x27;s cool.</div>
-<div class="seg"><a href="#" onclick="seekTo(443.62); return false;" class="ts">[07:23]</a> No, that&#x27;s July.</div>
-<div class="seg"><a href="#" onclick="seekTo(444.62); return false;" class="ts">[07:24]</a> Yeah.</div>
-<div class="seg"><a href="#" onclick="seekTo(445.62); return false;" class="ts">[07:25]</a> Oh, yeah.</div>
-<div class="seg"><a href="#" onclick="seekTo(446.81); return false;" class="ts">[07:26]</a> My bet.</div>
-<div class="seg"><a href="#" onclick="seekTo(448.65); return false;" class="ts">[07:28]</a> So you&#x27;re saying the...</div>
-<div class="seg"><a href="#" onclick="seekTo(450.05); return false;" class="ts">[07:30]</a> I understand your saying now.</div>
-<div class="seg"><a href="#" onclick="seekTo(451.85); return false;" class="ts">[07:31]</a> That&#x27;s my math, not math, because I&#x27;m in different fiscal quarters in my...</div>
-<div class="seg"><a href="#" onclick="seekTo(457.05); return false;" class="ts">[07:37]</a> Right.</div>
-<div class="seg"><a href="#" onclick="seekTo(458.05); return false;" class="ts">[07:38]</a> I&#x27;m going to make some.</div>
-<div class="seg"><a href="#" onclick="seekTo(459.05); return false;" class="ts">[07:39]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(469.74); return false;" class="ts">[07:49]</a> What&#x27;s your number?</div>
-<div class="seg"><a href="#" onclick="seekTo(471.0); return false;" class="ts">[07:51]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(473.28); return false;" class="ts">[07:53]</a> Joe&#x27;s five.</div>
-<div class="seg"><a href="#" onclick="seekTo(474.68); return false;" class="ts">[07:54]</a> E7.</div>
-<div class="seg"><a href="#" onclick="seekTo(475.68); return false;" class="ts">[07:55]</a> Aaron Ryan.</div>
-<div class="seg"><a href="#" onclick="seekTo(476.68); return false;" class="ts">[07:56]</a> Barnes.</div>
-<div class="seg"><a href="#" onclick="seekTo(478.13); return false;" class="ts">[07:58]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(479.13); return false;" class="ts">[07:59]</a> Joe&#x27;s five.</div>
-<div class="seg"><a href="#" onclick="seekTo(480.13); return false;" class="ts">[08:00]</a> Parker.</div>
-<div class="seg"><a href="#" onclick="seekTo(481.13); return false;" class="ts">[08:01]</a> She&#x27;s having a problem.</div>
-<div class="seg"><a href="#" onclick="seekTo(482.13); return false;" class="ts">[08:02]</a> Yeah.</div>
-<div class="seg"><a href="#" onclick="seekTo(483.13); return false;" class="ts">[08:03]</a> I&#x27;m going to do this.</div>
-<div class="seg"><a href="#" onclick="seekTo(484.13); return false;" class="ts">[08:04]</a> If any of which is...</div>
-<div class="seg"><a href="#" onclick="seekTo(485.13); return false;" class="ts">[08:05]</a> What&#x27;s your goodness?</div>
-<div class="seg"><a href="#" onclick="seekTo(486.13); return false;" class="ts">[08:06]</a> Supposing this again?</div>
-<div class="seg"><a href="#" onclick="seekTo(487.13); return false;" class="ts">[08:07]</a> No, I&#x27;m testing.</div>
-<div class="seg"><a href="#" onclick="seekTo(493.31); return false;" class="ts">[08:13]</a> You know what?</div>
-<div class="seg"><a href="#" onclick="seekTo(494.31); return false;" class="ts">[08:14]</a> Well done.</div>
-<div class="seg"><a href="#" onclick="seekTo(497.94); return false;" class="ts">[08:17]</a> Motion.</div>
-<div class="seg"><a href="#" onclick="seekTo(498.94); return false;" class="ts">[08:18]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(502.46000000000004); return false;" class="ts">[08:22]</a> Who&#x27;s seconded?</div>
-<div class="seg"><a href="#" onclick="seekTo(503.46000000000004); return false;" class="ts">[08:23]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(504.65999999999997); return false;" class="ts">[08:24]</a> Yeah.</div>
-<div class="seg"><a href="#" onclick="seekTo(505.65999999999997); return false;" class="ts">[08:25]</a> I&#x27;ll do it.</div>
-<div class="seg"><a href="#" onclick="seekTo(506.65999999999997); return false;" class="ts">[08:26]</a> Joe&#x27;s five.</div>
-<div class="seg"><a href="#" onclick="seekTo(507.65999999999997); return false;" class="ts">[08:27]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(508.65999999999997); return false;" class="ts">[08:28]</a> E7.</div>
-<div class="seg"><a href="#" onclick="seekTo(509.65999999999997); return false;" class="ts">[08:29]</a> Parker.</div>
-</div></section>
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/601" allowfullscreen></iframe></div>
+<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (3.9 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+</div>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="3.66"><span class="seg-time">00:03</span><span class="seg-text">Let&#x27;s pray, Father God, we love you, God, we&#x27;re so grateful for this community that you</span></div>
+<div class="seg" data-time="9.12"><span class="seg-time">00:09</span><span class="seg-text">place us in. God, I&#x27;m thankful for the leadership that we have and I just pray for your peace</span></div>
+<div class="seg" data-time="15.04"><span class="seg-time">00:15</span><span class="seg-text">and your prosperity for all of us. God, you place these people in their position to lead us well</span></div>
+<div class="seg" data-time="20.96"><span class="seg-time">00:20</span><span class="seg-text">and God, I just pray that you remind them of that but also give them the courage and confidence</span></div>
+<div class="seg" data-time="26.16"><span class="seg-time">00:26</span><span class="seg-text">that they need to make good decisions and that&#x27;d be for the betterment of all of us. God,</span></div>
+<div class="seg" data-time="30.8"><span class="seg-time">00:30</span><span class="seg-text">we just pray that mine was a great place to grow up, raise a family and to retire in all those</span></div>
+<div class="seg" data-time="37.36"><span class="seg-time">00:37</span><span class="seg-text">things and Father, you can do that for us. We love you, we pray that we become more like Jesus</span></div>
+<div class="seg" data-time="42.64"><span class="seg-time">00:42</span><span class="seg-text">every day. It&#x27;s in His name we pray. Amen. Amen. I pledge allegiance to the flag of the United States</span></div>
+<div class="seg" data-time="49.95"><span class="seg-time">00:49</span><span class="seg-text">of America and to the Republic for which it spans one nation under God in the visible</span></div>
+<div class="seg" data-time="57.07"><span class="seg-time">00:57</span><span class="seg-text">with liberty and justice for all of us. For a public embedment, it&#x27;s good that personal appearances</span></div>
+<div class="seg" data-time="73.62"><span class="seg-time">01:13</span><span class="seg-text">five points list. Most to a proof. Second, he stepped like Barnes. I&#x27;ve Joins, I don&#x27;t know.</span></div>
+<div class="seg" data-time="84.77"><span class="seg-time">01:24</span><span class="seg-text">Six minutes from the March 25th, 2025, regular meeting.</span></div>
+<div class="seg" data-time="87.89"><span class="seg-time">01:27</span><span class="seg-text">Much to proof. Second, he stepped like Barnes, I&#x27;ve Joins, I don&#x27;t know. Hi. Parker.</span></div>
+<div class="seg" data-time="97.01"><span class="seg-time">01:37</span><span class="seg-text">I&#x27;m seven, budget, budget, budget, amendment 25-20.</span></div>
+<div class="seg" data-time="105.26"><span class="seg-time">01:45</span><span class="seg-text">So, you&#x27;ll see three minutes tonight. This is the first one. This essentially, it moves money</span></div>
+<div class="seg" data-time="111.5"><span class="seg-time">01:51</span><span class="seg-text">to cover an under-budgeted OWRB loan payment. The information came in light. It was not budgeted.</span></div>
+<div class="seg" data-time="118.78"><span class="seg-time">01:58</span><span class="seg-text">So, second. Thanks. Thank you, Jen. All right. Barnes, I&#x27;m Darryle Cole. Hi. Parker.</span></div>
+<div class="seg" data-time="139.95"><span class="seg-time">02:19</span><span class="seg-text">Hey, the discussion about the possible action regarding amendment.</span></div>
+<div class="seg" data-time="143.9"><span class="seg-time">02:23</span><span class="seg-text">C-23-0-8C with B-3 construction.</span></div>
+<div class="seg" data-time="151.74"><span class="seg-time">02:31</span><span class="seg-text">And C-Z-23-0-8C with Stel and Brown Reynolds.</span></div>
+<div class="seg" data-time="155.98"><span class="seg-time">02:35</span><span class="seg-text">So, these are the tipping and transport fees for some of the ways the original contracts were lit in between</span></div>
+<div class="seg" data-time="165.02"><span class="seg-time">02:45</span><span class="seg-text">the city of Miami and the companies. So, it&#x27;s actually between MSUA and the companies.</span></div>
+<div class="seg" data-time="172.93"><span class="seg-time">02:52</span><span class="seg-text">So, we are drafted in amendment and I believe the companies have agreed to it.</span></div>
+<div class="seg" data-time="180.0"><span class="seg-time">03:00</span><span class="seg-text">the companies of R&amp;D agree to it. It&#x27;s just changing the name to MSU on the contract or the parties.</span></div>
+<div class="seg" data-time="198.75"><span class="seg-time">03:18</span><span class="seg-text">Hi, Parker.</span></div>
+<div class="seg" data-time="199.75"><span class="seg-time">03:19</span><span class="seg-text">Hi.</span></div>
+<div class="seg" data-time="200.75"><span class="seg-time">03:20</span><span class="seg-text">Now in contract amendments with Republic Services, also known as BFI,</span></div>
+<div class="seg" data-time="205.85"><span class="seg-time">03:25</span><span class="seg-text">Voice Services, C-23-080,</span></div>
+<div class="seg" data-time="208.85"><span class="seg-time">03:28</span><span class="seg-text">Services C-23-280 and B-3 construction C-23-080.</span></div>
+<div class="seg" data-time="216.23"><span class="seg-time">03:36</span><span class="seg-text">This will be the last year that we renew on the contract that was made a couple of years ago.</span></div>
+<div class="seg" data-time="222.23"><span class="seg-time">03:42</span><span class="seg-text">This will go through April 30th, the 2026.</span></div>
+<div class="seg" data-time="227.23"><span class="seg-time">03:47</span><span class="seg-text">Stella, environmental who halls all of the solid waste,</span></div>
+<div class="seg" data-time="231.23"><span class="seg-time">03:51</span><span class="seg-text">they deliberate to BFI and what we call Republic Services.</span></div>
+<div class="seg" data-time="237.23"><span class="seg-time">03:57</span><span class="seg-text">They were trying to increase it by 5.2%.</span></div>
+<div class="seg" data-time="241.23"><span class="seg-time">04:01</span><span class="seg-text">They ended up settling with a 3% increase.</span></div>
+<div class="seg" data-time="245.23000000000002"><span class="seg-time">04:05</span><span class="seg-text">We want to continue with the M-right now.</span></div>
+<div class="seg" data-time="250.06"><span class="seg-time">04:10</span><span class="seg-text">Back when they won the bid, they won, and they said it&#x27;s about 95 cents less per ton.</span></div>
+<div class="seg" data-time="260.58"><span class="seg-time">04:20</span><span class="seg-text">We just to give you an idea of this year, we&#x27;re at 12,615 tons,</span></div>
+<div class="seg" data-time="266.58"><span class="seg-time">04:26</span><span class="seg-text">5 March from July 1 through March 1.</span></div>
+<div class="seg" data-time="272.64"><span class="seg-time">04:32</span><span class="seg-text">We hall a lot of solid waste, but the 3% increase will only increase by 79 cents.</span></div>
+<div class="seg" data-time="280.64"><span class="seg-time">04:40</span><span class="seg-text">We&#x27;re getting back up to where we close to about where we broke in before we got the contract.</span></div>
+<div class="seg" data-time="286.64"><span class="seg-time">04:46</span><span class="seg-text">B-3 construction, that&#x27;s where we take our demolition material and the price will stay the same with them.</span></div>
+<div class="seg" data-time="295.40999999999997"><span class="seg-time">04:55</span><span class="seg-text">We actually haven&#x27;t used them this year because we&#x27;re not as heavy into knocking down homes</span></div>
+<div class="seg" data-time="301.57"><span class="seg-time">05:01</span><span class="seg-text">and things like that.</span></div>
+<div class="seg" data-time="303.57"><span class="seg-time">05:03</span><span class="seg-text">So if you want to, they know with them.</span></div>
+<div class="seg" data-time="308.16999999999996"><span class="seg-time">05:08</span><span class="seg-text">BFI services, they ask for a 4.44% increase.</span></div>
+<div class="seg" data-time="314.16999999999996"><span class="seg-time">05:14</span><span class="seg-text">They settle for a 3% as well.</span></div>
+<div class="seg" data-time="318.26"><span class="seg-time">05:18</span><span class="seg-text">It&#x27;s actually a 69-cent cost increase per ton.</span></div>
+<div class="seg" data-time="323.58000000000004"><span class="seg-time">05:23</span><span class="seg-text">Back when we, before we got the contract going, they were at 451 per ton.</span></div>
+<div class="seg" data-time="330.13"><span class="seg-time">05:30</span><span class="seg-text">And they ended up dropping that to 25-20 when we got the contract going a couple of years ago.</span></div>
+<div class="seg" data-time="337.13"><span class="seg-time">05:37</span><span class="seg-text">So it&#x27;s the 69-cent increase.</span></div>
+<div class="seg" data-time="341.61"><span class="seg-time">05:41</span><span class="seg-text">It still makes it a great savings compared to what we&#x27;ve won.</span></div>
+<div class="seg" data-time="347.63"><span class="seg-time">05:47</span><span class="seg-text">So we recommend renewing all of these contracts as the current market cost has increased,</span></div>
+<div class="seg" data-time="355.63"><span class="seg-time">05:55</span><span class="seg-text">but it&#x27;s still better to take this and go back out to bed again.</span></div>
+<div class="seg" data-time="360.5"><span class="seg-time">06:00</span><span class="seg-text">and we will have to at the end of this one here.</span></div>
+<div class="seg" data-time="364.7"><span class="seg-time">06:04</span><span class="seg-text">25?</span></div>
+<div class="seg" data-time="367.4"><span class="seg-time">06:07</span><span class="seg-text">Tell them we&#x27;re in budget for this every year.</span></div>
+<div class="seg" data-time="369.4"><span class="seg-time">06:09</span><span class="seg-text">1.1 million.</span></div>
+<div class="seg" data-time="371.2"><span class="seg-time">06:11</span><span class="seg-text">I know it&#x27;s right there.</span></div>
+<div class="seg" data-time="376.42"><span class="seg-time">06:16</span><span class="seg-text">It says 1.1 million.</span></div>
+<div class="seg" data-time="377.42"><span class="seg-time">06:17</span><span class="seg-text">I don&#x27;t check with Terry.</span></div>
+<div class="seg" data-time="378.42"><span class="seg-time">06:18</span><span class="seg-text">What is 1.1 million?</span></div>
+<div class="seg" data-time="379.42"><span class="seg-time">06:19</span><span class="seg-text">So this looks like it&#x27;s going to take us up to 1.3.</span></div>
+<div class="seg" data-time="382.42"><span class="seg-time">06:22</span><span class="seg-text">So we&#x27;re going to have to do budget amendments to take care of the overageer.</span></div>
+<div class="seg" data-time="385.62"><span class="seg-time">06:25</span><span class="seg-text">Hopefully we will be able to stay in that 1.1.</span></div>
+<div class="seg" data-time="389.42"><span class="seg-time">06:29</span><span class="seg-text">I&#x27;m going to make it next year.</span></div>
+<div class="seg" data-time="390.42"><span class="seg-time">06:30</span><span class="seg-text">We&#x27;re working on next year&#x27;s budget right now.</span></div>
+<div class="seg" data-time="392.42"><span class="seg-time">06:32</span><span class="seg-text">So we budgeted more money in our tipping fees to kind of for this.</span></div>
+<div class="seg" data-time="395.62"><span class="seg-time">06:35</span><span class="seg-text">So you said it was we&#x27;re at 12,000.</span></div>
+<div class="seg" data-time="398.78"><span class="seg-time">06:38</span><span class="seg-text">12,615 tons right now.</span></div>
+<div class="seg" data-time="404.7"><span class="seg-time">06:44</span><span class="seg-text">So we take 50,000 a year.</span></div>
+<div class="seg" data-time="408.7"><span class="seg-time">06:48</span><span class="seg-text">Is that pretty good?</span></div>
+<div class="seg" data-time="409.7"><span class="seg-time">06:49</span><span class="seg-text">We take what?</span></div>
+<div class="seg" data-time="410.3"><span class="seg-time">06:50</span><span class="seg-text">22 tons, 22,000 tons.</span></div>
+<div class="seg" data-time="412.5"><span class="seg-time">06:52</span><span class="seg-text">Things are high.</span></div>
+<div class="seg" data-time="413.3"><span class="seg-time">06:53</span><span class="seg-text">That are lower.</span></div>
+<div class="seg" data-time="414.3"><span class="seg-time">06:54</span><span class="seg-text">Yeah.</span></div>
+<div class="seg" data-time="415.49"><span class="seg-time">06:55</span><span class="seg-text">Really.</span></div>
+<div class="seg" data-time="415.89"><span class="seg-time">06:55</span><span class="seg-text">So is the reason that we took more in the...</span></div>
+<div class="seg" data-time="419.29"><span class="seg-time">06:59</span><span class="seg-text">Because if you do the math in your extrapolate,</span></div>
+<div class="seg" data-time="422.49"><span class="seg-time">07:02</span><span class="seg-text">we&#x27;re in the first quarter and we&#x27;ve taken 12,000 tons already.</span></div>
+<div class="seg" data-time="425.29"><span class="seg-time">07:05</span><span class="seg-text">That&#x27;s 50,000 tons for the year.</span></div>
+<div class="seg" data-time="434.71"><span class="seg-time">07:14</span><span class="seg-text">You&#x27;re saying the first quarter.</span></div>
+<div class="seg" data-time="436.58"><span class="seg-time">07:16</span><span class="seg-text">That&#x27;s what he said.</span></div>
+<div class="seg" data-time="438.82"><span class="seg-time">07:18</span><span class="seg-text">You said so far this year up to March.</span></div>
+<div class="seg" data-time="440.42"><span class="seg-time">07:20</span><span class="seg-text">We&#x27;ve hauled 12,600 tons.</span></div>
+<div class="seg" data-time="442.62"><span class="seg-time">07:22</span><span class="seg-text">It&#x27;s cool.</span></div>
+<div class="seg" data-time="443.62"><span class="seg-time">07:23</span><span class="seg-text">No, that&#x27;s July.</span></div>
+<div class="seg" data-time="444.62"><span class="seg-time">07:24</span><span class="seg-text">Yeah.</span></div>
+<div class="seg" data-time="445.62"><span class="seg-time">07:25</span><span class="seg-text">Oh, yeah.</span></div>
+<div class="seg" data-time="446.81"><span class="seg-time">07:26</span><span class="seg-text">My bet.</span></div>
+<div class="seg" data-time="448.65"><span class="seg-time">07:28</span><span class="seg-text">So you&#x27;re saying the...</span></div>
+<div class="seg" data-time="450.05"><span class="seg-time">07:30</span><span class="seg-text">I understand your saying now.</span></div>
+<div class="seg" data-time="451.85"><span class="seg-time">07:31</span><span class="seg-text">That&#x27;s my math, not math, because I&#x27;m in different fiscal quarters in my...</span></div>
+<div class="seg" data-time="457.05"><span class="seg-time">07:37</span><span class="seg-text">Right.</span></div>
+<div class="seg" data-time="458.05"><span class="seg-time">07:38</span><span class="seg-text">I&#x27;m going to make some.</span></div>
+<div class="seg" data-time="459.05"><span class="seg-time">07:39</span><span class="seg-text">Thank you.</span></div>
+<div class="seg" data-time="469.74"><span class="seg-time">07:49</span><span class="seg-text">What&#x27;s your number?</span></div>
+<div class="seg" data-time="471.0"><span class="seg-time">07:51</span><span class="seg-text">Second.</span></div>
+<div class="seg" data-time="473.28"><span class="seg-time">07:53</span><span class="seg-text">Joe&#x27;s five.</span></div>
+<div class="seg" data-time="474.68"><span class="seg-time">07:54</span><span class="seg-text">E7.</span></div>
+<div class="seg" data-time="475.68"><span class="seg-time">07:55</span><span class="seg-text">Aaron Ryan.</span></div>
+<div class="seg" data-time="476.68"><span class="seg-time">07:56</span><span class="seg-text">Barnes.</span></div>
+<div class="seg" data-time="478.13"><span class="seg-time">07:58</span><span class="seg-text">Hi.</span></div>
+<div class="seg" data-time="479.13"><span class="seg-time">07:59</span><span class="seg-text">Joe&#x27;s five.</span></div>
+<div class="seg" data-time="480.13"><span class="seg-time">08:00</span><span class="seg-text">Parker.</span></div>
+<div class="seg" data-time="481.13"><span class="seg-time">08:01</span><span class="seg-text">She&#x27;s having a problem.</span></div>
+<div class="seg" data-time="482.13"><span class="seg-time">08:02</span><span class="seg-text">Yeah.</span></div>
+<div class="seg" data-time="483.13"><span class="seg-time">08:03</span><span class="seg-text">I&#x27;m going to do this.</span></div>
+<div class="seg" data-time="484.13"><span class="seg-time">08:04</span><span class="seg-text">If any of which is...</span></div>
+<div class="seg" data-time="485.13"><span class="seg-time">08:05</span><span class="seg-text">What&#x27;s your goodness?</span></div>
+<div class="seg" data-time="486.13"><span class="seg-time">08:06</span><span class="seg-text">Supposing this again?</span></div>
+<div class="seg" data-time="487.13"><span class="seg-time">08:07</span><span class="seg-text">No, I&#x27;m testing.</span></div>
+<div class="seg" data-time="493.31"><span class="seg-time">08:13</span><span class="seg-text">You know what?</span></div>
+<div class="seg" data-time="494.31"><span class="seg-time">08:14</span><span class="seg-text">Well done.</span></div>
+<div class="seg" data-time="497.94"><span class="seg-time">08:17</span><span class="seg-text">Motion.</span></div>
+<div class="seg" data-time="498.94"><span class="seg-time">08:18</span><span class="seg-text">Second.</span></div>
+<div class="seg" data-time="502.46000000000004"><span class="seg-time">08:22</span><span class="seg-text">Who&#x27;s seconded?</span></div>
+<div class="seg" data-time="503.46000000000004"><span class="seg-time">08:23</span><span class="seg-text">Hi.</span></div>
+<div class="seg" data-time="504.65999999999997"><span class="seg-time">08:24</span><span class="seg-text">Yeah.</span></div>
+<div class="seg" data-time="505.65999999999997"><span class="seg-time">08:25</span><span class="seg-text">I&#x27;ll do it.</span></div>
+<div class="seg" data-time="506.65999999999997"><span class="seg-time">08:26</span><span class="seg-text">Joe&#x27;s five.</span></div>
+<div class="seg" data-time="507.65999999999997"><span class="seg-time">08:27</span><span class="seg-text">Hi.</span></div>
+<div class="seg" data-time="508.65999999999997"><span class="seg-time">08:28</span><span class="seg-text">E7.</span></div>
+<div class="seg" data-time="509.65999999999997"><span class="seg-time">08:29</span><span class="seg-text">Parker.</span></div>
 
-<section class="documents">
-<h2>📄 Full Agenda</h2>
-<div class="doc-preview">NOTICE OF REGULAR MEETING AND AGENDA<br>OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)<br>Tuesday, April 1, 2025<br>5:30<br>				<br><br>				p.m.<br>MIAMI CIVIC CENTER<br>129 5th Avenue Northwest, Miami, Oklahoma<br>Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by<br>posting on www.miamiokla.net.<br>THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:<br>1.<br>Call to Order                                                   Chairman Parker<br>2.<br>Invocation by Pastor of First Christian Church                                             Brandon Fletcher<br>3.<br>Pledge of Allegiance                                                                Trustee Estep<br>4.<br>Public Input and Unscheduled Personal Appearances<br>Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:<br>www.miamiokla.net<br>5.<br>*Action Item* Claims                                                                   Trustees<br>Claims List<br>Credit Cards<br>6.<br>*Action Item* Minutes:  March 25, 2025 (Regular)                                 Trustees<br>Minutes<br>7.<br>*Action Item* Budget Amendment:                                    Jill Fitzgibbon<br>#25-20 Moving: $268,973.18 From Left Over Funds From FAP-19-005-L Loan; $104,373.15 in Over Budgeted Interest Payment Funds; $19,591.84 in Over Budgeted Administrative Fee Payment Funds; and $5,902.83 From the Electric Department to the Underbudgeted OWRB Loan Principal Payment Account<br>Budget Amendment<br>8.<br>*Discussion and Possible Action Item* Regarding Amendment to C23-08C With B-3 Construction and C23-08C With Stella Environmental Services to Add the Correct Party (MSUA) to the Contracts and Remove the City of Miami as the Contracting Party                      Misty Barnes<br>BA<br>B-3 Construction Amendment<br>Stella Environmental Services Amendment<br>9.<br>*Action Item* Contract Amendments With Republic Service Also Known as BFI Waste Services (C23-08A), Stella Environmental Services (C23-28B), and B-3 Construction (C23-08C) for Tipping Fees and Transportation Fees for Solid Waste Disposal; Contingent Upon Submission of all Required Contract Documents                      Brian Brassfield<br>BA<br>BFI Waste Services Amendment<br>Stella Environmental Services Amendment<br>B-3 Construction Amendment<br>10.<br>*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))      Trustees/Tyler Cline<br>11.<br>Trustee Community Announcements                                       Trustees<br>12.<br>*Action Item* Adjournment                                           Trustees<br>The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager's office. We also ask that those in attendance place all electronic devices on silent. Thank you.</div>
-</section>
+</div>
+</div>
+</div>
 
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
+Tuesday, April 1, 2025
+5:30
+				
 
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+				p.m.
+MIAMI CIVIC CENTER
+129 5th Avenue Northwest, Miami, Oklahoma
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by
+posting on www.miamiokla.net.
+THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:
+1.
+Call to Order                                                   Chairman Parker
+2.
+Invocation by Pastor of First Christian Church                                             Brandon Fletcher
+3.
+Pledge of Allegiance                                                                Trustee Estep
+4.
+Public Input and Unscheduled Personal Appearances
+Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:
+www.miamiokla.net
+5.
+*Action Item* Claims                                                                   Trustees
+Claims List
+Credit Cards
+6.
+*Action Item* Minutes:  March 25, 2025 (Regular)                                 Trustees
+Minutes
+7.
+*Action Item* Budget Amendment:                                    Jill Fitzgibbon
+#25-20 Moving: $268,973.18 From Left Over Funds From FAP-19-005-L Loan; $104,373.15 in Over Budgeted Interest Payment Funds; $19,591.84 in Over Budgeted Administrative Fee Payment Funds; and $5,902.83 From the Electric Department to the Underbudgeted OWRB Loan Principal Payment Account
+Budget Amendment
+8.
+*Discussion and Possible Action Item* Regarding Amendment to C23-08C With B-3 Construction and C23-08C With Stella Environmental Services to Add the Correct Party (MSUA) to the Contracts and Remove the City of Miami as the Contracting Party                      Misty Barnes
+BA
+B-3 Construction Amendment
+Stella Environmental Services Amendment
+9.
+*Action Item* Contract Amendments With Republic Service Also Known as BFI Waste Services (C23-08A), Stella Environmental Services (C23-28B), and B-3 Construction (C23-08C) for Tipping Fees and Transportation Fees for Solid Waste Disposal; Contingent Upon Submission of all Required Contract Documents                      Brian Brassfield
+BA
+BFI Waste Services Amendment
+Stella Environmental Services Amendment
+B-3 Construction Amendment
+10.
+*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))      Trustees/Tyler Cline
+11.
+Trustee Community Announcements                                       Trustees
+12.
+*Action Item* Adjournment                                           Trustees
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Let&#x27;s pray, Father God, we love you, God, we&#x27;re so grateful for this community that you place us in. God, I&#x27;m thankful for the leadership that we have and I just pray for your peace and your prosperity for all of us. God, you place these people in their position to lead us well and God, I just pray that you remind them of that but also give them the courage and confidence that they need to make good decisions and that&#x27;d be for the betterment of all of us. God, we just pray that mine was a great place to grow up, raise a family and to retire in all those things and Father, you can do that for us. We love you, we pray that we become more like Jesus every day. It&#x27;s in His name we pray. Amen. Amen. I pledge allegiance to the flag of the United States of America and to the Republic for which it spans one nation under God in the visible with liberty and justice for all of us. For a public embedment, it&#x27;s good that personal appearances five points list. Most to a proof. Second, he stepped like Barnes. I&#x27;ve Joins, I don&#x27;t know. Six minutes from the March 25th, 2025, regular meeting. Much to proof. Second, he stepped like Barnes, I&#x27;ve Joins, I don&#x27;t know. Hi. Parker. I&#x27;m seven, budget, budget, budget, amendment 25-20. So, you&#x27;ll see three minutes tonight. This is the first one. This essentially, it moves money to cover an under-budgeted OWRB loan payment. The information came in light. It was not budgeted. So, second. Thanks. Thank you, Jen. All right. Barnes, I&#x27;m Darryle Cole. Hi. Parker. Hey, the discussion about the possible action regarding amendment. C-23-0-8C with B-3 construction. And C-Z-23-0-8C with Stel and Brown Reynolds. So, these are the tipping and transport fees for some of the ways the original contracts were lit in between the city of Miami and the companies. So, it&#x27;s actually between MSUA and the companies. So, we are drafted in amendment and I believe the companies have agreed to it. the companies of R&amp;D agree to it. It&#x27;s just changing the name to MSU on the contract or the parties. Hi, Parker. Hi. Now in contract amendments with Republic Services, also known as BFI, Voice Services, C-23-080, Services C-23-280 and B-3 construction C-23-080. This will be the last year that we renew on the contract that was made a couple of years ago. This will go through April 30th, the 2026. Stella, environmental who halls all of the solid waste, they deliberate to BFI and what we call Republic Services. They were trying to increase it by 5.2%. They ended up settling with a 3% increase. We want to continue with the M-right now. Back when they won the bid, they won, and they said it&#x27;s about 95 cents less per ton. We just to give you an idea of this year, we&#x27;re at 12,615 tons, 5 March from July 1 through March 1. We hall a lot of solid waste, but the 3% increase will only increase by 79 cents. We&#x27;re getting back up to where we close to about where we broke in before we got the contract. B-3 construction, that&#x27;s where we take our demolition material and the price will stay the same with them. We actually haven&#x27;t used them this year because we&#x27;re not as heavy into knocking down homes and things like that. So if you want to, they know with them. BFI services, they ask for a 4.44% increase. They settle for a 3% as well. It&#x27;s actually a 69-cent cost increase per ton. Back when we, before we got the contract going, they were at 451 per ton. And they ended up dropping that to 25-20 when we got the contract going a couple of years ago. So it&#x27;s the 69-cent increase. It still makes it a great savings compared to what we&#x27;ve won. So we recommend renewing all of these contracts as the current market cost has increased, but it&#x27;s still better to take this and go back out to bed again. and we will have to at the end of this one here. 25? Tell them we&#x27;re in budget for this every year. 1.1 million. I know it&#x27;s right there. It says 1.1 million. I don&#x27;t check with Terry. What is 1.1 million? So this looks like it&#x27;s going to take us up to 1.3. So we&#x27;re going to have to do budget amendments to take care of the overageer. Hopefully we will be able to stay in that 1.1. I&#x27;m going to make it next year. We&#x27;re working on next year&#x27;s budget right now. So we budgeted more money in our tipping fees to kind of for this. So you said it was we&#x27;re at 12,000. 12,615 tons right now. So we take 50,000 a year. Is that pretty good? We take what? 22 tons, 22,000 tons. Things are high. That are lower. Yeah. Really. So is the reason that we took more in the... Because if you do the math in your extrapolate, we&#x27;re in the first quarter and we&#x27;ve taken 12,000 tons already. That&#x27;s 50,000 tons for the year. You&#x27;re saying the first quarter. That&#x27;s what he said. You said so far this year up to March. We&#x27;ve hauled 12,600 tons. It&#x27;s cool. No, that&#x27;s July. Yeah. Oh, yeah. My bet. So you&#x27;re saying the... I understand your saying now. That&#x27;s my math, not math, because I&#x27;m in different fiscal quarters in my... Right. I&#x27;m going to make some. Thank you. What&#x27;s your number?</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
+Tuesday, April 1, 2025
+5:30
+				
+
+				p.m.
+MIAMI CIVIC CENTER
+129 5th Avenue Northwest, Miami, Oklahoma
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by
+posting on www.miamiokla.net.
+THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:
+1.
+Call to Order                                                   Chairman Parker
+2.
+Invocation by Pastor of First Christian Church                                             Brandon Fletcher
+3.
+Pledge of Allegiance                                                                Trustee Estep
+4.
+Public Input and Unscheduled Personal Appearances
+Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:
+www.miamiokla.net
+5.
+*Action Item* Claims                                                                   Trustees
+Claims List
+Credit Cards
+6.
+*Action Item* Minutes:  March 25, 2025 (Regular)                                 Trustees
+Minutes
+7.
+*Action Item* Budget Amendment:                                    Jill Fitzgibbon
+#25-20 Moving: $268,973.18 From Left Over Funds From FAP-19-005-L Loan; $104,373.15 in Over Budgeted Interest Payment Funds; $19,591.84 in Over Budgeted Administrative Fee Payment Funds; and $5,902.83 From the Electric Department to the Underbudgeted OWRB Loan Principal Payment Account
+Budget Amendment
+8.
+*Discussion and Possible Action Item* Regarding Amendment to C23-08C With B-3 Construction and C23-08C With Stella Environmental Services to Add the Correct Party (MSUA) to the Contracts and Remove the City of Miami as the Contracting Party                      Misty Barnes
+BA
+B-3 Construction Amendment
+Stella Environmental Services Amendment
+9.
+*Action Item* Contract Amendments With Republic Service Also Known as BFI Waste Services (C23-08A), Stella Environmental Services (C23-28B), and B-3 Construction (C23-08C) for Tipping Fees and Transportation Fees for Solid Waste Disposal; Contingent Upon Submission of all Required Contract Documents                      Brian Brassfield
+BA
+BFI Waste Services Amendment
+Stella Environmental Services Amendment
+B-3 Construction Amendment
+10.
+*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))      Trustees/Tyler Cline
+11.
+Trustee Community Announcements                                       Trustees
+12.
+*Action Item* Adjournment                                           Trustees
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
+</div>
+
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

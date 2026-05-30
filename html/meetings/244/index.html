@@ -1,93 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami City Council - Jan 21, 2020 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami City Council</h1>
-<div class="meta">📅 Jan 21, 2020 | Clip #244</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (3)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Agenda Document</div>
-  <div class="issue-desc">The city has not published an agenda document for this meeting on AgendaCenter. This is a transparency concern - agendas should be publicly available before meetings.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami City Council</h1>
+<div class="meeting-meta">
+<span>📅 Jan 21, 2020</span>
+<span>⏱️ 00h 29m</span>
+<span>🔖 Clip #244</span>
 </div>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
+
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/244" allowfullscreen></iframe></div>
+
 </div>
-</section>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="13.271"><span class="seg-time">00:13</span><span class="seg-text">*/~w</span></div>
+<div class="seg" data-time="93.253"><span class="seg-time">01:33</span><span class="seg-text">?|.|/z</span></div>
+<div class="seg" data-time="140.68"><span class="seg-time">02:20</span><span class="seg-text">w}/z?{*</span></div>
+<div class="seg" data-time="159.988"><span class="seg-time">02:39</span><span class="seg-text">k}?}</span></div>
+<div class="seg" data-time="209.44"><span class="seg-time">03:29</span><span class="seg-text">~</span></div>
+<div class="seg" data-time="219.15"><span class="seg-time">03:39</span><span class="seg-text">&#x27;q/</span></div>
+<div class="seg" data-time="270.135"><span class="seg-time">04:30</span><span class="seg-text">/z+~</span></div>
+<div class="seg" data-time="290.724"><span class="seg-time">04:50</span><span class="seg-text">w{</span></div>
+<div class="seg" data-time="306.4"><span class="seg-time">05:06</span><span class="seg-text">/|</span></div>
+<div class="seg" data-time="317.5"><span class="seg-time">05:17</span><span class="seg-text">?Z;</span></div>
+<div class="seg" data-time="336.937"><span class="seg-time">05:36</span><span class="seg-text">?</span></div>
+<div class="seg" data-time="354.522"><span class="seg-time">05:54</span><span class="seg-text">+~|</span></div>
+<div class="seg" data-time="377.88"><span class="seg-time">06:17</span><span class="seg-text">g</span></div>
+<div class="seg" data-time="404.274"><span class="seg-time">06:44</span><span class="seg-text">?X+~</span></div>
+<div class="seg" data-time="413.41700000000003"><span class="seg-time">06:53</span><span class="seg-text">gz</span></div>
+<div class="seg" data-time="442.279"><span class="seg-time">07:22</span><span class="seg-text">#|</span></div>
+<div class="seg" data-time="446.985"><span class="seg-time">07:26</span><span class="seg-text">+|</span></div>
+<div class="seg" data-time="463.201"><span class="seg-time">07:43</span><span class="seg-text">ee</span></div>
+<div class="seg" data-time="466.371"><span class="seg-time">07:46</span><span class="seg-text">{</span></div>
+<div class="seg" data-time="485.458"><span class="seg-time">08:05</span><span class="seg-text">o</span></div>
+<div class="seg" data-time="492.965"><span class="seg-time">08:12</span><span class="seg-text">e</span></div>
+<div class="seg" data-time="554.128"><span class="seg-time">09:14</span><span class="seg-text">u8u+|re{u~</span></div>
+<div class="seg" data-time="568.42"><span class="seg-time">09:28</span><span class="seg-text">j}</span></div>
+<div class="seg" data-time="590.1659999999999"><span class="seg-time">09:50</span><span class="seg-text">{~+z</span></div>
+<div class="seg" data-time="637.614"><span class="seg-time">10:37</span><span class="seg-text">/~I|w~</span></div>
+<div class="seg" data-time="647.24"><span class="seg-time">10:47</span><span class="seg-text">/~</span></div>
+<div class="seg" data-time="652.496"><span class="seg-time">10:52</span><span class="seg-text">Ox</span></div>
+<div class="seg" data-time="1108.9"><span class="seg-time">18:28</span><span class="seg-text">wq~w~yg~/z/~/{kz?/</span></div>
+<div class="seg" data-time="1307.639"><span class="seg-time">21:47</span><span class="seg-text">o}~;_u</span></div>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/244" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
+</div>
+</div>
+</div>
 
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag(&#x27;js&#x27;, new Date()); gtag(&#x27;config&#x27;, &#x27;G-X9VGCCGG49&#x27;, { &#x27;request_origin&#x27;:&#x27;external&#x27; }); City Council Regular Meeting body{ margin-top: .5in; margin-bottom: .5in; margin-right: .5in ; margin-left: .5in; text-align: justify; font-family: Calibri, Candara, Segoe, &#x27;Segoe UI&#x27;, Optima, Arial, sans-serif; font-size: 14px; } table{ text-align: justify; border-spacing: 5px; padding: 0; font-size: 11pt; } td { text-align: justify; vertical-align:top; } .numberspace { width: 30px; vertical-align: top; text-align: left; } .ul {text-decoration: underline;} /* Prevents logo resizing on print */ img { max-width: 100%; height: auto; } NOTICE OF REGULAR MEETING AND AGENDA OF THE MIAMI CITY COUNCIL Tuesday, January 21, 2020 5:45 p.m. OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY MIAMI CIVIC CENTER 129 5th Avenue Northwest, Miami, Oklahoma Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on www.miamiokla.net. THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA: blockquote { margin-left: 40px; margin-right: 0px; margin-top: 0px; margin-bottom: 0px; }@media print { a { color: black; } } 1. Call to Order&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Schultz 2. Public Input and Unscheduled Personal Appearances Each person will be limited to 3 minutes on agenda items only. The purpose of this agenda item is to provide an opportunity for citizens&#x27; comments on agenda items. Council members do not engage in discussion under this agenda item, and staff members are directed not to. If you seek discussion or inquiry, please contact your Councilmember, the Mayor or the office of the City Manager. Responses to citizen comments, if any, will occur under the applicable agenda item or may be reserved for further response by phone call, personal meeting, or a posting on the website: www.miamiokla.net 3. CONSENT AGENDA&amp;nbsp; By unanimous consent the public body may designate noncontroversial items to be considered in one motion and one vote.&amp;nbsp; The public body may add items from the regular agenda and approve. Posted agenda items not added to the consent docket will be considered separately.&amp;nbsp; Staff recommends that Item 4 through Item 11 be placed on the consent agenda. 4. Approve Claims&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Claims List 5. Approve Minutes:&amp;nbsp; January 07, 2020 (Regular)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Minutes 6. Budget Amendments: #20-20 Grant - Library (Receipting &amp; Expending $20k Children&amp;rsquo;s Reading Charitable Trust Grant) 7. Approve Agreement Between Integris Miami Hospital and City of Miami for Annual Wellness Program, Authorize City Manager to Sign&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Kim Horn BA Agreement 8. Approve Service Agreement With Universal Field Services, Inc. for Property Acquisition for Power Line Relocation on SH-69A Oklahoma Department of Transportation (ODOT) Project J/P 27944 (04) not to Exceed $48,650.00 to be Reimbursed by ODOT&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline BA Service Agreement Plans Letter 9. Approve Service Agreement With Universal Field Services, Inc. for Property Acquisition for Water Line Relocation on SH-69A ODOT Project J/P 27944 (04) not to Exceed $81,350.00 to be Reimbursed by ODOT&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline BA Service Agreement Plans Letter 10. Approve Service Agreement With Universal Field Services, Inc. for Property Acquisition for Water Line Extension on SH-69A From South Eight Tribes Trail to Buffalo Run Blvd. not to Exceed $13,700.00&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline BA Service Agreement Plan 11. Approve Resolution No. 122119-B: A Resolution to Approve Transfer of the Quapaw Nation Sewer Line on 69A to the City of Miami, OK&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline/S. McConnaughey BA Resolution Plan 12. Report on Miami Area Economic Development Services and Miami Regional Chamber of Commerce&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Charlotte Howe 13. Resolution CC2020-03 Approving Community Financial Support and Fee Waivers to J-M Farms Related to the Facility Expansion&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline BA Resolution 14. Accept or Reject bid C20-01 in the Amount of $192,364.00 to Altec Industries, Inc. for Assembly and Delivery of One (1) Hydraulic Digger on Tracks/Track Carrier With Turntable Winch; Approve Contract Contingent Upon the Submission of Required Contract Documents, and Approve City Manager or his Designee to Sign Notice to Proceed&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline/Derric Lollar BA Altec Bid Nesco Bid Contract Bid Packet 15. Accept or Reject bid C20-02 in the Amount of $118,132.00 to Altec Industries, Inc. for Assembly and Delivery of One (1) Telescopic Articulating Aerial Device (Backyard Bucket Machine); Approve Contract Contingent Upon the Submission of Required Contract Documents, and Approve City Manager or his Designee to Sign Notice to Proceed&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline/Derric Lollar BA Altec Bid Contract Bid Packet 16. Accept or Reject bid C20-03 in the Amount of $65,300.00 to Collins Construction Co. for Demolition of the Following Properties; 409 C SW, 410 C SW, 715 W Central, 717 W Central, 701 N NW, 406 E NE, 407 H NE, 227 B SE, 229 B SE, 602 D SE; Approve Contract Contingent Upon the Submission of Required Contract Documents, and Approve City Manager or his Designee to Sign Notice to Proceed&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Kristi McClain BA Collins Construction bid Level Excavation bid Contract Bid Tally Bid Packet 17. Ordinance 2020-01 Amending Chapter 3 (Alcoholic Beverages) in its Entirety; Repealing Sections 13-119 (Transporting Nonintoxicating Beverages) and 13-120 (Transporting Alcoholic Beverages) of Division 1 (Generally) of Article V (Offenses Against Public Peace and Order) of Chapter 13 (Miscellaneous Provisions and Offenses); Providing Severability; Providing for Conflicting Provisions; and Establishing an Effective Date&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Ben Loring BA Ordinance 18. CONSENT AGENDA &amp;nbsp; By unanimous consent the public body may designate noncontroversial items to be considered in one motion and one vote.&amp;nbsp; The public body may add items from the regular agenda and approve. Posted agenda items not added to the consent docket will be considered separately in their regular order.&amp;nbsp; Staff recommends that Item (A) through Item (C) be placed on the consent agenda. The Mayor does not vote on this consent agenda as these are his nominations. A. Mayor&amp;rsquo;s Nomination to Appoint Zeb Neece to the Board of Adjustment, (Term to Expire 01/21/22) B. Mayor&amp;rsquo;s Nomination to Re-Appoint Tracie DeLano to the Miami Public Library Board, (Term to Expire 01/03/23) C. Mayor&amp;rsquo;s Nomination to Re-Appoint Jess Robinson to the Airport Authority Board, (Term to Expire 02/16/23) 19. Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 20. Staff Reports (Written report included in packet, if available staff is present for questions)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Customer Service 22. City Manager&amp;rsquo;s Communications&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Dean Kruithof 21. Mayor and Council Community Announcements&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 23. The Meeting Will be Continued From Council Chambers and Reconvened in Meeting Room One (1) for Purposes of the Executive Session&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Schultz 24. Executive Session Pursuant to 25 O.S. 307(B)(4) for Confidential Communications With the City Attorney Concerning a Pending Investigation, Claim, or Action, to-wit:&amp;nbsp; City of Miami, et al., v. GRDA CJ-08-619 and F.E.R.C. Project No. 1494 25. Adjournment&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office. We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>*/~w
+?|.|/z
+w}/z?{*
+k}?}
+~
+&#x27;q/
+/z+~
+w{
+/|
+?Z;
+?
++~|
+g
+?X+~
+gz
+#|
++|
+ee
+{
+o
+e
+u8u+|re{u~
+j}
+{~+z
+/~I|w~
+/~
+Ox
+wq~w~yg~/z/~/{kz?/
+o}~;_u</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag(&#x27;js&#x27;, new Date()); gtag(&#x27;config&#x27;, &#x27;G-X9VGCCGG49&#x27;, { &#x27;request_origin&#x27;:&#x27;external&#x27; }); City Council Regular Meeting body{ margin-top: .5in; margin-bottom: .5in; margin-right: .5in ; margin-left: .5in; text-align: justify; font-family: Calibri, Candara, Segoe, &#x27;Segoe UI&#x27;, Optima, Arial, sans-serif; font-size: 14px; } table{ text-align: justify; border-spacing: 5px; padding: 0; font-size: 11pt; } td { text-align: justify; vertical-align:top; } .numberspace { width: 30px; vertical-align: top; text-align: left; } .ul {text-decoration: underline;} /* Prevents logo resizing on print */ img { max-width: 100%; height: auto; } NOTICE OF REGULAR MEETING AND AGENDA OF THE MIAMI CITY COUNCIL Tuesday, January 21, 2020 5:45 p.m. OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY MIAMI CIVIC CENTER 129 5th Avenue Northwest, Miami, Oklahoma Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on www.miamiokla.net. THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA: blockquote { margin-left: 40px; margin-right: 0px; margin-top: 0px; margin-bottom: 0px; }@media print { a { color: black; } } 1. Call to Order&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Schultz 2. Public Input and Unscheduled Personal Appearances Each person will be limited to 3 minutes on agenda items only. The purpose of this agenda item is to provide an opportunity for citizens&#x27; comments on agenda items. Council members do not engage in discussion under this agenda item, and staff members are directed not to. If you seek discussion or inquiry, please contact your Councilmember, the Mayor or the office of the City Manager. Responses to citizen comments, if any, will occur under the applicable agenda item or may be reserved for further response by phone call, personal meeting, or a posting on the website: www.miamiokla.net 3. CONSENT AGENDA&amp;nbsp; By unanimous consent the public body may designate noncontroversial items to be considered in one motion and one vote.&amp;nbsp; The public body may add items from the regular agenda and approve. Posted agenda items not added to the consent docket will be considered separately.&amp;nbsp; Staff recommends that Item 4 through Item 11 be placed on the consent agenda. 4. Approve Claims&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Claims List 5. Approve Minutes:&amp;nbsp; January 07, 2020 (Regular)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Minutes 6. Budget Amendments: #20-20 Grant - Library (Receipting &amp; Expending $20k Children&amp;rsquo;s Reading Charitable Trust Grant) 7. Approve Agreement Between Integris Miami Hospital and City of Miami for Annual Wellness Program, Authorize City Manager to Sign&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Kim Horn BA Agreement 8. Approve Service Agreement With Universal Field Services, Inc. for Property Acquisition for Power Line Relocation on SH-69A Oklahoma Department of Transportation (ODOT) Project J/P 27944 (04) not to Exceed $48,650.00 to be Reimbursed by ODOT&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline BA Service Agreement Plans Letter 9. Approve Service Agreement With Universal Field Services, Inc. for Property Acquisition for Water Line Relocation on SH-69A ODOT Project J/P 27944 (04) not to Exceed $81,350.00 to be Reimbursed by ODOT&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline BA Service Agreement Plans Letter 10. Approve Service Agreement With Universal Field Services, Inc. for Property Acquisition for Water Line Extension on SH-69A From South Eight Tribes Trail to Buffalo Run Blvd. not to Exceed $13,700.00&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline BA Service Agreement Plan 11. Approve Resolution No. 122119-B: A Resolution to Approve Transfer of the Quapaw Nation Sewer Line on 69A to the City of Miami, OK&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline/S. McConnaughey BA Resolution Plan 12. Report on Miami Area Economic Development Services and Miami Regional Chamber of Commerce&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Charlotte Howe 13. Resolution CC2020-03 Approving Community Financial Support and Fee Waivers to J-M Farms Related to the Facility Expansion&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline BA Resolution 14. Accept or Reject bid C20-01 in the Amount of $192,364.00 to Altec Industries, Inc. for Assembly and Delivery of One (1) Hydraulic Digger on Tracks/Track Carrier With Turntable Winch; Approve Contract Contingent Upon the Submission of Required Contract Documents, and Approve City Manager or his Designee to Sign Notice to Proceed&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline/Derric Lollar BA Altec Bid Nesco Bid Contract Bid Packet 15. Accept or Reject bid C20-02 in the Amount of $118,132.00 to Altec Industries, Inc. for Assembly and Delivery of One (1) Telescopic Articulating Aerial Device (Backyard Bucket Machine); Approve Contract Contingent Upon the Submission of Required Contract Documents, and Approve City Manager or his Designee to Sign Notice to Proceed&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline/Derric Lollar BA Altec Bid Contract Bid Packet 16. Accept or Reject bid C20-03 in the Amount of $65,300.00 to Collins Construction Co. for Demolition of the Following Properties; 409 C SW, 410 C SW, 715 W Central, 717 W Central, 701 N NW, 406 E NE, 407 H NE, 227 B SE, 229 B SE, 602 D SE; Approve Contract Contingent Upon the Submission of Required Contract Documents, and Approve City Manager or his Designee to Sign Notice to Proceed&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Kristi McClain BA Collins Construction bid Level Excavation bid Contract Bid Tally Bid Packet 17. Ordinance 2020-01 Amending Chapter 3 (Alcoholic Beverages) in its Entirety; Repealing Sections 13-119 (Transporting Nonintoxicating Beverages) and 13-120 (Transporting Alcoholic Beverages) of Division 1 (Generally) of Article V (Offenses Against Public Peace and Order) of Chapter 13 (Miscellaneous Provisions and Offenses); Providing Severability; Providing for Conflicting Provisions; and Establishing an Effective Date&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Ben Loring BA Ordinance 18. CONSENT AGENDA &amp;nbsp; By unanimous consent the public body may designate noncontroversial items to be considered in one motion and one vote.&amp;nbsp; The public body may add items from the regular agenda and approve. Posted agenda items not added to the consent docket will be considered separately in their regular order.&amp;nbsp; Staff recommends that Item (A) through Item (C) be placed on the consent agenda. The Mayor does not vote on this consent agenda as these are his nominations. A. Mayor&amp;rsquo;s Nomination to Appoint Zeb Neece to the Board of Adjustment, (Term to Expire 01/21/22) B. Mayor&amp;rsquo;s Nomination to Re-Appoint Tracie DeLano to the Miami Public Library Board, (Term to Expire 01/03/23) C. Mayor&amp;rsquo;s Nomination to Re-Appoint Jess Robinson to the Airport Authority Board, (Term to Expire 02/16/23) 19. Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 20. Staff Reports (Written report included in packet, if available staff is present for questions)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Customer Service 22. City Manager&amp;rsquo;s Communications&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Dean Kruithof 21. Mayor and Council Community Announcements&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 23. The Meeting Will be Continued From Council Chambers and Reconvened in Meeting Room One (1) for Purposes of the Executive Session&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Schultz 24. Executive Session Pursuant to 25 O.S. 307(B)(4) for Confidential Communications With the City Attorney Concerning a Pending Investigation, Claim, or Action, to-wit:&amp;nbsp; City of Miami, et al., v. GRDA CJ-08-619 and F.E.R.C. Project No. 1494 25. Adjournment&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office. We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div></div></div></div></div>
+</div>
 
-
-
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

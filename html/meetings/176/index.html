@@ -1,92 +1,364 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami Special Utility Authority (MSUA) - Aug  7, 2018 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami Special Utility Authority (MSUA)</h1>
-<div class="meta">📅 Aug  7, 2018 | Clip #176</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (2)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami Special Utility Authority (MSUA)</h1>
+<div class="meeting-meta">
+<span>📅 Aug  7, 2018</span>
+<span>⏱️ 00h 02m</span>
+<span>🔖 Clip #176</span>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
 </div>
-</section>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/176" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/176" allowfullscreen></iframe></div>
 
-<section class="documents">
-<h2>📄 Full Agenda</h2>
-<div class="doc-preview">NOTICE OF REGULAR MEETING AND AGENDA<br>OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)<br>Tuesday, August 7, 2018<br>5:30<br>				<br><br>				p.m.<br>MIAMI CIVIC CENTER<br>129 5th Avenue Northwest, Miami, Oklahoma<br>Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by<br>posting on www.miamiokla.net.<br>THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:<br>1.<br>Call to Order                                                                  Chairman Schultz<br>2.<br>Invocation by Director of Norse Campus Ministries                                                        Steve Whitesell<br>3.<br>Pledge of Allegiance                                                                                   Trustee Forrester<br>4.<br>Public Input and Unscheduled Personal Appearances<br>Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:<br>www.miamiokla.net<br>5.<br>CONSENT AGENDA                                                                    Trustees<br>By unanimous consent the public body may designate noncontroversial items to be considered in one motion and one vote.  The public body may add items from the regular agenda and approve. Posted agenda items not added to the consent docket will be considered separately in their regular order.  Staff recommends that Item 6 through Item 7 be placed on the consent agenda.<br>6.<br>Approve Claims:  $622,062.64                                                                                      Trustees<br>Claims List: June 30, 2018<br>Claims List: August 07, 2018<br>Credit Cards<br>7.<br>Approve Minutes:  July 17, 2018                                                              Trustees<br>Minutes: July 17, 2018 (Regular)<br>8.<br>Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. Â§ 311(9))                                         Trustees<br>9.<br>Staff Reports (Written report included in packet, if available staff is present for questions)                                                   Trustees<br>Human Resources 1<br>Human Resources 2<br>10.<br>Trustee Community Announcements                                                               Trustees<br>11.<br>Adjournment                                                                            Trustees<br>The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager's office. We also ask that those in attendance place all electronic devices on silent. Thank you.</div>
-</section>
+</div>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="0.377"><span class="seg-time">00:00</span><span class="seg-text">j b * *~ * * * j &quot;?</span></div>
+<div class="seg" data-time="2.713"><span class="seg-time">00:02</span><span class="seg-text">( ( b * j</span></div>
+<div class="seg" data-time="5.615"><span class="seg-time">00:05</span><span class="seg-text">z z` }*| * j</span></div>
+<div class="seg" data-time="7.918"><span class="seg-time">00:07</span><span class="seg-text">jz?Z j? * `_</span></div>
+<div class="seg" data-time="9.987"><span class="seg-time">00:09</span><span class="seg-text">u z?H/ * j j?</span></div>
+<div class="seg" data-time="12.857"><span class="seg-time">00:12</span><span class="seg-text">*? J j</span></div>
+<div class="seg" data-time="15.126"><span class="seg-time">00:15</span><span class="seg-text">&quot;/ &quot; j</span></div>
+<div class="seg" data-time="18.329"><span class="seg-time">00:18</span><span class="seg-text">* u * j j</span></div>
+<div class="seg" data-time="20.798"><span class="seg-time">00:20</span><span class="seg-text">j @ j j? *</span></div>
+<div class="seg" data-time="23.134"><span class="seg-time">00:23</span><span class="seg-text">j ` j</span></div>
+<div class="seg" data-time="25.336"><span class="seg-time">00:25</span><span class="seg-text">`_ *? B j_</span></div>
+<div class="seg" data-time="27.338"><span class="seg-time">00:27</span><span class="seg-text">b j</span></div>
+<div class="seg" data-time="29.641"><span class="seg-time">00:29</span><span class="seg-text">* j b jh j u&quot;? j z</span></div>
+<div class="seg" data-time="32.177"><span class="seg-time">00:32</span><span class="seg-text">h? * &quot; u j z</span></div>
+<div class="seg" data-time="34.346"><span class="seg-time">00:34</span><span class="seg-text">h? U j</span></div>
+<div class="seg" data-time="36.448"><span class="seg-time">00:36</span><span class="seg-text">* * * *</span></div>
+<div class="seg" data-time="39.584"><span class="seg-time">00:39</span><span class="seg-text">hh? B?*| * j &quot;/ z *</span></div>
+<div class="seg" data-time="42.553"><span class="seg-time">00:42</span><span class="seg-text">u jj z?Jj? B</span></div>
+<div class="seg" data-time="44.79"><span class="seg-time">00:44</span><span class="seg-text">* j *~ * j &quot;?</span></div>
+<div class="seg" data-time="47.393"><span class="seg-time">00:47</span><span class="seg-text">* @z? &quot;</span></div>
+<div class="seg" data-time="49.595"><span class="seg-time">00:49</span><span class="seg-text">bj?J j * `/ j j? Jb</span></div>
+<div class="seg" data-time="52.3"><span class="seg-time">00:52</span><span class="seg-text">&quot; *</span></div>
+<div class="seg" data-time="54.66"><span class="seg-time">00:54</span><span class="seg-text">j j *| h</span></div>
+<div class="seg" data-time="57.2"><span class="seg-time">00:57</span><span class="seg-text">u h ` j j z? J</span></div>
+<div class="seg" data-time="59.204"><span class="seg-time">00:59</span><span class="seg-text">z/ b j ; *j? + h? Jj*</span></div>
+<div class="seg" data-time="61.807"><span class="seg-time">01:01</span><span class="seg-text">&quot;? H_j?</span></div>
+<div class="seg" data-time="63.943"><span class="seg-time">01:03</span><span class="seg-text">Uu u * j</span></div>
+<div class="seg" data-time="66.679"><span class="seg-time">01:06</span><span class="seg-text">j b *~ j z u</span></div>
+<div class="seg" data-time="68.848"><span class="seg-time">01:08</span><span class="seg-text">* j j j e}</span></div>
+<div class="seg" data-time="71.116"><span class="seg-time">01:11</span><span class="seg-text">jj</span></div>
+<div class="seg" data-time="73.185"><span class="seg-time">01:13</span><span class="seg-text">j  *j</span></div>
+<div class="seg" data-time="75.354"><span class="seg-time">01:15</span><span class="seg-text">@_ j j j &quot; j b? *|</span></div>
+<div class="seg" data-time="77.589"><span class="seg-time">01:17</span><span class="seg-text">` b &quot; j j?&quot; b `/</span></div>
+<div class="seg" data-time="79.759"><span class="seg-time">01:19</span><span class="seg-text">b? J `/ ejj</span></div>
+<div class="seg" data-time="82.762"><span class="seg-time">01:22</span><span class="seg-text">+ * &quot;</span></div>
+<div class="seg" data-time="85.98"><span class="seg-time">01:25</span><span class="seg-text">j?J b?U z j j</span></div>
+<div class="seg" data-time="87.1"><span class="seg-time">01:27</span><span class="seg-text">j? Z? * u~ * j</span></div>
+<div class="seg" data-time="89.174"><span class="seg-time">01:29</span><span class="seg-text">b j? / j? J</span></div>
+<div class="seg" data-time="91.537"><span class="seg-time">01:31</span><span class="seg-text">* z? &quot;o j? B u</span></div>
+<div class="seg" data-time="93.773"><span class="seg-time">01:33</span><span class="seg-text">b z?J j j</span></div>
+<div class="seg" data-time="95.80799999999999"><span class="seg-time">01:35</span><span class="seg-text">j j? ? J z *</span></div>
+<div class="seg" data-time="98.14500000000001"><span class="seg-time">01:38</span><span class="seg-text">&quot;~j? J b *+</span></div>
+<div class="seg" data-time="100.547"><span class="seg-time">01:40</span><span class="seg-text">* j *z?* + j `/</span></div>
+<div class="seg" data-time="102.84899999999999"><span class="seg-time">01:42</span><span class="seg-text">* * &quot; (* u~ b</span></div>
+<div class="seg" data-time="105.52000000000001"><span class="seg-time">01:45</span><span class="seg-text">` j j &quot;?U</span></div>
+<div class="seg" data-time="108.188"><span class="seg-time">01:48</span><span class="seg-text">z? J &quot;* &quot; u</span></div>
+<div class="seg" data-time="110.457"><span class="seg-time">01:50</span><span class="seg-text">j?B j b? Z &quot;*j_</span></div>
+<div class="seg" data-time="112.759"><span class="seg-time">01:52</span><span class="seg-text">`_</span></div>
+<div class="seg" data-time="115.96000000000001"><span class="seg-time">01:55</span><span class="seg-text">*j? Z/j h/ u</span></div>
+<div class="seg" data-time="117.398"><span class="seg-time">01:57</span><span class="seg-text">z j bj @; j j_</span></div>
+<div class="seg" data-time="119.533"><span class="seg-time">01:59</span><span class="seg-text">h? J h/j u~j u</span></div>
+<div class="seg" data-time="122.169"><span class="seg-time">02:02</span><span class="seg-text">*~ z*~* j? B`</span></div>
+<div class="seg" data-time="124.471"><span class="seg-time">02:04</span><span class="seg-text">h? `/ *</span></div>
+<div class="seg" data-time="126.54"><span class="seg-time">02:06</span><span class="seg-text">j j h j_</span></div>
+<div class="seg" data-time="129.176"><span class="seg-time">02:09</span><span class="seg-text">* j j b/ z? U *~</span></div>
+<div class="seg" data-time="131.98"><span class="seg-time">02:11</span><span class="seg-text">z j? J `/ * &quot;</span></div>
+<div class="seg" data-time="134.349"><span class="seg-time">02:14</span><span class="seg-text">&quot; z &quot; jr?</span></div>
+<div class="seg" data-time="136.451"><span class="seg-time">02:16</span><span class="seg-text">J b? J? &quot; *</span></div>
+<div class="seg" data-time="138.486"><span class="seg-time">02:18</span><span class="seg-text">* *</span></div>
+<div class="seg" data-time="140.755"><span class="seg-time">02:20</span><span class="seg-text">_ j u</span></div>
+<div class="seg" data-time="143.324"><span class="seg-time">02:23</span><span class="seg-text">@ h j&quot; *</span></div>
+<div class="seg" data-time="145.426"><span class="seg-time">02:25</span><span class="seg-text">z? (j * +~ &quot;?</span></div>
+<div class="seg" data-time="147.628"><span class="seg-time">02:27</span><span class="seg-text">&quot; * `/ b &quot;/ z *j?J/ </span></div>
+<div class="seg" data-time="150.332"><span class="seg-time">02:30</span><span class="seg-text">jz j p/ *~ *</span></div>
+<div class="seg" data-time="152.4"><span class="seg-time">02:32</span><span class="seg-text">* j &quot; e|@</span></div>
+<div class="seg" data-time="154.703"><span class="seg-time">02:34</span><span class="seg-text">*  j j</span></div>
+<div class="seg" data-time="156.972"><span class="seg-time">02:36</span><span class="seg-text">* * b j/ z&quot;? /~b &quot;?</span></div>
+<div class="seg" data-time="159.341"><span class="seg-time">02:39</span><span class="seg-text">Z r j b/ * b</span></div>
+<div class="seg" data-time="161.50900000000001"><span class="seg-time">02:41</span><span class="seg-text">* j jb ( j (</span></div>
+<div class="seg" data-time="163.54399999999998"><span class="seg-time">02:43</span><span class="seg-text">z j z &quot;~ z? *?</span></div>
 
+</div>
+</div>
+</div>
 
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
+Tuesday, August 7, 2018
+5:30
+				
+
+				p.m.
+MIAMI CIVIC CENTER
+129 5th Avenue Northwest, Miami, Oklahoma
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by
+posting on www.miamiokla.net.
+THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:
+1.
+Call to Order                                                                  Chairman Schultz
+2.
+Invocation by Director of Norse Campus Ministries                                                        Steve Whitesell
+3.
+Pledge of Allegiance                                                                                   Trustee Forrester
+4.
+Public Input and Unscheduled Personal Appearances
+Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:
+www.miamiokla.net
+5.
+CONSENT AGENDA                                                                    Trustees
+By unanimous consent the public body may designate noncontroversial items to be considered in one motion and one vote.  The public body may add items from the regular agenda and approve. Posted agenda items not added to the consent docket will be considered separately in their regular order.  Staff recommends that Item 6 through Item 7 be placed on the consent agenda.
+6.
+Approve Claims:  $622,062.64                                                                                      Trustees
+Claims List: June 30, 2018
+Claims List: August 07, 2018
+Credit Cards
+7.
+Approve Minutes:  July 17, 2018                                                              Trustees
+Minutes: July 17, 2018 (Regular)
+8.
+Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. Â§ 311(9))                                         Trustees
+9.
+Staff Reports (Written report included in packet, if available staff is present for questions)                                                   Trustees
+Human Resources 1
+Human Resources 2
+10.
+Trustee Community Announcements                                                               Trustees
+11.
+Adjournment                                                                            Trustees
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>j b * *~ * * * j &quot;?
+( ( b * j
+z z` }*| * j
+jz?Z j? * `_
+u z?H/ * j j?
+*? J j
+&quot;/ &quot; j
+* u * j j
+j @ j j? *
+j ` j
+`_ *? B j_
+b j
+* j b jh j u&quot;? j z
+h? * &quot; u j z
+h? U j
+* * * *
+hh? B?*| * j &quot;/ z *
+u jj z?Jj? B
+* j *~ * j &quot;?
+* @z? &quot;
+bj?J j * `/ j j? Jb
+&quot; *
+j j *| h
+u h ` j j z? J
+z/ b j ; *j? + h? Jj*
+&quot;? H_j?
+Uu u * j
+j b *~ j z u
+* j j j e}
+jj
+j  *j
+@_ j j j &quot; j b? *|
+` b &quot; j j?&quot; b `/
+b? J `/ ejj
++ * &quot;
+j?J b?U z j j
+j? Z? * u~ * j
+b j? / j? J
+* z? &quot;o j? B u
+b z?J j j
+j j? ? J z *
+&quot;~j? J b *+
+* j *z?* + j `/
+* * &quot; (* u~ b
+` j j &quot;?U
+z? J &quot;* &quot; u
+j?B j b? Z &quot;*j_
+`_
+*j? Z/j h/ u
+z j bj @; j j_
+h? J h/j u~j u
+*~ z*~* j? B`
+h? `/ *
+j j h j_
+* j j b/ z? U *~
+z j? J `/ * &quot;
+&quot; z &quot; jr?
+J b? J? &quot; *
+* *
+_ j u
+@ h j&quot; *
+z? (j * +~ &quot;?
+&quot; * `/ b &quot;/ z *j?J/ 
+jz j p/ *~ *
+* j &quot; e|@
+*  j j
+* * b j/ z&quot;? /~b &quot;?
+Z r j b/ * b
+* j jb ( j (
+z j z &quot;~ z? *?</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
+Tuesday, August 7, 2018
+5:30
+				
+
+				p.m.
+MIAMI CIVIC CENTER
+129 5th Avenue Northwest, Miami, Oklahoma
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by
+posting on www.miamiokla.net.
+THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:
+1.
+Call to Order                                                                  Chairman Schultz
+2.
+Invocation by Director of Norse Campus Ministries                                                        Steve Whitesell
+3.
+Pledge of Allegiance                                                                                   Trustee Forrester
+4.
+Public Input and Unscheduled Personal Appearances
+Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:
+www.miamiokla.net
+5.
+CONSENT AGENDA                                                                    Trustees
+By unanimous consent the public body may designate noncontroversial items to be considered in one motion and one vote.  The public body may add items from the regular agenda and approve. Posted agenda items not added to the consent docket will be considered separately in their regular order.  Staff recommends that Item 6 through Item 7 be placed on the consent agenda.
+6.
+Approve Claims:  $622,062.64                                                                                      Trustees
+Claims List: June 30, 2018
+Claims List: August 07, 2018
+Credit Cards
+7.
+Approve Minutes:  July 17, 2018                                                              Trustees
+Minutes: July 17, 2018 (Regular)
+8.
+Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. Â§ 311(9))                                         Trustees
+9.
+Staff Reports (Written report included in packet, if available staff is present for questions)                                                   Trustees
+Human Resources 1
+Human Resources 2
+10.
+Trustee Community Announcements                                                               Trustees
+11.
+Adjournment                                                                            Trustees
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
+</div>
+
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

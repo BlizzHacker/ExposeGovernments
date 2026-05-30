@@ -1,92 +1,384 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami Special Utility Authority (MSUA) - Jul  2, 2019 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami Special Utility Authority (MSUA)</h1>
-<div class="meta">📅 Jul  2, 2019 | Clip #219</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (2)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami Special Utility Authority (MSUA)</h1>
+<div class="meeting-meta">
+<span>📅 Jul  2, 2019</span>
+<span>⏱️ 00h 05m</span>
+<span>🔖 Clip #219</span>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
 </div>
-</section>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/219" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/219" allowfullscreen></iframe></div>
+<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (2.4 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+</div>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">Two is in the case, and by Pastor 1st turn to Terrain Church Raven.</span></div>
+<div class="seg" data-time="3.4"><span class="seg-time">00:03</span><span class="seg-text">Thank you very much for being here tonight!</span></div>
+<div class="seg" data-time="64.58"><span class="seg-time">01:04</span><span class="seg-text">I have six to nine for the consent agenda. If there are no questions or concerns, only of those items that indicate motion two approved</span></div>
+<div class="seg" data-time="71.78"><span class="seg-time">01:11</span><span class="seg-text">The consent agenda as recommended?</span></div>
+<div class="seg" data-time="74.18"><span class="seg-time">01:14</span><span class="seg-text">Mr Prouf</span></div>
+<div class="seg" data-time="75.38"><span class="seg-time">01:15</span><span class="seg-text">On second it roll call please</span></div>
+<div class="seg" data-time="77.38"><span class="seg-time">01:17</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="78.58"><span class="seg-time">01:18</span><span class="seg-text">We&#x27;re a vice-corner</span></div>
+<div class="seg" data-time="79.98"><span class="seg-time">01:19</span><span class="seg-text">All right</span></div>
+<div class="seg" data-time="80.58"><span class="seg-time">01:20</span><span class="seg-text">Work at</span></div>
+<div class="seg" data-time="81.78"><span class="seg-time">01:21</span><span class="seg-text">Aye</span></div>
+<div class="seg" data-time="82.38"><span class="seg-time">01:22</span><span class="seg-text">Item 10 is the Minden chapter 24 utility section 24 day 49</span></div>
+<div class="seg" data-time="87.38"><span class="seg-time">01:27</span><span class="seg-text">Up division 2 with regard to establishing a minimum kilowatt adjustment</span></div>
+<div class="seg" data-time="92.31"><span class="seg-time">01:32</span><span class="seg-text">The strategy you got to join next week</span></div>
+<div class="seg" data-time="101.22"><span class="seg-time">01:41</span><span class="seg-text">This is what this says a copification of the rate that we&#x27;re already doing</span></div>
+<div class="seg" data-time="109.76"><span class="seg-time">01:49</span><span class="seg-text">And was in our ordinances before</span></div>
+<div class="seg" data-time="111.96"><span class="seg-time">01:51</span><span class="seg-text">and all are great tables have been done for last 10 years, whatever</span></div>
+<div class="seg" data-time="116.96"><span class="seg-time">01:56</span><span class="seg-text">It didn&#x27;t really get put taken out</span></div>
+<div class="seg" data-time="118.96"><span class="seg-time">01:58</span><span class="seg-text">Essentially</span></div>
+<div class="seg" data-time="119.76"><span class="seg-time">01:59</span><span class="seg-text">This is a minimum kilowatt adjustment</span></div>
+<div class="seg" data-time="123.53"><span class="seg-time">02:03</span><span class="seg-text">And this on our commercial rates and our industrial rigs</span></div>
+<div class="seg" data-time="127.0"><span class="seg-time">02:07</span><span class="seg-text">What it&#x27;s for, those particular services are very expensive</span></div>
+<div class="seg" data-time="132.4"><span class="seg-time">02:12</span><span class="seg-text">For the time</span></div>
+<div class="seg" data-time="133.4"><span class="seg-time">02:13</span><span class="seg-text">Transmores your money</span></div>
+<div class="seg" data-time="135.0"><span class="seg-time">02:15</span><span class="seg-text">$5000 to 50 thousand dollars in most</span></div>
+<div class="seg" data-time="138.2"><span class="seg-time">02:18</span><span class="seg-text">Of course they&#x27;re labor-free</span></div>
+<div class="seg" data-time="139.6"><span class="seg-time">02:19</span><span class="seg-text">So what happens if there were designs or loads of design</span></div>
+<div class="seg" data-time="143.8"><span class="seg-time">02:23</span><span class="seg-text">To recover expenses from that over a period 5 years</span></div>
+<div class="seg" data-time="148.2"><span class="seg-time">02:28</span><span class="seg-text">But if the load drops off</span></div>
+<div class="seg" data-time="151.56"><span class="seg-time">02:31</span><span class="seg-text">We have no way to recover that totally expensive</span></div>
+<div class="seg" data-time="154.36"><span class="seg-time">02:34</span><span class="seg-text">And thats what a minimum KW demand is</span></div>
+<div class="seg" data-time="156.96"><span class="seg-time">02:36</span><span class="seg-text">Our recovery&#x27;s through our demand charge</span></div>
+<div class="seg" data-time="159.56"><span class="seg-time">02:39</span><span class="seg-text">So therefore, we&#x27;ll just down lower at certain point</span></div>
+<div class="seg" data-time="164.36"><span class="seg-time">02:44</span><span class="seg-text">I said</span></div>
+<div class="seg" data-time="165.56"><span class="seg-time">02:45</span><span class="seg-text">The minimum will be $7 per kw based on some of their summer rate</span></div>
+<div class="seg" data-time="171.36"><span class="seg-time">02:51</span><span class="seg-text">That has been an nutshell</span></div>
+<div class="seg" data-time="173.88"><span class="seg-time">02:53</span><span class="seg-text">What this says and going over with Ben</span></div>
+<div class="seg" data-time="175.88"><span class="seg-time">02:55</span><span class="seg-text">And this is the codeification</span></div>
+<div class="seg" data-time="177.88"><span class="seg-time">02:57</span><span class="seg-text">What we&#x27;re actually doing right now</span></div>
+<div class="seg" data-time="180.28"><span class="seg-time">03:00</span><span class="seg-text">So that&#x27;s it</span></div>
+<div class="seg" data-time="182.48"><span class="seg-time">03:02</span><span class="seg-text">A nutshell I&#x27;ll be happy to answer any questions</span></div>
+<div class="seg" data-time="185.08"><span class="seg-time">03:05</span><span class="seg-text">Any questions for data and concerns</span></div>
+<div class="seg" data-time="188.98"><span class="seg-time">03:08</span><span class="seg-text">Do you have a motion?</span></div>
+<div class="seg" data-time="190.78"><span class="seg-time">03:10</span><span class="seg-text">To approve item 10 as recommended</span></div>
+<div class="seg" data-time="194.02"><span class="seg-time">03:14</span><span class="seg-text">I&#x27;m like every second</span></div>
+<div class="seg" data-time="196.02"><span class="seg-time">03:16</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="196.42"><span class="seg-time">03:16</span><span class="seg-text">We will call please</span></div>
+<div class="seg" data-time="197.22"><span class="seg-time">03:17</span><span class="seg-text">Foraster</span></div>
+<div class="seg" data-time="198.02"><span class="seg-time">03:18</span><span class="seg-text">Work at Westives Lewis</span></div>
+<div class="seg" data-time="200.62"><span class="seg-time">03:20</span><span class="seg-text">Hi, Chul</span></div>
+<div class="seg" data-time="201.62"><span class="seg-time">03:21</span><span class="seg-text">Item 11 is related to the same item</span></div>
+<div class="seg" data-time="205.82"><span class="seg-time">03:25</span><span class="seg-text">Says reestablishing minimum KW adjustment</span></div>
+<div class="seg" data-time="209.98"><span class="seg-time">03:29</span><span class="seg-text">Into a firm subcity weight level</span></div>
+<div class="seg" data-time="212.78"><span class="seg-time">03:32</span><span class="seg-text">Correct</span></div>
+<div class="seg" data-time="214.27"><span class="seg-time">03:34</span><span class="seg-text">That was this of course</span></div>
+<div class="seg" data-time="216.47"><span class="seg-time">03:36</span><span class="seg-text">To reaffirm in the minimum adjustment</span></div>
+<div class="seg" data-time="218.27"><span class="seg-time">03:38</span><span class="seg-text">Thats The same thing we just talked about</span></div>
+<div class="seg" data-time="220.27"><span class="seg-time">03:40</span><span class="seg-text">But our sub-sensivary rate</span></div>
+<div class="seg" data-time="222.47"><span class="seg-time">03:42</span><span class="seg-text">Those are huge that don&#x27;t understand what it Is</span></div>
+<div class="seg" data-time="225.07"><span class="seg-time">03:45</span><span class="seg-text">That is the rate that was put into place before I even got here</span></div>
+<div class="seg" data-time="229.81"><span class="seg-time">03:49</span><span class="seg-text">And it Was a very good action on The Carter City</span></div>
+<div class="seg" data-time="232.81"><span class="seg-time">03:52</span><span class="seg-text">and there reason wasn&#x27;t</span></div>
+<div class="seg" data-time="234.01"><span class="seg-time">03:54</span><span class="seg-text">It&#x27;s an enticement to pick up new industrial load</span></div>
+<div class="seg" data-time="238.41"><span class="seg-time">03:58</span><span class="seg-text">Industrial loads</span></div>
+<div class="seg" data-time="239.61"><span class="seg-time">03:59</span><span class="seg-text">Instead of going To like REC in fact</span></div>
+<div class="seg" data-time="243.21"><span class="seg-time">04:03</span><span class="seg-text">i.e., On-the other side</span></div>
+<div class="seg" data-time="244.61"><span class="seg-time">04:04</span><span class="seg-text">In 5th during this time</span></div>
+<div class="seg" data-time="245.81"><span class="seg-time">04:05</span><span class="seg-text">This rain came became the B</span></div>
+<div class="seg" data-time="247.01"><span class="seg-time">04:07</span><span class="seg-text">We lost</span></div>
+<div class="seg" data-time="248.01"><span class="seg-time">04:08</span><span class="seg-text">From rac loss below</span></div>
+<div class="seg" data-time="249.61"><span class="seg-time">04:09</span><span class="seg-text">Then city Gotit</span></div>
+<div class="seg" data-time="250.81"><span class="seg-time">04:10</span><span class="seg-text">Now its work</span></div>
+<div class="seg" data-time="251.41"><span class="seg-time">04:11</span><span class="seg-text">Because JNTL</span></div>
+<div class="seg" data-time="253.41"><span class="seg-time">04:13</span><span class="seg-text">But the low is work</span></div>
+<div class="seg" data-time="255.21"><span class="seg-time">04:15</span><span class="seg-text">Very good loads of we have</span></div>
+<div class="seg" data-time="256.81"><span class="seg-time">04:16</span><span class="seg-text">And We continue keeping these rates</span></div>
+<div class="seg" data-time="260.41"><span class="seg-time">04:20</span><span class="seg-text">All those stuff</span></div>
+<div class="seg" data-time="261.61"><span class="seg-time">04:21</span><span class="seg-text">Anyway,</span></div>
+<div class="seg" data-time="264.17"><span class="seg-time">04:24</span><span class="seg-text">I never actually put that in our ordinances</span></div>
+<div class="seg" data-time="267.17"><span class="seg-time">04:27</span><span class="seg-text">The rate</span></div>
+<div class="seg" data-time="269.17"><span class="seg-time">04:29</span><span class="seg-text">The line which has there</span></div>
+<div class="seg" data-time="271.17"><span class="seg-time">04:31</span><span class="seg-text">To allow us to do it</span></div>
+<div class="seg" data-time="272.97"><span class="seg-time">04:32</span><span class="seg-text">It&#x27;s Never been written</span></div>
+<div class="seg" data-time="274.17"><span class="seg-time">04:34</span><span class="seg-text">In what</span></div>
+<div class="seg" data-time="275.17"><span class="seg-time">04:35</span><span class="seg-text">What a really hits</span></div>
+<div class="seg" data-time="276.37"><span class="seg-time">04:36</span><span class="seg-text">That ss with this</span></div>
+<div class="seg" data-time="277.57"><span class="seg-time">04:37</span><span class="seg-text">Is an writing and you can codify</span></div>
+<div class="seg" data-time="280.17"><span class="seg-time">04:40</span><span class="seg-text">Within Our Ordnance</span></div>
+<div class="seg" data-time="281.84"><span class="seg-time">04:41</span><span class="seg-text">So it does not change</span></div>
+<div class="seg" data-time="283.04"><span class="seg-time">04:43</span><span class="seg-text">You want to do table comes out or something</span></div>
+<div class="seg" data-time="285.04"><span class="seg-time">04:45</span><span class="seg-text">Okay</span></div>
+<div class="seg" data-time="286.82"><span class="seg-time">04:46</span><span class="seg-text">Any questions you&#x27;re concerned on</span></div>
+<div class="seg" data-time="288.22"><span class="seg-time">04:48</span><span class="seg-text">I am 11</span></div>
+<div class="seg" data-time="289.22"><span class="seg-time">04:49</span><span class="seg-text">Do we have a most-year proof</span></div>
+<div class="seg" data-time="290.62"><span class="seg-time">04:50</span><span class="seg-text">Posture</span></div>
+<div class="seg" data-time="293.1"><span class="seg-time">04:53</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="294.1"><span class="seg-time">04:54</span><span class="seg-text">Roll call please</span></div>
+<div class="seg" data-time="295.1"><span class="seg-time">04:55</span><span class="seg-text">Or get</span></div>
+<div class="seg" data-time="296.1"><span class="seg-time">04:56</span><span class="seg-text">Weston</span></div>
+<div class="seg" data-time="297.1"><span class="seg-time">04:57</span><span class="seg-text">Forester</span></div>
+<div class="seg" data-time="298.1"><span class="seg-time">04:58</span><span class="seg-text">Loose high</span></div>
+<div class="seg" data-time="299.1"><span class="seg-time">04:59</span><span class="seg-text">Sholes</span></div>
+<div class="seg" data-time="299.9"><span class="seg-time">04:59</span><span class="seg-text">Thanks David</span></div>
+<div class="seg" data-time="300.7"><span class="seg-time">05:00</span><span class="seg-text">In New Business Anyone</span></div>
+<div class="seg" data-time="303.13"><span class="seg-time">05:03</span><span class="seg-text">And he truste community announcements</span></div>
+<div class="seg" data-time="305.13"><span class="seg-time">05:05</span><span class="seg-text">Iron 14 is the German</span></div>
+<div class="seg" data-time="307.46"><span class="seg-time">05:07</span><span class="seg-text">We are almost two german issue</span></div>
+<div class="seg" data-time="310.07"><span class="seg-time">05:10</span><span class="seg-text">On my way</span></div>
+<div class="seg" data-time="311.07"><span class="seg-time">05:11</span><span class="seg-text">To have second</span></div>
+<div class="seg" data-time="312.07"><span class="seg-time">05:12</span><span class="seg-text">World Health</span></div>
+<div class="seg" data-time="313.07"><span class="seg-time">05:13</span><span class="seg-text">Show</span></div>
+<div class="seg" data-time="314.07"><span class="seg-time">05:14</span><span class="seg-text">Forester</span></div>
+<div class="seg" data-time="315.47"><span class="seg-time">05:15</span><span class="seg-text">Bye</span></div>
+<div class="seg" data-time="316.27"><span class="seg-time">05:16</span><span class="seg-text">Loose high</span></div>
+<div class="seg" data-time="317.07"><span class="seg-time">05:17</span><span class="seg-text">Work it</span></div>
 
-<section class="documents">
-<h2>📄 Full Agenda</h2>
-<div class="doc-preview">NOTICE OF REGULAR MEETING AND AGENDA<br>OF THE MIAMI CITY COUNCIL<br>Tuesday, July 2, 2019<br>5:30<br>				<br><br>				p.m.<br>OR IMMEDIATELY FOLLOWING<br>THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY<br>MIAMI CIVIC CENTER<br>129 5th Avenue Northwest, Miami, Oklahoma<br>Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by <br>posting on www.miamiokla.net.<br>THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:<br>1.<br>Call to Order                                                             Chairman Schultz<br>2.<br>Invocation by Pastor of First Presbyterian Church                                                         Ray VandeGiessen<br>3.<br>Pledge of Allegiance                                               Chairman Schultz<br>4.<br>Public Input and Unscheduled Personal Appearances<br>Each person will be limited to 3 minutes on agenda items only.  The purpose of this agenda item is to provide an opportunity for citizens' comments on agenda items.  Council members do not engage in discussion under this agenda item, and staff members are directed not to.  If you seek discussion or inquiry, please contact your Councilmember, the Mayor or the office of the City Manager.  Responses to citizen comments, if any, will occur under the applicable agenda item or may be reserved for further response by phone call, personal meeting, or a posting on the website:<br>www.miamiokla.net<br>5.<br>CONSENT AGENDA                                                                  Trustees<br>By unanimous consent the public body may designate noncontroversial items to be considered in one motion and one vote.  The public body may add items from the regular agenda and approve. Posted agenda items not added to the consent docket will be considered separately.  Staff recommends that Item 6 through Item 9 be placed on the consent agenda.<br>6.<br>Approve Claims:  $435,773.67                                                   Trustees<br>Claims List 1<br>Claims List 2<br>Credit Cards 1<br>Credit Cards 2<br>7.<br>Approve Minutes:  June 18, 2019 (Regular)                                                  Trustees<br>Minutes<br>8.<br>Approve and Award bid C19-24 for (2) Self-Contained Dual Source 3-Phase pad Mounted Automatic Circuit Transfer Switches to Anixter Inc. for $110,474; Approve Contract Contingent Upon the Submission of Required Contract Documents, and Approve City Manager or his Designee to Sign Notice to Proceed                             Tyler Cline<br>BA<br>Anixter Response<br>Border States Response<br>Contract<br>Bid Tally<br>9.<br>Approve Olsson and Associates Master Service Agreement Work Order #19/20-1 for Fiscal Year 2019-2020 for General MSUA Engineering Services Not to Exceed $120,000 Combined     S. McConnaughey<br>BA<br>Work Order<br>10.<br>Amending Chapter 24 (Utilities) Section 24-49 (Commercial and Municipal Service Electric Rate Schedule) of Division 2, All With Regard to Reestablishing the Minimum Kw Adjustment                 David Rountree<br>BA<br>Ordinance<br>Redlined Ordinance<br>PPT<br>11.<br>Amending Chapter 24 (Utilities) Section 24-63 (Industrial Service Electrical Rate Schedule) of Division 2, All With Regard to Reestablishing the Minimum Kw Adjustment and to Affirm Subsidiary Rate Levels                        David Rountree<br>BA<br>Ordinance<br>Redlined Ordinance<br>PPT<br>12.<br>Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))             Trustees<br>13.<br>Trustee Community Announcements                                    Trustees<br>14.<br>Adjournment                                                          Trustees<br>The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office.  We also ask that those in attendance turn off or place on silent all cell phones or pagers.</div>
-</section>
+</div>
+</div>
+</div>
 
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI CITY COUNCIL
+Tuesday, July 2, 2019
+5:30
+				
 
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+				p.m.
+OR IMMEDIATELY FOLLOWING
+THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY
+MIAMI CIVIC CENTER
+129 5th Avenue Northwest, Miami, Oklahoma
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by 
+posting on www.miamiokla.net.
+THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:
+1.
+Call to Order                                                             Chairman Schultz
+2.
+Invocation by Pastor of First Presbyterian Church                                                         Ray VandeGiessen
+3.
+Pledge of Allegiance                                               Chairman Schultz
+4.
+Public Input and Unscheduled Personal Appearances
+Each person will be limited to 3 minutes on agenda items only.  The purpose of this agenda item is to provide an opportunity for citizens&#x27; comments on agenda items.  Council members do not engage in discussion under this agenda item, and staff members are directed not to.  If you seek discussion or inquiry, please contact your Councilmember, the Mayor or the office of the City Manager.  Responses to citizen comments, if any, will occur under the applicable agenda item or may be reserved for further response by phone call, personal meeting, or a posting on the website:
+www.miamiokla.net
+5.
+CONSENT AGENDA                                                                  Trustees
+By unanimous consent the public body may designate noncontroversial items to be considered in one motion and one vote.  The public body may add items from the regular agenda and approve. Posted agenda items not added to the consent docket will be considered separately.  Staff recommends that Item 6 through Item 9 be placed on the consent agenda.
+6.
+Approve Claims:  $435,773.67                                                   Trustees
+Claims List 1
+Claims List 2
+Credit Cards 1
+Credit Cards 2
+7.
+Approve Minutes:  June 18, 2019 (Regular)                                                  Trustees
+Minutes
+8.
+Approve and Award bid C19-24 for (2) Self-Contained Dual Source 3-Phase pad Mounted Automatic Circuit Transfer Switches to Anixter Inc. for $110,474; Approve Contract Contingent Upon the Submission of Required Contract Documents, and Approve City Manager or his Designee to Sign Notice to Proceed                             Tyler Cline
+BA
+Anixter Response
+Border States Response
+Contract
+Bid Tally
+9.
+Approve Olsson and Associates Master Service Agreement Work Order #19/20-1 for Fiscal Year 2019-2020 for General MSUA Engineering Services Not to Exceed $120,000 Combined     S. McConnaughey
+BA
+Work Order
+10.
+Amending Chapter 24 (Utilities) Section 24-49 (Commercial and Municipal Service Electric Rate Schedule) of Division 2, All With Regard to Reestablishing the Minimum Kw Adjustment                 David Rountree
+BA
+Ordinance
+Redlined Ordinance
+PPT
+11.
+Amending Chapter 24 (Utilities) Section 24-63 (Industrial Service Electrical Rate Schedule) of Division 2, All With Regard to Reestablishing the Minimum Kw Adjustment and to Affirm Subsidiary Rate Levels                        David Rountree
+BA
+Ordinance
+Redlined Ordinance
+PPT
+12.
+Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))             Trustees
+13.
+Trustee Community Announcements                                    Trustees
+14.
+Adjournment                                                          Trustees
+The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office.  We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Two is in the case, and by Pastor 1st turn to Terrain Church Raven. Thank you very much for being here tonight! I have six to nine for the consent agenda. If there are no questions or concerns, only of those items that indicate motion two approved The consent agenda as recommended? Mr Prouf On second it roll call please Hi We&#x27;re a vice-corner All right Work at Aye Item 10 is the Minden chapter 24 utility section 24 day 49 Up division 2 with regard to establishing a minimum kilowatt adjustment The strategy you got to join next week This is what this says a copification of the rate that we&#x27;re already doing And was in our ordinances before and all are great tables have been done for last 10 years, whatever It didn&#x27;t really get put taken out Essentially This is a minimum kilowatt adjustment And this on our commercial rates and our industrial rigs What it&#x27;s for, those particular services are very expensive For the time Transmores your money $5000 to 50 thousand dollars in most Of course they&#x27;re labor-free So what happens if there were designs or loads of design To recover expenses from that over a period 5 years But if the load drops off We have no way to recover that totally expensive And thats what a minimum KW demand is Our recovery&#x27;s through our demand charge So therefore, we&#x27;ll just down lower at certain point I said The minimum will be $7 per kw based on some of their summer rate That has been an nutshell What this says and going over with Ben And this is the codeification What we&#x27;re actually doing right now So that&#x27;s it A nutshell I&#x27;ll be happy to answer any questions Any questions for data and concerns Do you have a motion? To approve item 10 as recommended I&#x27;m like every second Second We will call please Foraster Work at Westives Lewis Hi, Chul Item 11 is related to the same item Says reestablishing minimum KW adjustment Into a firm subcity weight level Correct That was this of course To reaffirm in the minimum adjustment Thats The same thing we just talked about But our sub-sensivary rate Those are huge that don&#x27;t understand what it Is That is the rate that was put into place before I even got here And it Was a very good action on The Carter City and there reason wasn&#x27;t It&#x27;s an enticement to pick up new industrial load Industrial loads Instead of going To like REC in fact i.e., On-the other side In 5th during this time This rain came became the B We lost From rac loss below Then city Gotit Now its work Because JNTL But the low is work Very good loads of we have And We continue keeping these rates All those stuff Anyway, I never actually put that in our ordinances The rate The line which has there To allow us to do it It&#x27;s Never been written In what What a really hits That ss with this Is an writing and you can codify Within Our Ordnance So it does not change You want to do table comes out or something Okay Any questions you&#x27;re concerned on I am 11 Do we have a most-year proof Posture Second Roll call please Or get Weston Forester Loose high Sholes Thanks David In New Business Anyone And he truste community announcements Iron 14 is the German We are almost two german issue On my way To have second World Health Show Forester Bye Loose high Work it</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI CITY COUNCIL
+Tuesday, July 2, 2019
+5:30
+				
+
+				p.m.
+OR IMMEDIATELY FOLLOWING
+THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY
+MIAMI CIVIC CENTER
+129 5th Avenue Northwest, Miami, Oklahoma
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by 
+posting on www.miamiokla.net.
+THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:
+1.
+Call to Order                                                             Chairman Schultz
+2.
+Invocation by Pastor of First Presbyterian Church                                                         Ray VandeGiessen
+3.
+Pledge of Allegiance                                               Chairman Schultz
+4.
+Public Input and Unscheduled Personal Appearances
+Each person will be limited to 3 minutes on agenda items only.  The purpose of this agenda item is to provide an opportunity for citizens&#x27; comments on agenda items.  Council members do not engage in discussion under this agenda item, and staff members are directed not to.  If you seek discussion or inquiry, please contact your Councilmember, the Mayor or the office of the City Manager.  Responses to citizen comments, if any, will occur under the applicable agenda item or may be reserved for further response by phone call, personal meeting, or a posting on the website:
+www.miamiokla.net
+5.
+CONSENT AGENDA                                                                  Trustees
+By unanimous consent the public body may designate noncontroversial items to be considered in one motion and one vote.  The public body may add items from the regular agenda and approve. Posted agenda items not added to the consent docket will be considered separately.  Staff recommends that Item 6 through Item 9 be placed on the consent agenda.
+6.
+Approve Claims:  $435,773.67                                                   Trustees
+Claims List 1
+Claims List 2
+Credit Cards 1
+Credit Cards 2
+7.
+Approve Minutes:  June 18, 2019 (Regular)                                                  Trustees
+Minutes
+8.
+Approve and Award bid C19-24 for (2) Self-Contained Dual Source 3-Phase pad Mounted Automatic Circuit Transfer Switches to Anixter Inc. for $110,474; Approve Contract Contingent Upon the Submission of Required Contract Documents, and Approve City Manager or his Designee to Sign Notice to Proceed                             Tyler Cline
+BA
+Anixter Response
+Border States Response
+Contract
+Bid Tally
+9.
+Approve Olsson and Associates Master Service Agreement Work Order #19/20-1 for Fiscal Year 2019-2020 for General MSUA Engineering Services Not to Exceed $120,000 Combined     S. McConnaughey
+BA
+Work Order
+10.
+Amending Chapter 24 (Utilities) Section 24-49 (Commercial and Municipal Service Electric Rate Schedule) of Division 2, All With Regard to Reestablishing the Minimum Kw Adjustment                 David Rountree
+BA
+Ordinance
+Redlined Ordinance
+PPT
+11.
+Amending Chapter 24 (Utilities) Section 24-63 (Industrial Service Electrical Rate Schedule) of Division 2, All With Regard to Reestablishing the Minimum Kw Adjustment and to Affirm Subsidiary Rate Levels                        David Rountree
+BA
+Ordinance
+Redlined Ordinance
+PPT
+12.
+Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))             Trustees
+13.
+Trustee Community Announcements                                    Trustees
+14.
+Adjournment                                                          Trustees
+The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office.  We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div></div></div></div></div>
+</div>
+
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

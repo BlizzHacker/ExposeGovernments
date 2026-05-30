@@ -1,93 +1,558 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami City Council - Jun 23, 2020 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami City Council</h1>
-<div class="meta">📅 Jun 23, 2020 | Clip #275</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (3)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Agenda Document</div>
-  <div class="issue-desc">The city has not published an agenda document for this meeting on AgendaCenter. This is a transparency concern - agendas should be publicly available before meetings.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami City Council</h1>
+<div class="meeting-meta">
+<span>📅 Jun 23, 2020</span>
+<span>⏱️ 00h 59m</span>
+<span>🔖 Clip #275</span>
 </div>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
+
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/275" allowfullscreen></iframe></div>
+
 </div>
-</section>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="1.627"><span class="seg-time">00:01</span><span class="seg-text">@t</span></div>
+<div class="seg" data-time="863.215"><span class="seg-time">14:23</span><span class="seg-text">#</span></div>
+<div class="seg" data-time="1805.887"><span class="seg-time">30:05</span><span class="seg-text">*</span></div>
+<div class="seg" data-time="1809.568"><span class="seg-time">30:09</span><span class="seg-text">j}</span></div>
+<div class="seg" data-time="1821.27"><span class="seg-time">30:21</span><span class="seg-text">s~</span></div>
+<div class="seg" data-time="1825.808"><span class="seg-time">30:25</span><span class="seg-text">#*</span></div>
+<div class="seg" data-time="1888.206"><span class="seg-time">31:28</span><span class="seg-text">*@u</span></div>
+<div class="seg" data-time="1892.76"><span class="seg-time">31:32</span><span class="seg-text">&quot;z</span></div>
+<div class="seg" data-time="1900.419"><span class="seg-time">31:40</span><span class="seg-text">w</span></div>
+<div class="seg" data-time="1908.126"><span class="seg-time">31:48</span><span class="seg-text">~</span></div>
+<div class="seg" data-time="1911.371"><span class="seg-time">31:51</span><span class="seg-text">@u</span></div>
+<div class="seg" data-time="1925.378"><span class="seg-time">32:05</span><span class="seg-text"></span></div>
+<div class="seg" data-time="1936.756"><span class="seg-time">32:16</span><span class="seg-text">&quot;~</span></div>
+<div class="seg" data-time="1945.432"><span class="seg-time">32:25</span><span class="seg-text">&quot;*</span></div>
+<div class="seg" data-time="1954.709"><span class="seg-time">32:34</span><span class="seg-text">(N*x@w&quot;: &quot;x(~</span></div>
+<div class="seg" data-time="1960.547"><span class="seg-time">32:40</span><span class="seg-text">k</span></div>
+<div class="seg" data-time="1966.72"><span class="seg-time">32:46</span><span class="seg-text">pu</span></div>
+<div class="seg" data-time="1976.882"><span class="seg-time">32:56</span><span class="seg-text">h}</span></div>
+<div class="seg" data-time="2022.311"><span class="seg-time">33:42</span><span class="seg-text">&quot;:</span></div>
+<div class="seg" data-time="2029.418"><span class="seg-time">33:49</span><span class="seg-text">}&quot;z</span></div>
+<div class="seg" data-time="2032.121"><span class="seg-time">33:52</span><span class="seg-text">@</span></div>
+<div class="seg" data-time="2036.225"><span class="seg-time">33:56</span><span class="seg-text">z?*z</span></div>
+<div class="seg" data-time="2038.795"><span class="seg-time">33:58</span><span class="seg-text">%~&quot;j</span></div>
+<div class="seg" data-time="2060.517"><span class="seg-time">34:20</span><span class="seg-text">*j3</span></div>
+<div class="seg" data-time="2067.824"><span class="seg-time">34:27</span><span class="seg-text">&lt;</span></div>
+<div class="seg" data-time="2074.332"><span class="seg-time">34:34</span><span class="seg-text">z</span></div>
+<div class="seg" data-time="2078.402"><span class="seg-time">34:38</span><span class="seg-text">*</span></div>
+<div class="seg" data-time="2101.626"><span class="seg-time">35:01</span><span class="seg-text">&quot;c</span></div>
+<div class="seg" data-time="2106.764"><span class="seg-time">35:06</span><span class="seg-text">o</span></div>
+<div class="seg" data-time="2131.457"><span class="seg-time">35:31</span><span class="seg-text">@u</span></div>
+<div class="seg" data-time="2139.632"><span class="seg-time">35:39</span><span class="seg-text">g</span></div>
+<div class="seg" data-time="2143.69"><span class="seg-time">35:43</span><span class="seg-text">z</span></div>
+<div class="seg" data-time="2159.18"><span class="seg-time">35:59</span><span class="seg-text">@u</span></div>
+<div class="seg" data-time="2171.264"><span class="seg-time">36:11</span><span class="seg-text">@u</span></div>
+<div class="seg" data-time="2177.305"><span class="seg-time">36:17</span><span class="seg-text">b@q +</span></div>
+<div class="seg" data-time="2183.277"><span class="seg-time">36:23</span><span class="seg-text">@_&quot;&gt;</span></div>
+<div class="seg" data-time="2194.956"><span class="seg-time">36:34</span><span class="seg-text">*h</span></div>
+<div class="seg" data-time="2208.603"><span class="seg-time">36:48</span><span class="seg-text">h</span></div>
+<div class="seg" data-time="2214.843"><span class="seg-time">36:54</span><span class="seg-text">&quot;j(.</span></div>
+<div class="seg" data-time="2257.387"><span class="seg-time">37:37</span><span class="seg-text">@u</span></div>
+<div class="seg" data-time="2261.124"><span class="seg-time">37:41</span><span class="seg-text">*z</span></div>
+<div class="seg" data-time="2266.43"><span class="seg-time">37:46</span><span class="seg-text">&quot;2</span></div>
+<div class="seg" data-time="2272.803"><span class="seg-time">37:52</span><span class="seg-text">@w @e</span></div>
+<div class="seg" data-time="2283.748"><span class="seg-time">38:03</span><span class="seg-text">&quot;j</span></div>
+<div class="seg" data-time="2299.531"><span class="seg-time">38:19</span><span class="seg-text">&quot;~*{</span></div>
+<div class="seg" data-time="2312.477"><span class="seg-time">38:32</span><span class="seg-text">`w</span></div>
+<div class="seg" data-time="2318.817"><span class="seg-time">38:38</span><span class="seg-text">*:</span></div>
+<div class="seg" data-time="2323.288"><span class="seg-time">38:43</span><span class="seg-text">&quot;z</span></div>
+<div class="seg" data-time="2326.591"><span class="seg-time">38:46</span><span class="seg-text">2</span></div>
+<div class="seg" data-time="2335.534"><span class="seg-time">38:55</span><span class="seg-text">z *z</span></div>
+<div class="seg" data-time="2351.183"><span class="seg-time">39:11</span><span class="seg-text">*n</span></div>
+<div class="seg" data-time="2360.627"><span class="seg-time">39:20</span><span class="seg-text">&quot;~</span></div>
+<div class="seg" data-time="2371.972"><span class="seg-time">39:31</span><span class="seg-text">b&quot;</span></div>
+<div class="seg" data-time="2384.284"><span class="seg-time">39:44</span><span class="seg-text">p]*~</span></div>
+<div class="seg" data-time="2396.3"><span class="seg-time">39:56</span><span class="seg-text">_y</span></div>
+<div class="seg" data-time="2418.286"><span class="seg-time">40:18</span><span class="seg-text">*:*~</span></div>
+<div class="seg" data-time="2429.698"><span class="seg-time">40:29</span><span class="seg-text">:</span></div>
+<div class="seg" data-time="2449.618"><span class="seg-time">40:49</span><span class="seg-text">wa|</span></div>
+<div class="seg" data-time="2487.924"><span class="seg-time">41:27</span><span class="seg-text">*j</span></div>
+<div class="seg" data-time="2495.65"><span class="seg-time">41:35</span><span class="seg-text">@u</span></div>
+<div class="seg" data-time="2498.2"><span class="seg-time">41:38</span><span class="seg-text">@| &quot;z</span></div>
+<div class="seg" data-time="2500.571"><span class="seg-time">41:40</span><span class="seg-text">&quot;j</span></div>
+<div class="seg" data-time="2502.773"><span class="seg-time">41:42</span><span class="seg-text">?</span></div>
+<div class="seg" data-time="2508.11"><span class="seg-time">41:48</span><span class="seg-text">*j</span></div>
+<div class="seg" data-time="2513.284"><span class="seg-time">41:53</span><span class="seg-text">~</span></div>
+<div class="seg" data-time="2518.856"><span class="seg-time">41:58</span><span class="seg-text">` (</span></div>
+<div class="seg" data-time="2521.426"><span class="seg-time">42:01</span><span class="seg-text">@]</span></div>
+<div class="seg" data-time="2525.129"><span class="seg-time">42:05</span><span class="seg-text">**</span></div>
+<div class="seg" data-time="2533.371"><span class="seg-time">42:13</span><span class="seg-text">( &quot;n</span></div>
+<div class="seg" data-time="2538.576"><span class="seg-time">42:18</span><span class="seg-text">@]</span></div>
+<div class="seg" data-time="2555.961"><span class="seg-time">42:35</span><span class="seg-text">_ &quot;z</span></div>
+<div class="seg" data-time="2567.673"><span class="seg-time">42:47</span><span class="seg-text">c</span></div>
+<div class="seg" data-time="2586.927"><span class="seg-time">43:06</span><span class="seg-text">5*? ~</span></div>
+<div class="seg" data-time="2593.66"><span class="seg-time">43:13</span><span class="seg-text">Ju</span></div>
+<div class="seg" data-time="2599.673"><span class="seg-time">43:19</span><span class="seg-text">&quot;:</span></div>
+<div class="seg" data-time="2625.32"><span class="seg-time">43:45</span><span class="seg-text">*~</span></div>
+<div class="seg" data-time="2629.37"><span class="seg-time">43:49</span><span class="seg-text">&quot;/</span></div>
+<div class="seg" data-time="2635.21"><span class="seg-time">43:55</span><span class="seg-text">@u</span></div>
+<div class="seg" data-time="2648.356"><span class="seg-time">44:08</span><span class="seg-text">&quot;~@]</span></div>
+<div class="seg" data-time="2651.394"><span class="seg-time">44:11</span><span class="seg-text">?</span></div>
+<div class="seg" data-time="2654.663"><span class="seg-time">44:14</span><span class="seg-text">&quot;~</span></div>
+<div class="seg" data-time="2664.84"><span class="seg-time">44:24</span><span class="seg-text">3*n</span></div>
+<div class="seg" data-time="2678.54"><span class="seg-time">44:38</span><span class="seg-text">&quot;z</span></div>
+<div class="seg" data-time="2687.964"><span class="seg-time">44:47</span><span class="seg-text">@u</span></div>
+<div class="seg" data-time="2691.535"><span class="seg-time">44:51</span><span class="seg-text">~</span></div>
+<div class="seg" data-time="2704.448"><span class="seg-time">45:04</span><span class="seg-text">)~</span></div>
+<div class="seg" data-time="2709.319"><span class="seg-time">45:09</span><span class="seg-text">@]</span></div>
+<div class="seg" data-time="2712.423"><span class="seg-time">45:12</span><span class="seg-text">&quot;h</span></div>
+<div class="seg" data-time="2720.231"><span class="seg-time">45:20</span><span class="seg-text">@u</span></div>
+<div class="seg" data-time="2724.535"><span class="seg-time">45:24</span><span class="seg-text">&quot;z</span></div>
+<div class="seg" data-time="2733.44"><span class="seg-time">45:33</span><span class="seg-text">whu:&quot;&quot;</span></div>
+<div class="seg" data-time="2735.246"><span class="seg-time">45:35</span><span class="seg-text">*x pu</span></div>
+<div class="seg" data-time="2739.451"><span class="seg-time">45:39</span><span class="seg-text">&quot;~ &quot;x</span></div>
+<div class="seg" data-time="2751.162"><span class="seg-time">45:51</span><span class="seg-text">(X</span></div>
+<div class="seg" data-time="2760.539"><span class="seg-time">46:00</span><span class="seg-text">z</span></div>
+<div class="seg" data-time="2770.148"><span class="seg-time">46:10</span><span class="seg-text">x</span></div>
+<div class="seg" data-time="2777.256"><span class="seg-time">46:17</span><span class="seg-text">bw</span></div>
+<div class="seg" data-time="2793.94"><span class="seg-time">46:33</span><span class="seg-text">@}</span></div>
+<div class="seg" data-time="2797.844"><span class="seg-time">46:37</span><span class="seg-text">@ (Z</span></div>
+<div class="seg" data-time="2803.102"><span class="seg-time">46:43</span><span class="seg-text">@] &quot;&gt;</span></div>
+<div class="seg" data-time="2813.66"><span class="seg-time">46:53</span><span class="seg-text">z</span></div>
+<div class="seg" data-time="2817.931"><span class="seg-time">46:57</span><span class="seg-text">&quot;.</span></div>
+<div class="seg" data-time="2835.216"><span class="seg-time">47:15</span><span class="seg-text">&quot;z</span></div>
+<div class="seg" data-time="2839.587"><span class="seg-time">47:19</span><span class="seg-text">&quot;:</span></div>
+<div class="seg" data-time="2847.729"><span class="seg-time">47:27</span><span class="seg-text">*z</span></div>
+<div class="seg" data-time="2866.715"><span class="seg-time">47:46</span><span class="seg-text">*h x</span></div>
+<div class="seg" data-time="2883.132"><span class="seg-time">48:03</span><span class="seg-text">_</span></div>
+<div class="seg" data-time="2899.583"><span class="seg-time">48:19</span><span class="seg-text">@w</span></div>
+<div class="seg" data-time="2904.32"><span class="seg-time">48:24</span><span class="seg-text">**</span></div>
+<div class="seg" data-time="2910.26"><span class="seg-time">48:30</span><span class="seg-text">~</span></div>
+<div class="seg" data-time="2926.276"><span class="seg-time">48:46</span><span class="seg-text">x</span></div>
+<div class="seg" data-time="2936.12"><span class="seg-time">48:56</span><span class="seg-text">&quot;~ z *~</span></div>
+<div class="seg" data-time="2939.557"><span class="seg-time">48:59</span><span class="seg-text">k</span></div>
+<div class="seg" data-time="2943.16"><span class="seg-time">49:03</span><span class="seg-text">*~</span></div>
+<div class="seg" data-time="2947.232"><span class="seg-time">49:07</span><span class="seg-text">&quot;&gt;</span></div>
+<div class="seg" data-time="2965.384"><span class="seg-time">49:25</span><span class="seg-text">pu</span></div>
+<div class="seg" data-time="2980.399"><span class="seg-time">49:40</span><span class="seg-text">~</span></div>
+<div class="seg" data-time="3011.631"><span class="seg-time">50:11</span><span class="seg-text">&quot;r x(~</span></div>
+<div class="seg" data-time="3020.507"><span class="seg-time">50:20</span><span class="seg-text">** (~</span></div>
+<div class="seg" data-time="3026.38"><span class="seg-time">50:26</span><span class="seg-text">c&quot;z</span></div>
+<div class="seg" data-time="3032.85"><span class="seg-time">50:32</span><span class="seg-text">w</span></div>
+<div class="seg" data-time="3034.122"><span class="seg-time">50:34</span><span class="seg-text">_</span></div>
+<div class="seg" data-time="3045.166"><span class="seg-time">50:45</span><span class="seg-text">l &quot;~</span></div>
+<div class="seg" data-time="3056.812"><span class="seg-time">50:56</span><span class="seg-text">@u*:~</span></div>
+<div class="seg" data-time="3059.914"><span class="seg-time">50:59</span><span class="seg-text">n</span></div>
+<div class="seg" data-time="3064.752"><span class="seg-time">51:04</span><span class="seg-text">*.</span></div>
+<div class="seg" data-time="3067.822"><span class="seg-time">51:07</span><span class="seg-text">&quot;*</span></div>
+<div class="seg" data-time="3073.796"><span class="seg-time">51:13</span><span class="seg-text">@u</span></div>
+<div class="seg" data-time="3091.13"><span class="seg-time">51:31</span><span class="seg-text">*`</span></div>
+<div class="seg" data-time="3094.483"><span class="seg-time">51:34</span><span class="seg-text">&quot;x&quot;z</span></div>
+<div class="seg" data-time="3097.553"><span class="seg-time">51:37</span><span class="seg-text">*z</span></div>
+<div class="seg" data-time="3105.195"><span class="seg-time">51:45</span><span class="seg-text">!*</span></div>
+<div class="seg" data-time="3117.774"><span class="seg-time">51:57</span><span class="seg-text">@u</span></div>
+<div class="seg" data-time="3122.613"><span class="seg-time">52:02</span><span class="seg-text">_</span></div>
+<div class="seg" data-time="3133.23"><span class="seg-time">52:13</span><span class="seg-text">j</span></div>
+<div class="seg" data-time="3136.827"><span class="seg-time">52:16</span><span class="seg-text">*j_</span></div>
+<div class="seg" data-time="3142.233"><span class="seg-time">52:22</span><span class="seg-text">&quot;~Zw</span></div>
+<div class="seg" data-time="3151.342"><span class="seg-time">52:31</span><span class="seg-text">ru</span></div>
+<div class="seg" data-time="3156.47"><span class="seg-time">52:36</span><span class="seg-text">f_*.</span></div>
+<div class="seg" data-time="3158.917"><span class="seg-time">52:38</span><span class="seg-text">&quot;j</span></div>
+<div class="seg" data-time="3174.433"><span class="seg-time">52:54</span><span class="seg-text">|</span></div>
+<div class="seg" data-time="3178.637"><span class="seg-time">52:58</span><span class="seg-text">~</span></div>
+<div class="seg" data-time="3186.478"><span class="seg-time">53:06</span><span class="seg-text">*&gt;</span></div>
+<div class="seg" data-time="3198.958"><span class="seg-time">53:18</span><span class="seg-text">/</span></div>
+<div class="seg" data-time="3202.595"><span class="seg-time">53:22</span><span class="seg-text">(X</span></div>
+<div class="seg" data-time="3210.203"><span class="seg-time">53:30</span><span class="seg-text">rw</span></div>
+<div class="seg" data-time="3215.375"><span class="seg-time">53:35</span><span class="seg-text">&quot;~*z</span></div>
+<div class="seg" data-time="3221.47"><span class="seg-time">53:41</span><span class="seg-text">*</span></div>
+<div class="seg" data-time="3228.655"><span class="seg-time">53:48</span><span class="seg-text">**&quot;z</span></div>
+<div class="seg" data-time="3231.858"><span class="seg-time">53:51</span><span class="seg-text">w|&quot;z</span></div>
+<div class="seg" data-time="3242.702"><span class="seg-time">54:02</span><span class="seg-text">k</span></div>
+<div class="seg" data-time="3245.139"><span class="seg-time">54:05</span><span class="seg-text">&quot;na*</span></div>
+<div class="seg" data-time="3283.478"><span class="seg-time">54:43</span><span class="seg-text">bu</span></div>
+<div class="seg" data-time="3288.55"><span class="seg-time">54:48</span><span class="seg-text">&quot;*</span></div>
+<div class="seg" data-time="3291.186"><span class="seg-time">54:51</span><span class="seg-text">u\</span></div>
+<div class="seg" data-time="3294.456"><span class="seg-time">54:54</span><span class="seg-text">*z</span></div>
+<div class="seg" data-time="3301.497"><span class="seg-time">55:01</span><span class="seg-text">w *z</span></div>
+<div class="seg" data-time="3303.666"><span class="seg-time">55:03</span><span class="seg-text">#</span></div>
+<div class="seg" data-time="3305.968"><span class="seg-time">55:05</span><span class="seg-text">&quot;? &quot;z</span></div>
+<div class="seg" data-time="3308.47"><span class="seg-time">55:08</span><span class="seg-text">&quot;~</span></div>
+<div class="seg" data-time="3316.746"><span class="seg-time">55:16</span><span class="seg-text">j:</span></div>
+<div class="seg" data-time="3319.15"><span class="seg-time">55:19</span><span class="seg-text">_{;</span></div>
+<div class="seg" data-time="3321.451"><span class="seg-time">55:21</span><span class="seg-text"></span></div>
+<div class="seg" data-time="3326.923"><span class="seg-time">55:26</span><span class="seg-text">~</span></div>
+<div class="seg" data-time="3331.395"><span class="seg-time">55:31</span><span class="seg-text">x *z</span></div>
+<div class="seg" data-time="3335.299"><span class="seg-time">55:35</span><span class="seg-text">_</span></div>
+<div class="seg" data-time="3337.467"><span class="seg-time">55:37</span><span class="seg-text">~ o|</span></div>
+<div class="seg" data-time="3340.237"><span class="seg-time">55:40</span><span class="seg-text">&quot;n</span></div>
+<div class="seg" data-time="3342.506"><span class="seg-time">55:42</span><span class="seg-text">#@u</span></div>
+<div class="seg" data-time="3346.42"><span class="seg-time">55:46</span><span class="seg-text">rWx</span></div>
+<div class="seg" data-time="3356.954"><span class="seg-time">55:56</span><span class="seg-text">? z</span></div>
+<div class="seg" data-time="3360.57"><span class="seg-time">56:00</span><span class="seg-text">*? &quot;~ j</span></div>
+<div class="seg" data-time="3368.833"><span class="seg-time">56:08</span><span class="seg-text">/</span></div>
+<div class="seg" data-time="3372.337"><span class="seg-time">56:12</span><span class="seg-text">w w</span></div>
+<div class="seg" data-time="3375.84"><span class="seg-time">56:15</span><span class="seg-text">+</span></div>
+<div class="seg" data-time="3378.443"><span class="seg-time">56:18</span><span class="seg-text">*x</span></div>
+<div class="seg" data-time="3385.317"><span class="seg-time">56:25</span><span class="seg-text">2@w</span></div>
+<div class="seg" data-time="3395.327"><span class="seg-time">56:35</span><span class="seg-text">h</span></div>
+<div class="seg" data-time="3404.77"><span class="seg-time">56:44</span><span class="seg-text">*</span></div>
+<div class="seg" data-time="3408.574"><span class="seg-time">56:48</span><span class="seg-text">r_ ?V</span></div>
+<div class="seg" data-time="3413.398"><span class="seg-time">56:53</span><span class="seg-text">hw *}</span></div>
+<div class="seg" data-time="3415.514"><span class="seg-time">56:55</span><span class="seg-text">{+</span></div>
+<div class="seg" data-time="3418.285"><span class="seg-time">56:58</span><span class="seg-text">z</span></div>
+<div class="seg" data-time="3422.522"><span class="seg-time">57:02</span><span class="seg-text">`u w</span></div>
+<div class="seg" data-time="3426.993"><span class="seg-time">57:06</span><span class="seg-text">we</span></div>
+<div class="seg" data-time="3429.929"><span class="seg-time">57:09</span><span class="seg-text">{ ?</span></div>
+<div class="seg" data-time="3436.67"><span class="seg-time">57:16</span><span class="seg-text">(~@u h&quot;fw</span></div>
+<div class="seg" data-time="3440.44"><span class="seg-time">57:20</span><span class="seg-text">7&quot;x</span></div>
+<div class="seg" data-time="3444.77"><span class="seg-time">57:24</span><span class="seg-text">_ w</span></div>
+<div class="seg" data-time="3449.49"><span class="seg-time">57:29</span><span class="seg-text"> j</span></div>
+<div class="seg" data-time="3455.856"><span class="seg-time">57:35</span><span class="seg-text">+</span></div>
+<div class="seg" data-time="3463.163"><span class="seg-time">57:43</span><span class="seg-text">&quot;~&#x27;} &quot;~</span></div>
+<div class="seg" data-time="3472.674"><span class="seg-time">57:52</span><span class="seg-text">/</span></div>
+<div class="seg" data-time="3477.312"><span class="seg-time">57:57</span><span class="seg-text">&quot;z</span></div>
+<div class="seg" data-time="3481.249"><span class="seg-time">58:01</span><span class="seg-text"></span></div>
+<div class="seg" data-time="3483.885"><span class="seg-time">58:03</span><span class="seg-text">&quot;n</span></div>
+<div class="seg" data-time="3487.355"><span class="seg-time">58:07</span><span class="seg-text">c&quot;&gt;&quot;*</span></div>
+<div class="seg" data-time="3494.29"><span class="seg-time">58:14</span><span class="seg-text">/~&quot;~*</span></div>
+<div class="seg" data-time="3501.269"><span class="seg-time">58:21</span><span class="seg-text">#/ka~k&quot;:</span></div>
+<div class="seg" data-time="3509.979"><span class="seg-time">58:29</span><span class="seg-text">o~</span></div>
+<div class="seg" data-time="3512.448"><span class="seg-time">58:32</span><span class="seg-text">*: ~</span></div>
+<div class="seg" data-time="3514.45"><span class="seg-time">58:34</span><span class="seg-text">w~*~ f}</span></div>
+<div class="seg" data-time="3516.819"><span class="seg-time">58:36</span><span class="seg-text">&quot;~</span></div>
+<div class="seg" data-time="3519.388"><span class="seg-time">58:39</span><span class="seg-text">wq</span></div>
+<div class="seg" data-time="3525.829"><span class="seg-time">58:45</span><span class="seg-text">/~*j&quot;z</span></div>
+<div class="seg" data-time="3529.332"><span class="seg-time">58:49</span><span class="seg-text">}+</span></div>
+<div class="seg" data-time="3533.236"><span class="seg-time">58:53</span><span class="seg-text">| ~{</span></div>
+<div class="seg" data-time="3536.272"><span class="seg-time">58:56</span><span class="seg-text">@w</span></div>
+<div class="seg" data-time="3538.474"><span class="seg-time">58:58</span><span class="seg-text">bu c}</span></div>
+<div class="seg" data-time="3542.312"><span class="seg-time">59:02</span><span class="seg-text">a: pw x /~</span></div>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/275" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
+</div>
+</div>
+</div>
 
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag(&#x27;js&#x27;, new Date()); gtag(&#x27;config&#x27;, &#x27;G-X9VGCCGG49&#x27;, { &#x27;request_origin&#x27;:&#x27;external&#x27; }); City Council Regular Meeting body{ margin-top: .5in; margin-bottom: .5in; margin-right: .5in ; margin-left: .5in; text-align: justify; font-family: Calibri, Candara, Segoe, &#x27;Segoe UI&#x27;, Optima, Arial, sans-serif; font-size: 14px; } table{ text-align: justify; border-spacing: 5px; padding: 0; font-size: 11pt; } td { text-align: justify; vertical-align:top; } .numberspace { width: 30px; vertical-align: top; text-align: left; } .ul {text-decoration: underline;} /* Prevents logo resizing on print */ img { max-width: 100%; height: auto; } NOTICE OF REGULAR MEETING AND AGENDA OF THE MIAMI CITY COUNCIL Tuesday, June 23, 2020 4:30 p.m. OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY MIAMI CIVIC CENTER 129 5th Avenue Northwest, Miami, Oklahoma Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on www.miamiokla.net. THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA: blockquote { margin-left: 40px; margin-right: 0px; margin-top: 0px; margin-bottom: 0px; }@media print { a { color: black; } } 1. Call to Order&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Schultz 2. Presentation From Chisolm Springs Housing Developer&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Kristi McClain/Lance Windel BA Presentation 3. Resolution Approving Community Financial Support, and Fee Waivers to Fresh Leaf LLC Related to the Development of 430 N. Main&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Kristi McClain BA Presentation Resolution 4. Approve City Judge Chuck Chesnut Contract for FY 2020-2021&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council BA Contract 5. Approve CARES Act Grant Offer, Grant No. 3-40-0059-021-2020 for the Miami Regional Airport From the US Department of Transportation Federal Aviation Administration&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Thomas Anderson BA Grant Letter 6. Continued Discussion and Possible Vote on Rental and Use, and Advertisement Agreement Policy&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Ben Loring Policy 7. The Meeting Will be Continued From Council Chambers and Reconvened in Meeting Room One (1) for Purposes of the Executive Session&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Schultz&amp;nbsp; &amp;nbsp; 8. Executive Session Pursuant to 25 O.S. Section 307 (B)(3) Discussing the Purchase or Appraisal of Real Property 9. Adjournment&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office. We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>@t
+#
+*
+j}
+s~
+#*
+*@u
+&quot;z
+w
+~
+@u
+
+&quot;~
+&quot;*
+(N*x@w&quot;: &quot;x(~
+k
+pu
+h}
+&quot;:
+}&quot;z
+@
+z?*z
+%~&quot;j
+*j3
+&lt;
+z
+*
+&quot;c
+o
+@u
+g
+z
+@u
+@u
+b@q +
+@_&quot;&gt;
+*h
+h
+&quot;j(.
+@u
+*z
+&quot;2
+@w @e
+&quot;j
+&quot;~*{
+`w
+*:
+&quot;z
+2
+z *z
+*n
+&quot;~
+b&quot;
+p]*~
+_y
+*:*~
+:
+wa|
+*j
+@u
+@| &quot;z
+&quot;j
+?
+*j
+~
+` (
+@]
+**
+( &quot;n
+@]
+_ &quot;z
+c
+5*? ~
+Ju
+&quot;:
+*~
+&quot;/
+@u
+&quot;~@]
+?
+&quot;~
+3*n
+&quot;z
+@u
+~
+)~
+@]
+&quot;h
+@u
+&quot;z
+whu:&quot;&quot;
+*x pu
+&quot;~ &quot;x
+(X
+z
+x
+bw
+@}
+@ (Z
+@] &quot;&gt;
+z
+&quot;.
+&quot;z
+&quot;:
+*z
+*h x
+_
+@w
+**
+~
+x
+&quot;~ z *~
+k
+*~
+&quot;&gt;
+pu
+~
+&quot;r x(~
+** (~
+c&quot;z
+w
+_
+l &quot;~
+@u*:~
+n
+*.
+&quot;*
+@u
+*`
+&quot;x&quot;z
+*z
+!*
+@u
+_
+j
+*j_
+&quot;~Zw
+ru
+f_*.
+&quot;j
+|
+~
+*&gt;
+/
+(X
+rw
+&quot;~*z
+*
+**&quot;z
+w|&quot;z
+k
+&quot;na*
+bu
+&quot;*
+u\
+*z
+w *z
+#
+&quot;? &quot;z
+&quot;~
+j:
+_{;
+
+~
+x *z
+_
+~ o|
+&quot;n
+#@u
+rWx
+? z
+*? &quot;~ j
+/
+w w
++
+*x
+2@w
+h
+*
+r_ ?V
+hw *}
+{+
+z
+`u w
+we
+{ ?
+(~@u h&quot;fw
+7&quot;x
+_ w
+ j
++
+&quot;~&#x27;} &quot;~
+/
+&quot;z
+
+&quot;n
+c&quot;&gt;&quot;*
+/~&quot;~*
+#/ka~k&quot;:
+o~
+*: ~
+w~*~ f}
+&quot;~
+wq
+/~*j&quot;z
+}+
+| ~{
+@w
+bu c}
+a: pw x /~</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag(&#x27;js&#x27;, new Date()); gtag(&#x27;config&#x27;, &#x27;G-X9VGCCGG49&#x27;, { &#x27;request_origin&#x27;:&#x27;external&#x27; }); City Council Regular Meeting body{ margin-top: .5in; margin-bottom: .5in; margin-right: .5in ; margin-left: .5in; text-align: justify; font-family: Calibri, Candara, Segoe, &#x27;Segoe UI&#x27;, Optima, Arial, sans-serif; font-size: 14px; } table{ text-align: justify; border-spacing: 5px; padding: 0; font-size: 11pt; } td { text-align: justify; vertical-align:top; } .numberspace { width: 30px; vertical-align: top; text-align: left; } .ul {text-decoration: underline;} /* Prevents logo resizing on print */ img { max-width: 100%; height: auto; } NOTICE OF REGULAR MEETING AND AGENDA OF THE MIAMI CITY COUNCIL Tuesday, June 23, 2020 4:30 p.m. OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY MIAMI CIVIC CENTER 129 5th Avenue Northwest, Miami, Oklahoma Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on www.miamiokla.net. THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA: blockquote { margin-left: 40px; margin-right: 0px; margin-top: 0px; margin-bottom: 0px; }@media print { a { color: black; } } 1. Call to Order&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Schultz 2. Presentation From Chisolm Springs Housing Developer&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Kristi McClain/Lance Windel BA Presentation 3. Resolution Approving Community Financial Support, and Fee Waivers to Fresh Leaf LLC Related to the Development of 430 N. Main&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Kristi McClain BA Presentation Resolution 4. Approve City Judge Chuck Chesnut Contract for FY 2020-2021&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council BA Contract 5. Approve CARES Act Grant Offer, Grant No. 3-40-0059-021-2020 for the Miami Regional Airport From the US Department of Transportation Federal Aviation Administration&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Thomas Anderson BA Grant Letter 6. Continued Discussion and Possible Vote on Rental and Use, and Advertisement Agreement Policy&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Ben Loring Policy 7. The Meeting Will be Continued From Council Chambers and Reconvened in Meeting Room One (1) for Purposes of the Executive Session&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Schultz&amp;nbsp; &amp;nbsp; 8. Executive Session Pursuant to 25 O.S. Section 307 (B)(3) Discussing the Purchase or Appraisal of Real Property 9. Adjournment&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office. We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div></div></div></div></div>
+</div>
 
-
-
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

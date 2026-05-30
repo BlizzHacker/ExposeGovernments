@@ -1,128 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami City Council - May 19, 2026 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami City Council</h1>
-<div class="meta">📅 May 19, 2026 | Clip #672</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (2)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami City Council</h1>
+<div class="meeting-meta">
+<span>📅 May 19, 2026</span>
+<span>⏱️ 00h 04m</span>
+<span>🔖 Clip #672</span>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
 </div>
-</section>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/672" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
-<div class="seg"><a href="#" onclick="seekTo(0.0); return false;" class="ts">[00:00]</a> this meeting so it&#x27;s gonna be out of order tonight but we&#x27;ll call to order the regular</div>
-<div class="seg"><a href="#" onclick="seekTo(4.6); return false;" class="ts">[00:04]</a> scouting meeting of my city council for tuesday may 19th 2026 item two in public input unscheduled</div>
-<div class="seg"><a href="#" onclick="seekTo(13.16); return false;" class="ts">[00:13]</a> personal appearances we have none 3a claims list most to approve second all right all right</div>
-<div class="seg"><a href="#" onclick="seekTo(21.54); return false;" class="ts">[00:21]</a> aye 3b minutes from the may 5th 2026 regular meeting most to approve</div>
-<div class="seg"><a href="#" onclick="seekTo(36.61); return false;" class="ts">[00:36]</a> aye 3c fireworks production contract with schneider&#x27;s fireworks an importing company</div>
-<div class="seg"><a href="#" onclick="seekTo(41.75); return false;" class="ts">[00:41]</a> for the july 4th event held at buffalo run casino and event center not exceed $20,000 is that</div>
-<div class="seg"><a href="#" onclick="seekTo(48.95); return false;" class="ts">[00:48]</a> yep this so this is the annual show that we partner with buffalo run so this is just to</div>
-<div class="seg"><a href="#" onclick="seekTo(54.43); return false;" class="ts">[00:54]</a> approve the contract between us and schneider&#x27;s to shoot those off again this year make motion</div>
-<div class="seg"><a href="#" onclick="seekTo(62.56); return false;" class="ts">[01:02]</a> to approve second aye 3d memorandum of understanding with the witty enterprises</div>
-<div class="seg"><a href="#" onclick="seekTo(74.98); return false;" class="ts">[01:14]</a> warehouse evangelism for the community garden project located at 201l southeast and 207l</div>
-<div class="seg"><a href="#" onclick="seekTo(82.08); return false;" class="ts">[01:22]</a> authorized city manager to sign and also zip so this is a an mou between us and witty</div>
-<div class="seg"><a href="#" onclick="seekTo(87.96); return false;" class="ts">[01:27]</a> enterprises the warehouse evangelism these are located on a couple of lots we have over on</div>
-<div class="seg"><a href="#" onclick="seekTo(93.2); return false;" class="ts">[01:33]</a> l street southeast this is a project that was started last year it did get started due to</div>
-<div class="seg"><a href="#" onclick="seekTo(100.44); return false;" class="ts">[01:40]</a> some issues that he had it kind of slowed down but he is still interested in doing it</div>
-<div class="seg"><a href="#" onclick="seekTo(105.24); return false;" class="ts">[01:45]</a> nothing&#x27;s changed we just extended it out for another year for him to see if he can</div>
-<div class="seg"><a href="#" onclick="seekTo(108.58); return false;" class="ts">[01:48]</a> do this it&#x27;s going to be a community garden and things as such so was this the location where</div>
-<div class="seg"><a href="#" onclick="seekTo(113.98); return false;" class="ts">[01:53]</a> he was like mowing yes everything yes ma&#x27;am so everything will stay the same as far as his</div>
-<div class="seg"><a href="#" onclick="seekTo(120.52); return false;" class="ts">[02:00]</a> upkeep and his expectation ours will be the same as well and like i said he he had some</div>
-<div class="seg"><a href="#" onclick="seekTo(125.94); return false;" class="ts">[02:05]</a> health issues he had a knee he had every place so slowed him down but he&#x27;s still</div>
-<div class="seg"><a href="#" onclick="seekTo(129.96); return false;" class="ts">[02:09]</a> on board and ready to continue with it this quick question misty this is still city</div>
-<div class="seg"><a href="#" onclick="seekTo(136.39); return false;" class="ts">[02:16]</a> property right yes are we so liable if there&#x27;s any accidents it arguably yeah i mean there are</div>
-<div class="seg"><a href="#" onclick="seekTo(144.21); return false;" class="ts">[02:24]</a> i mean does this memorandum protect us against that if something happened we would be a named</div>
-<div class="seg"><a href="#" onclick="seekTo(148.69); return false;" class="ts">[02:28]</a> party certainly right i don&#x27;t know that i don&#x27;t know that we would well given that all they&#x27;re</div>
-<div class="seg"><a href="#" onclick="seekTo(156.59); return false;" class="ts">[02:36]</a> doing is gardening it&#x27;s probably not a high risk anyway just a curious question we could be</div>
-<div class="seg"><a href="#" onclick="seekTo(161.39); return false;" class="ts">[02:41]</a> okay can we get at probably not if it&#x27;s our if it&#x27;s property that we own</div>
-<div class="seg"><a href="#" onclick="seekTo(171.3); return false;" class="ts">[02:51]</a> but that&#x27;s what our big insurance policies for so we have insurance in the company yes</div>
-<div class="seg"><a href="#" onclick="seekTo(175.84); return false;" class="ts">[02:55]</a> yes and mr witty also provides liability insurance as well as part of this</div>
-<div class="seg"><a href="#" onclick="seekTo(182.76); return false;" class="ts">[03:02]</a> thank you we&#x27;re a named party to his insurance motion to approve second</div>
-<div class="seg"><a href="#" onclick="seekTo(188.43); return false;" class="ts">[03:08]</a> uncle all right hi hi item four other new business if any which has risen since</div>
-<div class="seg"><a href="#" onclick="seekTo(198.11); return false;" class="ts">[03:18]</a> the posting of this agenda five staff reports six mayor council community announcements</div>
-<div class="seg"><a href="#" onclick="seekTo(217.29); return false;" class="ts">[03:37]</a> last week again we missed police week national police week i want to thank the</div>
-<div class="seg"><a href="#" onclick="seekTo(224.23); return false;" class="ts">[03:44]</a> miama police department and all the surrounding police departments in the area</div>
-<div class="seg"><a href="#" onclick="seekTo(227.85); return false;" class="ts">[03:47]</a> for the outstanding job that they do in our community and everything that they do for us</div>
-<div class="seg"><a href="#" onclick="seekTo(233.32); return false;" class="ts">[03:53]</a> thank you chief and for your department seven city manager communications yes sir eight</div>
-<div class="seg"><a href="#" onclick="seekTo(240.99); return false;" class="ts">[04:00]</a> motion</div>
-</div></section>
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/672" allowfullscreen></iframe></div>
+<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (1.9 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+</div>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="0.06"><span class="seg-time">00:00</span><span class="seg-text">We&#x27;ll call the order, or maybe a regular scheduled meeting in my city council.</span></div>
+<div class="seg" data-time="6.06"><span class="seg-time">00:06</span><span class="seg-text">For Tuesday May 19th 2026 I&#x27;m two Republican put on schedule personal appearances of none 3A claims list</span></div>
+<div class="seg" data-time="18.2"><span class="seg-time">00:18</span><span class="seg-text">Most to approve?</span></div>
+<div class="seg" data-time="21.38"><span class="seg-time">00:21</span><span class="seg-text">All right</span></div>
+<div class="seg" data-time="23.85"><span class="seg-time">00:23</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="27.15"><span class="seg-time">00:27</span><span class="seg-text">Three minutes from The May 5th 26 regular meeting</span></div>
+<div class="seg" data-time="29.46"><span class="seg-time">00:29</span><span class="seg-text">Mr. President, please say aye</span></div>
+<div class="seg" data-time="36.89"><span class="seg-time">00:36</span><span class="seg-text">3C fireworks production contract with Schneider&#x27;s fireworks and importing company for the July 4th event held a Buffalo Run casino an events center not exceed</span></div>
+<div class="seg" data-time="47.34"><span class="seg-time">00:47</span><span class="seg-text">$20 000</span></div>
+<div class="seg" data-time="49.36"><span class="seg-time">00:49</span><span class="seg-text">This is</span></div>
+<div class="seg" data-time="49.94"><span class="seg-time">00:49</span><span class="seg-text">The annual show that we partner</span></div>
+<div class="seg" data-time="52.36"><span class="seg-time">00:52</span><span class="seg-text">Bahluarun so this</span></div>
+<div class="seg" data-time="53.86"><span class="seg-time">00:53</span><span class="seg-text">Is just here proved</span></div>
+<div class="seg" data-time="54.68"><span class="seg-time">00:54</span><span class="seg-text">the contract between us and Schneiders to issue that document.</span></div>
+<div class="seg" data-time="62.64"><span class="seg-time">01:02</span><span class="seg-text">Make motion approve? Second, five</span></div>
+<div class="seg" data-time="69.22"><span class="seg-time">01:09</span><span class="seg-text">All right three D memorandum of</span></div>
+<div class="seg" data-time="73.86"><span class="seg-time">01:13</span><span class="seg-text">Understanding what The Woody Enterprises warehouse</span></div>
+<div class="seg" data-time="76.86"><span class="seg-time">01:16</span><span class="seg-text">Evangelism for Community Garden Project located at 201</span></div>
+<div class="seg" data-time="79.86"><span class="seg-time">01:19</span><span class="seg-text">L southeast into a seven l Southeast</span></div>
+<div class="seg" data-time="83.1"><span class="seg-time">01:23</span><span class="seg-text">Authorities City Manager sign also is it</span></div>
+<div class="seg" data-time="85.1"><span class="seg-time">01:25</span><span class="seg-text">So this Is an email you Between Us</span></div>
+<div class="seg" data-time="88.1"><span class="seg-time">01:28</span><span class="seg-text">In Winniator prizes where</span></div>
+<div class="seg" data-time="89.1"><span class="seg-time">01:29</span><span class="seg-text">Evangelism these are located on a couple of Lots</span></div>
+<div class="seg" data-time="93.1"><span class="seg-time">01:33</span><span class="seg-text">We have over at Onel Street</span></div>
+<div class="seg" data-time="95.1"><span class="seg-time">01:35</span><span class="seg-text">South East this is the project that was started last year</span></div>
+<div class="seg" data-time="98.1"><span class="seg-time">01:38</span><span class="seg-text">It did get Started</span></div>
+<div class="seg" data-time="100.1"><span class="seg-time">01:40</span><span class="seg-text">Do some issues if he had</span></div>
+<div class="seg" data-time="103.1"><span class="seg-time">01:43</span><span class="seg-text">Kind Of slowed down but He Is still in Resting Donut</span></div>
+<div class="seg" data-time="106.1"><span class="seg-time">01:46</span><span class="seg-text">Nothing&#x27;s changed we just extended it out for another year</span></div>
+<div class="seg" data-time="109.1"><span class="seg-time">01:49</span><span class="seg-text">To see If you can do This.</span></div>
+<div class="seg" data-time="111.1"><span class="seg-time">01:51</span><span class="seg-text">That will be community garden and things as such</span></div>
+<div class="seg" data-time="113.1"><span class="seg-time">01:53</span><span class="seg-text">Was System location where</span></div>
+<div class="seg" data-time="114.1"><span class="seg-time">01:54</span><span class="seg-text">Is that the way you&#x27;re doing it?</span></div>
+<div class="seg" data-time="117.1"><span class="seg-time">01:57</span><span class="seg-text">Yes, everything is up to him</span></div>
+<div class="seg" data-time="120.1"><span class="seg-time">02:00</span><span class="seg-text">His expectation and his expectations are just The same as Well</span></div>
+<div class="seg" data-time="124.1"><span class="seg-time">02:04</span><span class="seg-text">He has some health issues he had in need</span></div>
+<div class="seg" data-time="128.1"><span class="seg-time">02:08</span><span class="seg-text">He Had Everplaced a Slowed-down but</span></div>
+<div class="seg" data-time="130.1"><span class="seg-time">02:10</span><span class="seg-text">Still On Boarding And ready To continue with</span></div>
+<div class="seg" data-time="133.1"><span class="seg-time">02:13</span><span class="seg-text">This Quick Question Missy this</span></div>
+<div class="seg" data-time="136.69"><span class="seg-time">02:16</span><span class="seg-text">It&#x27;s still City property right.</span></div>
+<div class="seg" data-time="138.69"><span class="seg-time">02:18</span><span class="seg-text">Are we so liable if there s any accidents</span></div>
+<div class="seg" data-time="141.57"><span class="seg-time">02:21</span><span class="seg-text">Are you of Lee?</span></div>
+<div class="seg" data-time="143.91"><span class="seg-time">02:23</span><span class="seg-text">I mean does this many we protect</span></div>
+<div class="seg" data-time="146.91"><span class="seg-time">02:26</span><span class="seg-text">If something Happened, We would be a named party certainly</span></div>
+<div class="seg" data-time="151.21"><span class="seg-time">02:31</span><span class="seg-text">Right.</span></div>
+<div class="seg" data-time="154.06"><span class="seg-time">02:34</span><span class="seg-text">Well given All They&#x27;re doing his Gardening</span></div>
+<div class="seg" data-time="158.61"><span class="seg-time">02:38</span><span class="seg-text">It&#x27;s probably not a high risk.</span></div>
+<div class="seg" data-time="161.92"><span class="seg-time">02:41</span><span class="seg-text">Could Be</span></div>
+<div class="seg" data-time="164.67"><span class="seg-time">02:44</span><span class="seg-text">Can&#x27;t get Ad to it</span></div>
+<div class="seg" data-time="169.28"><span class="seg-time">02:49</span><span class="seg-text">Probably Not if its property that</span></div>
+<div class="seg" data-time="171.28"><span class="seg-time">02:51</span><span class="seg-text">But That s what our big insurance policies for</span></div>
+<div class="seg" data-time="174.28"><span class="seg-time">02:54</span><span class="seg-text">So have Insurance</span></div>
+<div class="seg" data-time="176.28"><span class="seg-time">02:56</span><span class="seg-text">Yes, yes.</span></div>
+<div class="seg" data-time="178.28"><span class="seg-time">02:58</span><span class="seg-text">And Mr Witty also provides</span></div>
+<div class="seg" data-time="181.28"><span class="seg-time">03:01</span><span class="seg-text">Liability Insurance is what&#x27;s part of this</span></div>
+<div class="seg" data-time="183.28"><span class="seg-time">03:03</span><span class="seg-text">Thank you for a name party to his insurance</span></div>
+<div class="seg" data-time="187.08"><span class="seg-time">03:07</span><span class="seg-text">Posting To Appro second</span></div>
+<div class="seg" data-time="189.08"><span class="seg-time">03:09</span><span class="seg-text">All right</span></div>
+<div class="seg" data-time="191.08"><span class="seg-time">03:11</span><span class="seg-text">I don&#x27;t know if any which the</span></div>
+<div class="seg" data-time="198.08"><span class="seg-time">03:18</span><span class="seg-text">Residents are Supposing This agenda five staff reports six</span></div>
+<div class="seg" data-time="210.85"><span class="seg-time">03:30</span><span class="seg-text">Maricouncil Community Announcements</span></div>
+<div class="seg" data-time="216.36"><span class="seg-time">03:36</span><span class="seg-text">Last week again we miss police</span></div>
+<div class="seg" data-time="221.49"><span class="seg-time">03:41</span><span class="seg-text">We National Police Week I want to thank the</span></div>
+<div class="seg" data-time="224.49"><span class="seg-time">03:44</span><span class="seg-text">My, my please Department and all this surrounding</span></div>
+<div class="seg" data-time="227.49"><span class="seg-time">03:47</span><span class="seg-text">Please departments in area for The outstanding</span></div>
+<div class="seg" data-time="229.49"><span class="seg-time">03:49</span><span class="seg-text">Jail that they do In our community And everything That They Do For Us</span></div>
+<div class="seg" data-time="233.4"><span class="seg-time">03:53</span><span class="seg-text">Thank You Chief &amp; Premier department</span></div>
+<div class="seg" data-time="238.95"><span class="seg-time">03:58</span><span class="seg-text">Seven C Managing Communications.</span></div>
+<div class="seg" data-time="240.95"><span class="seg-time">04:00</span><span class="seg-text">Eight adjournment.</span></div>
 
-<section class="documents">
-<h2>📄 Full Agenda</h2>
-<div class="doc-preview">% MI4)<br>SFR<br>NEY,<br>OFS wy<br>NOTICE OF REGULAR MEETING AND AGENDA<br>OF THE MIAMI CITY COUNCIL<br>TUESDAY, MAY 19, 2026<br>5:30 PM<br>OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY<br>Miami Civic Center<br>129 5th Avenue Northwest, Miami, Oklahoma 74354<br>Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on<br>www.miamiokla.net starting at 4. OO AM/PMon May _|1S , 2026, pursuant to 25 O.S. § 311(9) (a) and (b).<br>Melissa Moore, City Clerk<br>THE COUNCIL MAY TAKE ANY OF THE FOLLOWING ACTIONS: DISCUSS, CONSIDER AND VOTE FOR APPROVAL,<br>ACCEPTANCE, REJECTION, AMENDMENT AND/OR POSTPONEMENT OF ANY ITEM LISTED IN THIS AGENDA:<br>1. Call to Order Mayor Parker<br>2. Public Input and Unscheduled Personal Appearances Mayor Parker<br>Each person will be limited to three minutes. The purpose of this agenda item<br>is to provide an opportunity for citizens’ comments and public announcements.<br>In keeping with the principles of the Oklahoma Open Meeting Act, Council<br>Members and city staff will not engage in discussion or take any action under<br>this agenda item. If you seek discussion or further inquiry, please contact your<br>Council Member, the Mayor or the office of the city manager. Responses to<br>citizen comments, if any, will occur under an applicable Agenda item at this ora<br>future public meeting, or a response may be given by a phone call, personal<br>meeting or a posting on the city website: www.miamiokla.net.<br>3. Discussion and Possible Action Items<br>A. — Claims List City Council<br>B. Minutes: May 05, 2026 (Regular Meeting) City Council<br>C. Fireworks Production Contract With Schneitters Fireworks & Importing Zeb Mingori<br>Company For The July 4th Event Held at The Buffalo Run Casino & Event<br>Center, Not to Exceed $20,000.00<br>D. Memorandum of Understanding With Witte Enterprises/Warehouse Zeb Mingori<br>Evangelism for a Community Garden Project Located at 201 L Street SE<br>And 207 L Street SE, Authorize the City Manager to Sign<br>4. Other New Business, if any, Which has Arisen Since the Posting of the Agenda City Council/<br>and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § Tyler Cline<br>311(9)). This Agenda Item Could Include Possible Action Items<br><br><br>5. Staff Reports (Written Report Included in Packet, if Available Staff is Present<br><br>for Questions)<br><br>A. Facilities Approved Fee Waiver For AWAA'S Fee Shot Clinic at The Expo on City Council<br><br>May 2, 2026<br><br>B. | CVBand Miami Main Street Report Trinda Crow<br>6. Mayor and Council Community Announcements City Council<br>7. City Manager's Communications Tyler Cline<br>8. Adjournment City Council<br>The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens<br>and if special assistance or accommodations are required, please submit your request to the City Manager's<br>office. We also ask that those in attendance place all electronic devices on silent. Thank you.<br></div>
-</section>
+</div>
+</div>
+</div>
+
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>% MI4)
+SFR
+NEY,
+OFS wy
+NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI CITY COUNCIL
+TUESDAY, MAY 19, 2026
+5:30 PM
+OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY
+Miami Civic Center
+129 5th Avenue Northwest, Miami, Oklahoma 74354
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on
+www.miamiokla.net starting at 4. OO AM/PMon May _|1S , 2026, pursuant to 25 O.S. § 311(9) (a) and (b).
+Melissa Moore, City Clerk
+THE COUNCIL MAY TAKE ANY OF THE FOLLOWING ACTIONS: DISCUSS, CONSIDER AND VOTE FOR APPROVAL,
+ACCEPTANCE, REJECTION, AMENDMENT AND/OR POSTPONEMENT OF ANY ITEM LISTED IN THIS AGENDA:
+1. Call to Order Mayor Parker
+2. Public Input and Unscheduled Personal Appearances Mayor Parker
+Each person will be limited to three minutes. The purpose of this agenda item
+is to provide an opportunity for citizens’ comments and public announcements.
+In keeping with the principles of the Oklahoma Open Meeting Act, Council
+Members and city staff will not engage in discussion or take any action under
+this agenda item. If you seek discussion or further inquiry, please contact your
+Council Member, the Mayor or the office of the city manager. Responses to
+citizen comments, if any, will occur under an applicable Agenda item at this ora
+future public meeting, or a response may be given by a phone call, personal
+meeting or a posting on the city website: www.miamiokla.net.
+3. Discussion and Possible Action Items
+A. — Claims List City Council
+B. Minutes: May 05, 2026 (Regular Meeting) City Council
+C. Fireworks Production Contract With Schneitters Fireworks &amp; Importing Zeb Mingori
+Company For The July 4th Event Held at The Buffalo Run Casino &amp; Event
+Center, Not to Exceed $20,000.00
+D. Memorandum of Understanding With Witte Enterprises/Warehouse Zeb Mingori
+Evangelism for a Community Garden Project Located at 201 L Street SE
+And 207 L Street SE, Authorize the City Manager to Sign
+4. Other New Business, if any, Which has Arisen Since the Posting of the Agenda City Council/
+and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § Tyler Cline
+311(9)). This Agenda Item Could Include Possible Action Items
 
 
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+5. Staff Reports (Written Report Included in Packet, if Available Staff is Present
+
+for Questions)
+
+A. Facilities Approved Fee Waiver For AWAA&#x27;S Fee Shot Clinic at The Expo on City Council
+
+May 2, 2026
+
+B. | CVBand Miami Main Street Report Trinda Crow
+6. Mayor and Council Community Announcements City Council
+7. City Manager&#x27;s Communications Tyler Cline
+8. Adjournment City Council
+The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens
+and if special assistance or accommodations are required, please submit your request to the City Manager&#x27;s
+office. We also ask that those in attendance place all electronic devices on silent. Thank you.
+</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>We&#x27;ll call the order, or maybe a regular scheduled meeting in my city council. For Tuesday May 19th 2026 I&#x27;m two Republican put on schedule personal appearances of none 3A claims list Most to approve? All right Hi Three minutes from The May 5th 26 regular meeting Mr. President, please say aye 3C fireworks production contract with Schneider&#x27;s fireworks and importing company for the July 4th event held a Buffalo Run casino an events center not exceed $20 000 This is The annual show that we partner Bahluarun so this Is just here proved the contract between us and Schneiders to issue that document. Make motion approve? Second, five All right three D memorandum of Understanding what The Woody Enterprises warehouse Evangelism for Community Garden Project located at 201 L southeast into a seven l Southeast Authorities City Manager sign also is it So this Is an email you Between Us In Winniator prizes where Evangelism these are located on a couple of Lots We have over at Onel Street South East this is the project that was started last year It did get Started Do some issues if he had Kind Of slowed down but He Is still in Resting Donut Nothing&#x27;s changed we just extended it out for another year To see If you can do This. That will be community garden and things as such Was System location where Is that the way you&#x27;re doing it? Yes, everything is up to him His expectation and his expectations are just The same as Well He has some health issues he had in need He Had Everplaced a Slowed-down but Still On Boarding And ready To continue with This Quick Question Missy this It&#x27;s still City property right. Are we so liable if there s any accidents Are you of Lee? I mean does this many we protect If something Happened, We would be a named party certainly Right. Well given All They&#x27;re doing his Gardening It&#x27;s probably not a high risk. Could Be Can&#x27;t get Ad to it Probably Not if its property that But That s what our big insurance policies for So have Insurance Yes, yes. And Mr Witty also provides Liability Insurance is what&#x27;s part of this Thank you for a name party to his insurance Posting To Appro second All right I don&#x27;t know if any which the Residents are Supposing This agenda five staff reports six Maricouncil Community Announcements Last week again we miss police We National Police Week I want to thank the My, my please Department and all this surrounding Please departments in area for The outstanding Jail that they do In our community And everything That They Do For Us Thank You Chief &amp; Premier department Seven C Managing Communications. Eight adjournment.</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>% MI4)
+SFR
+NEY,
+OFS wy
+NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI CITY COUNCIL
+TUESDAY, MAY 19, 2026
+5:30 PM
+OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY
+Miami Civic Center
+129 5th Avenue Northwest, Miami, Oklahoma 74354
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on
+www.miamiokla.net starting at 4. OO AM/PMon May _|1S , 2026, pursuant to 25 O.S. § 311(9) (a) and (b).
+Melissa Moore, City Clerk
+THE COUNCIL MAY TAKE ANY OF THE FOLLOWING ACTIONS: DISCUSS, CONSIDER AND VOTE FOR APPROVAL,
+ACCEPTANCE, REJECTION, AMENDMENT AND/OR POSTPONEMENT OF ANY ITEM LISTED IN THIS AGENDA:
+1. Call to Order Mayor Parker
+2. Public Input and Unscheduled Personal Appearances Mayor Parker
+Each person will be limited to three minutes. The purpose of this agenda item
+is to provide an opportunity for citizens’ comments and public announcements.
+In keeping with the principles of the Oklahoma Open Meeting Act, Council
+Members and city staff will not engage in discussion or take any action under
+this agenda item. If you seek discussion or further inquiry, please contact your
+Council Member, the Mayor or the office of the city manager. Responses to
+citizen comments, if any, will occur under an applicable Agenda item at this ora
+future public meeting, or a response may be given by a phone call, personal
+meeting or a posting on the city website: www.miamiokla.net.
+3. Discussion and Possible Action Items
+A. — Claims List City Council
+B. Minutes: May 05, 2026 (Regular Meeting) City Council
+C. Fireworks Production Contract With Schneitters Fireworks &amp; Importing Zeb Mingori
+Company For The July 4th Event Held at The Buffalo Run Casino &amp; Event
+Center, Not to Exceed $20,000.00
+D. Memorandum of Understanding With Witte Enterprises/Warehouse Zeb Mingori
+Evangelism for a Community Garden Project Located at 201 L Street SE
+And 207 L Street SE, Authorize the City Manager to Sign
+4. Other New Business, if any, Which has Arisen Since the Posting of the Agenda City Council/
+and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § Tyler Cline
+311(9)). This Agenda Item Could Include Possible Action Items
+
+
+5. Staff Reports (Written Report Included in Packet, if Available Staff is Present
+
+for Questions)
+
+A. Facilities Approved Fee Waiver For AWAA&#x27;S Fee Shot Clinic at The Expo on City Council
+
+May 2, 2026
+
+B. | CVBand Miami Main Street Report Trinda Crow
+6. Mayor and Council Community Announcements City Council
+7. City Manager&#x27;s Communications Tyler Cline
+8. Adjournment City Council
+The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens
+and if special assistance or accommodations are required, please submit your request to the City Manager&#x27;s
+office. We also ask that those in attendance place all electronic devices on silent. Thank you.
+</pre></div></div></div></div></div>
+</div>
+
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

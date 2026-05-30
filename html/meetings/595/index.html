@@ -1,211 +1,409 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami Special Utility Authority (MSUA) - Feb 25, 2025 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami Special Utility Authority (MSUA)</h1>
-<div class="meta">📅 Feb 25, 2025 | Clip #595</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (2)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami Special Utility Authority (MSUA)</h1>
+<div class="meeting-meta">
+<span>📅 Feb 25, 2025</span>
+<span>⏱️ 00h 06m</span>
+<span>🔖 Clip #595</span>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
 </div>
-</section>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/595" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
-<div class="seg"><a href="#" onclick="seekTo(0.0); return false;" class="ts">[00:00]</a> The National Utility Authority meeting before Tuesday, February 25th,</div>
-<div class="seg"><a href="#" onclick="seekTo(4.0); return false;" class="ts">[00:04]</a> the invocation by Ms. K. Bowman.</div>
-<div class="seg"><a href="#" onclick="seekTo(8.02); return false;" class="ts">[00:08]</a> My God, our guest in down upon those who hold office in the city,</div>
-<div class="seg"><a href="#" onclick="seekTo(22.88); return false;" class="ts">[00:22]</a> the spirit of wisdom and charity and justice at my steadfast purpose.</div>
-<div class="seg"><a href="#" onclick="seekTo(29.14); return false;" class="ts">[00:29]</a> They may faithfully serve and their children up the well-being of all the peace through Jesus Christ our Lord.</div>
-<div class="seg"><a href="#" onclick="seekTo(36.9); return false;" class="ts">[00:36]</a> Amen.</div>
-<div class="seg"><a href="#" onclick="seekTo(40.59); return false;" class="ts">[00:40]</a> Let you lead to the flag of the United States of America and choose the Republic for which it sounds.</div>
-<div class="seg"><a href="#" onclick="seekTo(46.59); return false;" class="ts">[00:46]</a> One nation under God, in the midst of the liturgy of justice for all.</div>
-<div class="seg"><a href="#" onclick="seekTo(52.59); return false;" class="ts">[00:52]</a> Greg, on public uniterious and unskilled we have none.</div>
-<div class="seg"><a href="#" onclick="seekTo(60.26); return false;" class="ts">[01:00]</a> Five, five, claims.</div>
-<div class="seg"><a href="#" onclick="seekTo(62.26); return false;" class="ts">[01:02]</a> Motion.</div>
-<div class="seg"><a href="#" onclick="seekTo(64.38); return false;" class="ts">[01:04]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(67.5); return false;" class="ts">[01:07]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(68.5); return false;" class="ts">[01:08]</a> Jones.</div>
-<div class="seg"><a href="#" onclick="seekTo(69.5); return false;" class="ts">[01:09]</a> I, Gordon, I, EastF.</div>
-<div class="seg"><a href="#" onclick="seekTo(70.5); return false;" class="ts">[01:10]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(71.5); return false;" class="ts">[01:11]</a> Madam of six.</div>
-<div class="seg"><a href="#" onclick="seekTo(73.78); return false;" class="ts">[01:13]</a> minutes from the February 4th regular meeting.</div>
-<div class="seg"><a href="#" onclick="seekTo(76.78); return false;" class="ts">[01:16]</a> Question.</div>
-<div class="seg"><a href="#" onclick="seekTo(78.58); return false;" class="ts">[01:18]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(79.65); return false;" class="ts">[01:19]</a> I&#x27;m Rethel.</div>
-<div class="seg"><a href="#" onclick="seekTo(81.65); return false;" class="ts">[01:21]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(82.65); return false;" class="ts">[01:22]</a> I&#x27;m Rethel.</div>
-<div class="seg"><a href="#" onclick="seekTo(83.65); return false;" class="ts">[01:23]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(84.65); return false;" class="ts">[01:24]</a> Don&#x27;s.</div>
-<div class="seg"><a href="#" onclick="seekTo(85.65); return false;" class="ts">[01:25]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(86.94); return false;" class="ts">[01:26]</a> There were seven.</div>
-<div class="seg"><a href="#" onclick="seekTo(87.94); return false;" class="ts">[01:27]</a> Action out of master service agreement with owned formerly Anderson Engineering for Engineering Services.</div>
-<div class="seg"><a href="#" onclick="seekTo(93.03); return false;" class="ts">[01:33]</a> Yes, board.</div>
-<div class="seg"><a href="#" onclick="seekTo(95.03); return false;" class="ts">[01:35]</a> This is for owned Anderson Engineering for the engineering.</div>
-<div class="seg"><a href="#" onclick="seekTo(98.03); return false;" class="ts">[01:38]</a> To do our city engineering stuff for us.</div>
-<div class="seg"><a href="#" onclick="seekTo(100.03); return false;" class="ts">[01:40]</a> They do a lot of different projects for us.</div>
-<div class="seg"><a href="#" onclick="seekTo(101.03); return false;" class="ts">[01:41]</a> You know, they do testing for the streets.</div>
-<div class="seg"><a href="#" onclick="seekTo(104.03); return false;" class="ts">[01:44]</a> You know, a survey workforce.</div>
-<div class="seg"><a href="#" onclick="seekTo(105.03); return false;" class="ts">[01:45]</a> They do, you know, surveys on our properties that we bought.</div>
-<div class="seg"><a href="#" onclick="seekTo(109.06); return false;" class="ts">[01:49]</a> You know, make sure it&#x27;s check.</div>
-<div class="seg"><a href="#" onclick="seekTo(110.06); return false;" class="ts">[01:50]</a> I mean, they do a slew of different things for us.</div>
-<div class="seg"><a href="#" onclick="seekTo(113.38); return false;" class="ts">[01:53]</a> We just have an on-call contract with them that we have paid them an hourly rate.</div>
-<div class="seg"><a href="#" onclick="seekTo(116.38); return false;" class="ts">[01:56]</a> And this is just three new it.</div>
-<div class="seg"><a href="#" onclick="seekTo(118.86); return false;" class="ts">[01:58]</a> So.</div>
-<div class="seg"><a href="#" onclick="seekTo(120.06); return false;" class="ts">[02:00]</a> So do we pay them a monthly fee?</div>
-<div class="seg"><a href="#" onclick="seekTo(122.06); return false;" class="ts">[02:02]</a> No.</div>
-<div class="seg"><a href="#" onclick="seekTo(123.06); return false;" class="ts">[02:03]</a> We paid them just like an out.</div>
-<div class="seg"><a href="#" onclick="seekTo(124.06); return false;" class="ts">[02:04]</a> We paid them an hourly rate.</div>
-<div class="seg"><a href="#" onclick="seekTo(125.06); return false;" class="ts">[02:05]</a> Kind of like we do our attorneys and everything else.</div>
-<div class="seg"><a href="#" onclick="seekTo(127.06); return false;" class="ts">[02:07]</a> Anything you want to add there?</div>
-<div class="seg"><a href="#" onclick="seekTo(129.62); return false;" class="ts">[02:09]</a> It took all your sunshine?</div>
-<div class="seg"><a href="#" onclick="seekTo(134.38); return false;" class="ts">[02:14]</a> Sorry.</div>
-<div class="seg"><a href="#" onclick="seekTo(135.54); return false;" class="ts">[02:15]</a> I&#x27;m going to.</div>
-<div class="seg"><a href="#" onclick="seekTo(138.39); return false;" class="ts">[02:18]</a> I&#x27;m going to entertain a motion.</div>
-<div class="seg"><a href="#" onclick="seekTo(140.39); return false;" class="ts">[02:20]</a> I&#x27;ll make motion.</div>
-<div class="seg"><a href="#" onclick="seekTo(141.39); return false;" class="ts">[02:21]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(142.39); return false;" class="ts">[02:22]</a> Jones.</div>
-<div class="seg"><a href="#" onclick="seekTo(143.62); return false;" class="ts">[02:23]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(144.62); return false;" class="ts">[02:24]</a> Orange.</div>
-<div class="seg"><a href="#" onclick="seekTo(145.62); return false;" class="ts">[02:25]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(146.62); return false;" class="ts">[02:26]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(147.9); return false;" class="ts">[02:27]</a> Number eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(148.9); return false;" class="ts">[02:28]</a> Ash down on board to bid.</div>
-<div class="seg"><a href="#" onclick="seekTo(149.9); return false;" class="ts">[02:29]</a> Revis Walter.</div>
-<div class="seg"><a href="#" onclick="seekTo(150.9); return false;" class="ts">[02:30]</a> Well, and construction for contract.</div>
-<div class="seg"><a href="#" onclick="seekTo(152.9); return false;" class="ts">[02:32]</a> DS RF project number.</div>
-<div class="seg"><a href="#" onclick="seekTo(154.9); return false;" class="ts">[02:34]</a> Two zero zero eight one three dash.</div>
-<div class="seg"><a href="#" onclick="seekTo(156.9); return false;" class="ts">[02:36]</a> Two.</div>
-<div class="seg"><a href="#" onclick="seekTo(157.9); return false;" class="ts">[02:37]</a> New space.</div>
-<div class="seg"><a href="#" onclick="seekTo(158.9); return false;" class="ts">[02:38]</a> We said.</div>
-<div class="seg"><a href="#" onclick="seekTo(216.56); return false;" class="ts">[03:36]</a> And I would like to point on to the administrative board that this is the first of our large project that we received you green on so this is like</div>
-<div class="seg"><a href="#" onclick="seekTo(222.56); return false;" class="ts">[03:42]</a> The actual us actually doing the construction so I mean, you know, there&#x27;ll be many more of these coming about but this is like</div>
-<div class="seg"><a href="#" onclick="seekTo(228.56); return false;" class="ts">[03:48]</a> This is the first of our</div>
-<div class="seg"><a href="#" onclick="seekTo(230.56); return false;" class="ts">[03:50]</a> We related to the</div>
-<div class="seg"><a href="#" onclick="seekTo(232.56); return false;" class="ts">[03:52]</a> We had the one out that we had to do a large super parol</div>
-<div class="seg"><a href="#" onclick="seekTo(234.56); return false;" class="ts">[03:54]</a> This is the different location but this would actually help us in the future if something like that happens we&#x27;d have other areas that we could store water to pump water into the town</div>
-<div class="seg"><a href="#" onclick="seekTo(242.56); return false;" class="ts">[04:02]</a> We were done in like inventory for these or probably not right on the six hundred dollars</div>
-<div class="seg"><a href="#" onclick="seekTo(246.56); return false;" class="ts">[04:06]</a> Well, not this is just this is actually the building</div>
-<div class="seg"><a href="#" onclick="seekTo(251.59); return false;" class="ts">[04:11]</a> Yeah, we&#x27;re just one half right there on the corner</div>
-<div class="seg"><a href="#" onclick="seekTo(265.84000000000003); return false;" class="ts">[04:25]</a> We bought that you know a few years. We bought that property from ROTA</div>
-<div class="seg"><a href="#" onclick="seekTo(270.25); return false;" class="ts">[04:30]</a> Is that the triangle?</div>
-<div class="seg"><a href="#" onclick="seekTo(272.25); return false;" class="ts">[04:32]</a> Yes, sir. I&#x27;ll get that&#x27;s the triangle</div>
-<div class="seg"><a href="#" onclick="seekTo(274.25); return false;" class="ts">[04:34]</a> Motion to approve</div>
-<div class="seg"><a href="#" onclick="seekTo(277.37); return false;" class="ts">[04:37]</a> Second</div>
-<div class="seg"><a href="#" onclick="seekTo(280.81); return false;" class="ts">[04:40]</a> Hi</div>
-<div class="seg"><a href="#" onclick="seekTo(281.81); return false;" class="ts">[04:41]</a> Jones</div>
-<div class="seg"><a href="#" onclick="seekTo(282.81); return false;" class="ts">[04:42]</a> I</div>
-<div class="seg"><a href="#" onclick="seekTo(283.81); return false;" class="ts">[04:43]</a> On</div>
-<div class="seg"><a href="#" onclick="seekTo(284.81); return false;" class="ts">[04:44]</a> Hi</div>
-<div class="seg"><a href="#" onclick="seekTo(285.81); return false;" class="ts">[04:45]</a> I&#x27;m not so you&#x27;re explain that here</div>
-<div class="seg"><a href="#" onclick="seekTo(287.81); return false;" class="ts">[04:47]</a> We had</div>
-<div class="seg"><a href="#" onclick="seekTo(288.81); return false;" class="ts">[04:48]</a> We had a pretty good community all year</div>
-<div class="seg"><a href="#" onclick="seekTo(290.81); return false;" class="ts">[04:50]</a> And the bar</div>
-<div class="seg"><a href="#" onclick="seekTo(291.81); return false;" class="ts">[04:51]</a> Again</div>
-<div class="seg"><a href="#" onclick="seekTo(307.69); return false;" class="ts">[05:07]</a> Yeah, so it&#x27;s 50% of the amount of the $500</div>
-<div class="seg"><a href="#" onclick="seekTo(312.33000000000004); return false;" class="ts">[05:12]</a> So the number of the numbers is going to be ruined</div>
-<div class="seg"><a href="#" onclick="seekTo(313.33000000000004); return false;" class="ts">[05:13]</a> Yep</div>
-<div class="seg"><a href="#" onclick="seekTo(314.33000000000004); return false;" class="ts">[05:14]</a> Yeah, motion to approve</div>
-<div class="seg"><a href="#" onclick="seekTo(320.87); return false;" class="ts">[05:20]</a> Second</div>
-<div class="seg"><a href="#" onclick="seekTo(322.35); return false;" class="ts">[05:22]</a> He&#x27;s said</div>
-<div class="seg"><a href="#" onclick="seekTo(323.86); return false;" class="ts">[05:23]</a> All right</div>
-<div class="seg"><a href="#" onclick="seekTo(325.06); return false;" class="ts">[05:25]</a> Sorry. I&#x27;m going to read you that</div>
-<div class="seg"><a href="#" onclick="seekTo(326.06); return false;" class="ts">[05:26]</a> What&#x27;s going on?</div>
-<div class="seg"><a href="#" onclick="seekTo(327.06); return false;" class="ts">[05:27]</a> Hi</div>
-<div class="seg"><a href="#" onclick="seekTo(328.06); return false;" class="ts">[05:28]</a> Jones</div>
-<div class="seg"><a href="#" onclick="seekTo(329.06); return false;" class="ts">[05:29]</a> I</div>
-<div class="seg"><a href="#" onclick="seekTo(330.06); return false;" class="ts">[05:30]</a> Barnes</div>
-<div class="seg"><a href="#" onclick="seekTo(331.06); return false;" class="ts">[05:31]</a> Hi</div>
-<div class="seg"><a href="#" onclick="seekTo(333.73); return false;" class="ts">[05:33]</a> Thank you guys great job</div>
-<div class="seg"><a href="#" onclick="seekTo(334.73); return false;" class="ts">[05:34]</a> That&#x27;s exciting</div>
-<div class="seg"><a href="#" onclick="seekTo(335.73); return false;" class="ts">[05:35]</a> Any other business</div>
-<div class="seg"><a href="#" onclick="seekTo(337.73); return false;" class="ts">[05:37]</a> So sorry, I didn&#x27;t mean I&#x27;m going to talk to</div>
-<div class="seg"><a href="#" onclick="seekTo(339.73); return false;" class="ts">[05:39]</a> I&#x27;m going to sign it</div>
-<div class="seg"><a href="#" onclick="seekTo(340.73); return false;" class="ts">[05:40]</a> I&#x27;m going to sign it</div>
-<div class="seg"><a href="#" onclick="seekTo(341.73); return false;" class="ts">[05:41]</a> I&#x27;m going to move</div>
-<div class="seg"><a href="#" onclick="seekTo(342.73); return false;" class="ts">[05:42]</a> Go for it</div>
-<div class="seg"><a href="#" onclick="seekTo(343.73); return false;" class="ts">[05:43]</a> Other business that has a reason since the Posting of the agenda</div>
-<div class="seg"><a href="#" onclick="seekTo(346.73); return false;" class="ts">[05:46]</a> And staff reports</div>
-<div class="seg"><a href="#" onclick="seekTo(348.73); return false;" class="ts">[05:48]</a> Trusty community announcements</div>
-<div class="seg"><a href="#" onclick="seekTo(354.15); return false;" class="ts">[05:54]</a> I have number three</div>
-<div class="seg"><a href="#" onclick="seekTo(360.0); return false;" class="ts">[06:00]</a> Our team is meeting we&#x27;ll be continuing from the council chambers and we convened in the staffer to discuss the executive session of the completion of the regular meeting of the C.</div>
-<div class="seg"><a href="#" onclick="seekTo(367.64); return false;" class="ts">[06:07]</a> My Miss City Council.</div>
-</div></section>
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/595" allowfullscreen></iframe></div>
 
-<section class="documents">
-<h2>📄 Full Agenda</h2>
-<div class="doc-preview">NOTICE OF REGULAR MEETING AND AGENDA<br>OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)<br>Tuesday, February 25, 2025<br>5:30<br>				<br><br>				p.m.<br>MIAMI CIVIC CENTER<br>129 5th Avenue Northwest, Miami, Oklahoma<br>Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by<br>posting on www.miamiokla.net.<br>THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:<br>1.<br>Call to Order                                                                 Vice Chairman Estep<br>2.<br>Invocation by the Deacon of All Saints Episcopal Church                                                Kay Boman-Harvey<br>3.<br>Pledge of Allegiance                                                                      Trustee Jones<br>4.<br>Public Input and Unscheduled Personal Appearances<br>Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:<br>www.miamiokla.net<br>5.<br>*Action Item* Claims                                                                 Trustees<br>Claims List<br>Credit Cards<br>6.<br>*Action Item* Minutes:  February 04, 2025 (Regular)                                       Trustees<br>Minutes<br>7.<br>*Action Item* Master Service Agreement With OWN (Formerly Anderson Engineering) for Engineering Services                                          Tyler Cline/Derric Lollar<br>BA<br>Agreement<br>8.<br>*Action Item* Award Bid to Reavis Water Well & Construction Inc. for Contract No. 1 of DWSRF Project No. 2005813-02 for a new Pump House at Well No. 7 in the Amount of $609,550.00, Approve Contract Contingent Upon Submission of all Required Contract Documents, and Authorize the Trust Manager or His Designee to Sign the Notice to Proceed              Tyler Cline/Derric Lollar<br>BA<br>Reavis Response<br>Agreement<br>Bid Tabulation<br>DW-049 SRF Construction Contract Information<br>Notice of Award<br>ODEQ Authorization<br>Solicitation Packet<br>9.<br>*Action Item* Award Bid to Maguire Iron Inc. for Contract No. 2 of DWSRF Project No. 2005813-02 for a new Water Tower in the Amount of $1,965,000.00, Approve Contract Contingent Upon Submission of all Required Contract Documents, and Authorize the Trust Manager or His Designee to Sign the Notice to Proceed                          Tyler Cline/Derric Lollar<br>BA<br>Caldwell Response<br>Gerard Response<br>Maguire Response<br>Agreement<br>Maguire Bid Form Agreement #2<br>Bid Tabulation<br>DW-049 SRF Construction Contract Information<br>Notice of Award<br>ODEQ Authorization<br>Solicitation Packet<br>10.<br>*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))              Trustees/Tyler Cline<br>11.<br>Staff Reports (Written report included in packet, if available staff is present for questions)                                   Trustees<br>Pollution Control<br>Solid Waste<br>12.<br>Trustee Community Announcements                                                            Trustees<br>13.<br>The Meeting Will be Continued From the Council Chambers and Reconvened in the Staff Room for Purposes of the Executive Session at the Completion of the Regular Meeting of the Miami City Council                  Vice Chairman Estep<br>14.<br>Executive Session in the Staff Room to Review Previous Executive Session Minutes                       Trustees<br>15.<br>Executive Session in the Staff Room Pursuant to 25 O.S. §307(B)(4) for Purposes of Confidential Communications Between the Trust and its Attorney Concerning a Pending Investigation, Claim, or Action, to wit:  City of Miami, et al., v. GRDA CJ-08-619 and F.E.R.C. Project No. 1494               Trustees<br>16.<br>The Meeting Will be Reconvened in the Staff Room After the Executive Session                        Trustees<br>17.<br>*Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 15                                 Trustees<br>18.<br>*Action Item* Adjournment                                   Trustees<br>The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager's office. We also ask that those in attendance place all electronic devices on silent. Thank you.</div>
-</section>
+</div>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">The National Utility Authority meeting before Tuesday, February 25th,</span></div>
+<div class="seg" data-time="4.0"><span class="seg-time">00:04</span><span class="seg-text">the invocation by Ms. K. Bowman.</span></div>
+<div class="seg" data-time="8.02"><span class="seg-time">00:08</span><span class="seg-text">My God, our guest in down upon those who hold office in the city,</span></div>
+<div class="seg" data-time="22.88"><span class="seg-time">00:22</span><span class="seg-text">the spirit of wisdom and charity and justice at my steadfast purpose.</span></div>
+<div class="seg" data-time="29.14"><span class="seg-time">00:29</span><span class="seg-text">They may faithfully serve and their children up the well-being of all the peace through Jesus Christ our Lord.</span></div>
+<div class="seg" data-time="36.9"><span class="seg-time">00:36</span><span class="seg-text">Amen.</span></div>
+<div class="seg" data-time="40.59"><span class="seg-time">00:40</span><span class="seg-text">Let you lead to the flag of the United States of America and choose the Republic for which it sounds.</span></div>
+<div class="seg" data-time="46.59"><span class="seg-time">00:46</span><span class="seg-text">One nation under God, in the midst of the liturgy of justice for all.</span></div>
+<div class="seg" data-time="52.59"><span class="seg-time">00:52</span><span class="seg-text">Greg, on public uniterious and unskilled we have none.</span></div>
+<div class="seg" data-time="60.26"><span class="seg-time">01:00</span><span class="seg-text">Five, five, claims.</span></div>
+<div class="seg" data-time="62.26"><span class="seg-time">01:02</span><span class="seg-text">Motion.</span></div>
+<div class="seg" data-time="64.38"><span class="seg-time">01:04</span><span class="seg-text">Second.</span></div>
+<div class="seg" data-time="67.5"><span class="seg-time">01:07</span><span class="seg-text">Five.</span></div>
+<div class="seg" data-time="68.5"><span class="seg-time">01:08</span><span class="seg-text">Jones.</span></div>
+<div class="seg" data-time="69.5"><span class="seg-time">01:09</span><span class="seg-text">I, Gordon, I, EastF.</span></div>
+<div class="seg" data-time="70.5"><span class="seg-time">01:10</span><span class="seg-text">Five.</span></div>
+<div class="seg" data-time="71.5"><span class="seg-time">01:11</span><span class="seg-text">Madam of six.</span></div>
+<div class="seg" data-time="73.78"><span class="seg-time">01:13</span><span class="seg-text">minutes from the February 4th regular meeting.</span></div>
+<div class="seg" data-time="76.78"><span class="seg-time">01:16</span><span class="seg-text">Question.</span></div>
+<div class="seg" data-time="78.58"><span class="seg-time">01:18</span><span class="seg-text">Second.</span></div>
+<div class="seg" data-time="79.65"><span class="seg-time">01:19</span><span class="seg-text">I&#x27;m Rethel.</span></div>
+<div class="seg" data-time="81.65"><span class="seg-time">01:21</span><span class="seg-text">Hi.</span></div>
+<div class="seg" data-time="82.65"><span class="seg-time">01:22</span><span class="seg-text">I&#x27;m Rethel.</span></div>
+<div class="seg" data-time="83.65"><span class="seg-time">01:23</span><span class="seg-text">Hi.</span></div>
+<div class="seg" data-time="84.65"><span class="seg-time">01:24</span><span class="seg-text">Don&#x27;s.</span></div>
+<div class="seg" data-time="85.65"><span class="seg-time">01:25</span><span class="seg-text">Hi.</span></div>
+<div class="seg" data-time="86.94"><span class="seg-time">01:26</span><span class="seg-text">There were seven.</span></div>
+<div class="seg" data-time="87.94"><span class="seg-time">01:27</span><span class="seg-text">Action out of master service agreement with owned formerly Anderson Engineering for Engineering Services.</span></div>
+<div class="seg" data-time="93.03"><span class="seg-time">01:33</span><span class="seg-text">Yes, board.</span></div>
+<div class="seg" data-time="95.03"><span class="seg-time">01:35</span><span class="seg-text">This is for owned Anderson Engineering for the engineering.</span></div>
+<div class="seg" data-time="98.03"><span class="seg-time">01:38</span><span class="seg-text">To do our city engineering stuff for us.</span></div>
+<div class="seg" data-time="100.03"><span class="seg-time">01:40</span><span class="seg-text">They do a lot of different projects for us.</span></div>
+<div class="seg" data-time="101.03"><span class="seg-time">01:41</span><span class="seg-text">You know, they do testing for the streets.</span></div>
+<div class="seg" data-time="104.03"><span class="seg-time">01:44</span><span class="seg-text">You know, a survey workforce.</span></div>
+<div class="seg" data-time="105.03"><span class="seg-time">01:45</span><span class="seg-text">They do, you know, surveys on our properties that we bought.</span></div>
+<div class="seg" data-time="109.06"><span class="seg-time">01:49</span><span class="seg-text">You know, make sure it&#x27;s check.</span></div>
+<div class="seg" data-time="110.06"><span class="seg-time">01:50</span><span class="seg-text">I mean, they do a slew of different things for us.</span></div>
+<div class="seg" data-time="113.38"><span class="seg-time">01:53</span><span class="seg-text">We just have an on-call contract with them that we have paid them an hourly rate.</span></div>
+<div class="seg" data-time="116.38"><span class="seg-time">01:56</span><span class="seg-text">And this is just three new it.</span></div>
+<div class="seg" data-time="118.86"><span class="seg-time">01:58</span><span class="seg-text">So.</span></div>
+<div class="seg" data-time="120.06"><span class="seg-time">02:00</span><span class="seg-text">So do we pay them a monthly fee?</span></div>
+<div class="seg" data-time="122.06"><span class="seg-time">02:02</span><span class="seg-text">No.</span></div>
+<div class="seg" data-time="123.06"><span class="seg-time">02:03</span><span class="seg-text">We paid them just like an out.</span></div>
+<div class="seg" data-time="124.06"><span class="seg-time">02:04</span><span class="seg-text">We paid them an hourly rate.</span></div>
+<div class="seg" data-time="125.06"><span class="seg-time">02:05</span><span class="seg-text">Kind of like we do our attorneys and everything else.</span></div>
+<div class="seg" data-time="127.06"><span class="seg-time">02:07</span><span class="seg-text">Anything you want to add there?</span></div>
+<div class="seg" data-time="129.62"><span class="seg-time">02:09</span><span class="seg-text">It took all your sunshine?</span></div>
+<div class="seg" data-time="134.38"><span class="seg-time">02:14</span><span class="seg-text">Sorry.</span></div>
+<div class="seg" data-time="135.54"><span class="seg-time">02:15</span><span class="seg-text">I&#x27;m going to.</span></div>
+<div class="seg" data-time="138.39"><span class="seg-time">02:18</span><span class="seg-text">I&#x27;m going to entertain a motion.</span></div>
+<div class="seg" data-time="140.39"><span class="seg-time">02:20</span><span class="seg-text">I&#x27;ll make motion.</span></div>
+<div class="seg" data-time="141.39"><span class="seg-time">02:21</span><span class="seg-text">Second.</span></div>
+<div class="seg" data-time="142.39"><span class="seg-time">02:22</span><span class="seg-text">Jones.</span></div>
+<div class="seg" data-time="143.62"><span class="seg-time">02:23</span><span class="seg-text">Hi.</span></div>
+<div class="seg" data-time="144.62"><span class="seg-time">02:24</span><span class="seg-text">Orange.</span></div>
+<div class="seg" data-time="145.62"><span class="seg-time">02:25</span><span class="seg-text">Hi.</span></div>
+<div class="seg" data-time="146.62"><span class="seg-time">02:26</span><span class="seg-text">Hi.</span></div>
+<div class="seg" data-time="147.9"><span class="seg-time">02:27</span><span class="seg-text">Number eight.</span></div>
+<div class="seg" data-time="148.9"><span class="seg-time">02:28</span><span class="seg-text">Ash down on board to bid.</span></div>
+<div class="seg" data-time="149.9"><span class="seg-time">02:29</span><span class="seg-text">Revis Walter.</span></div>
+<div class="seg" data-time="150.9"><span class="seg-time">02:30</span><span class="seg-text">Well, and construction for contract.</span></div>
+<div class="seg" data-time="152.9"><span class="seg-time">02:32</span><span class="seg-text">DS RF project number.</span></div>
+<div class="seg" data-time="154.9"><span class="seg-time">02:34</span><span class="seg-text">Two zero zero eight one three dash.</span></div>
+<div class="seg" data-time="156.9"><span class="seg-time">02:36</span><span class="seg-text">Two.</span></div>
+<div class="seg" data-time="157.9"><span class="seg-time">02:37</span><span class="seg-text">New space.</span></div>
+<div class="seg" data-time="158.9"><span class="seg-time">02:38</span><span class="seg-text">We said.</span></div>
+<div class="seg" data-time="216.56"><span class="seg-time">03:36</span><span class="seg-text">And I would like to point on to the administrative board that this is the first of our large project that we received you green on so this is like</span></div>
+<div class="seg" data-time="222.56"><span class="seg-time">03:42</span><span class="seg-text">The actual us actually doing the construction so I mean, you know, there&#x27;ll be many more of these coming about but this is like</span></div>
+<div class="seg" data-time="228.56"><span class="seg-time">03:48</span><span class="seg-text">This is the first of our</span></div>
+<div class="seg" data-time="230.56"><span class="seg-time">03:50</span><span class="seg-text">We related to the</span></div>
+<div class="seg" data-time="232.56"><span class="seg-time">03:52</span><span class="seg-text">We had the one out that we had to do a large super parol</span></div>
+<div class="seg" data-time="234.56"><span class="seg-time">03:54</span><span class="seg-text">This is the different location but this would actually help us in the future if something like that happens we&#x27;d have other areas that we could store water to pump water into the town</span></div>
+<div class="seg" data-time="242.56"><span class="seg-time">04:02</span><span class="seg-text">We were done in like inventory for these or probably not right on the six hundred dollars</span></div>
+<div class="seg" data-time="246.56"><span class="seg-time">04:06</span><span class="seg-text">Well, not this is just this is actually the building</span></div>
+<div class="seg" data-time="251.59"><span class="seg-time">04:11</span><span class="seg-text">Yeah, we&#x27;re just one half right there on the corner</span></div>
+<div class="seg" data-time="265.84000000000003"><span class="seg-time">04:25</span><span class="seg-text">We bought that you know a few years. We bought that property from ROTA</span></div>
+<div class="seg" data-time="270.25"><span class="seg-time">04:30</span><span class="seg-text">Is that the triangle?</span></div>
+<div class="seg" data-time="272.25"><span class="seg-time">04:32</span><span class="seg-text">Yes, sir. I&#x27;ll get that&#x27;s the triangle</span></div>
+<div class="seg" data-time="274.25"><span class="seg-time">04:34</span><span class="seg-text">Motion to approve</span></div>
+<div class="seg" data-time="277.37"><span class="seg-time">04:37</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="280.81"><span class="seg-time">04:40</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="281.81"><span class="seg-time">04:41</span><span class="seg-text">Jones</span></div>
+<div class="seg" data-time="282.81"><span class="seg-time">04:42</span><span class="seg-text">I</span></div>
+<div class="seg" data-time="283.81"><span class="seg-time">04:43</span><span class="seg-text">On</span></div>
+<div class="seg" data-time="284.81"><span class="seg-time">04:44</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="285.81"><span class="seg-time">04:45</span><span class="seg-text">I&#x27;m not so you&#x27;re explain that here</span></div>
+<div class="seg" data-time="287.81"><span class="seg-time">04:47</span><span class="seg-text">We had</span></div>
+<div class="seg" data-time="288.81"><span class="seg-time">04:48</span><span class="seg-text">We had a pretty good community all year</span></div>
+<div class="seg" data-time="290.81"><span class="seg-time">04:50</span><span class="seg-text">And the bar</span></div>
+<div class="seg" data-time="291.81"><span class="seg-time">04:51</span><span class="seg-text">Again</span></div>
+<div class="seg" data-time="307.69"><span class="seg-time">05:07</span><span class="seg-text">Yeah, so it&#x27;s 50% of the amount of the $500</span></div>
+<div class="seg" data-time="312.33000000000004"><span class="seg-time">05:12</span><span class="seg-text">So the number of the numbers is going to be ruined</span></div>
+<div class="seg" data-time="313.33000000000004"><span class="seg-time">05:13</span><span class="seg-text">Yep</span></div>
+<div class="seg" data-time="314.33000000000004"><span class="seg-time">05:14</span><span class="seg-text">Yeah, motion to approve</span></div>
+<div class="seg" data-time="320.87"><span class="seg-time">05:20</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="322.35"><span class="seg-time">05:22</span><span class="seg-text">He&#x27;s said</span></div>
+<div class="seg" data-time="323.86"><span class="seg-time">05:23</span><span class="seg-text">All right</span></div>
+<div class="seg" data-time="325.06"><span class="seg-time">05:25</span><span class="seg-text">Sorry. I&#x27;m going to read you that</span></div>
+<div class="seg" data-time="326.06"><span class="seg-time">05:26</span><span class="seg-text">What&#x27;s going on?</span></div>
+<div class="seg" data-time="327.06"><span class="seg-time">05:27</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="328.06"><span class="seg-time">05:28</span><span class="seg-text">Jones</span></div>
+<div class="seg" data-time="329.06"><span class="seg-time">05:29</span><span class="seg-text">I</span></div>
+<div class="seg" data-time="330.06"><span class="seg-time">05:30</span><span class="seg-text">Barnes</span></div>
+<div class="seg" data-time="331.06"><span class="seg-time">05:31</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="333.73"><span class="seg-time">05:33</span><span class="seg-text">Thank you guys great job</span></div>
+<div class="seg" data-time="334.73"><span class="seg-time">05:34</span><span class="seg-text">That&#x27;s exciting</span></div>
+<div class="seg" data-time="335.73"><span class="seg-time">05:35</span><span class="seg-text">Any other business</span></div>
+<div class="seg" data-time="337.73"><span class="seg-time">05:37</span><span class="seg-text">So sorry, I didn&#x27;t mean I&#x27;m going to talk to</span></div>
+<div class="seg" data-time="339.73"><span class="seg-time">05:39</span><span class="seg-text">I&#x27;m going to sign it</span></div>
+<div class="seg" data-time="340.73"><span class="seg-time">05:40</span><span class="seg-text">I&#x27;m going to sign it</span></div>
+<div class="seg" data-time="341.73"><span class="seg-time">05:41</span><span class="seg-text">I&#x27;m going to move</span></div>
+<div class="seg" data-time="342.73"><span class="seg-time">05:42</span><span class="seg-text">Go for it</span></div>
+<div class="seg" data-time="343.73"><span class="seg-time">05:43</span><span class="seg-text">Other business that has a reason since the Posting of the agenda</span></div>
+<div class="seg" data-time="346.73"><span class="seg-time">05:46</span><span class="seg-text">And staff reports</span></div>
+<div class="seg" data-time="348.73"><span class="seg-time">05:48</span><span class="seg-text">Trusty community announcements</span></div>
+<div class="seg" data-time="354.15"><span class="seg-time">05:54</span><span class="seg-text">I have number three</span></div>
+<div class="seg" data-time="360.0"><span class="seg-time">06:00</span><span class="seg-text">Our team is meeting we&#x27;ll be continuing from the council chambers and we convened in the staffer to discuss the executive session of the completion of the regular meeting of the C.</span></div>
+<div class="seg" data-time="367.64"><span class="seg-time">06:07</span><span class="seg-text">My Miss City Council.</span></div>
 
+</div>
+</div>
+</div>
 
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
+Tuesday, February 25, 2025
+5:30
+				
+
+				p.m.
+MIAMI CIVIC CENTER
+129 5th Avenue Northwest, Miami, Oklahoma
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by
+posting on www.miamiokla.net.
+THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:
+1.
+Call to Order                                                                 Vice Chairman Estep
+2.
+Invocation by the Deacon of All Saints Episcopal Church                                                Kay Boman-Harvey
+3.
+Pledge of Allegiance                                                                      Trustee Jones
+4.
+Public Input and Unscheduled Personal Appearances
+Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:
+www.miamiokla.net
+5.
+*Action Item* Claims                                                                 Trustees
+Claims List
+Credit Cards
+6.
+*Action Item* Minutes:  February 04, 2025 (Regular)                                       Trustees
+Minutes
+7.
+*Action Item* Master Service Agreement With OWN (Formerly Anderson Engineering) for Engineering Services                                          Tyler Cline/Derric Lollar
+BA
+Agreement
+8.
+*Action Item* Award Bid to Reavis Water Well &amp; Construction Inc. for Contract No. 1 of DWSRF Project No. 2005813-02 for a new Pump House at Well No. 7 in the Amount of $609,550.00, Approve Contract Contingent Upon Submission of all Required Contract Documents, and Authorize the Trust Manager or His Designee to Sign the Notice to Proceed              Tyler Cline/Derric Lollar
+BA
+Reavis Response
+Agreement
+Bid Tabulation
+DW-049 SRF Construction Contract Information
+Notice of Award
+ODEQ Authorization
+Solicitation Packet
+9.
+*Action Item* Award Bid to Maguire Iron Inc. for Contract No. 2 of DWSRF Project No. 2005813-02 for a new Water Tower in the Amount of $1,965,000.00, Approve Contract Contingent Upon Submission of all Required Contract Documents, and Authorize the Trust Manager or His Designee to Sign the Notice to Proceed                          Tyler Cline/Derric Lollar
+BA
+Caldwell Response
+Gerard Response
+Maguire Response
+Agreement
+Maguire Bid Form Agreement #2
+Bid Tabulation
+DW-049 SRF Construction Contract Information
+Notice of Award
+ODEQ Authorization
+Solicitation Packet
+10.
+*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))              Trustees/Tyler Cline
+11.
+Staff Reports (Written report included in packet, if available staff is present for questions)                                   Trustees
+Pollution Control
+Solid Waste
+12.
+Trustee Community Announcements                                                            Trustees
+13.
+The Meeting Will be Continued From the Council Chambers and Reconvened in the Staff Room for Purposes of the Executive Session at the Completion of the Regular Meeting of the Miami City Council                  Vice Chairman Estep
+14.
+Executive Session in the Staff Room to Review Previous Executive Session Minutes                       Trustees
+15.
+Executive Session in the Staff Room Pursuant to 25 O.S. §307(B)(4) for Purposes of Confidential Communications Between the Trust and its Attorney Concerning a Pending Investigation, Claim, or Action, to wit:  City of Miami, et al., v. GRDA CJ-08-619 and F.E.R.C. Project No. 1494               Trustees
+16.
+The Meeting Will be Reconvened in the Staff Room After the Executive Session                        Trustees
+17.
+*Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 15                                 Trustees
+18.
+*Action Item* Adjournment                                   Trustees
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>The National Utility Authority meeting before Tuesday, February 25th, the invocation by Ms. K. Bowman. My God, our guest in down upon those who hold office in the city, the spirit of wisdom and charity and justice at my steadfast purpose. They may faithfully serve and their children up the well-being of all the peace through Jesus Christ our Lord. Amen. Let you lead to the flag of the United States of America and choose the Republic for which it sounds. One nation under God, in the midst of the liturgy of justice for all. Greg, on public uniterious and unskilled we have none. Five, five, claims. Motion. Second. Five. Jones. I, Gordon, I, EastF. Five. Madam of six. minutes from the February 4th regular meeting. Question. Second. I&#x27;m Rethel. Hi. I&#x27;m Rethel. Hi. Don&#x27;s. Hi. There were seven. Action out of master service agreement with owned formerly Anderson Engineering for Engineering Services. Yes, board. This is for owned Anderson Engineering for the engineering. To do our city engineering stuff for us. They do a lot of different projects for us. You know, they do testing for the streets. You know, a survey workforce. They do, you know, surveys on our properties that we bought. You know, make sure it&#x27;s check. I mean, they do a slew of different things for us. We just have an on-call contract with them that we have paid them an hourly rate. And this is just three new it. So. So do we pay them a monthly fee? No. We paid them just like an out. We paid them an hourly rate. Kind of like we do our attorneys and everything else. Anything you want to add there? It took all your sunshine? Sorry. I&#x27;m going to. I&#x27;m going to entertain a motion. I&#x27;ll make motion. Second. Jones. Hi. Orange. Hi. Hi. Number eight. Ash down on board to bid. Revis Walter. Well, and construction for contract. DS RF project number. Two zero zero eight one three dash. Two. New space. We said. And I would like to point on to the administrative board that this is the first of our large project that we received you green on so this is like The actual us actually doing the construction so I mean, you know, there&#x27;ll be many more of these coming about but this is like This is the first of our We related to the We had the one out that we had to do a large super parol This is the different location but this would actually help us in the future if something like that happens we&#x27;d have other areas that we could store water to pump water into the town We were done in like inventory for these or probably not right on the six hundred dollars Well, not this is just this is actually the building Yeah, we&#x27;re just one half right there on the corner We bought that you know a few years. We bought that property from ROTA Is that the triangle? Yes, sir. I&#x27;ll get that&#x27;s the triangle Motion to approve Second Hi Jones I On Hi I&#x27;m not so you&#x27;re explain that here We had We had a pretty good community all year And the bar Again Yeah, so it&#x27;s 50% of the amount of the $500 So the number of the numbers is going to be ruined Yep Yeah, motion to approve Second He&#x27;s said All right Sorry. I&#x27;m going to read you that What&#x27;s going on? Hi Jones I Barnes Hi Thank you guys great job That&#x27;s exciting Any other business So sorry, I didn&#x27;t mean I&#x27;m going to talk to I&#x27;m going to sign it I&#x27;m going to sign it I&#x27;m going to move Go for it Other business that has a reason since the Posting of the agenda And staff reports Trusty community announcements I have number three Our team is meeting we&#x27;ll be continuing from the council chambers and we convened in the staffer to discuss the executive session of the completion of the regular meeting of the C. My Miss City Council.</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
+Tuesday, February 25, 2025
+5:30
+				
+
+				p.m.
+MIAMI CIVIC CENTER
+129 5th Avenue Northwest, Miami, Oklahoma
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by
+posting on www.miamiokla.net.
+THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:
+1.
+Call to Order                                                                 Vice Chairman Estep
+2.
+Invocation by the Deacon of All Saints Episcopal Church                                                Kay Boman-Harvey
+3.
+Pledge of Allegiance                                                                      Trustee Jones
+4.
+Public Input and Unscheduled Personal Appearances
+Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:
+www.miamiokla.net
+5.
+*Action Item* Claims                                                                 Trustees
+Claims List
+Credit Cards
+6.
+*Action Item* Minutes:  February 04, 2025 (Regular)                                       Trustees
+Minutes
+7.
+*Action Item* Master Service Agreement With OWN (Formerly Anderson Engineering) for Engineering Services                                          Tyler Cline/Derric Lollar
+BA
+Agreement
+8.
+*Action Item* Award Bid to Reavis Water Well &amp; Construction Inc. for Contract No. 1 of DWSRF Project No. 2005813-02 for a new Pump House at Well No. 7 in the Amount of $609,550.00, Approve Contract Contingent Upon Submission of all Required Contract Documents, and Authorize the Trust Manager or His Designee to Sign the Notice to Proceed              Tyler Cline/Derric Lollar
+BA
+Reavis Response
+Agreement
+Bid Tabulation
+DW-049 SRF Construction Contract Information
+Notice of Award
+ODEQ Authorization
+Solicitation Packet
+9.
+*Action Item* Award Bid to Maguire Iron Inc. for Contract No. 2 of DWSRF Project No. 2005813-02 for a new Water Tower in the Amount of $1,965,000.00, Approve Contract Contingent Upon Submission of all Required Contract Documents, and Authorize the Trust Manager or His Designee to Sign the Notice to Proceed                          Tyler Cline/Derric Lollar
+BA
+Caldwell Response
+Gerard Response
+Maguire Response
+Agreement
+Maguire Bid Form Agreement #2
+Bid Tabulation
+DW-049 SRF Construction Contract Information
+Notice of Award
+ODEQ Authorization
+Solicitation Packet
+10.
+*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))              Trustees/Tyler Cline
+11.
+Staff Reports (Written report included in packet, if available staff is present for questions)                                   Trustees
+Pollution Control
+Solid Waste
+12.
+Trustee Community Announcements                                                            Trustees
+13.
+The Meeting Will be Continued From the Council Chambers and Reconvened in the Staff Room for Purposes of the Executive Session at the Completion of the Regular Meeting of the Miami City Council                  Vice Chairman Estep
+14.
+Executive Session in the Staff Room to Review Previous Executive Session Minutes                       Trustees
+15.
+Executive Session in the Staff Room Pursuant to 25 O.S. §307(B)(4) for Purposes of Confidential Communications Between the Trust and its Attorney Concerning a Pending Investigation, Claim, or Action, to wit:  City of Miami, et al., v. GRDA CJ-08-619 and F.E.R.C. Project No. 1494               Trustees
+16.
+The Meeting Will be Reconvened in the Staff Room After the Executive Session                        Trustees
+17.
+*Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 15                                 Trustees
+18.
+*Action Item* Adjournment                                   Trustees
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
+</div>
+
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

@@ -1,560 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami City Council - Jun  3, 2024 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami City Council</h1>
-<div class="meta">📅 Jun  3, 2024 | Clip #552</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (3)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Agenda Document</div>
-  <div class="issue-desc">The city has not published an agenda document for this meeting on AgendaCenter. This is a transparency concern - agendas should be publicly available before meetings.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami City Council</h1>
+<div class="meeting-meta">
+<span>📅 Jun  3, 2024</span>
+<span>⏱️ 00h 24m</span>
+<span>🔖 Clip #552</span>
 </div>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
+
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/552" allowfullscreen></iframe></div>
+<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (11.1 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
-</section>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="2.9"><span class="seg-time">00:02</span><span class="seg-text">Our cover was a regular scheduled meeting of the state council for June 3, 2024. Number 2 public hearing on</span></div>
+<div class="seg" data-time="13.04"><span class="seg-time">00:13</span><span class="seg-text">the proposed fiscal year 24, 25 budget.</span></div>
+<div class="seg" data-time="54.27"><span class="seg-time">00:54</span><span class="seg-text">Children who do not read in the summer can lose two to three months of reading skills and kids</span></div>
+<div class="seg" data-time="62.88"><span class="seg-time">01:02</span><span class="seg-text">who do read 10 to gain a month of reading proficiency. The reason that I say is because we have the budget from last year on</span></div>
+<div class="seg" data-time="75.14"><span class="seg-time">01:15</span><span class="seg-text">the team program, adult programming reading and children&#x27;s programme.</span></div>
+<div class="seg" data-time="106.16"><span class="seg-time">01:46</span><span class="seg-text">We&#x27;re constantly, you know I will say Kelly is a strong go-getter. She&#x27;s extremely thrifty she has gone to conventions and there was</span></div>
+<div class="seg" data-time="137.88"><span class="seg-time">02:17</span><span class="seg-text">a 6,000 down to like 3,004 thousand.</span></div>
+<div class="seg" data-time="170.1"><span class="seg-time">02:50</span><span class="seg-text">They give so much of themselves and they are extremely qualified in the work that</span></div>
+<div class="seg" data-time="202.02"><span class="seg-time">03:22</span><span class="seg-text">they have to continue in education units. When we are going into these conventions, when</span></div>
+<div class="seg" data-time="446.58"><span class="seg-time">07:26</span><span class="seg-text">the second floor because of other writers had issues working. I recall they also have</span></div>
+<div class="seg" data-time="751.36"><span class="seg-time">12:31</span><span class="seg-text">to do raises for employees or we want you know, use that money elsewhere and the decision was let&#x27;s</span></div>
+<div class="seg" data-time="1048.24"><span class="seg-time">17:28</span><span class="seg-text">be a request of the council last meeting. We&#x27;ve relatively minor change but I think that is exactly what</span></div>
+<div class="seg" data-time="1347.03"><span class="seg-time">22:27</span><span class="seg-text">I would like to say.</span></div>
+<div class="seg" data-time="1431.83"><span class="seg-time">23:51</span><span class="seg-text">Thank you.</span></div>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/552" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
-<div class="seg"><a href="#" onclick="seekTo(2.7); return false;" class="ts">[00:02]</a> I would call it over the Reggers Academy in the Madison City Council for June 3rd, 2024.</div>
-<div class="seg"><a href="#" onclick="seekTo(7.7); return false;" class="ts">[00:07]</a> Number two, public hearing on the proposed fiscal year 24, 25 budget.</div>
-<div class="seg"><a href="#" onclick="seekTo(16.04); return false;" class="ts">[00:16]</a> It&#x27;s all a good.</div>
-<div class="seg"><a href="#" onclick="seekTo(27.64); return false;" class="ts">[00:27]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(29.96); return false;" class="ts">[00:29]</a> First off, I want to say welcome to private Jones.</div>
-<div class="seg"><a href="#" onclick="seekTo(33.96); return false;" class="ts">[00:33]</a> You are my new counsel.</div>
-<div class="seg"><a href="#" onclick="seekTo(35.96); return false;" class="ts">[00:35]</a> I&#x27;m in your district, your ward.</div>
-<div class="seg"><a href="#" onclick="seekTo(38.96); return false;" class="ts">[00:38]</a> My name is Kit Waters.</div>
-<div class="seg"><a href="#" onclick="seekTo(41.96); return false;" class="ts">[00:41]</a> I am here to speak on behalf of the library.</div>
-<div class="seg"><a href="#" onclick="seekTo(46.96); return false;" class="ts">[00:46]</a> I am on the board of directors for the library.</div>
-<div class="seg"><a href="#" onclick="seekTo(51.96); return false;" class="ts">[00:51]</a> And I just want to start off with children who do not read in the summer can</div>
-<div class="seg"><a href="#" onclick="seekTo(57.96); return false;" class="ts">[00:57]</a> lose two to three months of reading skills.</div>
-<div class="seg"><a href="#" onclick="seekTo(61.96); return false;" class="ts">[01:01]</a> And kids who do read 10 to gain a month of reading proficiency.</div>
-<div class="seg"><a href="#" onclick="seekTo(66.96); return false;" class="ts">[01:06]</a> The reason that I say that is because we have the budget from last year on the team program,</div>
-<div class="seg"><a href="#" onclick="seekTo(77.22); return false;" class="ts">[01:17]</a> the adult program reading and the children&#x27;s program reading summer reading program.</div>
-<div class="seg"><a href="#" onclick="seekTo(85.31); return false;" class="ts">[01:25]</a> And we started off in July, saved for the children&#x27;s with $1,500.</div>
-<div class="seg"><a href="#" onclick="seekTo(92.31); return false;" class="ts">[01:32]</a> And by the end of March, we had $188.52.</div>
-<div class="seg"><a href="#" onclick="seekTo(97.31); return false;" class="ts">[01:37]</a> And that&#x27;s going to be cut further.</div>
-<div class="seg"><a href="#" onclick="seekTo(100.44); return false;" class="ts">[01:40]</a> I know that we use our book budget to purchase janitorial supplies.</div>
-<div class="seg"><a href="#" onclick="seekTo(108.44); return false;" class="ts">[01:48]</a> And we&#x27;re constantly, you know, I will say Kelly is a strong go get her.</div>
-<div class="seg"><a href="#" onclick="seekTo(117.11); return false;" class="ts">[01:57]</a> She&#x27;s extremely thrifty.</div>
-<div class="seg"><a href="#" onclick="seekTo(119.11); return false;" class="ts">[01:59]</a> She has gone to conventions.</div>
-<div class="seg"><a href="#" onclick="seekTo(122.11); return false;" class="ts">[02:02]</a> And there was a vendor that she approached at one of the conventions.</div>
-<div class="seg"><a href="#" onclick="seekTo(126.11); return false;" class="ts">[02:06]</a> And she said, we are not going to renew our contract with you.</div>
-<div class="seg"><a href="#" onclick="seekTo(130.11); return false;" class="ts">[02:10]</a> We cannot afford this in the next year.</div>
-<div class="seg"><a href="#" onclick="seekTo(133.11); return false;" class="ts">[02:13]</a> And at vendor said, I will cut it.</div>
-<div class="seg"><a href="#" onclick="seekTo(136.11); return false;" class="ts">[02:16]</a> And I want to say it was 6,000 down to like 3,000 or 4,000.</div>
-<div class="seg"><a href="#" onclick="seekTo(144.94); return false;" class="ts">[02:24]</a> 6,900 to 2,400.</div>
-<div class="seg"><a href="#" onclick="seekTo(146.94); return false;" class="ts">[02:26]</a> Because she attends the conventions because she continues the relationships.</div>
-<div class="seg"><a href="#" onclick="seekTo(150.94); return false;" class="ts">[02:30]</a> And because she is constantly double checking on the prices.</div>
-<div class="seg"><a href="#" onclick="seekTo(155.94); return false;" class="ts">[02:35]</a> She is constantly coming to us saying, I&#x27;m finding ways for us to cut this budget.</div>
-<div class="seg"><a href="#" onclick="seekTo(161.94); return false;" class="ts">[02:41]</a> And we&#x27;re going to do this.</div>
-<div class="seg"><a href="#" onclick="seekTo(162.94); return false;" class="ts">[02:42]</a> And I do want to say every single member of that staff at the library is phenomenal.</div>
-<div class="seg"><a href="#" onclick="seekTo(168.94); return false;" class="ts">[02:48]</a> They have amazing hearts. They give so much of themselves.</div>
-<div class="seg"><a href="#" onclick="seekTo(172.94); return false;" class="ts">[02:52]</a> And they are extremely qualified and the work that they are doing.</div>
-<div class="seg"><a href="#" onclick="seekTo(180.0); return false;" class="ts">[03:00]</a> And I want to applaud the city for raising their pay.</div>
-<div class="seg"><a href="#" onclick="seekTo(188.93); return false;" class="ts">[03:08]</a> I, you know, with the cost of living, everything&#x27;s going up.</div>
-<div class="seg"><a href="#" onclick="seekTo(192.13); return false;" class="ts">[03:12]</a> And I think that was a great move.</div>
-<div class="seg"><a href="#" onclick="seekTo(194.21); return false;" class="ts">[03:14]</a> However, when we&#x27;re cutting the budget,</div>
-<div class="seg"><a href="#" onclick="seekTo(197.13); return false;" class="ts">[03:17]</a> we also need to consider the training cost.</div>
-<div class="seg"><a href="#" onclick="seekTo(199.41); return false;" class="ts">[03:19]</a> And is there money in the budget for them to have</div>
-<div class="seg"><a href="#" onclick="seekTo(203.01); return false;" class="ts">[03:23]</a> continuing education units to, when they&#x27;re going</div>
-<div class="seg"><a href="#" onclick="seekTo(206.13); return false;" class="ts">[03:26]</a> to these conventions, when they&#x27;re taking the classes</div>
-<div class="seg"><a href="#" onclick="seekTo(208.85); return false;" class="ts">[03:28]</a> to keep maintaining and building on what we have here</div>
-<div class="seg"><a href="#" onclick="seekTo(212.29); return false;" class="ts">[03:32]</a> in the community.</div>
-<div class="seg"><a href="#" onclick="seekTo(214.45); return false;" class="ts">[03:34]</a> Finally, because I don&#x27;t know how much time I have left,</div>
-<div class="seg"><a href="#" onclick="seekTo(216.89); return false;" class="ts">[03:36]</a> I just, again, want to say, this city library,</div>
-<div class="seg"><a href="#" onclick="seekTo(221.73); return false;" class="ts">[03:41]</a> our county library that benefits the entire county.</div>
-<div class="seg"><a href="#" onclick="seekTo(225.82999999999998); return false;" class="ts">[03:45]</a> They are doing so much to improve the lives of the families</div>
-<div class="seg"><a href="#" onclick="seekTo(230.51); return false;" class="ts">[03:50]</a> here.</div>
-<div class="seg"><a href="#" onclick="seekTo(232.03); return false;" class="ts">[03:52]</a> The summer reading program, imagination,</div>
-<div class="seg"><a href="#" onclick="seekTo(234.51); return false;" class="ts">[03:54]</a> library, constantly working.</div>
-<div class="seg"><a href="#" onclick="seekTo(237.55); return false;" class="ts">[03:57]</a> They&#x27;ve even put in together a team program.</div>
-<div class="seg"><a href="#" onclick="seekTo(241.63); return false;" class="ts">[04:01]</a> When we talk about what do we do with these kids,</div>
-<div class="seg"><a href="#" onclick="seekTo(244.59); return false;" class="ts">[04:04]</a> and how do they not get in trouble and cost problems,</div>
-<div class="seg"><a href="#" onclick="seekTo(248.26999999999998); return false;" class="ts">[04:08]</a> you know, for the city, the library is giving them an outlet.</div>
-<div class="seg"><a href="#" onclick="seekTo(252.51); return false;" class="ts">[04:12]</a> And I just feel like we should invest in that.</div>
-<div class="seg"><a href="#" onclick="seekTo(256.15); return false;" class="ts">[04:16]</a> And thank you very much for your time.</div>
-<div class="seg"><a href="#" onclick="seekTo(258.31); return false;" class="ts">[04:18]</a> And thank you, good.</div>
-<div class="seg"><a href="#" onclick="seekTo(263.45); return false;" class="ts">[04:23]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(277.14); return false;" class="ts">[04:37]</a> Oh, this is getting ready to be a double whammy.</div>
-<div class="seg"><a href="#" onclick="seekTo(282.13); return false;" class="ts">[04:42]</a> I don&#x27;t know if the time was coming yet.</div>
-<div class="seg"><a href="#" onclick="seekTo(286.65999999999997); return false;" class="ts">[04:46]</a> I was going to add it to you.</div>
-<div class="seg"><a href="#" onclick="seekTo(288.46); return false;" class="ts">[04:48]</a> Oh, OK.</div>
-<div class="seg"><a href="#" onclick="seekTo(289.7); return false;" class="ts">[04:49]</a> Well, my name&#x27;s Berkeley Oberie.</div>
-<div class="seg"><a href="#" onclick="seekTo(292.5); return false;" class="ts">[04:52]</a> I&#x27;m her son.</div>
-<div class="seg"><a href="#" onclick="seekTo(296.43); return false;" class="ts">[04:56]</a> And I just also wanted to come up here to talk a little bit about the library</div>
-<div class="seg"><a href="#" onclick="seekTo(305.17); return false;" class="ts">[05:05]</a> budget.</div>
-<div class="seg"><a href="#" onclick="seekTo(309.33000000000004); return false;" class="ts">[05:09]</a> The library has been a great asset.</div>
-<div class="seg"><a href="#" onclick="seekTo(311.25); return false;" class="ts">[05:11]</a> And this community, it&#x27;s definitely been a great asset for me.</div>
-<div class="seg"><a href="#" onclick="seekTo(315.13); return false;" class="ts">[05:15]</a> Having access to all those books,</div>
-<div class="seg"><a href="#" onclick="seekTo(318.69); return false;" class="ts">[05:18]</a> I probably myself, on being a voracious reader</div>
-<div class="seg"><a href="#" onclick="seekTo(321.40999999999997); return false;" class="ts">[05:21]</a> and having the library there has been an incredible outlet</div>
-<div class="seg"><a href="#" onclick="seekTo(324.77); return false;" class="ts">[05:24]</a> to lead to learn to expand my horizons.</div>
-<div class="seg"><a href="#" onclick="seekTo(329.09000000000003); return false;" class="ts">[05:29]</a> And one thing I did want to mention is that the library has so many</div>
-<div class="seg"><a href="#" onclick="seekTo(335.76); return false;" class="ts">[05:35]</a> outstanding, wholesome programs that benefit the community outside of just books</div>
-<div class="seg"><a href="#" onclick="seekTo(341.56); return false;" class="ts">[05:41]</a> and new magazines and all those publications that they provide at no cost</div>
-<div class="seg"><a href="#" onclick="seekTo(349.7); return false;" class="ts">[05:49]</a> to the members of the community.</div>
-<div class="seg"><a href="#" onclick="seekTo(352.34000000000003); return false;" class="ts">[05:52]</a> I know for adults, if I remember correctly, they have helped with job search programs.</div>
-<div class="seg"><a href="#" onclick="seekTo(360.0); return false;" class="ts">[06:00]</a> And there are so many great things that they do with the summer reading program, helping</div>
-<div class="seg"><a href="#" onclick="seekTo(366.6); return false;" class="ts">[06:06]</a> make sure that young children in school, stay reading, even when school is out.</div>
-<div class="seg"><a href="#" onclick="seekTo(374.24); return false;" class="ts">[06:14]</a> And I believe that the library could do so much more if there was just something else there</div>
-<div class="seg"><a href="#" onclick="seekTo(382.64); return false;" class="ts">[06:22]</a> for them to use.</div>
-<div class="seg"><a href="#" onclick="seekTo(387.65); return false;" class="ts">[06:27]</a> But here, these papers show and March, they were already running out in the children&#x27;s program</div>
-<div class="seg"><a href="#" onclick="seekTo(397.57); return false;" class="ts">[06:37]</a> and then the adult program and by February of this year they had already run through 90% of</div>
-<div class="seg"><a href="#" onclick="seekTo(404.6); return false;" class="ts">[06:44]</a> their budget for pain expenses.</div>
-<div class="seg"><a href="#" onclick="seekTo(407.08); return false;" class="ts">[06:47]</a> And it is just so hard for them to continue providing these outstanding resources for</div>
-<div class="seg"><a href="#" onclick="seekTo(413.22); return false;" class="ts">[06:53]</a> community when there&#x27;s just always that danger of being out and over budget.</div>
-<div class="seg"><a href="#" onclick="seekTo(422.38); return false;" class="ts">[07:02]</a> And that&#x27;s definitely a major issue that they face.</div>
-<div class="seg"><a href="#" onclick="seekTo(428.67); return false;" class="ts">[07:08]</a> And then there&#x27;s also some maintenance issues, some janitorial issues, there&#x27;s issues with</div>
-<div class="seg"><a href="#" onclick="seekTo(438.25); return false;" class="ts">[07:18]</a> the windows, there&#x27;s issues with the elevator, that&#x27;s unfortunately spend a lot of time</div>
-<div class="seg"><a href="#" onclick="seekTo(444.21); return false;" class="ts">[07:24]</a> with trouble just getting up to the second floor because the elevators had issues working.</div>
-<div class="seg"><a href="#" onclick="seekTo(453.25); return false;" class="ts">[07:33]</a> I recall they&#x27;ve also had issues with birds getting in through the roof.</div>
-<div class="seg"><a href="#" onclick="seekTo(458.37); return false;" class="ts">[07:38]</a> There&#x27;s just been a lot of issues with maintenance that they haven&#x27;t been able to pursue.</div>
-<div class="seg"><a href="#" onclick="seekTo(464.25); return false;" class="ts">[07:44]</a> And unfortunately, these issues all start to draw from the book budget because there&#x27;s just</div>
-<div class="seg"><a href="#" onclick="seekTo(471.57); return false;" class="ts">[07:51]</a> nowhere else for them to find from it&#x27;s a major issue and I just came up here to ask for</div>
-<div class="seg"><a href="#" onclick="seekTo(481.40999999999997); return false;" class="ts">[08:01]</a> consideration of these issues and how it hinders what otherwise such a great potential and</div>
-<div class="seg"><a href="#" onclick="seekTo(490.77); return false;" class="ts">[08:10]</a> a great asset for the community.</div>
-<div class="seg"><a href="#" onclick="seekTo(492.52); return false;" class="ts">[08:12]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(493.52); return false;" class="ts">[08:13]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(494.74); return false;" class="ts">[08:14]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(501.95); return false;" class="ts">[08:21]</a> Anyone else?</div>
-<div class="seg"><a href="#" onclick="seekTo(502.95); return false;" class="ts">[08:22]</a> Public hearing for the budget?</div>
-<div class="seg"><a href="#" onclick="seekTo(506.07); return false;" class="ts">[08:26]</a> There&#x27;s no more comments.</div>
-<div class="seg"><a href="#" onclick="seekTo(519.3); return false;" class="ts">[08:39]</a> We&#x27;ll close the public hearing on the budget and we&#x27;ll go to three public hearing, but let&#x27;s</div>
-<div class="seg"><a href="#" onclick="seekTo(525.02); return false;" class="ts">[08:45]</a> go to a personal period.</div>
-<div class="seg"><a href="#" onclick="seekTo(526.02); return false;" class="ts">[08:46]</a> So I think the two we had already went, right?</div>
-<div class="seg"><a href="#" onclick="seekTo(529.02); return false;" class="ts">[08:49]</a> Yes.</div>
-<div class="seg"><a href="#" onclick="seekTo(530.92); return false;" class="ts">[08:50]</a> Okay.</div>
-<div class="seg"><a href="#" onclick="seekTo(532.72); return false;" class="ts">[08:52]</a> Four claims list.</div>
-<div class="seg"><a href="#" onclick="seekTo(534.72); return false;" class="ts">[08:54]</a> Most you approve?</div>
-<div class="seg"><a href="#" onclick="seekTo(537.0699999999999); return false;" class="ts">[08:57]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(538.0699999999999); return false;" class="ts">[08:58]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(540.0); return false;" class="ts">[09:00]</a> So full.</div>
-<div class="seg"><a href="#" onclick="seekTo(541.0); return false;" class="ts">[09:01]</a> Jones.</div>
-<div class="seg"><a href="#" onclick="seekTo(542.0); return false;" class="ts">[09:02]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(543.0); return false;" class="ts">[09:03]</a> Hitton.</div>
-<div class="seg"><a href="#" onclick="seekTo(544.0); return false;" class="ts">[09:04]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(545.0); return false;" class="ts">[09:05]</a> No.</div>
-<div class="seg"><a href="#" onclick="seekTo(546.0); return false;" class="ts">[09:06]</a> Parker.</div>
-<div class="seg"><a href="#" onclick="seekTo(547.0); return false;" class="ts">[09:07]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(548.7); return false;" class="ts">[09:08]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(549.7); return false;" class="ts">[09:09]</a> Claims for an ideal concrete.</div>
-<div class="seg"><a href="#" onclick="seekTo(551.8); return false;" class="ts">[09:11]</a> Motion approved.</div>
-<div class="seg"><a href="#" onclick="seekTo(552.8); return false;" class="ts">[09:12]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(553.8); return false;" class="ts">[09:13]</a> So full.</div>
-<div class="seg"><a href="#" onclick="seekTo(554.8); return false;" class="ts">[09:14]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(555.8); return false;" class="ts">[09:15]</a> He said.</div>
-<div class="seg"><a href="#" onclick="seekTo(556.8); return false;" class="ts">[09:16]</a> Jones.</div>
-<div class="seg"><a href="#" onclick="seekTo(557.8); return false;" class="ts">[09:17]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(558.8); return false;" class="ts">[09:18]</a> Hitton.</div>
-<div class="seg"><a href="#" onclick="seekTo(559.8); return false;" class="ts">[09:19]</a> Parker.</div>
-<div class="seg"><a href="#" onclick="seekTo(560.9); return false;" class="ts">[09:20]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(561.9); return false;" class="ts">[09:21]</a> Six.</div>
-<div class="seg"><a href="#" onclick="seekTo(563.95); return false;" class="ts">[09:23]</a> Minutes from the May 6, 2024.</div>
-<div class="seg"><a href="#" onclick="seekTo(564.95); return false;" class="ts">[09:24]</a> Regular meeting.</div>
-<div class="seg"><a href="#" onclick="seekTo(565.95); return false;" class="ts">[09:25]</a> Motion.</div>
-<div class="seg"><a href="#" onclick="seekTo(566.95); return false;" class="ts">[09:26]</a> Sorry.</div>
-<div class="seg"><a href="#" onclick="seekTo(569.04); return false;" class="ts">[09:29]</a> He said.</div>
-<div class="seg"><a href="#" onclick="seekTo(571.54); return false;" class="ts">[09:31]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(573.18); return false;" class="ts">[09:33]</a> 37 meetings in each meeting.</div>
-<div class="seg"><a href="#" onclick="seekTo(575.18); return false;" class="ts">[09:35]</a> I don&#x27;t know what you&#x27;ll get in this one.</div>
-<div class="seg"><a href="#" onclick="seekTo(578.18); return false;" class="ts">[09:38]</a> I&#x27;ll come down.</div>
-<div class="seg"><a href="#" onclick="seekTo(580.18); return false;" class="ts">[09:40]</a> And then you&#x27;re long enough.</div>
-<div class="seg"><a href="#" onclick="seekTo(581.18); return false;" class="ts">[09:41]</a> I can&#x27;t.</div>
-<div class="seg"><a href="#" onclick="seekTo(582.18); return false;" class="ts">[09:42]</a> I can&#x27;t.</div>
-<div class="seg"><a href="#" onclick="seekTo(584.3); return false;" class="ts">[09:44]</a> Seven.</div>
-<div class="seg"><a href="#" onclick="seekTo(585.3); return false;" class="ts">[09:45]</a> Budget.</div>
-<div class="seg"><a href="#" onclick="seekTo(586.3); return false;" class="ts">[09:46]</a> Twenty four nineteen transfer.</div>
-<div class="seg"><a href="#" onclick="seekTo(587.3); return false;" class="ts">[09:47]</a> You miss you.</div>
-<div class="seg"><a href="#" onclick="seekTo(588.3); return false;" class="ts">[09:48]</a> You a budget to.</div>
-<div class="seg"><a href="#" onclick="seekTo(589.3); return false;" class="ts">[09:49]</a> Grants and donations along with the actual fund transfers from previous fiscal years.</div>
-<div class="seg"><a href="#" onclick="seekTo(593.3); return false;" class="ts">[09:53]</a> From general fund.</div>
-<div class="seg"><a href="#" onclick="seekTo(594.3); return false;" class="ts">[09:54]</a> Grants and donations on to the MSUA grant.</div>
-<div class="seg"><a href="#" onclick="seekTo(596.3); return false;" class="ts">[09:56]</a> Relations fund.</div>
-<div class="seg"><a href="#" onclick="seekTo(597.3); return false;" class="ts">[09:57]</a> Motion approved.</div>
-<div class="seg"><a href="#" onclick="seekTo(598.3); return false;" class="ts">[09:58]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(599.3); return false;" class="ts">[09:59]</a> He said.</div>
-<div class="seg"><a href="#" onclick="seekTo(600.75); return false;" class="ts">[10:00]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(601.75); return false;" class="ts">[10:01]</a> Jones.</div>
-<div class="seg"><a href="#" onclick="seekTo(602.75); return false;" class="ts">[10:02]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(603.75); return false;" class="ts">[10:03]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(604.75); return false;" class="ts">[10:04]</a> Parker.</div>
-<div class="seg"><a href="#" onclick="seekTo(605.75); return false;" class="ts">[10:05]</a> Back.</div>
-<div class="seg"><a href="#" onclick="seekTo(606.75); return false;" class="ts">[10:06]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(607.75); return false;" class="ts">[10:07]</a> Fiscal Year 2425.</div>
-<div class="seg"><a href="#" onclick="seekTo(608.75); return false;" class="ts">[10:08]</a> Municipal budget.</div>
-<div class="seg"><a href="#" onclick="seekTo(609.75); return false;" class="ts">[10:09]</a> Message.</div>
-<div class="seg"><a href="#" onclick="seekTo(610.75); return false;" class="ts">[10:10]</a> In Resolution.</div>
-<div class="seg"><a href="#" onclick="seekTo(611.75); return false;" class="ts">[10:11]</a> Regarding.</div>
-<div class="seg"><a href="#" onclick="seekTo(612.75); return false;" class="ts">[10:12]</a> The City of Miami.</div>
-<div class="seg"><a href="#" onclick="seekTo(613.75); return false;" class="ts">[10:13]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(615.75); return false;" class="ts">[10:15]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(618.83); return false;" class="ts">[10:18]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(619.83); return false;" class="ts">[10:19]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(620.83); return false;" class="ts">[10:20]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(621.83); return false;" class="ts">[10:21]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(622.83); return false;" class="ts">[10:22]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(623.83); return false;" class="ts">[10:23]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(624.83); return false;" class="ts">[10:24]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(625.83); return false;" class="ts">[10:25]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(626.83); return false;" class="ts">[10:26]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(627.83); return false;" class="ts">[10:27]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(628.83); return false;" class="ts">[10:28]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(629.83); return false;" class="ts">[10:29]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(630.83); return false;" class="ts">[10:30]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(631.83); return false;" class="ts">[10:31]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(632.83); return false;" class="ts">[10:32]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(633.83); return false;" class="ts">[10:33]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(634.83); return false;" class="ts">[10:34]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(635.83); return false;" class="ts">[10:35]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(636.83); return false;" class="ts">[10:36]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(637.83); return false;" class="ts">[10:37]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(638.83); return false;" class="ts">[10:38]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(639.83); return false;" class="ts">[10:39]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(640.83); return false;" class="ts">[10:40]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(641.83); return false;" class="ts">[10:41]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(642.83); return false;" class="ts">[10:42]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(643.83); return false;" class="ts">[10:43]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(644.83); return false;" class="ts">[10:44]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(645.83); return false;" class="ts">[10:45]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(646.83); return false;" class="ts">[10:46]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(647.83); return false;" class="ts">[10:47]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(648.83); return false;" class="ts">[10:48]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(649.83); return false;" class="ts">[10:49]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(650.83); return false;" class="ts">[10:50]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(651.83); return false;" class="ts">[10:51]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(652.83); return false;" class="ts">[10:52]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(653.83); return false;" class="ts">[10:53]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(654.83); return false;" class="ts">[10:54]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(655.83); return false;" class="ts">[10:55]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(656.83); return false;" class="ts">[10:56]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(657.83); return false;" class="ts">[10:57]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(658.83); return false;" class="ts">[10:58]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(659.83); return false;" class="ts">[10:59]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(660.83); return false;" class="ts">[11:00]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(661.83); return false;" class="ts">[11:01]</a> Public.</div>
-<div class="seg"><a href="#" onclick="seekTo(662.83); return false;" class="ts">[11:02]</a> department needed to transfer money to the water department. Well, that&#x27;s all in fund $510 and</div>
-<div class="seg"><a href="#" onclick="seekTo(667.39); return false;" class="ts">[11:07]</a> MSU A fund. The city manager have consigned that form on his own. Now, if the general fund needed money</div>
-<div class="seg"><a href="#" onclick="seekTo(675.87); return false;" class="ts">[11:15]</a> at MSU A fund $510 needed to move money to 01, which is a general fund, then that would be the</div>
-<div class="seg"><a href="#" onclick="seekTo(682.03); return false;" class="ts">[11:22]</a> amendment that the council would have. Is there a cap on that amount? No. There&#x27;s a cap. There</div>
-<div class="seg"><a href="#" onclick="seekTo(690.0); return false;" class="ts">[11:30]</a> is a little bit similar how much money can be transferred out of the MSU A, or not an MSU A purpose</div>
-<div class="seg"><a href="#" onclick="seekTo(698.53); return false;" class="ts">[11:38]</a> and it&#x27;s paying to is in the budget message, which is a pretty little book that has the</div>
-<div class="seg"><a href="#" onclick="seekTo(713.06); return false;" class="ts">[11:53]</a> city manager&#x27;s message and then some statistics. And then at the back of that it has a certificate</div>
-<div class="seg"><a href="#" onclick="seekTo(718.1); return false;" class="ts">[11:58]</a> certification for the rainy day fund.</div>
-<div class="seg"><a href="#" onclick="seekTo(720.21); return false;" class="ts">[12:00]</a> that is also white ordinance, and it sets how much the ring they find will be at the end of next year, so it&#x27;s 630-25.</div>
-<div class="seg"><a href="#" onclick="seekTo(728.21); return false;" class="ts">[12:08]</a> So those are the two things, the resolution and the certification.</div>
-<div class="seg"><a href="#" onclick="seekTo(734.02); return false;" class="ts">[12:14]</a> If I could say a couple of things, I want to thank staff.</div>
-<div class="seg"><a href="#" onclick="seekTo(740.13); return false;" class="ts">[12:20]</a> We all got together and worked on this.</div>
-<div class="seg"><a href="#" onclick="seekTo(741.13); return false;" class="ts">[12:21]</a> A lot of human beings said, hey, this is the first time we&#x27;ve really got together and got to see how the budget was made.</div>
-<div class="seg"><a href="#" onclick="seekTo(746.13); return false;" class="ts">[12:26]</a> You know, we had to make some hard decisions.</div>
-<div class="seg"><a href="#" onclick="seekTo(748.38); return false;" class="ts">[12:28]</a> So the first question I asked in that meeting was, do we want to do raises for employees?</div>
-<div class="seg"><a href="#" onclick="seekTo(752.38); return false;" class="ts">[12:32]</a> Or do we want to use that money elsewhere?</div>
-<div class="seg"><a href="#" onclick="seekTo(755.38); return false;" class="ts">[12:35]</a> And the decision was, let&#x27;s do raises for employees.</div>
-<div class="seg"><a href="#" onclick="seekTo(757.38); return false;" class="ts">[12:37]</a> And then the second thing was, we had to go through and cut some stuff.</div>
-<div class="seg"><a href="#" onclick="seekTo(760.38); return false;" class="ts">[12:40]</a> I mean, HD cut a police car.</div>
-<div class="seg"><a href="#" onclick="seekTo(761.38); return false;" class="ts">[12:41]</a> I know there&#x27;s a budget.</div>
-<div class="seg"><a href="#" onclick="seekTo(762.38); return false;" class="ts">[12:42]</a> I know there&#x27;s streets cut a couple of things out of their budget.</div>
-<div class="seg"><a href="#" onclick="seekTo(764.38); return false;" class="ts">[12:44]</a> I can quit my lives.</div>
-<div class="seg"><a href="#" onclick="seekTo(765.38); return false;" class="ts">[12:45]</a> I know parks cut a couple of things.</div>
-<div class="seg"><a href="#" onclick="seekTo(767.38); return false;" class="ts">[12:47]</a> I&#x27;m just, you know, we kind of went through the list and everybody just like, hey, I cut this.</div>
-<div class="seg"><a href="#" onclick="seekTo(770.38); return false;" class="ts">[12:50]</a> If you cut that, you know, I&#x27;m so we worked very hard.</div>
-<div class="seg"><a href="#" onclick="seekTo(773.38); return false;" class="ts">[12:53]</a> I&#x27;m also willing to, you know, she&#x27;d awesome on her budget message.</div>
-<div class="seg"><a href="#" onclick="seekTo(776.38); return false;" class="ts">[12:56]</a> So thank you very much, Melinda, and I know Jill too.</div>
-<div class="seg"><a href="#" onclick="seekTo(779.38); return false;" class="ts">[12:59]</a> So thank you guys very much for the very hard on this.</div>
-<div class="seg"><a href="#" onclick="seekTo(782.38); return false;" class="ts">[13:02]</a> We want to show the message that, you know, I mean, things cost more.</div>
-<div class="seg"><a href="#" onclick="seekTo(786.58); return false;" class="ts">[13:06]</a> Just like when you go to the grocery store, they cost more.</div>
-<div class="seg"><a href="#" onclick="seekTo(788.58); return false;" class="ts">[13:08]</a> But what we, you know, we&#x27;re trying to do less with more.</div>
-<div class="seg"><a href="#" onclick="seekTo(791.58); return false;" class="ts">[13:11]</a> So I mean, you know, this next year, I think we&#x27;d be going to do some bench marking on where we compare to other cities.</div>
-<div class="seg"><a href="#" onclick="seekTo(795.58); return false;" class="ts">[13:15]</a> Obviously, we need to look at raising some of our, our fees and revenues to increase revenues to pay for stuff.</div>
-<div class="seg"><a href="#" onclick="seekTo(802.89); return false;" class="ts">[13:22]</a> You know, GRD is going up opposite our tipping fees of one up.</div>
-<div class="seg"><a href="#" onclick="seekTo(805.89); return false;" class="ts">[13:25]</a> I&#x27;m just some things like that.</div>
-<div class="seg"><a href="#" onclick="seekTo(807.98); return false;" class="ts">[13:27]</a> So I&#x27;m excited to, I mean, the budget staff really got together and made it work.</div>
-<div class="seg"><a href="#" onclick="seekTo(813.46); return false;" class="ts">[13:33]</a> I do have a question, Tyler, like in regards to the library specifically.</div>
-<div class="seg"><a href="#" onclick="seekTo(817.46); return false;" class="ts">[13:37]</a> We&#x27;re technically the only public library within the county correct.</div>
-<div class="seg"><a href="#" onclick="seekTo(821.46); return false;" class="ts">[13:41]</a> Is there, is that&#x27;s my understanding, Kayla?</div>
-<div class="seg"><a href="#" onclick="seekTo(823.46); return false;" class="ts">[13:43]</a> Are we really, correct?</div>
-<div class="seg"><a href="#" onclick="seekTo(825.85); return false;" class="ts">[13:45]</a> That&#x27;s public.</div>
-<div class="seg"><a href="#" onclick="seekTo(826.85); return false;" class="ts">[13:46]</a> So, is there any funding coming in from the county in that regard?</div>
-<div class="seg"><a href="#" onclick="seekTo(836.0699999999999); return false;" class="ts">[13:56]</a> I was an opportunity to, to reach out to the other communities, man, the county and the commissioners.</div>
-<div class="seg"><a href="#" onclick="seekTo(843.0699999999999); return false;" class="ts">[14:03]</a> I can&#x27;t see if there&#x27;s any funding in there.</div>
-<div class="seg"><a href="#" onclick="seekTo(845.0699999999999); return false;" class="ts">[14:05]</a> Also along the same box, say sales tax revenues run higher than normal or making more than what we thought we were going to.</div>
-<div class="seg"><a href="#" onclick="seekTo(862.26); return false;" class="ts">[14:22]</a> Right.</div>
-<div class="seg"><a href="#" onclick="seekTo(863.26); return false;" class="ts">[14:23]</a> With these amendments, you can shift some of that light around, so if the library needs something or HD needs something, whatever you can, you have the ability to shift that around with the average.</div>
-<div class="seg"><a href="#" onclick="seekTo(870.26); return false;" class="ts">[14:30]</a> We can do a bunch of amendments.</div>
-<div class="seg"><a href="#" onclick="seekTo(871.26); return false;" class="ts">[14:31]</a> So, so we may be able to help.</div>
-<div class="seg"><a href="#" onclick="seekTo(874.38); return false;" class="ts">[14:34]</a> If we&#x27;re making more, we can do more.</div>
-<div class="seg"><a href="#" onclick="seekTo(877.38); return false;" class="ts">[14:37]</a> I&#x27;m confident that we can do that.</div>
-<div class="seg"><a href="#" onclick="seekTo(902.58); return false;" class="ts">[15:02]</a> Jones, E-Ceph, Kippen,</div>
-<div class="seg"><a href="#" onclick="seekTo(906.22); return false;" class="ts">[15:06]</a> the whole parker.</div>
-<div class="seg"><a href="#" onclick="seekTo(908.22); return false;" class="ts">[15:08]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(910.62); return false;" class="ts">[15:10]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(911.62); return false;" class="ts">[15:11]</a> Not in contract minimum number one, for the annual six month,</div>
-<div class="seg"><a href="#" onclick="seekTo(914.46); return false;" class="ts">[15:14]</a> as the aggregate rock supply, C-2039, with Kip Stone.</div>
-<div class="seg"><a href="#" onclick="seekTo(919.52); return false;" class="ts">[15:19]</a> This is the same one, we&#x27;re going to talk about it earlier.</div>
-<div class="seg"><a href="#" onclick="seekTo(921.32); return false;" class="ts">[15:21]</a> Motion no further.</div>
-<div class="seg"><a href="#" onclick="seekTo(922.32); return false;" class="ts">[15:22]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(923.57); return false;" class="ts">[15:23]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(924.07); return false;" class="ts">[15:24]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(925.07); return false;" class="ts">[15:25]</a> E-Ceph.</div>
-<div class="seg"><a href="#" onclick="seekTo(926.07); return false;" class="ts">[15:26]</a> Jones.</div>
-<div class="seg"><a href="#" onclick="seekTo(926.57); return false;" class="ts">[15:26]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(927.57); return false;" class="ts">[15:27]</a> Didn&#x27;t it come to the parker?</div>
-<div class="seg"><a href="#" onclick="seekTo(929.07); return false;" class="ts">[15:29]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(930.07); return false;" class="ts">[15:30]</a> It&#x27;s like, they job we all over again.</div>
-<div class="seg"><a href="#" onclick="seekTo(933.07); return false;" class="ts">[15:33]</a> To the contract with Concrete Sand&#x27;s Apply, C-2033,</div>
-<div class="seg"><a href="#" onclick="seekTo(939.07); return false;" class="ts">[15:39]</a> that&#x27;s 60 with MuscoBee Sand,</div>
-<div class="seg"><a href="#" onclick="seekTo(942.07); return false;" class="ts">[15:42]</a> the digital bonds mission of all of our contract documents.</div>
-<div class="seg"><a href="#" onclick="seekTo(945.07); return false;" class="ts">[15:45]</a> Motion to approve.</div>
-<div class="seg"><a href="#" onclick="seekTo(947.49); return false;" class="ts">[15:47]</a> E-Ceph.</div>
-<div class="seg"><a href="#" onclick="seekTo(952.52); return false;" class="ts">[15:52]</a> Pippen.</div>
-<div class="seg"><a href="#" onclick="seekTo(953.52); return false;" class="ts">[15:53]</a> Jones.</div>
-<div class="seg"><a href="#" onclick="seekTo(954.52); return false;" class="ts">[15:54]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(955.52); return false;" class="ts">[15:55]</a> Don&#x27;t go.</div>
-<div class="seg"><a href="#" onclick="seekTo(956.52); return false;" class="ts">[15:56]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(957.52); return false;" class="ts">[15:57]</a> Parker.</div>
-<div class="seg"><a href="#" onclick="seekTo(958.52); return false;" class="ts">[15:58]</a> Hello.</div>
-<div class="seg"><a href="#" onclick="seekTo(959.52); return false;" class="ts">[15:59]</a> An on-call open-transition boring.</div>
-<div class="seg"><a href="#" onclick="seekTo(960.52); return false;" class="ts">[16:00]</a> Labor for a borderline replacement, C-2040,</div>
-<div class="seg"><a href="#" onclick="seekTo(963.52); return false;" class="ts">[16:03]</a> 10th Fisk, year 2425.</div>
-<div class="seg"><a href="#" onclick="seekTo(965.52); return false;" class="ts">[16:05]</a> With M&amp;J, equipment services,</div>
-<div class="seg"><a href="#" onclick="seekTo(967.52); return false;" class="ts">[16:07]</a> Collins construction, B-town construction, LLC,</div>
-<div class="seg"><a href="#" onclick="seekTo(969.52); return false;" class="ts">[16:09]</a> broadhead, boring LLC,</div>
-<div class="seg"><a href="#" onclick="seekTo(971.52); return false;" class="ts">[16:11]</a> and recommend, as recommended by staff,</div>
-<div class="seg"><a href="#" onclick="seekTo(973.52); return false;" class="ts">[16:13]</a> approve contracts,</div>
-<div class="seg"><a href="#" onclick="seekTo(974.52); return false;" class="ts">[16:14]</a> contingent upon this mission of all required.</div>
-<div class="seg"><a href="#" onclick="seekTo(976.52); return false;" class="ts">[16:16]</a> Contract documents and authorized in terms of C-2033,</div>
-<div class="seg"><a href="#" onclick="seekTo(978.52); return false;" class="ts">[16:18]</a> his does need to sign,</div>
-<div class="seg"><a href="#" onclick="seekTo(979.52); return false;" class="ts">[16:19]</a> knows to proceed.</div>
-<div class="seg"><a href="#" onclick="seekTo(980.52); return false;" class="ts">[16:20]</a> Motion to approve.</div>
-<div class="seg"><a href="#" onclick="seekTo(982.1); return false;" class="ts">[16:22]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(983.1); return false;" class="ts">[16:23]</a> E-Ceph.</div>
-<div class="seg"><a href="#" onclick="seekTo(984.9300000000001); return false;" class="ts">[16:24]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(985.9300000000001); return false;" class="ts">[16:25]</a> Good morning.</div>
-<div class="seg"><a href="#" onclick="seekTo(986.9300000000001); return false;" class="ts">[16:26]</a> Jones.</div>
-<div class="seg"><a href="#" onclick="seekTo(987.9300000000001); return false;" class="ts">[16:27]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(988.9300000000001); return false;" class="ts">[16:28]</a> Parker.</div>
-<div class="seg"><a href="#" onclick="seekTo(989.9300000000001); return false;" class="ts">[16:29]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(990.9300000000001); return false;" class="ts">[16:30]</a> 12.</div>
-<div class="seg"><a href="#" onclick="seekTo(991.9300000000001); return false;" class="ts">[16:31]</a> Award-high voltage line clearance,</div>
-<div class="seg"><a href="#" onclick="seekTo(992.9300000000001); return false;" class="ts">[16:32]</a> tree trimming, and tree removal services, C-2044-29.</div>
-<div class="seg"><a href="#" onclick="seekTo(995.9300000000001); return false;" class="ts">[16:35]</a> For this career, 2425,</div>
-<div class="seg"><a href="#" onclick="seekTo(997.9300000000001); return false;" class="ts">[16:37]</a> to pro tree management,</div>
-<div class="seg"><a href="#" onclick="seekTo(999.9300000000001); return false;" class="ts">[16:39]</a> as recommended by staff,</div>
-<div class="seg"><a href="#" onclick="seekTo(1000.9300000000001); return false;" class="ts">[16:40]</a> approve the contract,</div>
-<div class="seg"><a href="#" onclick="seekTo(1001.9300000000001); return false;" class="ts">[16:41]</a> depending upon submission of all required contract.</div>
-<div class="seg"><a href="#" onclick="seekTo(1003.9300000000001); return false;" class="ts">[16:43]</a> Documents and authorized in terms of C-2033,</div>
-<div class="seg"><a href="#" onclick="seekTo(1005.9300000000001); return false;" class="ts">[16:45]</a> his does need to sign,</div>
-<div class="seg"><a href="#" onclick="seekTo(1006.9300000000001); return false;" class="ts">[16:46]</a> knows to proceed.</div>
-<div class="seg"><a href="#" onclick="seekTo(1007.9300000000001); return false;" class="ts">[16:47]</a> Motion to approve.</div>
-<div class="seg"><a href="#" onclick="seekTo(1008.9300000000001); return false;" class="ts">[16:48]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(1009.9300000000001); return false;" class="ts">[16:49]</a> E-Ceph.</div>
-<div class="seg"><a href="#" onclick="seekTo(1012.34); return false;" class="ts">[16:52]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(1013.34); return false;" class="ts">[16:53]</a> Good morning.</div>
-<div class="seg"><a href="#" onclick="seekTo(1014.34); return false;" class="ts">[16:54]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(1015.34); return false;" class="ts">[16:55]</a> Jones.</div>
-<div class="seg"><a href="#" onclick="seekTo(1016.34); return false;" class="ts">[16:56]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(1017.34); return false;" class="ts">[16:57]</a> Parker.</div>
-<div class="seg"><a href="#" onclick="seekTo(1018.34); return false;" class="ts">[16:58]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(1019.34); return false;" class="ts">[16:59]</a> 13.</div>
-<div class="seg"><a href="#" onclick="seekTo(1020.34); return false;" class="ts">[17:00]</a> Ordnance 24 or 2024-02.</div>
-<div class="seg"><a href="#" onclick="seekTo(1022.34); return false;" class="ts">[17:02]</a> The Mending Section 28-40-GR,</div>
-<div class="seg"><a href="#" onclick="seekTo(1025.34); return false;" class="ts">[17:05]</a> some Cherry Class and fees.</div>
-<div class="seg"><a href="#" onclick="seekTo(1027.34); return false;" class="ts">[17:07]</a> Two Article 3,</div>
-<div class="seg"><a href="#" onclick="seekTo(1031.34); return false;" class="ts">[17:11]</a> Custom Fees and Chapter 28.</div>
-<div class="seg"><a href="#" onclick="seekTo(1033.34); return false;" class="ts">[17:13]</a> Symmeteries were provided for</div>
-<div class="seg"><a href="#" onclick="seekTo(1038.34); return false;" class="ts">[17:18]</a> conflicting provisions to</div>
-<div class="seg"><a href="#" onclick="seekTo(1039.34); return false;" class="ts">[17:19]</a> banning all conflicting ordinances</div>
-<div class="seg"><a href="#" onclick="seekTo(1041.34); return false;" class="ts">[17:21]</a> in the State of Asia,</div>
-<div class="seg"><a href="#" onclick="seekTo(1042.34); return false;" class="ts">[17:22]</a> and GAR,</div>
-<div class="seg"><a href="#" onclick="seekTo(1043.34); return false;" class="ts">[17:23]</a> G-A-R,</div>
-<div class="seg"><a href="#" onclick="seekTo(1046.26); return false;" class="ts">[17:26]</a> cemetery, rate increase.</div>
-<div class="seg"><a href="#" onclick="seekTo(1048.3); return false;" class="ts">[17:28]</a> So,</div>
-<div class="seg"><a href="#" onclick="seekTo(1050.3); return false;" class="ts">[17:30]</a> informed me with the request of councillor</div>
-<div class="seg"><a href="#" onclick="seekTo(1053.81); return false;" class="ts">[17:33]</a> But I believe there is exactly what you ask us to do, as soon as the ordinance is identical to what you had the last time in front of you.</div>
-<div class="seg"><a href="#" onclick="seekTo(1066.54); return false;" class="ts">[17:46]</a> But in the introductory paragraph, we added an equation that the City Council will review the fee schedule prior to the beginning of the next.</div>
-<div class="seg"><a href="#" onclick="seekTo(1080.75); return false;" class="ts">[18:00]</a> So, in Mayor June, the cheer, you&#x27;ll review, well, let me add the intent is to make this, this works for you.</div>
-<div class="seg"><a href="#" onclick="seekTo(1092.17); return false;" class="ts">[18:12]</a> We&#x27;re going to make this applied to all of our theme schedules.</div>
-<div class="seg"><a href="#" onclick="seekTo(1096.17); return false;" class="ts">[18:16]</a> So, in Mayor June, you would review those.</div>
-<div class="seg"><a href="#" onclick="seekTo(1102.18); return false;" class="ts">[18:22]</a> If you want to have us do something to the contrary, you absolutely have to write to do that.</div>
-<div class="seg"><a href="#" onclick="seekTo(1109.62); return false;" class="ts">[18:29]</a> It&#x27;s required by ordinance that you look at all of these fee schedules.</div>
-<div class="seg"><a href="#" onclick="seekTo(1113.62); return false;" class="ts">[18:33]</a> But if you don&#x27;t do something to the contrary, then it will have the consumer pricing mix.</div>
-<div class="seg"><a href="#" onclick="seekTo(1120.66); return false;" class="ts">[18:40]</a> Increase or decrease, come July 1, based on your off-taking and the other.</div>
-<div class="seg"><a href="#" onclick="seekTo(1128.84); return false;" class="ts">[18:48]</a> Could you explain the severability piece to me?</div>
-<div class="seg"><a href="#" onclick="seekTo(1138.14); return false;" class="ts">[18:58]</a> That is a purely legalese thing, basically, is saying any part of the ordinance is declared illegal or any constitutional</div>
-<div class="seg"><a href="#" onclick="seekTo(1149.91); return false;" class="ts">[19:09]</a> that the remainder of the ordinance in effect, as long as it makes sense with whatever it is that&#x27;s been made.</div>
-<div class="seg"><a href="#" onclick="seekTo(1160.51); return false;" class="ts">[19:20]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(1161.51); return false;" class="ts">[19:21]</a> Thank you for taking this back and working on it.</div>
-<div class="seg"><a href="#" onclick="seekTo(1168.06); return false;" class="ts">[19:28]</a> I appreciate that.</div>
-<div class="seg"><a href="#" onclick="seekTo(1169.06); return false;" class="ts">[19:29]</a> There&#x27;s an easy change in it.</div>
-<div class="seg"><a href="#" onclick="seekTo(1173.36); return false;" class="ts">[19:33]</a> Motion to approve.</div>
-<div class="seg"><a href="#" onclick="seekTo(1176.19); return false;" class="ts">[19:36]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(1177.58); return false;" class="ts">[19:37]</a> Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(1179.63); return false;" class="ts">[19:39]</a> Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(1180.63); return false;" class="ts">[19:40]</a> Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(1181.63); return false;" class="ts">[19:41]</a> So, aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(1182.63); return false;" class="ts">[19:42]</a> Goodman.</div>
-<div class="seg"><a href="#" onclick="seekTo(1183.63); return false;" class="ts">[19:43]</a> Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(1186.18); return false;" class="ts">[19:46]</a> Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(1187.18); return false;" class="ts">[19:47]</a> 14.</div>
-<div class="seg"><a href="#" onclick="seekTo(1188.18); return false;" class="ts">[19:48]</a> Other new business, many of what&#x27;s the reasons that&#x27;s posting this agenda.</div>
-<div class="seg"><a href="#" onclick="seekTo(1192.58); return false;" class="ts">[19:52]</a> 15.</div>
-<div class="seg"><a href="#" onclick="seekTo(1193.58); return false;" class="ts">[19:53]</a> 15.</div>
-<div class="seg"><a href="#" onclick="seekTo(1198.86); return false;" class="ts">[19:58]</a> Staff of importance.</div>
-<div class="seg"><a href="#" onclick="seekTo(1199.86); return false;" class="ts">[19:59]</a> 16.</div>
-<div class="seg"><a href="#" onclick="seekTo(1200.86); return false;" class="ts">[20:00]</a> Mayor, council, community, and announcements.</div>
-<div class="seg"><a href="#" onclick="seekTo(1204.21); return false;" class="ts">[20:04]</a> I&#x27;d just like to say a special thanks to our crews who were out in the weather.</div>
-<div class="seg"><a href="#" onclick="seekTo(1208.21); return false;" class="ts">[20:08]</a> Just passed a couple of weeks.</div>
-<div class="seg"><a href="#" onclick="seekTo(1211.21); return false;" class="ts">[20:11]</a> It&#x27;s been crazy and they&#x27;ve even gone so far as to go out and help other communities.</div>
-<div class="seg"><a href="#" onclick="seekTo(1215.21); return false;" class="ts">[20:15]</a> So, just extra special praise to go out to those guys and all the people that are behind that.</div>
-<div class="seg"><a href="#" onclick="seekTo(1221.34); return false;" class="ts">[20:21]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(1223.68); return false;" class="ts">[20:23]</a> I&#x27;d like to say to kind of along the same lines of Brian.</div>
-<div class="seg"><a href="#" onclick="seekTo(1226.68); return false;" class="ts">[20:26]</a> A lot of people don&#x27;t know that, you know, of course, Memorial Day was here.</div>
-<div class="seg"><a href="#" onclick="seekTo(1230.68); return false;" class="ts">[20:30]</a> Kevin&#x27;s crew is swamped around that time.</div>
-<div class="seg"><a href="#" onclick="seekTo(1232.68); return false;" class="ts">[20:32]</a> Trying to keep up the cemetery and everything else.</div>
-<div class="seg"><a href="#" onclick="seekTo(1234.68); return false;" class="ts">[20:34]</a> Tyler&#x27;s crew is electric crew.</div>
-<div class="seg"><a href="#" onclick="seekTo(1236.68); return false;" class="ts">[20:36]</a> I know everybody joined in and tried to help make it and get it cleaned up and looking good.</div>
-<div class="seg"><a href="#" onclick="seekTo(1242.68); return false;" class="ts">[20:42]</a> And I know that we even had some bad help with the baseball fields and help get them ready.</div>
-<div class="seg"><a href="#" onclick="seekTo(1248.68); return false;" class="ts">[20:48]</a> One of our firefighters.</div>
-<div class="seg"><a href="#" onclick="seekTo(1249.68); return false;" class="ts">[20:49]</a> Kate Whitton was down in the morning.</div>
-<div class="seg"><a href="#" onclick="seekTo(1251.68); return false;" class="ts">[20:51]</a> The baseball fields are getting ready.</div>
-<div class="seg"><a href="#" onclick="seekTo(1253.68); return false;" class="ts">[20:53]</a> So, I love the fact that the whole community is chippin&#x27; in.</div>
-<div class="seg"><a href="#" onclick="seekTo(1256.68); return false;" class="ts">[20:56]</a> And it&#x27;s not about us.</div>
-<div class="seg"><a href="#" onclick="seekTo(1257.68); return false;" class="ts">[20:57]</a> It&#x27;s about the kids and the communities.</div>
-<div class="seg"><a href="#" onclick="seekTo(1260.0); return false;" class="ts">[21:00]</a> So I appreciate that.</div>
-<div class="seg"><a href="#" onclick="seekTo(1262.0); return false;" class="ts">[21:02]</a> I appreciate our line career going to Clarence More,</div>
-<div class="seg"><a href="#" onclick="seekTo(1263.72); return false;" class="ts">[21:03]</a> helping me with the tornado.</div>
-<div class="seg"><a href="#" onclick="seekTo(1266.28); return false;" class="ts">[21:06]</a> I know the city manager there said he knew we sent a great crew</div>
-<div class="seg"><a href="#" onclick="seekTo(1270.72); return false;" class="ts">[21:10]</a> of guys and he put him in his toughest areas</div>
-<div class="seg"><a href="#" onclick="seekTo(1272.56); return false;" class="ts">[21:12]</a> and they got the job done.</div>
-<div class="seg"><a href="#" onclick="seekTo(1273.56); return false;" class="ts">[21:13]</a> So I think we hear that every time we send him out.</div>
-<div class="seg"><a href="#" onclick="seekTo(1276.48); return false;" class="ts">[21:16]</a> So we got a really good group of people.</div>
-<div class="seg"><a href="#" onclick="seekTo(1278.36); return false;" class="ts">[21:18]</a> So 17 city managers communications.</div>
-<div class="seg"><a href="#" onclick="seekTo(1286.95); return false;" class="ts">[21:26]</a> I have just a few.</div>
-<div class="seg"><a href="#" onclick="seekTo(1288.43); return false;" class="ts">[21:28]</a> The library wanted me to announce that there&#x27;s</div>
-<div class="seg"><a href="#" onclick="seekTo(1289.87); return false;" class="ts">[21:29]</a> some reading program has officially kicked off as a June 1st.</div>
-<div class="seg"><a href="#" onclick="seekTo(1293.19); return false;" class="ts">[21:33]</a> And it&#x27;s open all ages.</div>
-<div class="seg"><a href="#" onclick="seekTo(1294.43); return false;" class="ts">[21:34]</a> And they&#x27;ve also invited the council,</div>
-<div class="seg"><a href="#" onclick="seekTo(1296.23); return false;" class="ts">[21:36]</a> and the council members, they want to come down and participate.</div>
-<div class="seg"><a href="#" onclick="seekTo(1298.39); return false;" class="ts">[21:38]</a> I know utility screens are going to go down there</div>
-<div class="seg"><a href="#" onclick="seekTo(1300.11); return false;" class="ts">[21:40]</a> and read the street department&#x27;s going to go read.</div>
-<div class="seg"><a href="#" onclick="seekTo(1302.99); return false;" class="ts">[21:42]</a> So they enjoy that.</div>
-<div class="seg"><a href="#" onclick="seekTo(1305.39); return false;" class="ts">[21:45]</a> I&#x27;m also, and I&#x27;ll see what we&#x27;re doing there.</div>
-<div class="seg"><a href="#" onclick="seekTo(1307.51); return false;" class="ts">[21:47]</a> Use on stage performances, June 13th, and 14th,</div>
-<div class="seg"><a href="#" onclick="seekTo(1310.11); return false;" class="ts">[21:50]</a> at 7pm and June 15th at 2pm.</div>
-<div class="seg"><a href="#" onclick="seekTo(1314.18); return false;" class="ts">[21:54]</a> So that&#x27;ll be good.</div>
-<div class="seg"><a href="#" onclick="seekTo(1316.59); return false;" class="ts">[21:56]</a> And the last thing is we, and I&#x27;m kind of excited about this.</div>
-<div class="seg"><a href="#" onclick="seekTo(1320.35); return false;" class="ts">[22:00]</a> We received and episode of 10 in L.I.</div>
-<div class="seg"><a href="#" onclick="seekTo(1324.21); return false;" class="ts">[22:04]</a> We submitted for the initial, there&#x27;s a big long acronym for it.</div>
-<div class="seg"><a href="#" onclick="seekTo(1328.09); return false;" class="ts">[22:08]</a> But project application for the city of Miami,</div>
-<div class="seg"><a href="#" onclick="seekTo(1329.85); return false;" class="ts">[22:09]</a> for a public safety center.</div>
-<div class="seg"><a href="#" onclick="seekTo(1331.09); return false;" class="ts">[22:11]</a> So we worked on getting some stuff together for this.</div>
-<div class="seg"><a href="#" onclick="seekTo(1334.17); return false;" class="ts">[22:14]</a> So we have been approved and your organization is here</div>
-<div class="seg"><a href="#" onclick="seekTo(1337.45); return false;" class="ts">[22:17]</a> by invited to complete it and submit a full project application.</div>
-<div class="seg"><a href="#" onclick="seekTo(1340.09); return false;" class="ts">[22:20]</a> So we made it through the first round.</div>
-<div class="seg"><a href="#" onclick="seekTo(1341.29); return false;" class="ts">[22:21]</a> So this would be a really cool public safety center</div>
-<div class="seg"><a href="#" onclick="seekTo(1344.37); return false;" class="ts">[22:24]</a> that would have placed in fire.</div>
-<div class="seg"><a href="#" onclick="seekTo(1346.17); return false;" class="ts">[22:26]</a> And then we&#x27;d have a satellite facility out in the southwest part</div>
-<div class="seg"><a href="#" onclick="seekTo(1349.29); return false;" class="ts">[22:29]</a> of Miami.</div>
-<div class="seg"><a href="#" onclick="seekTo(1350.45); return false;" class="ts">[22:30]</a> So we had a good meeting on that today.</div>
-<div class="seg"><a href="#" onclick="seekTo(1354.94); return false;" class="ts">[22:34]</a> The second round, I don&#x27;t know if we&#x27;ll make it farther,</div>
-<div class="seg"><a href="#" onclick="seekTo(1356.78); return false;" class="ts">[22:36]</a> but I mean, it&#x27;s a new job by everybody involved.</div>
-<div class="seg"><a href="#" onclick="seekTo(1359.26); return false;" class="ts">[22:39]</a> Yeah, I&#x27;m excited about that.</div>
-<div class="seg"><a href="#" onclick="seekTo(1360.66); return false;" class="ts">[22:40]</a> So city manager, search, keep it on a take.</div>
-<div class="seg"><a href="#" onclick="seekTo(1370.11); return false;" class="ts">[22:50]</a> Yes, it&#x27;ll go ahead, it&#x27;s any.</div>
-<div class="seg"><a href="#" onclick="seekTo(1371.83); return false;" class="ts">[22:51]</a> I&#x27;m going to go with today.</div>
-<div class="seg"><a href="#" onclick="seekTo(1373.63); return false;" class="ts">[22:53]</a> And so we come here within the next couple of the group</div>
-<div class="seg"><a href="#" onclick="seekTo(1378.71); return false;" class="ts">[22:58]</a> that we get good games.</div>
-<div class="seg"><a href="#" onclick="seekTo(1425.21); return false;" class="ts">[23:45]</a> Is that good for everybody to do it at the next house?</div>
-<div class="seg"><a href="#" onclick="seekTo(1428.57); return false;" class="ts">[23:48]</a> May they want to have a special in between?</div>
-<div class="seg"><a href="#" onclick="seekTo(1430.41); return false;" class="ts">[23:50]</a> Mm-hmm.</div>
-<div class="seg"><a href="#" onclick="seekTo(1430.85); return false;" class="ts">[23:50]</a> Thanks, thanks.</div>
-<div class="seg"><a href="#" onclick="seekTo(1431.85); return false;" class="ts">[23:51]</a> OK.</div>
-<div class="seg"><a href="#" onclick="seekTo(1435.63); return false;" class="ts">[23:55]</a> OK.</div>
-<div class="seg"><a href="#" onclick="seekTo(1440.08); return false;" class="ts">[24:00]</a> 18 adjournment.</div>
-<div class="seg"><a href="#" onclick="seekTo(1442.08); return false;" class="ts">[24:02]</a> Motion?</div>
-<div class="seg"><a href="#" onclick="seekTo(1444.14); return false;" class="ts">[24:04]</a> Sir?</div>
-<div class="seg"><a href="#" onclick="seekTo(1445.14); return false;" class="ts">[24:05]</a> Yes.</div>
-<div class="seg"><a href="#" onclick="seekTo(1446.39); return false;" class="ts">[24:06]</a> Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(1447.39); return false;" class="ts">[24:07]</a> Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(1448.39); return false;" class="ts">[24:08]</a> Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(1449.39); return false;" class="ts">[24:09]</a> Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(1450.39); return false;" class="ts">[24:10]</a> Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(1451.39); return false;" class="ts">[24:11]</a> Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(1452.39); return false;" class="ts">[24:12]</a> Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(1453.39); return false;" class="ts">[24:13]</a> Aye.</div>
-</div></section>
+</div>
+</div>
+</div>
 
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag(&#x27;js&#x27;, new Date()); gtag(&#x27;config&#x27;, &#x27;G-X9VGCCGG49&#x27;, { &#x27;request_origin&#x27;:&#x27;external&#x27; }); City Council Regular Meeting body{ margin-top: .5in; margin-bottom: .5in; margin-right: .5in ; margin-left: .5in; text-align: justify; font-family: Calibri, Candara, Segoe, &#x27;Segoe UI&#x27;, Optima, Arial, sans-serif; font-size: 14px; } table{ text-align: justify; border-spacing: 5px; padding: 0; font-size: 11pt; } td { text-align: justify; vertical-align:top; } .numberspace { width: 30px; vertical-align: top; text-align: left; } .ul {text-decoration: underline;} /* Prevents logo resizing on print */ img { max-width: 100%; height: auto; } NOTICE OF REGULAR MEETING AND AGENDA OF THE MIAMI CITY COUNCIL Monday, June 3, 2024 6:15 p.m. OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY MIAMI CIVIC CENTER 129 5th Avenue Northwest, Miami, Oklahoma Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on www.miamiokla.net. THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA: blockquote { margin-left: 40px; margin-right: 0px; margin-top: 0px; margin-bottom: 0px; }@media print { a { color: black; } } 1. Call to Order&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 2. Public Hearing on the Proposed FY 2024-2025 Budget Note:&amp;nbsp; This public hearing is called for any member of the public to present to the governing body comments, recommendations, or information on any part of the proposed budget.&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker Public Hearing Notice 3. Public Input and Unscheduled Personal Appearances Each person will be limited to 3 minutes on agenda items only. The purpose of this agenda item is to provide an opportunity for citizens&#x27; comments on agenda items. Council members do not engage in discussion under this agenda item, and staff members are directed not to. If you seek discussion or inquiry, please contact your Councilmember, the Mayor or the office of the City Manager. Responses to citizen comments, if any, will occur under the applicable agenda item or may be reserved for further response by phone call, personal meeting, or a posting on the website: www.miamiokla.net 4. *Action Item* Claims&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Claims List 5. *Action Item* Claims for NEO Concrete&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Claims List 6. *Action Item* Minutes:&amp;nbsp; May 06, 2024 (Regular)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 7. *Action Item* Budget Amendment:&amp;nbsp; #24-19 Transferring MSUA Budgeted Grants and Donations, Along With Actual Fund Transfers From Previous Fiscal Years From the General Fund Grants/Donations Fund to the MSUA Grants/Donations Fund&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Jill Fitzgibbon Budget Amendment 8. *Action Item* Fiscal Year 2024 - 2025 Municipal Budget Message and Resolution Regarding the City of Miami Oklahoma Budget for the Fiscal Year 2024 - 2025 and Establishing Budget Amendment Authority&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline/Jill Fitzgibbon Budget Message Budget Resolution Fund Summary Budget Worksheets From Incode PPT 9. *Action Item* Contract Amendment #1 for Annual (6 Month) &amp;quot;As Needed&amp;quot; Aggregate Rock Supply (C23-59) With Kemp Stone Contingent Upon Submission of all Required Contract Documents&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Brian Brassfield&amp;nbsp; BA Contract Amendment Supplemental Information 10. *Action Item* Contract Amendment #1 for Annual (6 Month) &amp;quot;As Needed&amp;quot; Concrete Sand Supply (C23-60) With Muskogee Sand Contingent Upon Submission of all Required Contract Documents&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Brian Brassfield BA Contract Amendment Supplemental Information 11. *Action Item* Award Annual &amp;quot;As Needed&amp;quot; On-Call, Open - Trench and Boring Labor for Waterline Replacement (C24-18) for Fiscal Year 2024-2025 to M&amp;J Equipment Services; Collins Construction Co.; B-Town Construction, LLC; and Broadhead Boring, LLC as Recommended by Staff; Approve Contracts Contingent Upon the Submission of all Required Contract Documents; and Authorize the Interim City Manager or His Designee to Sign the Notice to Proceed&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Brian Brassfield BA M&amp;J Equipment Services Response Collins Construction Response B-Town Construction, LLC Response Broadhead Boring, LLC Response Contract Solicitation Packet 12. *Action Item* Award High Voltage Line Clearance, Tree Trimming and Tree Removal Services (C24-29) for Fiscal Year 2024-2025 to Pro Tree Management as Recommended by Staff; Approve the Contract Contingent Upon Submission of all Required Contract Documents; and Authorize the Interim City Manager or His Designee to Sign the Notice to Proceed&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Brian Brassfield BA Price Listing Pro Tree Management Response Asplundh Tree Expert LLC Response BDG Trees Response Contract Solicitation Packet 13. *Action Item* Ordinance 2024-02 Amending Section 28-40 (G.A.R. Cemetery Costs and Fees) to Article III (Cost and Fees) of Chapter 28 (Cemeteries) of the Code of Ordinances; Providing Severability; Providing for Conflicting Provisions; Repealing All Conflicting Ordinances; and Establishing an Effective Date; GAR Cemetery Rate Increase&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Ben Loring/Angela Williams BA Ordinance 14. *Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9)) City Council/ Tyler Cline 15. Staff Reports (Written report included in packet, if available staff is present for questions)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Facilities Financial Statement Sales/Use Tax Report 16. Mayor and Council Community Announcements&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 17. City Manager&amp;rsquo;s Communications&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline 18. *Action Item* Adjournment&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office. We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Our cover was a regular scheduled meeting of the state council for June 3, 2024. Number 2 public hearing on the proposed fiscal year 24, 25 budget. Children who do not read in the summer can lose two to three months of reading skills and kids who do read 10 to gain a month of reading proficiency. The reason that I say is because we have the budget from last year on the team program, adult programming reading and children&#x27;s programme. We&#x27;re constantly, you know I will say Kelly is a strong go-getter. She&#x27;s extremely thrifty she has gone to conventions and there was a 6,000 down to like 3,004 thousand. They give so much of themselves and they are extremely qualified in the work that they have to continue in education units. When we are going into these conventions, when the second floor because of other writers had issues working. I recall they also have to do raises for employees or we want you know, use that money elsewhere and the decision was let&#x27;s be a request of the council last meeting. We&#x27;ve relatively minor change but I think that is exactly what I would like to say. Thank you.</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag(&#x27;js&#x27;, new Date()); gtag(&#x27;config&#x27;, &#x27;G-X9VGCCGG49&#x27;, { &#x27;request_origin&#x27;:&#x27;external&#x27; }); City Council Regular Meeting body{ margin-top: .5in; margin-bottom: .5in; margin-right: .5in ; margin-left: .5in; text-align: justify; font-family: Calibri, Candara, Segoe, &#x27;Segoe UI&#x27;, Optima, Arial, sans-serif; font-size: 14px; } table{ text-align: justify; border-spacing: 5px; padding: 0; font-size: 11pt; } td { text-align: justify; vertical-align:top; } .numberspace { width: 30px; vertical-align: top; text-align: left; } .ul {text-decoration: underline;} /* Prevents logo resizing on print */ img { max-width: 100%; height: auto; } NOTICE OF REGULAR MEETING AND AGENDA OF THE MIAMI CITY COUNCIL Monday, June 3, 2024 6:15 p.m. OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY MIAMI CIVIC CENTER 129 5th Avenue Northwest, Miami, Oklahoma Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on www.miamiokla.net. THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA: blockquote { margin-left: 40px; margin-right: 0px; margin-top: 0px; margin-bottom: 0px; }@media print { a { color: black; } } 1. Call to Order&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 2. Public Hearing on the Proposed FY 2024-2025 Budget Note:&amp;nbsp; This public hearing is called for any member of the public to present to the governing body comments, recommendations, or information on any part of the proposed budget.&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker Public Hearing Notice 3. Public Input and Unscheduled Personal Appearances Each person will be limited to 3 minutes on agenda items only. The purpose of this agenda item is to provide an opportunity for citizens&#x27; comments on agenda items. Council members do not engage in discussion under this agenda item, and staff members are directed not to. If you seek discussion or inquiry, please contact your Councilmember, the Mayor or the office of the City Manager. Responses to citizen comments, if any, will occur under the applicable agenda item or may be reserved for further response by phone call, personal meeting, or a posting on the website: www.miamiokla.net 4. *Action Item* Claims&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Claims List 5. *Action Item* Claims for NEO Concrete&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Claims List 6. *Action Item* Minutes:&amp;nbsp; May 06, 2024 (Regular)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 7. *Action Item* Budget Amendment:&amp;nbsp; #24-19 Transferring MSUA Budgeted Grants and Donations, Along With Actual Fund Transfers From Previous Fiscal Years From the General Fund Grants/Donations Fund to the MSUA Grants/Donations Fund&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Jill Fitzgibbon Budget Amendment 8. *Action Item* Fiscal Year 2024 - 2025 Municipal Budget Message and Resolution Regarding the City of Miami Oklahoma Budget for the Fiscal Year 2024 - 2025 and Establishing Budget Amendment Authority&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline/Jill Fitzgibbon Budget Message Budget Resolution Fund Summary Budget Worksheets From Incode PPT 9. *Action Item* Contract Amendment #1 for Annual (6 Month) &amp;quot;As Needed&amp;quot; Aggregate Rock Supply (C23-59) With Kemp Stone Contingent Upon Submission of all Required Contract Documents&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Brian Brassfield&amp;nbsp; BA Contract Amendment Supplemental Information 10. *Action Item* Contract Amendment #1 for Annual (6 Month) &amp;quot;As Needed&amp;quot; Concrete Sand Supply (C23-60) With Muskogee Sand Contingent Upon Submission of all Required Contract Documents&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Brian Brassfield BA Contract Amendment Supplemental Information 11. *Action Item* Award Annual &amp;quot;As Needed&amp;quot; On-Call, Open - Trench and Boring Labor for Waterline Replacement (C24-18) for Fiscal Year 2024-2025 to M&amp;J Equipment Services; Collins Construction Co.; B-Town Construction, LLC; and Broadhead Boring, LLC as Recommended by Staff; Approve Contracts Contingent Upon the Submission of all Required Contract Documents; and Authorize the Interim City Manager or His Designee to Sign the Notice to Proceed&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Brian Brassfield BA M&amp;J Equipment Services Response Collins Construction Response B-Town Construction, LLC Response Broadhead Boring, LLC Response Contract Solicitation Packet 12. *Action Item* Award High Voltage Line Clearance, Tree Trimming and Tree Removal Services (C24-29) for Fiscal Year 2024-2025 to Pro Tree Management as Recommended by Staff; Approve the Contract Contingent Upon Submission of all Required Contract Documents; and Authorize the Interim City Manager or His Designee to Sign the Notice to Proceed&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Brian Brassfield BA Price Listing Pro Tree Management Response Asplundh Tree Expert LLC Response BDG Trees Response Contract Solicitation Packet 13. *Action Item* Ordinance 2024-02 Amending Section 28-40 (G.A.R. Cemetery Costs and Fees) to Article III (Cost and Fees) of Chapter 28 (Cemeteries) of the Code of Ordinances; Providing Severability; Providing for Conflicting Provisions; Repealing All Conflicting Ordinances; and Establishing an Effective Date; GAR Cemetery Rate Increase&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Ben Loring/Angela Williams BA Ordinance 14. *Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9)) City Council/ Tyler Cline 15. Staff Reports (Written report included in packet, if available staff is present for questions)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Facilities Financial Statement Sales/Use Tax Report 16. Mayor and Council Community Announcements&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 17. City Manager&amp;rsquo;s Communications&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline 18. *Action Item* Adjournment&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office. We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div></div></div></div></div>
+</div>
 
-
-
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

@@ -1,222 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami Special Utility Authority (MSUA) - Aug  5, 2024 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami Special Utility Authority (MSUA)</h1>
-<div class="meta">📅 Aug  5, 2024 | Clip #559</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (2)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami Special Utility Authority (MSUA)</h1>
+<div class="meeting-meta">
+<span>📅 Aug  5, 2024</span>
+<span>⏱️ 00h 14m</span>
+<span>🔖 Clip #559</span>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
 </div>
-</section>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/559" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
-<div class="seg"><a href="#" onclick="seekTo(0.0); return false;" class="ts">[00:00]</a> Let us pray. Heavenly Father, in your word you have given a vision of that holy city to which the nations</div>
-<div class="seg"><a href="#" onclick="seekTo(19.12); return false;" class="ts">[00:19]</a> of the world, green their glory. Behold and visit we pray that citizens in earth renew</div>
-<div class="seg"><a href="#" onclick="seekTo(26.69); return false;" class="ts">[00:26]</a> ties with mutual regard which form our civic life send us honest enable leaders to eliminate poverty</div>
-<div class="seg"><a href="#" onclick="seekTo(35.56); return false;" class="ts">[00:35]</a> prejudice or oppression</div>
-<div class="seg"><a href="#" onclick="seekTo(38.18); return false;" class="ts">[00:38]</a> that peace may prevail with righteousness and justice</div>
-<div class="seg"><a href="#" onclick="seekTo(41.74); return false;" class="ts">[00:41]</a> with order and that men, women from different cultures</div>
-<div class="seg"><a href="#" onclick="seekTo(46.7); return false;" class="ts">[00:46]</a> in differing talents may find one another the fulfillment of their humanity.</div>
-<div class="seg"><a href="#" onclick="seekTo(55.57); return false;" class="ts">[00:55]</a> And less all schools colleges</div>
-<div class="seg"><a href="#" onclick="seekTo(60.11); return false;" class="ts">[01:00]</a> universities</div>
-<div class="seg"><a href="#" onclick="seekTo(61.55); return false;" class="ts">[01:01]</a> they might be lively centers for sound learning new discovery</div>
-<div class="seg"><a href="#" onclick="seekTo(67.35); return false;" class="ts">[01:07]</a> and the pursuit of wisdom, ignorant that those who teach</div>
-<div class="seg"><a href="#" onclick="seekTo(71.01); return false;" class="ts">[01:11]</a> in them may find you to be source</div>
-<div class="seg"><a href="#" onclick="seekTo(199.37); return false;" class="ts">[03:19]</a> of the government. This right here is a program that</div>
-<div class="seg"><a href="#" onclick="seekTo(204.73); return false;" class="ts">[03:24]</a> state acquires merchandise from federal</div>
-<div class="seg"><a href="#" onclick="seekTo(207.71); return false;" class="ts">[03:27]</a> Government, excess</div>
-<div class="seg"><a href="#" onclick="seekTo(211.29); return false;" class="ts">[03:31]</a> it can be any kind</div>
-<div class="seg"><a href="#" onclick="seekTo(212.41); return false;" class="ts">[03:32]</a> equipment in some cases I understand they might have</div>
-<div class="seg"><a href="#" onclick="seekTo(216.85); return false;" class="ts">[03:36]</a> something&#x27;s available for donation others you</div>
-<div class="seg"><a href="#" onclick="seekTo(219.95); return false;" class="ts">[03:39]</a> had to buy at depreciating cost and wherever</div>
-<div class="seg"><a href="#" onclick="seekTo(223.01); return false;" class="ts">[03:43]</a> that is this would be for a three year period and we</div>
-<div class="seg"><a href="#" onclick="seekTo(226.71); return false;" class="ts">[03:46]</a> will renewing. We&#x27;ve had</div>
-<div class="seg"><a href="#" onclick="seekTo(228.47); return false;" class="ts">[03:48]</a> before I haven&#x27;t recognized it since</div>
-<div class="seg"><a href="#" onclick="seekTo(230.99); return false;" class="ts">[03:50]</a> i have been here until</div>
-<div class="seg"><a href="#" onclick="seekTo(521.62); return false;" class="ts">[08:41]</a> authorized there is a structure to take since an information</div>
-<div class="seg"><a href="#" onclick="seekTo(524.8); return false;" class="ts">[08:44]</a> authorize the trust man or decide. And on this one</div>
-<div class="seg"><a href="#" onclick="seekTo(529.62); return false;" class="ts">[08:49]</a> library, fire department</div>
-<div class="seg"><a href="#" onclick="seekTo(532.7); return false;" class="ts">[08:52]</a> pollution control</div>
-<div class="seg"><a href="#" onclick="seekTo(534.38); return false;" class="ts">[08:54]</a> electric</div>
-<div class="seg"><a href="#" onclick="seekTo(534.94); return false;" class="ts">[08:54]</a> Department all of these groups have some items that we want</div>
-<div class="seg"><a href="#" onclick="seekTo(538.4); return false;" class="ts">[08:58]</a> move because</div>
-<div class="seg"><a href="#" onclick="seekTo(540.0); return false;" class="ts">[09:00]</a> We don&#x27;t</div>
-<div class="seg"><a href="#" onclick="seekTo(540.6); return false;" class="ts">[09:00]</a> need for them at any more</div>
-<div class="seg"><a href="#" onclick="seekTo(543.12); return false;" class="ts">[09:03]</a> All</div>
-<div class="seg"><a href="#" onclick="seekTo(543.72); return false;" class="ts">[09:03]</a> of these were purchased by the</div>
-<div class="seg"><a href="#" onclick="seekTo(545.46); return false;" class="ts">[09:05]</a> departments.</div>
-<div class="seg"><a href="#" onclick="seekTo(547.48); return false;" class="ts">[09:07]</a> A meeting sometime ago there</div>
-<div class="seg"><a href="#" onclick="seekTo(549.48); return false;" class="ts">[09:09]</a> was concerns that some</div>
-<div class="seg"><a href="#" onclick="seekTo(551.48); return false;" class="ts">[09:11]</a> The items might have been transferred to another</div>
-<div class="seg"><a href="#" onclick="seekTo(553.24); return false;" class="ts">[09:13]</a> department and we did</div>
-<div class="seg"><a href="#" onclick="seekTo(554.32); return false;" class="ts">[09:14]</a> We just need make sure</div>
-<div class="seg"><a href="#" onclick="seekTo(555.52); return false;" class="ts">[09:15]</a> Exactly where</div>
-<div class="seg"><a href="#" onclick="seekTo(557.38); return false;" class="ts">[09:17]</a> money</div>
-<div class="seg"><a href="#" onclick="seekTo(557.78); return false;" class="ts">[09:17]</a> Was spent for so if</div>
-<div class="seg"><a href="#" onclick="seekTo(559.04); return false;" class="ts">[09:19]</a> If</div>
-<div class="seg"><a href="#" onclick="seekTo(559.08); return false;" class="ts">[09:19]</a> Did get</div>
-<div class="seg"><a href="#" onclick="seekTo(560.76); return false;" class="ts">[09:20]</a> Money through surplus</div>
-<div class="seg"><a href="#" onclick="seekTo(562.56); return false;" class="ts">[09:22]</a> It would go back</div>
-<div class="seg"><a href="#" onclick="seekTo(563.32); return false;" class="ts">[09:23]</a> To</div>
-<div class="seg"><a href="#" onclick="seekTo(563.42); return false;" class="ts">[09:23]</a> Correct</div>
-<div class="seg"><a href="#" onclick="seekTo(563.86); return false;" class="ts">[09:23]</a> Apartments</div>
-<div class="seg"><a href="#" onclick="seekTo(564.4); return false;" class="ts">[09:24]</a> And</div>
-<div class="seg"><a href="#" onclick="seekTo(564.76); return false;" class="ts">[09:24]</a> So</div>
-<div class="seg"><a href="#" onclick="seekTo(565.2); return false;" class="ts">[09:25]</a> But</div>
-<div class="seg"><a href="#" onclick="seekTo(566.46); return false;" class="ts">[09:26]</a> With all</div>
-<div class="seg"><a href="#" onclick="seekTo(567.2); return false;" class="ts">[09:27]</a> Of this</div>
-<div class="seg"><a href="#" onclick="seekTo(567.96); return false;" class="ts">[09:27]</a> Down</div>
-<div class="seg"><a href="#" onclick="seekTo(569.02); return false;" class="ts">[09:29]</a> This</div>
-<div class="seg"><a href="#" onclick="seekTo(569.54); return false;" class="ts">[09:29]</a> was donated. It is all purchased by the departments and I think we are good to go with this list,</div>
-<div class="seg"><a href="#" onclick="seekTo(575.76); return false;" class="ts">[09:35]</a> so that&#x27;s why it needs approval of these products on out if you can in-brile</div>
-<div class="seg"><a href="#" onclick="seekTo(583.82); return false;" class="ts">[09:43]</a> all the websites that there is a beyond.</div>
-<div class="seg"><a href="#" onclick="seekTo(586.74); return false;" class="ts">[09:46]</a> Guests, dot coms so we can get them to work as people will be at onsite</div>
-<div class="seg"><a href="#" onclick="seekTo(590.72); return false;" class="ts">[09:50]</a> and guet deals have become very involved they came out took</div>
-<div class="seg"><a href="#" onclick="seekTo(596.38); return false;" class="ts">[09:56]</a> lot of pictures</div>
-<div class="seg"><a href="#" onclick="seekTo(597.74); return false;" class="ts">[09:57]</a> They are going help on this website itself</div>
-<div class="seg"><a href="#" onclick="seekTo(600.78); return false;" class="ts">[10:00]</a> I think it has pretty good service compared</div>
-<div class="seg"><a href="#" onclick="seekTo(603.38); return false;" class="ts">[10:03]</a> to others that I&#x27;ve looked at.</div>
-<div class="seg"><a href="#" onclick="seekTo(615.92); return false;" class="ts">[10:15]</a> Thank you, Parker?</div>
-<div class="seg"><a href="#" onclick="seekTo(621.62); return false;" class="ts">[10:21]</a> Hi!</div>
-<div class="seg"><a href="#" onclick="seekTo(623.92); return false;" class="ts">[10:23]</a> Good morning</div>
-<div class="seg"><a href="#" onclick="seekTo(626.42); return false;" class="ts">[10:26]</a> Well resolution M-SU82024 BASHIRAWARPROVING</div>
-<div class="seg"><a href="#" onclick="seekTo(630.42); return false;" class="ts">[10:30]</a> In a doctor in the Fiscal Year 2425</div>
-<div class="seg"><a href="#" onclick="seekTo(633.42); return false;" class="ts">[10:33]</a> You tell Ukraine for Boys and Girls Club,</div>
-<div class="seg"><a href="#" onclick="seekTo(635.42); return false;" class="ts">[10:35]</a> The Water County</div>
-<div class="seg"><a href="#" onclick="seekTo(637.42); return false;" class="ts">[10:37]</a> And the Community Crisis Center</div>
-<div class="seg"><a href="#" onclick="seekTo(638.42); return false;" class="ts">[10:38]</a> I have the old agenda</div>
-<div class="seg"><a href="#" onclick="seekTo(658.85); return false;" class="ts">[10:58]</a> So, this city council has recently approved</div>
-<div class="seg"><a href="#" onclick="seekTo(662.85); return false;" class="ts">[11:02]</a> This outside organization context</div>
-<div class="seg"><a href="#" onclick="seekTo(667.69); return false;" class="ts">[11:07]</a> Included in each of those was a detailed credit</div>
-<div class="seg"><a href="#" onclick="seekTo(670.69); return false;" class="ts">[11:10]</a> so M-SU8</div>
-<div class="seg"><a href="#" onclick="seekTo(676.22); return false;" class="ts">[11:16]</a> Make a motion we approve</div>
-<div class="seg"><a href="#" onclick="seekTo(701.62); return false;" class="ts">[11:41]</a> Hi</div>
-<div class="seg"><a href="#" onclick="seekTo(705.86); return false;" class="ts">[11:45]</a> 13 Revised Government of my area</div>
-<div class="seg"><a href="#" onclick="seekTo(707.86); return false;" class="ts">[11:47]</a> I&#x27;m an Air Economic Services</div>
-<div class="seg"><a href="#" onclick="seekTo(709.86); return false;" class="ts">[11:49]</a> Incorporated for the Episcopal Year 2425</div>
-<div class="seg"><a href="#" onclick="seekTo(713.13); return false;" class="ts">[11:53]</a> So, when your packet is a Revive</div>
-<div class="seg"><a href="#" onclick="seekTo(715.13); return false;" class="ts">[11:55]</a> You just approve the M-S contract</div>
-<div class="seg"><a href="#" onclick="seekTo(717.13); return false;" class="ts">[11:57]</a> But in Your Packages Revised Contract</div>
-<div class="seg"><a href="#" onclick="seekTo(719.13); return false;" class="ts">[11:59]</a> The three changes are</div>
-<div class="seg"><a href="#" onclick="seekTo(721.13); return false;" class="ts">[12:01]</a> We added M-SU8</div>
-<div class="seg"><a href="#" onclick="seekTo(723.13); return false;" class="ts">[12:03]</a> Because of utility credits</div>
-<div class="seg"><a href="#" onclick="seekTo(725.13); return false;" class="ts">[12:05]</a> They&#x27;re also going to be assigned around</div>
-<div class="seg"><a href="#" onclick="seekTo(727.13); return false;" class="ts">[12:07]</a> The contract</div>
-<div class="seg"><a href="#" onclick="seekTo(729.13); return false;" class="ts">[12:09]</a> Well, this is the M-SU8ment meeting</div>
-<div class="seg"><a href="#" onclick="seekTo(732.56); return false;" class="ts">[12:12]</a> And other thing</div>
-<div class="seg"><a href="#" onclick="seekTo(733.56); return false;" class="ts">[12:13]</a> I&#x27;m an area chamber of commerce</div>
-<div class="seg"><a href="#" onclick="seekTo(735.56); return false;" class="ts">[12:15]</a> It&#x27;s made now so we took that out</div>
-<div class="seg"><a href="#" onclick="seekTo(738.09); return false;" class="ts">[12:18]</a> And then the spec building</div>
-<div class="seg"><a href="#" onclick="seekTo(740.09); return false;" class="ts">[12:20]</a> We do not need insurance because they sold this back</div>
-<div class="seg"><a href="#" onclick="seekTo(743.46); return false;" class="ts">[12:23]</a> So those are very changes</div>
-<div class="seg"><a href="#" onclick="seekTo(746.3); return false;" class="ts">[12:26]</a> You&#x27;ll see these again on the council</div>
-<div class="seg"><a href="#" onclick="seekTo(757.47); return false;" class="ts">[12:37]</a> The still for a thousand percent credit</div>
-<div class="seg"><a href="#" onclick="seekTo(763.18); return false;" class="ts">[12:43]</a> Up to 11.5</div>
-<div class="seg"><a href="#" onclick="seekTo(765.42); return false;" class="ts">[12:45]</a> Based On their three year history</div>
-<div class="seg"><a href="#" onclick="seekTo(769.15); return false;" class="ts">[12:49]</a> That was around in motion approved</div>
-<div class="seg"><a href="#" onclick="seekTo(771.81); return false;" class="ts">[12:51]</a> Marker</div>
-<div class="seg"><a href="#" onclick="seekTo(773.81); return false;" class="ts">[12:53]</a> He stepped</div>
-<div class="seg"><a href="#" onclick="seekTo(775.81); return false;" class="ts">[12:55]</a> 14</div>
-<div class="seg"><a href="#" onclick="seekTo(776.81); return false;" class="ts">[12:56]</a> The business committee would</div>
-<div class="seg"><a href="#" onclick="seekTo(779.81); return false;" class="ts">[12:59]</a> Supposed to this agenda</div>
-<div class="seg"><a href="#" onclick="seekTo(783.2); return false;" class="ts">[13:03]</a> I&#x27;m not one thing that say</div>
-<div class="seg"><a href="#" onclick="seekTo(785.2); return false;" class="ts">[13:05]</a> This morning council member does some pivot and resigned from the board</div>
-<div class="seg"><a href="#" onclick="seekTo(788.5); return false;" class="ts">[13:08]</a> So we have a lot of net opening now</div>
-<div class="seg"><a href="#" onclick="seekTo(791.93); return false;" class="ts">[13:11]</a> Just like everybody in on it&#x27;s 90</div>
-<div class="seg"><a href="#" onclick="seekTo(795.26); return false;" class="ts">[13:15]</a> We appreciate that</div>
-<div class="seg"><a href="#" onclick="seekTo(797.26); return false;" class="ts">[13:17]</a> Thank you, thank you. We appreciate Dustin</div>
-<div class="seg"><a href="#" onclick="seekTo(799.26); return false;" class="ts">[13:19]</a> And his willingness to serve</div>
-<div class="seg"><a href="#" onclick="seekTo(802.26); return false;" class="ts">[13:22]</a> He though is short</div>
-<div class="seg"><a href="#" onclick="seekTo(804.26); return false;" class="ts">[13:24]</a> Think he&#x27;d be on his control</div>
-<div class="seg"><a href="#" onclick="seekTo(806.26); return false;" class="ts">[13:26]</a> On this one</div>
-<div class="seg"><a href="#" onclick="seekTo(808.26); return false;" class="ts">[13:28]</a> He was in board four</div>
-<div class="seg"><a href="#" onclick="seekTo(811.26); return false;" class="ts">[13:31]</a> So they might have worked for his interest</div>
-<div class="seg"><a href="#" onclick="seekTo(813.26); return false;" class="ts">[13:33]</a> Or a little bit of an account member</div>
-<div class="seg"><a href="#" onclick="seekTo(815.26); return false;" class="ts">[13:35]</a> Give me the call or Call it office</div>
-<div class="seg"><a href="#" onclick="seekTo(818.26); return false;" class="ts">[13:38]</a> We&#x27;ll reach back up to 15</div>
-<div class="seg"><a href="#" onclick="seekTo(823.63); return false;" class="ts">[13:43]</a> 16</div>
-<div class="seg"><a href="#" onclick="seekTo(830.58); return false;" class="ts">[13:50]</a> 16. Justin&#x27;s meeting announcements</div>
-<div class="seg"><a href="#" onclick="seekTo(835.18); return false;" class="ts">[13:55]</a> 17 and German motion</div>
-<div class="seg"><a href="#" onclick="seekTo(837.55); return false;" class="ts">[13:57]</a> Second</div>
-<div class="seg"><a href="#" onclick="seekTo(839.55); return false;" class="ts">[13:59]</a> Perfect</div>
-</div></section>
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/559" allowfullscreen></iframe></div>
+<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (6.4 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+</div>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">Let us pray. Heavenly Father, in your word you have given a vision of that holy city to which the nations</span></div>
+<div class="seg" data-time="19.12"><span class="seg-time">00:19</span><span class="seg-text">of the world, green their glory. Behold and visit we pray that citizens in earth renew</span></div>
+<div class="seg" data-time="26.69"><span class="seg-time">00:26</span><span class="seg-text">ties with mutual regard which form our civic life send us honest enable leaders to eliminate poverty</span></div>
+<div class="seg" data-time="35.56"><span class="seg-time">00:35</span><span class="seg-text">prejudice or oppression</span></div>
+<div class="seg" data-time="38.18"><span class="seg-time">00:38</span><span class="seg-text">that peace may prevail with righteousness and justice</span></div>
+<div class="seg" data-time="41.74"><span class="seg-time">00:41</span><span class="seg-text">with order and that men, women from different cultures</span></div>
+<div class="seg" data-time="46.7"><span class="seg-time">00:46</span><span class="seg-text">in differing talents may find one another the fulfillment of their humanity.</span></div>
+<div class="seg" data-time="55.57"><span class="seg-time">00:55</span><span class="seg-text">And less all schools colleges</span></div>
+<div class="seg" data-time="60.11"><span class="seg-time">01:00</span><span class="seg-text">universities</span></div>
+<div class="seg" data-time="61.55"><span class="seg-time">01:01</span><span class="seg-text">they might be lively centers for sound learning new discovery</span></div>
+<div class="seg" data-time="67.35"><span class="seg-time">01:07</span><span class="seg-text">and the pursuit of wisdom, ignorant that those who teach</span></div>
+<div class="seg" data-time="71.01"><span class="seg-time">01:11</span><span class="seg-text">in them may find you to be source</span></div>
+<div class="seg" data-time="199.37"><span class="seg-time">03:19</span><span class="seg-text">of the government. This right here is a program that</span></div>
+<div class="seg" data-time="204.73"><span class="seg-time">03:24</span><span class="seg-text">state acquires merchandise from federal</span></div>
+<div class="seg" data-time="207.71"><span class="seg-time">03:27</span><span class="seg-text">Government, excess</span></div>
+<div class="seg" data-time="211.29"><span class="seg-time">03:31</span><span class="seg-text">it can be any kind</span></div>
+<div class="seg" data-time="212.41"><span class="seg-time">03:32</span><span class="seg-text">equipment in some cases I understand they might have</span></div>
+<div class="seg" data-time="216.85"><span class="seg-time">03:36</span><span class="seg-text">something&#x27;s available for donation others you</span></div>
+<div class="seg" data-time="219.95"><span class="seg-time">03:39</span><span class="seg-text">had to buy at depreciating cost and wherever</span></div>
+<div class="seg" data-time="223.01"><span class="seg-time">03:43</span><span class="seg-text">that is this would be for a three year period and we</span></div>
+<div class="seg" data-time="226.71"><span class="seg-time">03:46</span><span class="seg-text">will renewing. We&#x27;ve had</span></div>
+<div class="seg" data-time="228.47"><span class="seg-time">03:48</span><span class="seg-text">before I haven&#x27;t recognized it since</span></div>
+<div class="seg" data-time="230.99"><span class="seg-time">03:50</span><span class="seg-text">i have been here until</span></div>
+<div class="seg" data-time="521.62"><span class="seg-time">08:41</span><span class="seg-text">authorized there is a structure to take since an information</span></div>
+<div class="seg" data-time="524.8"><span class="seg-time">08:44</span><span class="seg-text">authorize the trust man or decide. And on this one</span></div>
+<div class="seg" data-time="529.62"><span class="seg-time">08:49</span><span class="seg-text">library, fire department</span></div>
+<div class="seg" data-time="532.7"><span class="seg-time">08:52</span><span class="seg-text">pollution control</span></div>
+<div class="seg" data-time="534.38"><span class="seg-time">08:54</span><span class="seg-text">electric</span></div>
+<div class="seg" data-time="534.94"><span class="seg-time">08:54</span><span class="seg-text">Department all of these groups have some items that we want</span></div>
+<div class="seg" data-time="538.4"><span class="seg-time">08:58</span><span class="seg-text">move because</span></div>
+<div class="seg" data-time="540.0"><span class="seg-time">09:00</span><span class="seg-text">We don&#x27;t</span></div>
+<div class="seg" data-time="540.6"><span class="seg-time">09:00</span><span class="seg-text">need for them at any more</span></div>
+<div class="seg" data-time="543.12"><span class="seg-time">09:03</span><span class="seg-text">All</span></div>
+<div class="seg" data-time="543.72"><span class="seg-time">09:03</span><span class="seg-text">of these were purchased by the</span></div>
+<div class="seg" data-time="545.46"><span class="seg-time">09:05</span><span class="seg-text">departments.</span></div>
+<div class="seg" data-time="547.48"><span class="seg-time">09:07</span><span class="seg-text">A meeting sometime ago there</span></div>
+<div class="seg" data-time="549.48"><span class="seg-time">09:09</span><span class="seg-text">was concerns that some</span></div>
+<div class="seg" data-time="551.48"><span class="seg-time">09:11</span><span class="seg-text">The items might have been transferred to another</span></div>
+<div class="seg" data-time="553.24"><span class="seg-time">09:13</span><span class="seg-text">department and we did</span></div>
+<div class="seg" data-time="554.32"><span class="seg-time">09:14</span><span class="seg-text">We just need make sure</span></div>
+<div class="seg" data-time="555.52"><span class="seg-time">09:15</span><span class="seg-text">Exactly where</span></div>
+<div class="seg" data-time="557.38"><span class="seg-time">09:17</span><span class="seg-text">money</span></div>
+<div class="seg" data-time="557.78"><span class="seg-time">09:17</span><span class="seg-text">Was spent for so if</span></div>
+<div class="seg" data-time="559.04"><span class="seg-time">09:19</span><span class="seg-text">If</span></div>
+<div class="seg" data-time="559.08"><span class="seg-time">09:19</span><span class="seg-text">Did get</span></div>
+<div class="seg" data-time="560.76"><span class="seg-time">09:20</span><span class="seg-text">Money through surplus</span></div>
+<div class="seg" data-time="562.56"><span class="seg-time">09:22</span><span class="seg-text">It would go back</span></div>
+<div class="seg" data-time="563.32"><span class="seg-time">09:23</span><span class="seg-text">To</span></div>
+<div class="seg" data-time="563.42"><span class="seg-time">09:23</span><span class="seg-text">Correct</span></div>
+<div class="seg" data-time="563.86"><span class="seg-time">09:23</span><span class="seg-text">Apartments</span></div>
+<div class="seg" data-time="564.4"><span class="seg-time">09:24</span><span class="seg-text">And</span></div>
+<div class="seg" data-time="564.76"><span class="seg-time">09:24</span><span class="seg-text">So</span></div>
+<div class="seg" data-time="565.2"><span class="seg-time">09:25</span><span class="seg-text">But</span></div>
+<div class="seg" data-time="566.46"><span class="seg-time">09:26</span><span class="seg-text">With all</span></div>
+<div class="seg" data-time="567.2"><span class="seg-time">09:27</span><span class="seg-text">Of this</span></div>
+<div class="seg" data-time="567.96"><span class="seg-time">09:27</span><span class="seg-text">Down</span></div>
+<div class="seg" data-time="569.02"><span class="seg-time">09:29</span><span class="seg-text">This</span></div>
+<div class="seg" data-time="569.54"><span class="seg-time">09:29</span><span class="seg-text">was donated. It is all purchased by the departments and I think we are good to go with this list,</span></div>
+<div class="seg" data-time="575.76"><span class="seg-time">09:35</span><span class="seg-text">so that&#x27;s why it needs approval of these products on out if you can in-brile</span></div>
+<div class="seg" data-time="583.82"><span class="seg-time">09:43</span><span class="seg-text">all the websites that there is a beyond.</span></div>
+<div class="seg" data-time="586.74"><span class="seg-time">09:46</span><span class="seg-text">Guests, dot coms so we can get them to work as people will be at onsite</span></div>
+<div class="seg" data-time="590.72"><span class="seg-time">09:50</span><span class="seg-text">and guet deals have become very involved they came out took</span></div>
+<div class="seg" data-time="596.38"><span class="seg-time">09:56</span><span class="seg-text">lot of pictures</span></div>
+<div class="seg" data-time="597.74"><span class="seg-time">09:57</span><span class="seg-text">They are going help on this website itself</span></div>
+<div class="seg" data-time="600.78"><span class="seg-time">10:00</span><span class="seg-text">I think it has pretty good service compared</span></div>
+<div class="seg" data-time="603.38"><span class="seg-time">10:03</span><span class="seg-text">to others that I&#x27;ve looked at.</span></div>
+<div class="seg" data-time="615.92"><span class="seg-time">10:15</span><span class="seg-text">Thank you, Parker?</span></div>
+<div class="seg" data-time="621.62"><span class="seg-time">10:21</span><span class="seg-text">Hi!</span></div>
+<div class="seg" data-time="623.92"><span class="seg-time">10:23</span><span class="seg-text">Good morning</span></div>
+<div class="seg" data-time="626.42"><span class="seg-time">10:26</span><span class="seg-text">Well resolution M-SU82024 BASHIRAWARPROVING</span></div>
+<div class="seg" data-time="630.42"><span class="seg-time">10:30</span><span class="seg-text">In a doctor in the Fiscal Year 2425</span></div>
+<div class="seg" data-time="633.42"><span class="seg-time">10:33</span><span class="seg-text">You tell Ukraine for Boys and Girls Club,</span></div>
+<div class="seg" data-time="635.42"><span class="seg-time">10:35</span><span class="seg-text">The Water County</span></div>
+<div class="seg" data-time="637.42"><span class="seg-time">10:37</span><span class="seg-text">And the Community Crisis Center</span></div>
+<div class="seg" data-time="638.42"><span class="seg-time">10:38</span><span class="seg-text">I have the old agenda</span></div>
+<div class="seg" data-time="658.85"><span class="seg-time">10:58</span><span class="seg-text">So, this city council has recently approved</span></div>
+<div class="seg" data-time="662.85"><span class="seg-time">11:02</span><span class="seg-text">This outside organization context</span></div>
+<div class="seg" data-time="667.69"><span class="seg-time">11:07</span><span class="seg-text">Included in each of those was a detailed credit</span></div>
+<div class="seg" data-time="670.69"><span class="seg-time">11:10</span><span class="seg-text">so M-SU8</span></div>
+<div class="seg" data-time="676.22"><span class="seg-time">11:16</span><span class="seg-text">Make a motion we approve</span></div>
+<div class="seg" data-time="701.62"><span class="seg-time">11:41</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="705.86"><span class="seg-time">11:45</span><span class="seg-text">13 Revised Government of my area</span></div>
+<div class="seg" data-time="707.86"><span class="seg-time">11:47</span><span class="seg-text">I&#x27;m an Air Economic Services</span></div>
+<div class="seg" data-time="709.86"><span class="seg-time">11:49</span><span class="seg-text">Incorporated for the Episcopal Year 2425</span></div>
+<div class="seg" data-time="713.13"><span class="seg-time">11:53</span><span class="seg-text">So, when your packet is a Revive</span></div>
+<div class="seg" data-time="715.13"><span class="seg-time">11:55</span><span class="seg-text">You just approve the M-S contract</span></div>
+<div class="seg" data-time="717.13"><span class="seg-time">11:57</span><span class="seg-text">But in Your Packages Revised Contract</span></div>
+<div class="seg" data-time="719.13"><span class="seg-time">11:59</span><span class="seg-text">The three changes are</span></div>
+<div class="seg" data-time="721.13"><span class="seg-time">12:01</span><span class="seg-text">We added M-SU8</span></div>
+<div class="seg" data-time="723.13"><span class="seg-time">12:03</span><span class="seg-text">Because of utility credits</span></div>
+<div class="seg" data-time="725.13"><span class="seg-time">12:05</span><span class="seg-text">They&#x27;re also going to be assigned around</span></div>
+<div class="seg" data-time="727.13"><span class="seg-time">12:07</span><span class="seg-text">The contract</span></div>
+<div class="seg" data-time="729.13"><span class="seg-time">12:09</span><span class="seg-text">Well, this is the M-SU8ment meeting</span></div>
+<div class="seg" data-time="732.56"><span class="seg-time">12:12</span><span class="seg-text">And other thing</span></div>
+<div class="seg" data-time="733.56"><span class="seg-time">12:13</span><span class="seg-text">I&#x27;m an area chamber of commerce</span></div>
+<div class="seg" data-time="735.56"><span class="seg-time">12:15</span><span class="seg-text">It&#x27;s made now so we took that out</span></div>
+<div class="seg" data-time="738.09"><span class="seg-time">12:18</span><span class="seg-text">And then the spec building</span></div>
+<div class="seg" data-time="740.09"><span class="seg-time">12:20</span><span class="seg-text">We do not need insurance because they sold this back</span></div>
+<div class="seg" data-time="743.46"><span class="seg-time">12:23</span><span class="seg-text">So those are very changes</span></div>
+<div class="seg" data-time="746.3"><span class="seg-time">12:26</span><span class="seg-text">You&#x27;ll see these again on the council</span></div>
+<div class="seg" data-time="757.47"><span class="seg-time">12:37</span><span class="seg-text">The still for a thousand percent credit</span></div>
+<div class="seg" data-time="763.18"><span class="seg-time">12:43</span><span class="seg-text">Up to 11.5</span></div>
+<div class="seg" data-time="765.42"><span class="seg-time">12:45</span><span class="seg-text">Based On their three year history</span></div>
+<div class="seg" data-time="769.15"><span class="seg-time">12:49</span><span class="seg-text">That was around in motion approved</span></div>
+<div class="seg" data-time="771.81"><span class="seg-time">12:51</span><span class="seg-text">Marker</span></div>
+<div class="seg" data-time="773.81"><span class="seg-time">12:53</span><span class="seg-text">He stepped</span></div>
+<div class="seg" data-time="775.81"><span class="seg-time">12:55</span><span class="seg-text">14</span></div>
+<div class="seg" data-time="776.81"><span class="seg-time">12:56</span><span class="seg-text">The business committee would</span></div>
+<div class="seg" data-time="779.81"><span class="seg-time">12:59</span><span class="seg-text">Supposed to this agenda</span></div>
+<div class="seg" data-time="783.2"><span class="seg-time">13:03</span><span class="seg-text">I&#x27;m not one thing that say</span></div>
+<div class="seg" data-time="785.2"><span class="seg-time">13:05</span><span class="seg-text">This morning council member does some pivot and resigned from the board</span></div>
+<div class="seg" data-time="788.5"><span class="seg-time">13:08</span><span class="seg-text">So we have a lot of net opening now</span></div>
+<div class="seg" data-time="791.93"><span class="seg-time">13:11</span><span class="seg-text">Just like everybody in on it&#x27;s 90</span></div>
+<div class="seg" data-time="795.26"><span class="seg-time">13:15</span><span class="seg-text">We appreciate that</span></div>
+<div class="seg" data-time="797.26"><span class="seg-time">13:17</span><span class="seg-text">Thank you, thank you. We appreciate Dustin</span></div>
+<div class="seg" data-time="799.26"><span class="seg-time">13:19</span><span class="seg-text">And his willingness to serve</span></div>
+<div class="seg" data-time="802.26"><span class="seg-time">13:22</span><span class="seg-text">He though is short</span></div>
+<div class="seg" data-time="804.26"><span class="seg-time">13:24</span><span class="seg-text">Think he&#x27;d be on his control</span></div>
+<div class="seg" data-time="806.26"><span class="seg-time">13:26</span><span class="seg-text">On this one</span></div>
+<div class="seg" data-time="808.26"><span class="seg-time">13:28</span><span class="seg-text">He was in board four</span></div>
+<div class="seg" data-time="811.26"><span class="seg-time">13:31</span><span class="seg-text">So they might have worked for his interest</span></div>
+<div class="seg" data-time="813.26"><span class="seg-time">13:33</span><span class="seg-text">Or a little bit of an account member</span></div>
+<div class="seg" data-time="815.26"><span class="seg-time">13:35</span><span class="seg-text">Give me the call or Call it office</span></div>
+<div class="seg" data-time="818.26"><span class="seg-time">13:38</span><span class="seg-text">We&#x27;ll reach back up to 15</span></div>
+<div class="seg" data-time="823.63"><span class="seg-time">13:43</span><span class="seg-text">16</span></div>
+<div class="seg" data-time="830.58"><span class="seg-time">13:50</span><span class="seg-text">16. Justin&#x27;s meeting announcements</span></div>
+<div class="seg" data-time="835.18"><span class="seg-time">13:55</span><span class="seg-text">17 and German motion</span></div>
+<div class="seg" data-time="837.55"><span class="seg-time">13:57</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="839.55"><span class="seg-time">13:59</span><span class="seg-text">Perfect</span></div>
 
-<section class="documents">
-<h2>📄 Full Agenda</h2>
-<div class="doc-preview">NOTICE OF REGULAR MEETING AND AGENDA<br>OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)<br>Monday, August 5, 2024<br>6:00<br>				<br><br>				p.m.<br>MIAMI CIVIC CENTER<br>129 5th Avenue Northwest, Miami, Oklahoma<br>Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by<br>posting on www.miamiokla.net.<br>THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:<br>1.<br>Call to Order                                                             Chairman Parker<br>2.<br>Invocation by the Deacon of All Saints Episcopal Church                                                           Kay Boman-Harvey<br>3.<br>Pledge of Allegiance                                                                   Trustee Pittman<br>4.<br>Public Input and Unscheduled Personal Appearances<br>Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:<br>www.miamiokla.net<br>5.<br>*Action Item* Claims                                                                                           Trustees<br>Claims List FY 23-24<br>Claims List FY 24-25<br>Credit Cards 1<br>Credit Cards 2<br>6.<br>*Action Item* Claims for NEO Concrete                                                                  Trustees<br>Claims List<br>7.<br>*Action Item* Minutes:  July 15, 2024 (Regular)                                                           Trustees<br>Minutes<br>8.<br>*Action Item* Goodell, Stratton, Edmonds & Palmer Claim for Civil Litigation in the Amount of $1,031.25                     Tyler Cline<br>BA<br>Claims List<br>9.<br>*Action Item* State of Oklahoma Federal Surplus Property Program Capital Assets Management Office of Management and Enterprise Services Application             Brian Brassfield<br>BA<br>Application<br>10.<br>*Action Item* Contract Amendment #1 for Annual (6-Month) "As Needed" Concrete Material (C23-61) With NEO Concrete Contingent Upon Submission of all Required Contract Documents                             Brian Brassfield<br>BA<br>Amendment<br>11.<br>*Action Item* Declare the Proposed Items Listed in the Packet as Surplus and Authorize the Items to be Offered for Public Sale, or Sold for Highest Scrap Metal Value, or Authorize Their Destruction to Protect Sensitive Information; Authorize the Trust Manager to Sign                          Brian Brassfield<br>BA<br>Surplus List<br>12.<br>*Action Item* Resolution MSUA 2024-01 Approving and Adopting the Fiscal Year 2024-2025 Utility Credit for the Boys & Girls Club of Ottawa County and the Community Crisis Center of Northeast Oklahoma                             Ben Loring<br>BA<br>Resolution<br>13.<br>*Action Item* Revised Agreement With Miami Area Economic Development Service, Inc. for Fiscal Year 2024-2025                                       Jill Fitzgibbon<br>Revised Agreement<br>Redlined Agreement<br>14.<br>*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))	Trustees/Tyler Cline<br>15.<br>Staff Reports (Written report included in packet, if available staff is present for questions)                               Trustees<br>16.<br>Trustee Community Announcements                                                    Trustees<br>17.<br>*Action Item* Adjournment                                                  Trustees<br>The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager's office. We also ask that those in attendance place all electronic devices on silent. Thank you.</div>
-</section>
+</div>
+</div>
+</div>
 
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
+Monday, August 5, 2024
+6:00
+				
 
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+				p.m.
+MIAMI CIVIC CENTER
+129 5th Avenue Northwest, Miami, Oklahoma
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by
+posting on www.miamiokla.net.
+THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:
+1.
+Call to Order                                                             Chairman Parker
+2.
+Invocation by the Deacon of All Saints Episcopal Church                                                           Kay Boman-Harvey
+3.
+Pledge of Allegiance                                                                   Trustee Pittman
+4.
+Public Input and Unscheduled Personal Appearances
+Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:
+www.miamiokla.net
+5.
+*Action Item* Claims                                                                                           Trustees
+Claims List FY 23-24
+Claims List FY 24-25
+Credit Cards 1
+Credit Cards 2
+6.
+*Action Item* Claims for NEO Concrete                                                                  Trustees
+Claims List
+7.
+*Action Item* Minutes:  July 15, 2024 (Regular)                                                           Trustees
+Minutes
+8.
+*Action Item* Goodell, Stratton, Edmonds &amp; Palmer Claim for Civil Litigation in the Amount of $1,031.25                     Tyler Cline
+BA
+Claims List
+9.
+*Action Item* State of Oklahoma Federal Surplus Property Program Capital Assets Management Office of Management and Enterprise Services Application             Brian Brassfield
+BA
+Application
+10.
+*Action Item* Contract Amendment #1 for Annual (6-Month) &quot;As Needed&quot; Concrete Material (C23-61) With NEO Concrete Contingent Upon Submission of all Required Contract Documents                             Brian Brassfield
+BA
+Amendment
+11.
+*Action Item* Declare the Proposed Items Listed in the Packet as Surplus and Authorize the Items to be Offered for Public Sale, or Sold for Highest Scrap Metal Value, or Authorize Their Destruction to Protect Sensitive Information; Authorize the Trust Manager to Sign                          Brian Brassfield
+BA
+Surplus List
+12.
+*Action Item* Resolution MSUA 2024-01 Approving and Adopting the Fiscal Year 2024-2025 Utility Credit for the Boys &amp; Girls Club of Ottawa County and the Community Crisis Center of Northeast Oklahoma                             Ben Loring
+BA
+Resolution
+13.
+*Action Item* Revised Agreement With Miami Area Economic Development Service, Inc. for Fiscal Year 2024-2025                                       Jill Fitzgibbon
+Revised Agreement
+Redlined Agreement
+14.
+*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))	Trustees/Tyler Cline
+15.
+Staff Reports (Written report included in packet, if available staff is present for questions)                               Trustees
+16.
+Trustee Community Announcements                                                    Trustees
+17.
+*Action Item* Adjournment                                                  Trustees
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Let us pray. Heavenly Father, in your word you have given a vision of that holy city to which the nations of the world, green their glory. Behold and visit we pray that citizens in earth renew ties with mutual regard which form our civic life send us honest enable leaders to eliminate poverty prejudice or oppression that peace may prevail with righteousness and justice with order and that men, women from different cultures in differing talents may find one another the fulfillment of their humanity. And less all schools colleges universities they might be lively centers for sound learning new discovery and the pursuit of wisdom, ignorant that those who teach in them may find you to be source of the government. This right here is a program that state acquires merchandise from federal Government, excess it can be any kind equipment in some cases I understand they might have something&#x27;s available for donation others you had to buy at depreciating cost and wherever that is this would be for a three year period and we will renewing. We&#x27;ve had before I haven&#x27;t recognized it since i have been here until authorized there is a structure to take since an information authorize the trust man or decide. And on this one library, fire department pollution control electric Department all of these groups have some items that we want move because We don&#x27;t need for them at any more All of these were purchased by the departments. A meeting sometime ago there was concerns that some The items might have been transferred to another department and we did We just need make sure Exactly where money Was spent for so if If Did get Money through surplus It would go back To Correct Apartments And So But With all Of this Down This was donated. It is all purchased by the departments and I think we are good to go with this list, so that&#x27;s why it needs approval of these products on out if you can in-brile all the websites that there is a beyond. Guests, dot coms so we can get them to work as people will be at onsite and guet deals have become very involved they came out took lot of pictures They are going help on this website itself I think it has pretty good service compared to others that I&#x27;ve looked at. Thank you, Parker? Hi! Good morning Well resolution M-SU82024 BASHIRAWARPROVING In a doctor in the Fiscal Year 2425 You tell Ukraine for Boys and Girls Club, The Water County And the Community Crisis Center I have the old agenda So, this city council has recently approved This outside organization context Included in each of those was a detailed credit so M-SU8 Make a motion we approve Hi 13 Revised Government of my area I&#x27;m an Air Economic Services Incorporated for the Episcopal Year 2425 So, when your packet is a Revive You just approve the M-S contract But in Your Packages Revised Contract The three changes are We added M-SU8 Because of utility credits They&#x27;re also going to be assigned around The contract Well, this is the M-SU8ment meeting And other thing I&#x27;m an area chamber of commerce It&#x27;s made now so we took that out And then the spec building We do not need insurance because they sold this back So those are very changes You&#x27;ll see these again on the council The still for a thousand percent credit Up to 11.5 Based On their three year history That was around in motion approved Marker He stepped 14 The business committee would Supposed to this agenda I&#x27;m not one thing that say This morning council member does some pivot and resigned from the board So we have a lot of net opening now Just like everybody in on it&#x27;s 90 We appreciate that Thank you, thank you. We appreciate Dustin And his willingness to serve He though is short Think he&#x27;d be on his control On this one He was in board four So they might have worked for his interest Or a little bit of an account member Give me the call or Call it office We&#x27;ll reach back up to 15 16 16. Justin&#x27;s meeting announcements 17 and German motion Second Perfect</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
+Monday, August 5, 2024
+6:00
+				
+
+				p.m.
+MIAMI CIVIC CENTER
+129 5th Avenue Northwest, Miami, Oklahoma
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by
+posting on www.miamiokla.net.
+THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:
+1.
+Call to Order                                                             Chairman Parker
+2.
+Invocation by the Deacon of All Saints Episcopal Church                                                           Kay Boman-Harvey
+3.
+Pledge of Allegiance                                                                   Trustee Pittman
+4.
+Public Input and Unscheduled Personal Appearances
+Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:
+www.miamiokla.net
+5.
+*Action Item* Claims                                                                                           Trustees
+Claims List FY 23-24
+Claims List FY 24-25
+Credit Cards 1
+Credit Cards 2
+6.
+*Action Item* Claims for NEO Concrete                                                                  Trustees
+Claims List
+7.
+*Action Item* Minutes:  July 15, 2024 (Regular)                                                           Trustees
+Minutes
+8.
+*Action Item* Goodell, Stratton, Edmonds &amp; Palmer Claim for Civil Litigation in the Amount of $1,031.25                     Tyler Cline
+BA
+Claims List
+9.
+*Action Item* State of Oklahoma Federal Surplus Property Program Capital Assets Management Office of Management and Enterprise Services Application             Brian Brassfield
+BA
+Application
+10.
+*Action Item* Contract Amendment #1 for Annual (6-Month) &quot;As Needed&quot; Concrete Material (C23-61) With NEO Concrete Contingent Upon Submission of all Required Contract Documents                             Brian Brassfield
+BA
+Amendment
+11.
+*Action Item* Declare the Proposed Items Listed in the Packet as Surplus and Authorize the Items to be Offered for Public Sale, or Sold for Highest Scrap Metal Value, or Authorize Their Destruction to Protect Sensitive Information; Authorize the Trust Manager to Sign                          Brian Brassfield
+BA
+Surplus List
+12.
+*Action Item* Resolution MSUA 2024-01 Approving and Adopting the Fiscal Year 2024-2025 Utility Credit for the Boys &amp; Girls Club of Ottawa County and the Community Crisis Center of Northeast Oklahoma                             Ben Loring
+BA
+Resolution
+13.
+*Action Item* Revised Agreement With Miami Area Economic Development Service, Inc. for Fiscal Year 2024-2025                                       Jill Fitzgibbon
+Revised Agreement
+Redlined Agreement
+14.
+*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))	Trustees/Tyler Cline
+15.
+Staff Reports (Written report included in packet, if available staff is present for questions)                               Trustees
+16.
+Trustee Community Announcements                                                    Trustees
+17.
+*Action Item* Adjournment                                                  Trustees
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
+</div>
+
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

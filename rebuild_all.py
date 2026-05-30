@@ -305,6 +305,19 @@ def build_meeting_page(clip_id, meeting, issues):
 <iframe src="{video_url}" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
 </section>'''
     
+
+    # Audio section (for those who prefer listening)
+    audio_html = ''
+    audio_mp3 = meeting_dir / 'audio.mp3'
+    if audio_mp3.exists() and audio_mp3.stat().st_size > 1000:
+        mp3_size = round(audio_mp3.stat().st_size / 1024 / 1024, 1)
+        audio_html = '<section class="audio">\n'
+        audio_html += '<h2>\U0001f3a7 Audio Only</h2>\n'
+        audio_html += '<p style="color:#666;font-size:0.9em;margin-bottom:10px">Prefer to listen? ' + str(mp3_size) + ' MB MP3 \u2014 right-click to download.</p>\n'
+        audio_html += '<audio controls preload="none" style="width:100%">\n'
+        audio_html += '<source src="audio.mp3" type="audio/mpeg">\n'
+        audio_html += '</audio></section>\n'
+
     html = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -338,6 +351,8 @@ section h2 {{ margin-bottom: 15px; color: #1a1a2e; }}
 .issue-timestamp {{ margin-top: 5px; }}
 .issue-timestamp a {{ color: #4488cc; text-decoration: none; font-family: monospace; }}
 .issue-quote {{ margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }}
+.audio {{ border-left: 4px solid #a855f7; }}
+.audio h2 {{ margin-bottom: 10px; }}
 .doc-preview {{ background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }}
 .doc-note {{ margin-top: 10px; font-size: 0.85em; color: #666; }}
 .transcript-segments {{ }}
@@ -357,6 +372,7 @@ footer {{ text-align: center; padding: 20px; color: #666; font-size: 0.85em; }}
 
 {disc_html}
 {video_html}
+{audio_html}
 {transcript_html}
 {agenda_html}
 {minutes_html}

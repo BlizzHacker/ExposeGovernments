@@ -1,317 +1,527 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami Special Utility Authority (MSUA) - Jul 17, 2023 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami Special Utility Authority (MSUA)</h1>
-<div class="meta">📅 Jul 17, 2023 | Clip #494</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (2)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami Special Utility Authority (MSUA)</h1>
+<div class="meeting-meta">
+<span>📅 Jul 17, 2023</span>
+<span>⏱️ 00h 15m</span>
+<span>🔖 Clip #494</span>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
 </div>
-</section>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/494" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
-<div class="seg"><a href="#" onclick="seekTo(0.0); return false;" class="ts">[00:00]</a> May 23 of the invocation by the Reverend of the All-Sate of the Pismar Church, Mr. Mary Susan</div>
-<div class="seg"><a href="#" onclick="seekTo(6.0); return false;" class="ts">[00:06]</a> Quillie.</div>
-<div class="seg"><a href="#" onclick="seekTo(7.0); return false;" class="ts">[00:07]</a> Thank you for the gift and the opportunity to serve the people of our city, help our council members</div>
-<div class="seg"><a href="#" onclick="seekTo(20.01); return false;" class="ts">[00:20]</a> to act with character and conviction.</div>
-<div class="seg"><a href="#" onclick="seekTo(23.01); return false;" class="ts">[00:23]</a> Help them to listen with understanding and goodwill.</div>
-<div class="seg"><a href="#" onclick="seekTo(27.17); return false;" class="ts">[00:27]</a> Help them to speak with charity and restraint.</div>
-<div class="seg"><a href="#" onclick="seekTo(31.52); return false;" class="ts">[00:31]</a> Give them a spirit of service.</div>
-<div class="seg"><a href="#" onclick="seekTo(34.52); return false;" class="ts">[00:34]</a> Remind them that they are stewards of your authority.</div>
-<div class="seg"><a href="#" onclick="seekTo(38.65); return false;" class="ts">[00:38]</a> Guide them to be the leaders of your people need.</div>
-<div class="seg"><a href="#" onclick="seekTo(41.74); return false;" class="ts">[00:41]</a> Help them see the humanity and dignity of those who disagree with them.</div>
-<div class="seg"><a href="#" onclick="seekTo(45.74); return false;" class="ts">[00:45]</a> And to treat all persons, no matter how weak or poor,</div>
-<div class="seg"><a href="#" onclick="seekTo(49.74); return false;" class="ts">[00:49]</a> with the reverence of your creation deserves.</div>
-<div class="seg"><a href="#" onclick="seekTo(52.74); return false;" class="ts">[00:52]</a> And finally, Father, renewed them with the strength of your presence</div>
-<div class="seg"><a href="#" onclick="seekTo(57.19); return false;" class="ts">[00:57]</a> and the joy of helping to build the community worthy of the human person.</div>
-<div class="seg"><a href="#" onclick="seekTo(62.19); return false;" class="ts">[01:02]</a> We ask this through Jesus Christ our Lord, confident in your goodness and love.</div>
-<div class="seg"><a href="#" onclick="seekTo(67.22); return false;" class="ts">[01:07]</a> Amen.</div>
-<div class="seg"><a href="#" onclick="seekTo(70.38); return false;" class="ts">[01:10]</a> Please, just to the flag of the United States of America.</div>
-<div class="seg"><a href="#" onclick="seekTo(75.96); return false;" class="ts">[01:15]</a> And to the Republic for which it stands.</div>
-<div class="seg"><a href="#" onclick="seekTo(77.96); return false;" class="ts">[01:17]</a> One nation under God in the visible liberty and justice for all.</div>
-<div class="seg"><a href="#" onclick="seekTo(88.52); return false;" class="ts">[01:28]</a> Before we go back into it, let&#x27;s get to the personal experiences.</div>
-<div class="seg"><a href="#" onclick="seekTo(93.8); return false;" class="ts">[01:33]</a> That&#x27;s where the neck and neck.</div>
-<div class="seg"><a href="#" onclick="seekTo(98.04); return false;" class="ts">[01:38]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(99.04); return false;" class="ts">[01:39]</a> Plain Bliss.</div>
-<div class="seg"><a href="#" onclick="seekTo(115.7); return false;" class="ts">[01:55]</a> Make a motion.</div>
-<div class="seg"><a href="#" onclick="seekTo(116.7); return false;" class="ts">[01:56]</a> Three.</div>
-<div class="seg"><a href="#" onclick="seekTo(119.55); return false;" class="ts">[01:59]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(120.55); return false;" class="ts">[02:00]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(121.55); return false;" class="ts">[02:01]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(123.22); return false;" class="ts">[02:03]</a> Six.</div>
-<div class="seg"><a href="#" onclick="seekTo(124.22); return false;" class="ts">[02:04]</a> Minutes from July 3, 2023.</div>
-<div class="seg"><a href="#" onclick="seekTo(126.22); return false;" class="ts">[02:06]</a> Regular meeting.</div>
-<div class="seg"><a href="#" onclick="seekTo(127.22); return false;" class="ts">[02:07]</a> Motion to prove.</div>
-<div class="seg"><a href="#" onclick="seekTo(128.22); return false;" class="ts">[02:08]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(129.22); return false;" class="ts">[02:09]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(130.26); return false;" class="ts">[02:10]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(131.26); return false;" class="ts">[02:11]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(132.26); return false;" class="ts">[02:12]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(133.26); return false;" class="ts">[02:13]</a> Seven.</div>
-<div class="seg"><a href="#" onclick="seekTo(134.26); return false;" class="ts">[02:14]</a> Get out of Straton.</div>
-<div class="seg"><a href="#" onclick="seekTo(135.26); return false;" class="ts">[02:15]</a> We&#x27;re calling for Gerda, relaxing seeing the amount of 1,710 dollars.</div>
-<div class="seg"><a href="#" onclick="seekTo(139.26); return false;" class="ts">[02:19]</a> It&#x27;s my, members of the Council, these professional services were incurred.</div>
-<div class="seg"><a href="#" onclick="seekTo(143.26); return false;" class="ts">[02:23]</a> For the time period may 18th, June 2023 or 2023 through June 20th, 2023.</div>
-<div class="seg"><a href="#" onclick="seekTo(149.26); return false;" class="ts">[02:29]</a> On behalf of the city, focusing on ongoing legal processes, including review of recent GRDA</div>
-<div class="seg"><a href="#" onclick="seekTo(155.26); return false;" class="ts">[02:35]</a> and FERC filings and proper response.</div>
-<div class="seg"><a href="#" onclick="seekTo(161.51); return false;" class="ts">[02:41]</a> This is, again, this is for last year&#x27;s fiscal budget, because this was occurred in June, which is last fiscal year.</div>
-<div class="seg"><a href="#" onclick="seekTo(167.51); return false;" class="ts">[02:47]</a> So of that, 750,000 budget.</div>
-<div class="seg"><a href="#" onclick="seekTo(170.51); return false;" class="ts">[02:50]</a> We have 307,000 and $8.8 per year remaining.</div>
-<div class="seg"><a href="#" onclick="seekTo(175.51); return false;" class="ts">[02:55]</a> If the 1,700, $10 whose invoice is approved.</div>
-<div class="seg"><a href="#" onclick="seekTo(180.0); return false;" class="ts">[03:00]</a> that would leave a remaining balance of 305,298 dollars in this course.</div>
-<div class="seg"><a href="#" onclick="seekTo(186.77); return false;" class="ts">[03:06]</a> Like the laws of California&#x27;s step for the ride.</div>
-<div class="seg"><a href="#" onclick="seekTo(191.31); return false;" class="ts">[03:11]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(193.18); return false;" class="ts">[03:13]</a> Sorry, I was late.</div>
-<div class="seg"><a href="#" onclick="seekTo(194.18); return false;" class="ts">[03:14]</a> You came and got to get in the middle of that one.</div>
-<div class="seg"><a href="#" onclick="seekTo(199.47); return false;" class="ts">[03:19]</a> Did you have any questions on?</div>
-<div class="seg"><a href="#" onclick="seekTo(201.57); return false;" class="ts">[03:21]</a> I read it earlier today.</div>
-<div class="seg"><a href="#" onclick="seekTo(203.57); return false;" class="ts">[03:23]</a> I&#x27;m good.</div>
-<div class="seg"><a href="#" onclick="seekTo(204.57); return false;" class="ts">[03:24]</a> I&#x27;m good.</div>
-<div class="seg"><a href="#" onclick="seekTo(206.46); return false;" class="ts">[03:26]</a> Motion to approve.</div>
-<div class="seg"><a href="#" onclick="seekTo(207.46); return false;" class="ts">[03:27]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(208.91); return false;" class="ts">[03:28]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(211.45); return false;" class="ts">[03:31]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(212.45); return false;" class="ts">[03:32]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(213.45); return false;" class="ts">[03:33]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(214.45); return false;" class="ts">[03:34]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(215.45); return false;" class="ts">[03:35]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(217.22); return false;" class="ts">[03:37]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(218.22); return false;" class="ts">[03:38]</a> Board, elite&#x27;s.</div>
-<div class="seg"><a href="#" onclick="seekTo(219.22); return false;" class="ts">[03:39]</a> millimeter bank.</div>
-<div class="seg"><a href="#" onclick="seekTo(220.22); return false;" class="ts">[03:40]</a> It&#x27;s a grand lake.</div>
-<div class="seg"><a href="#" onclick="seekTo(222.22); return false;" class="ts">[03:42]</a> �.</div>
-<div class="seg"><a href="#" onclick="seekTo(223.22); return false;" class="ts">[03:43]</a> Give.</div>
-<div class="seg"><a href="#" onclick="seekTo(224.22); return false;" class="ts">[03:44]</a> Related signing and payment authority.</div>
-<div class="seg"><a href="#" onclick="seekTo(226.22); return false;" class="ts">[03:46]</a> Thecirately manager.</div>
-<div class="seg"><a href="#" onclick="seekTo(228.22); return false;" class="ts">[03:48]</a> Or hesitate.</div>
-<div class="seg"><a href="#" onclick="seekTo(236.78); return false;" class="ts">[03:56]</a> Mister.</div>
-<div class="seg"><a href="#" onclick="seekTo(239.32); return false;" class="ts">[03:59]</a> to get the lowest data and the interest rates for the competitive data.</div>
-<div class="seg"><a href="#" onclick="seekTo(247.8); return false;" class="ts">[04:07]</a> You have the funding, came in at 6.9% and we had five to five seven to four best,</div>
-<div class="seg"><a href="#" onclick="seekTo(255.91); return false;" class="ts">[04:15]</a> or one nine four per national, came in at 4.85.</div>
-<div class="seg"><a href="#" onclick="seekTo(260.84000000000003); return false;" class="ts">[04:20]</a> And thank you, friends.</div>
-<div class="seg"><a href="#" onclick="seekTo(262.84000000000003); return false;" class="ts">[04:22]</a> I came in at 4.7%.</div>
-<div class="seg"><a href="#" onclick="seekTo(266.13); return false;" class="ts">[04:26]</a> So we have these on top of that, which might be a little different there.</div>
-<div class="seg"><a href="#" onclick="seekTo(272.25); return false;" class="ts">[04:32]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(273.25); return false;" class="ts">[04:33]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(274.86); return false;" class="ts">[04:34]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(275.86); return false;" class="ts">[04:35]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(276.86); return false;" class="ts">[04:36]</a> I appreciate that.</div>
-<div class="seg"><a href="#" onclick="seekTo(283.56); return false;" class="ts">[04:43]</a> I appreciate that.</div>
-<div class="seg"><a href="#" onclick="seekTo(294.01); return false;" class="ts">[04:54]</a> We also, I haven&#x27;t seen it this time.</div>
-<div class="seg"><a href="#" onclick="seekTo(296.01); return false;" class="ts">[04:56]</a> It&#x27;s about a nine four-dollar savings.</div>
-<div class="seg"><a href="#" onclick="seekTo(307.27); return false;" class="ts">[05:07]</a> So when I was looking at this one.</div>
-<div class="seg"><a href="#" onclick="seekTo(323.62); return false;" class="ts">[05:23]</a> So there was 94 dollar difference between Bank of Grand Lake and First National, right?</div>
-<div class="seg"><a href="#" onclick="seekTo(334.94); return false;" class="ts">[05:34]</a> 32.</div>
-<div class="seg"><a href="#" onclick="seekTo(335.94); return false;" class="ts">[05:35]</a> How can we didn&#x27;t stay local with it?</div>
-<div class="seg"><a href="#" onclick="seekTo(340.74); return false;" class="ts">[05:40]</a> I said only with it being that close.</div>
-<div class="seg"><a href="#" onclick="seekTo(341.74); return false;" class="ts">[05:41]</a> Well, when I go for business, I tell all the clients that we&#x27;re going through the launch</div>
-<div class="seg"><a href="#" onclick="seekTo(346.74); return false;" class="ts">[05:46]</a> to it.</div>
-<div class="seg"><a href="#" onclick="seekTo(347.74); return false;" class="ts">[05:47]</a> And I got here at the city, David.</div>
-<div class="seg"><a href="#" onclick="seekTo(361.49); return false;" class="ts">[06:01]</a> So, you know, since I&#x27;ve been here six months now, I know a lot more.</div>
-<div class="seg"><a href="#" onclick="seekTo(372.15); return false;" class="ts">[06:12]</a> So, Georgia, do we have to go with most better?</div>
-<div class="seg"><a href="#" onclick="seekTo(375.15); return false;" class="ts">[06:15]</a> Can we go with most pins at the local?</div>
-<div class="seg"><a href="#" onclick="seekTo(377.15); return false;" class="ts">[06:17]</a> There is an authorization in the statute for picking within a certain range.</div>
-<div class="seg"><a href="#" onclick="seekTo(384.92); return false;" class="ts">[06:24]</a> And this is within the monetary range.</div>
-<div class="seg"><a href="#" onclick="seekTo(388.92); return false;" class="ts">[06:28]</a> There is authorization within the statute to pick the next lowest bid.</div>
-<div class="seg"><a href="#" onclick="seekTo(395.08); return false;" class="ts">[06:35]</a> If it is local, that&#x27;s the key.</div>
-<div class="seg"><a href="#" onclick="seekTo(398.53); return false;" class="ts">[06:38]</a> So, from what&#x27;s the monetary range?</div>
-<div class="seg"><a href="#" onclick="seekTo(401.53); return false;" class="ts">[06:41]</a> I don&#x27;t know either.</div>
-<div class="seg"><a href="#" onclick="seekTo(402.53); return false;" class="ts">[06:42]</a> It&#x27;s a percentage.</div>
-<div class="seg"><a href="#" onclick="seekTo(404.53); return false;" class="ts">[06:44]</a> I don&#x27;t have it on me at the moment.</div>
-<div class="seg"><a href="#" onclick="seekTo(406.53); return false;" class="ts">[06:46]</a> But it&#x27;s considerable.</div>
-<div class="seg"><a href="#" onclick="seekTo(407.53); return false;" class="ts">[06:47]</a> It&#x27;s something on the order of 10%.</div>
-<div class="seg"><a href="#" onclick="seekTo(410.53); return false;" class="ts">[06:50]</a> But I would have to look that up.</div>
-<div class="seg"><a href="#" onclick="seekTo(411.53); return false;" class="ts">[06:51]</a> But it&#x27;s significant, we more than what we&#x27;re talking about in this instance.</div>
-<div class="seg"><a href="#" onclick="seekTo(418.17); return false;" class="ts">[06:58]</a> So, for me, I appreciate my grand late in their bid.</div>
-<div class="seg"><a href="#" onclick="seekTo(424.17); return false;" class="ts">[07:04]</a> But for me, I would rather spend the $94 in the state with our local bank with first national sits at $94.</div>
-<div class="seg"><a href="#" onclick="seekTo(433.23); return false;" class="ts">[07:13]</a> And $32.</div>
-<div class="seg"><a href="#" onclick="seekTo(434.23); return false;" class="ts">[07:14]</a> I feel like our previous one, there was a much bigger disparity.</div>
-<div class="seg"><a href="#" onclick="seekTo(438.23); return false;" class="ts">[07:18]</a> Yeah, thank you, disparity between one grant when we issued two grand before.</div>
-<div class="seg"><a href="#" onclick="seekTo(443.39); return false;" class="ts">[07:23]</a> And I don&#x27;t know what the rest of the guys, thank you up here.</div>
-<div class="seg"><a href="#" onclick="seekTo(446.39); return false;" class="ts">[07:26]</a> That was the first national sits at $94.</div>
-<div class="seg"><a href="#" onclick="seekTo(451.39); return false;" class="ts">[07:31]</a> So...</div>
-<div class="seg"><a href="#" onclick="seekTo(454.0); return false;" class="ts">[07:34]</a> Well, I just need to know how we&#x27;re going to go forward.</div>
-<div class="seg"><a href="#" onclick="seekTo(457.15999999999997); return false;" class="ts">[07:37]</a> This is what it now is.</div>
-<div class="seg"><a href="#" onclick="seekTo(460.61); return false;" class="ts">[07:40]</a> Okay.</div>
-<div class="seg"><a href="#" onclick="seekTo(461.61); return false;" class="ts">[07:41]</a> And I think that&#x27;s fair to say.</div>
-<div class="seg"><a href="#" onclick="seekTo(463.61); return false;" class="ts">[07:43]</a> Probably the same way you have been doing.</div>
-<div class="seg"><a href="#" onclick="seekTo(465.61); return false;" class="ts">[07:45]</a> I thought we were just heard here about the 10% delay.</div>
-<div class="seg"><a href="#" onclick="seekTo(473.54); return false;" class="ts">[07:53]</a> I didn&#x27;t know that either, so.</div>
-<div class="seg"><a href="#" onclick="seekTo(482.61); return false;" class="ts">[08:02]</a> So, having those types of guidelines, thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(485.61); return false;" class="ts">[08:05]</a> That made one look at things when we are looking at.</div>
-<div class="seg"><a href="#" onclick="seekTo(488.61); return false;" class="ts">[08:08]</a> So, if we make a motion, we can make a motion to accept the second lowest or first national.</div>
-<div class="seg"><a href="#" onclick="seekTo(506.39); return false;" class="ts">[08:26]</a> Yes.</div>
-<div class="seg"><a href="#" onclick="seekTo(507.58000000000004); return false;" class="ts">[08:27]</a> I&#x27;ll make a motion that we accept.</div>
-<div class="seg"><a href="#" onclick="seekTo(513.65); return false;" class="ts">[08:33]</a> The bid from first national bank amount of $8,000 and $573,64.</div>
-<div class="seg"><a href="#" onclick="seekTo(519.84); return false;" class="ts">[08:39]</a> Has anybody been notified of the award yet?</div>
-<div class="seg"><a href="#" onclick="seekTo(521.84); return false;" class="ts">[08:41]</a> I&#x27;ll say it has to get approved accounts.</div>
-<div class="seg"><a href="#" onclick="seekTo(529.28); return false;" class="ts">[08:49]</a> But I&#x27;ll say it.</div>
-<div class="seg"><a href="#" onclick="seekTo(530.92); return false;" class="ts">[08:50]</a> Okay.</div>
-<div class="seg"><a href="#" onclick="seekTo(531.92); return false;" class="ts">[08:51]</a> Okay.</div>
-<div class="seg"><a href="#" onclick="seekTo(533.91); return false;" class="ts">[08:53]</a> Okay.</div>
-<div class="seg"><a href="#" onclick="seekTo(534.91); return false;" class="ts">[08:54]</a> It&#x27;s it.</div>
-<div class="seg"><a href="#" onclick="seekTo(535.91); return false;" class="ts">[08:55]</a> For this to happen.</div>
-<div class="seg"><a href="#" onclick="seekTo(536.91); return false;" class="ts">[08:56]</a> Like.</div>
-<div class="seg"><a href="#" onclick="seekTo(538.36); return false;" class="ts">[08:58]</a> It&#x27;s just nice to walk off.</div>
-<div class="seg"><a href="#" onclick="seekTo(543.66); return false;" class="ts">[09:03]</a> I think they&#x27;ll appreciate our motive, Zill. I hope</div>
-<div class="seg"><a href="#" onclick="seekTo(552.43); return false;" class="ts">[09:12]</a> Personal but you know, we preach</div>
-<div class="seg"><a href="#" onclick="seekTo(555.51); return false;" class="ts">[09:15]</a> Love local</div>
-<div class="seg"><a href="#" onclick="seekTo(556.51); return false;" class="ts">[09:16]</a> This is what we got a lot of local</div>
-<div class="seg"><a href="#" onclick="seekTo(564.82); return false;" class="ts">[09:24]</a> Thank you keep going the way you&#x27;re going there. Let&#x27;s be the decision</div>
-<div class="seg"><a href="#" onclick="seekTo(569.5); return false;" class="ts">[09:29]</a> Like the decision that because if it was like $2,000 difference it would be a brand of it&#x27;s not a $94</div>
-<div class="seg"><a href="#" onclick="seekTo(575.34); return false;" class="ts">[09:35]</a> and that&#x27;s why</div>
-<div class="seg"><a href="#" onclick="seekTo(578.02); return false;" class="ts">[09:38]</a> For me, it was worth keeping it local</div>
-<div class="seg"><a href="#" onclick="seekTo(580.34); return false;" class="ts">[09:40]</a> for the $94,000 that</div>
-<div class="seg"><a href="#" onclick="seekTo(582.34); return false;" class="ts">[09:42]</a> That&#x27;s about $2,000</div>
-<div class="seg"><a href="#" onclick="seekTo(584.1); return false;" class="ts">[09:44]</a> It would probably be their story</div>
-<div class="seg"><a href="#" onclick="seekTo(586.19); return false;" class="ts">[09:46]</a> The other one that was working</div>
-<div class="seg"><a href="#" onclick="seekTo(589.12); return false;" class="ts">[09:49]</a> It came in 100</div>
-<div class="seg"><a href="#" onclick="seekTo(597.34); return false;" class="ts">[09:57]</a> Well we can talk about that</div>
-<div class="seg"><a href="#" onclick="seekTo(598.86); return false;" class="ts">[09:58]</a> And it is</div>
-<div class="seg"><a href="#" onclick="seekTo(601.5); return false;" class="ts">[10:01]</a> What&#x27;s the 10% of the value of the bid?</div>
-<div class="seg"><a href="#" onclick="seekTo(605.36); return false;" class="ts">[10:05]</a> Yeah</div>
-<div class="seg"><a href="#" onclick="seekTo(608.62); return false;" class="ts">[10:08]</a> So that&#x27;s why I say it&#x27;s a surprising range</div>
-<div class="seg"><a href="#" onclick="seekTo(612.99); return false;" class="ts">[10:12]</a> So a 10% of 77,000</div>
-<div class="seg"><a href="#" onclick="seekTo(617.06); return false;" class="ts">[10:17]</a> Yeah, well and again, I need to check that</div>
-<div class="seg"><a href="#" onclick="seekTo(619.86); return false;" class="ts">[10:19]</a> For all the exact figure</div>
-<div class="seg"><a href="#" onclick="seekTo(621.86); return false;" class="ts">[10:21]</a> I don&#x27;t have it</div>
-<div class="seg"><a href="#" onclick="seekTo(622.9); return false;" class="ts">[10:22]</a> We know this was well</div>
-<div class="seg"><a href="#" onclick="seekTo(624.9); return false;" class="ts">[10:24]</a> I don&#x27;t know, that&#x27;s what she said she&#x27;s not to check</div>
-<div class="seg"><a href="#" onclick="seekTo(626.9); return false;" class="ts">[10:26]</a> Yeah, that&#x27;s 100% of the brand will make sure we&#x27;re talking about the purchase milk</div>
-<div class="seg"><a href="#" onclick="seekTo(631.84); return false;" class="ts">[10:31]</a> So do we all off on this</div>
-<div class="seg"><a href="#" onclick="seekTo(633.04); return false;" class="ts">[10:33]</a> Do we know that number exactly or</div>
-<div class="seg"><a href="#" onclick="seekTo(637.17); return false;" class="ts">[10:37]</a> I&#x27;m sure if it&#x27;s 80% of that that&#x27;s how it falls in</div>
-<div class="seg"><a href="#" onclick="seekTo(642.86); return false;" class="ts">[10:42]</a> And I apologize for making that awkward</div>
-<div class="seg"><a href="#" onclick="seekTo(645.26); return false;" class="ts">[10:45]</a> For you, it&#x27;s in my town</div>
-<div class="seg"><a href="#" onclick="seekTo(657.84); return false;" class="ts">[10:57]</a> So what do you guys let me</div>
-<div class="seg"><a href="#" onclick="seekTo(660.24); return false;" class="ts">[11:00]</a> I&#x27;ll go ahead and second your motion</div>
-<div class="seg"><a href="#" onclick="seekTo(671.04); return false;" class="ts">[11:11]</a> 9</div>
-<div class="seg"><a href="#" onclick="seekTo(672.0); return false;" class="ts">[11:12]</a> Tetra Tech contract</div>
-<div class="seg"><a href="#" onclick="seekTo(673.04); return false;" class="ts">[11:13]</a> See 18-47</div>
-<div class="seg"><a href="#" onclick="seekTo(675.04); return false;" class="ts">[11:15]</a> Extention for fiscal year 2324 the amount of 78,448 dollars</div>
-<div class="seg"><a href="#" onclick="seekTo(685.86); return false;" class="ts">[11:25]</a> So may or members of the council</div>
-<div class="seg"><a href="#" onclick="seekTo(687.86); return false;" class="ts">[11:27]</a> This is our annual contract that just happens to be up for renewal</div>
-<div class="seg"><a href="#" onclick="seekTo(693.38); return false;" class="ts">[11:33]</a> This contract however with Tetra Tech</div>
-<div class="seg"><a href="#" onclick="seekTo(696.26); return false;" class="ts">[11:36]</a> is</div>
-<div class="seg"><a href="#" onclick="seekTo(697.62); return false;" class="ts">[11:37]</a> More than it has been in previous years</div>
-<div class="seg"><a href="#" onclick="seekTo(700.1800000000001); return false;" class="ts">[11:40]</a> It does not mean that we have to modify the budget in any way</div>
-<div class="seg"><a href="#" onclick="seekTo(703.22); return false;" class="ts">[11:43]</a> The amount of still taking into consideration when we set the budget for next year</div>
-<div class="seg"><a href="#" onclick="seekTo(708.1); return false;" class="ts">[11:48]</a> But with all the activities that we have coming up next next fiscal year</div>
-<div class="seg"><a href="#" onclick="seekTo(712.98); return false;" class="ts">[11:52]</a> It&#x27;s important that we have</div>
-<div class="seg"><a href="#" onclick="seekTo(715.3); return false;" class="ts">[11:55]</a> Enough bandwidth in this contract for them to complete the services required</div>
-<div class="seg"><a href="#" onclick="seekTo(720.0); return false;" class="ts">[12:00]</a> which are all related to the Pensacola Day of Realizing and some want to the flood</div>
-<div class="seg"><a href="#" onclick="seekTo(726.41); return false;" class="ts">[12:06]</a> civil litigation. I can go through any of those activities, but as you can see</div>
-<div class="seg"><a href="#" onclick="seekTo(732.91); return false;" class="ts">[12:12]</a> outlined there, there&#x27;s a lot of activities with Senate Transport and the</div>
-<div class="seg"><a href="#" onclick="seekTo(738.85); return false;" class="ts">[12:18]</a> operational model they&#x27;re working on. The tech to mitigate enhancement measures,</div>
-<div class="seg"><a href="#" onclick="seekTo(743.59); return false;" class="ts">[12:23]</a> we&#x27;ve got to pull together and then the summary report for GRDA studies that we</div>
-<div class="seg"><a href="#" onclick="seekTo(748.67); return false;" class="ts">[12:28]</a> have to produce for that&#x27;ll be due early this September or so of course there&#x27;s just</div>
-<div class="seg"><a href="#" onclick="seekTo(753.23); return false;" class="ts">[12:33]</a> a whole lot going on as things kind of wrap up this next year. What was this</div>
-<div class="seg"><a href="#" onclick="seekTo(762.68); return false;" class="ts">[12:42]</a> contract cost last year? 45,000. 45,000. 45,000. So yeah it&#x27;s significantly more.</div>
-<div class="seg"><a href="#" onclick="seekTo(768.2); return false;" class="ts">[12:48]</a> But again, a lot more activity in the world within the budget of forage. Is this for service</div>
-<div class="seg"><a href="#" onclick="seekTo(777.7); return false;" class="ts">[12:57]</a> as already rendered or services to me rendered? To me rendered. So it&#x27;s possible to write</div>
-<div class="seg"><a href="#" onclick="seekTo(784.31); return false;" class="ts">[13:04]</a> and not be that much. It&#x27;s absolutely possible that much, sure. Yeah they actually</div>
-<div class="seg"><a href="#" onclick="seekTo(789.8199999999999); return false;" class="ts">[13:09]</a> said it was really hard to predict this year because they just they don&#x27;t know what&#x27;s</div>
-<div class="seg"><a href="#" onclick="seekTo(792.8199999999999); return false;" class="ts">[13:12]</a> going to be asked if it depends as it unfolds. So they went with higher. So again this</div>
-<div class="seg"><a href="#" onclick="seekTo(801.61); return false;" class="ts">[13:21]</a> is us just approving a number not to exceed at this point. I make a much when we approve.</div>
-<div class="seg"><a href="#" onclick="seekTo(808.5); return false;" class="ts">[13:28]</a> All right. 10 engagement letter with altered gen Associates. Do you conduct the fiscal year</div>
-<div class="seg"><a href="#" onclick="seekTo(822.52); return false;" class="ts">[13:42]</a> 2223 audit? This letter is giving them permissions to do our auditors that with that is sort of.</div>
-<div class="seg"><a href="#" onclick="seekTo(869.26); return false;" class="ts">[14:29]</a> And then the letter is saying cost of being the project. Did this one raise from last year</div>
-<div class="seg"><a href="#" onclick="seekTo(889.64); return false;" class="ts">[14:49]</a> do you know? I don&#x27;t know. I&#x27;ve talked to my head if this one. I think that&#x27;s pretty much</div>
-<div class="seg"><a href="#" onclick="seekTo(893.24); return false;" class="ts">[14:53]</a> the same one. I thought it sounded close but let&#x27;s look at them.</div>
-<div class="seg"><a href="#" onclick="seekTo(900.98); return false;" class="ts">[15:00]</a> Now we&#x27;re going to approve.</div>
-<div class="seg"><a href="#" onclick="seekTo(906.62); return false;" class="ts">[15:06]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(910.09); return false;" class="ts">[15:10]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(911.09); return false;" class="ts">[15:11]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(912.09); return false;" class="ts">[15:12]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(913.09); return false;" class="ts">[15:13]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(914.09); return false;" class="ts">[15:14]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(915.09); return false;" class="ts">[15:15]</a> I love another new business of any, which is written since the posting of this agenda.</div>
-<div class="seg"><a href="#" onclick="seekTo(922.78); return false;" class="ts">[15:22]</a> Staff reports.</div>
-<div class="seg"><a href="#" onclick="seekTo(927.78); return false;" class="ts">[15:27]</a> Trust that you community announcements.</div>
-<div class="seg"><a href="#" onclick="seekTo(932.94); return false;" class="ts">[15:32]</a> And adjournment.</div>
-<div class="seg"><a href="#" onclick="seekTo(933.94); return false;" class="ts">[15:33]</a> Number.</div>
-<div class="seg"><a href="#" onclick="seekTo(936.58); return false;" class="ts">[15:36]</a> Number.</div>
-<div class="seg"><a href="#" onclick="seekTo(937.58); return false;" class="ts">[15:37]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(938.58); return false;" class="ts">[15:38]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(939.58); return false;" class="ts">[15:39]</a> Five.</div>
-</div></section>
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/494" allowfullscreen></iframe></div>
+<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (7.2 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+</div>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">May 23, the invocation by The Reverend of All-Sate&#x27;s Pismar Church.</span></div>
+<div class="seg" data-time="36.58"><span class="seg-time">00:36</span><span class="seg-text">of your authority, guide them to be the leaders for people need.</span></div>
+<div class="seg" data-time="42.06"><span class="seg-time">00:42</span><span class="seg-text">Help them see humanity and dignity</span></div>
+<div class="seg" data-time="44.34"><span class="seg-time">00:44</span><span class="seg-text">in those who disagree with Him</span></div>
+<div class="seg" data-time="46.68"><span class="seg-time">00:46</span><span class="seg-text">into treat all persons no matter how weak or poor</span></div>
+<div class="seg" data-time="50.58"><span class="seg-time">00:50</span><span class="seg-text">but reverence Your creation deserves</span></div>
+<div class="seg" data-time="53.67"><span class="seg-time">00:53</span><span class="seg-text">And finally Father renewed him</span></div>
+<div class="seg" data-time="55.97"><span class="seg-time">00:55</span><span class="seg-text">With a strength Of You&#x27;re Presence</span></div>
+<div class="seg" data-time="57.97"><span class="seg-time">00:57</span><span class="seg-text">In The Joyof Helping To Build A Community</span></div>
+<div class="seg" data-time="60.51"><span class="seg-time">01:00</span><span class="seg-text">Or Thief But Be Human Person</span></div>
+<div class="seg" data-time="63.2"><span class="seg-time">01:03</span><span class="seg-text">We asked this through Jesus Christ our Lord</span></div>
+<div class="seg" data-time="66.06"><span class="seg-time">01:06</span><span class="seg-text">Confident in Your Ignis and Love</span></div>
+<div class="seg" data-time="70.59"><span class="seg-time">01:10</span><span class="seg-text">What do you think is just to the flag</span></div>
+<div class="seg" data-time="73.59"><span class="seg-time">01:13</span><span class="seg-text">of the United States of America?</span></div>
+<div class="seg" data-time="75.61"><span class="seg-time">01:15</span><span class="seg-text">And due The Republic for which</span></div>
+<div class="seg" data-time="77.81"><span class="seg-time">01:17</span><span class="seg-text">your stands One Nation</span></div>
+<div class="seg" data-time="80.01"><span class="seg-time">01:20</span><span class="seg-text">Under God</span></div>
+<div class="seg" data-time="81.05"><span class="seg-time">01:21</span><span class="seg-text">In the Visible</span></div>
+<div class="seg" data-time="82.33"><span class="seg-time">01:22</span><span class="seg-text">With a little liberty</span></div>
+<div class="seg" data-time="83.07"><span class="seg-time">01:23</span><span class="seg-text">Just as far off</span></div>
+<div class="seg" data-time="85.23"><span class="seg-time">01:25</span><span class="seg-text">Before public input</span></div>
+<div class="seg" data-time="89.73"><span class="seg-time">01:29</span><span class="seg-text">I&#x27;m just good with personal appearances</span></div>
+<div class="seg" data-time="91.75"><span class="seg-time">01:31</span><span class="seg-text">That&#x27;s where they come at</span></div>
+<div class="seg" data-time="95.12"><span class="seg-time">01:35</span><span class="seg-text">Five</span></div>
+<div class="seg" data-time="98.82"><span class="seg-time">01:38</span><span class="seg-text">Plain Bliss</span></div>
+<div class="seg" data-time="100.31"><span class="seg-time">01:40</span><span class="seg-text">Make a motionary proof</span></div>
+<div class="seg" data-time="116.54"><span class="seg-time">01:56</span><span class="seg-text">Some birth</span></div>
+<div class="seg" data-time="119.78"><span class="seg-time">01:59</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="120.02"><span class="seg-time">02:00</span><span class="seg-text">So old</span></div>
+<div class="seg" data-time="120.58"><span class="seg-time">02:00</span><span class="seg-text">High</span></div>
+<div class="seg" data-time="120.82"><span class="seg-time">02:00</span><span class="seg-text">Parker</span></div>
+<div class="seg" data-time="121.5"><span class="seg-time">02:01</span><span class="seg-text">Right</span></div>
+<div class="seg" data-time="121.82"><span class="seg-time">02:01</span><span class="seg-text">Six</span></div>
+<div class="seg" data-time="123.58"><span class="seg-time">02:03</span><span class="seg-text">minutes from the July 3rd 2023 regular meeting.</span></div>
+<div class="seg" data-time="127.91"><span class="seg-time">02:07</span><span class="seg-text">Motion to approve?</span></div>
+<div class="seg" data-time="130.31"><span class="seg-time">02:10</span><span class="seg-text">Second,</span></div>
+<div class="seg" data-time="132.31"><span class="seg-time">02:12</span><span class="seg-text">second</span></div>
+<div class="seg" data-time="134.65"><span class="seg-time">02:14</span><span class="seg-text">7</span></div>
+<div class="seg" data-time="136.65"><span class="seg-time">02:16</span><span class="seg-text">7</span></div>
+<div class="seg" data-time="138.65"><span class="seg-time">02:18</span><span class="seg-text">7</span></div>
+<div class="seg" data-time="140.92"><span class="seg-time">02:20</span><span class="seg-text">It&#x27;s mayor members of Council</span></div>
+<div class="seg" data-time="143.92"><span class="seg-time">02:23</span><span class="seg-text">These professionals services were incurred for</span></div>
+<div class="seg" data-time="147.92"><span class="seg-time">02:27</span><span class="seg-text">June 20th</span></div>
+<div class="seg" data-time="148.92"><span class="seg-time">02:28</span><span class="seg-text">I&#x27;ll be half of the city focusing on ongoing legal processes including review and recent GRDA</span></div>
+<div class="seg" data-time="155.55"><span class="seg-time">02:35</span><span class="seg-text">in FERC filings, improper response.</span></div>
+<div class="seg" data-time="161.87"><span class="seg-time">02:41</span><span class="seg-text">This is again this for last year&#x27;s fiscal budget because it was occurred June which</span></div>
+<div class="seg" data-time="165.83"><span class="seg-time">02:45</span><span class="seg-text">has lasts a few years so that 750 thousand budgets we have 3700 dollars an eight dollar</span></div>
+<div class="seg" data-time="174.53"><span class="seg-time">02:54</span><span class="seg-text">million dollars.</span></div>
+<div class="seg" data-time="175.57"><span class="seg-time">02:55</span><span class="seg-text">If the 1,700-10 dollar invoice is approved that would leave a remaining balance of 305</span></div>
+<div class="seg" data-time="183.47"><span class="seg-time">03:03</span><span class="seg-text">thousand two hundred ninety eight billion dollars in this course and like involves</span></div>
+<div class="seg" data-time="187.53"><span class="seg-time">03:07</span><span class="seg-text">it got to be used up for the right thank you sorry I was late giving</span></div>
+<div class="seg" data-time="198.25"><span class="seg-time">03:18</span><span class="seg-text">You can&#x27;t get any middle out when there&#x27;s questions on number seven</span></div>
+<div class="seg" data-time="202.42"><span class="seg-time">03:22</span><span class="seg-text">I read it earlier today.</span></div>
+<div class="seg" data-time="206.71"><span class="seg-time">03:26</span><span class="seg-text">Motion to approve second,</span></div>
+<div class="seg" data-time="213.46"><span class="seg-time">03:33</span><span class="seg-text">Mark?</span></div>
+<div class="seg" data-time="215.46"><span class="seg-time">03:35</span><span class="seg-text">Eight Ward-Leasport&#x27;s agreement</span></div>
+<div class="seg" data-time="219.63"><span class="seg-time">03:39</span><span class="seg-text">To bank the grant lake for Q23 dash 40 on that escuator</span></div>
+<div class="seg" data-time="224.63"><span class="seg-time">03:44</span><span class="seg-text">You&#x27;ve related signing and payment authority</span></div>
+<div class="seg" data-time="227.63"><span class="seg-time">03:47</span><span class="seg-text">The city manager or his days in need</span></div>
+<div class="seg" data-time="229.63"><span class="seg-time">03:49</span><span class="seg-text">Mr Brown breasted</span></div>
+<div class="seg" data-time="239.22"><span class="seg-time">03:59</span><span class="seg-text">Good</span></div>
+<div class="seg" data-time="240.22"><span class="seg-time">04:00</span><span class="seg-text">The first day of the course</span></div>
+<div class="seg" data-time="242.22"><span class="seg-time">04:02</span><span class="seg-text">And</span></div>
+<div class="seg" data-time="244.22"><span class="seg-time">04:04</span><span class="seg-text">You know, you have a bank</span></div>
+<div class="seg" data-time="248.88"><span class="seg-time">04:08</span><span class="seg-text">I came in at 6.9%</span></div>
+<div class="seg" data-time="252.9"><span class="seg-time">04:12</span><span class="seg-text">Then we had 5.57 million more best</span></div>
+<div class="seg" data-time="255.9"><span class="seg-time">04:15</span><span class="seg-text">4.94 million per national</span></div>
+<div class="seg" data-time="259.82"><span class="seg-time">04:19</span><span class="seg-text">Okay, four point eight five</span></div>
+<div class="seg" data-time="262.06"><span class="seg-time">04:22</span><span class="seg-text">and thank your friends, way to pay me</span></div>
+<div class="seg" data-time="264.06"><span class="seg-time">04:24</span><span class="seg-text">In 2.7 years per cent</span></div>
+<div class="seg" data-time="266.74"><span class="seg-time">04:26</span><span class="seg-text">So he&#x27;s on top</span></div>
+<div class="seg" data-time="268.74"><span class="seg-time">04:28</span><span class="seg-text">Of that which actually looks</span></div>
+<div class="seg" data-time="271.78"><span class="seg-time">04:31</span><span class="seg-text">A little different there</span></div>
+<div class="seg" data-time="273.06"><span class="seg-time">04:33</span><span class="seg-text">So I was looking at this one</span></div>
+<div class="seg" data-time="276.49"><span class="seg-time">04:36</span><span class="seg-text">There were 94</span></div>
+<div class="seg" data-time="283.22"><span class="seg-time">04:43</span><span class="seg-text">Between bank and grant lake in first national</span></div>
+<div class="seg" data-time="295.01"><span class="seg-time">04:55</span><span class="seg-text">32</span></div>
+<div class="seg" data-time="298.94"><span class="seg-time">04:58</span><span class="seg-text">How can we stay local with it?</span></div>
+<div class="seg" data-time="300.94"><span class="seg-time">05:00</span><span class="seg-text">Oh, so that only within being</span></div>
+<div class="seg" data-time="309.41"><span class="seg-time">05:09</span><span class="seg-text">That close</span></div>
+<div class="seg" data-time="325.65"><span class="seg-time">05:25</span><span class="seg-text">Well when i go out for a bit of a day</span></div>
+<div class="seg" data-time="329.08"><span class="seg-time">05:29</span><span class="seg-text">And then you have to pay me</span></div>
+<div class="seg" data-time="331.08"><span class="seg-time">05:31</span><span class="seg-text">And the next day</span></div>
+<div class="seg" data-time="335.62"><span class="seg-time">05:35</span><span class="seg-text">How can we stay local with it?</span></div>
+<div class="seg" data-time="340.81"><span class="seg-time">05:40</span><span class="seg-text">Oh, so that only within being</span></div>
+<div class="seg" data-time="342.81"><span class="seg-time">05:42</span><span class="seg-text">That close</span></div>
+<div class="seg" data-time="344.81"><span class="seg-time">05:44</span><span class="seg-text">Well when i go out for a bit of a day</span></div>
+<div class="seg" data-time="346.81"><span class="seg-time">05:46</span><span class="seg-text">The blinds</span></div>
+<div class="seg" data-time="357.91"><span class="seg-time">05:57</span><span class="seg-text">We&#x27;re going to launch the</span></div>
+<div class="seg" data-time="364.38"><span class="seg-time">06:04</span><span class="seg-text">At here at this city bay</span></div>
+<div class="seg" data-time="372.51"><span class="seg-time">06:12</span><span class="seg-text">So you know</span></div>
+<div class="seg" data-time="374.51"><span class="seg-time">06:14</span><span class="seg-text">I&#x27;m in your six months now</span></div>
+<div class="seg" data-time="376.51"><span class="seg-time">06:16</span><span class="seg-text">To Georgia do</span></div>
+<div class="seg" data-time="379.51"><span class="seg-time">06:19</span><span class="seg-text">Do e have</span></div>
+<div class="seg" data-time="384.08"><span class="seg-time">06:24</span><span class="seg-text">Within a certain range and this is within the monetary</span></div>
+<div class="seg" data-time="389.64"><span class="seg-time">06:29</span><span class="seg-text">There&#x27;s authorization</span></div>
+<div class="seg" data-time="392.64"><span class="seg-time">06:32</span><span class="seg-text">To pick</span></div>
+<div class="seg" data-time="394.64"><span class="seg-time">06:34</span><span class="seg-text">If it</span></div>
+<div class="seg" data-time="396.91"><span class="seg-time">06:36</span><span class="seg-text">That that&#x27;s</span></div>
+<div class="seg" data-time="399.76"><span class="seg-time">06:39</span><span class="seg-text">What?</span></div>
+<div class="seg" data-time="402.06"><span class="seg-time">06:42</span><span class="seg-text">It&#x27;s a percentage</span></div>
+<div class="seg" data-time="405.06"><span class="seg-time">06:45</span><span class="seg-text">I don&#x27;t have an on me at</span></div>
+<div class="seg" data-time="407.06"><span class="seg-time">06:47</span><span class="seg-text">But its considerable</span></div>
+<div class="seg" data-time="409.06"><span class="seg-time">06:49</span><span class="seg-text">Its something</span></div>
+<div class="seg" data-time="411.06"><span class="seg-time">06:51</span><span class="seg-text">On The Order of 10%</span></div>
+<div class="seg" data-time="413.06"><span class="seg-time">06:53</span><span class="seg-text">It&#x27;s a significant</span></div>
+<div class="seg" data-time="416.06"><span class="seg-time">06:56</span><span class="seg-text">We&#x27;re talking about it in this instance</span></div>
+<div class="seg" data-time="419.14"><span class="seg-time">06:59</span><span class="seg-text">So for me i appreciate</span></div>
+<div class="seg" data-time="421.14"><span class="seg-time">07:01</span><span class="seg-text">Back the grant lake and their bid</span></div>
+<div class="seg" data-time="424.14"><span class="seg-time">07:04</span><span class="seg-text">But</span></div>
+<div class="seg" data-time="426.6"><span class="seg-time">07:06</span><span class="seg-text">For my our other</span></div>
+<div class="seg" data-time="428.94"><span class="seg-time">07:08</span><span class="seg-text">Spinnable 94</span></div>
+<div class="seg" data-time="431.94"><span class="seg-time">07:11</span><span class="seg-text">And stay with local bank</span></div>
+<div class="seg" data-time="434.94"><span class="seg-time">07:14</span><span class="seg-text">With first national</span></div>
+<div class="seg" data-time="436.94"><span class="seg-time">07:16</span><span class="seg-text">Since its ninety four dollars and thirty two cents</span></div>
+<div class="seg" data-time="439.24"><span class="seg-time">07:19</span><span class="seg-text">I feel like</span></div>
+<div class="seg" data-time="441.8"><span class="seg-time">07:21</span><span class="seg-text">Our previous one is</span></div>
+<div class="seg" data-time="445.8"><span class="seg-time">07:25</span><span class="seg-text">I think i&#x27;ll hear a bit of my opinion</span></div>
+<div class="seg" data-time="448.8"><span class="seg-time">07:28</span><span class="seg-text">That was not going to go with first national</span></div>
+<div class="seg" data-time="451.17"><span class="seg-time">07:31</span><span class="seg-text">Since its on ninety four dollars</span></div>
+<div class="seg" data-time="454.7"><span class="seg-time">07:34</span><span class="seg-text">So</span></div>
+<div class="seg" data-time="457.1"><span class="seg-time">07:37</span><span class="seg-text">And</span></div>
+<div class="seg" data-time="459.95"><span class="seg-time">07:39</span><span class="seg-text">Okay</span></div>
+<div class="seg" data-time="462.26"><span class="seg-time">07:42</span><span class="seg-text">But</span></div>
+<div class="seg" data-time="464.26"><span class="seg-time">07:44</span><span class="seg-text">What about the same way you have been doing</span></div>
+<div class="seg" data-time="471.15"><span class="seg-time">07:51</span><span class="seg-text">We were just heard here</span></div>
+<div class="seg" data-time="473.15"><span class="seg-time">07:53</span><span class="seg-text">About the time</span></div>
+<div class="seg" data-time="482.59"><span class="seg-time">08:02</span><span class="seg-text">You know</span></div>
+<div class="seg" data-time="484.59"><span class="seg-time">08:04</span><span class="seg-text">To that</span></div>
+<div class="seg" data-time="486.59"><span class="seg-time">08:06</span><span class="seg-text">Things</span></div>
+<div class="seg" data-time="488.59"><span class="seg-time">08:08</span><span class="seg-text">So</span></div>
+<div class="seg" data-time="501.65"><span class="seg-time">08:21</span><span class="seg-text">We make a motion we can</span></div>
+<div class="seg" data-time="503.65"><span class="seg-time">08:23</span><span class="seg-text">Make the second lowest or</span></div>
+<div class="seg" data-time="505.65"><span class="seg-time">08:25</span><span class="seg-text">First national</span></div>
+<div class="seg" data-time="512.7"><span class="seg-time">08:32</span><span class="seg-text">I&#x27;ll</span></div>
+<div class="seg" data-time="514.7"><span class="seg-time">08:34</span><span class="seg-text">Make Motion</span></div>
+<div class="seg" data-time="517.23"><span class="seg-time">08:37</span><span class="seg-text">The week</span></div>
+<div class="seg" data-time="519.23"><span class="seg-time">08:39</span><span class="seg-text">From first National Bank</span></div>
+<div class="seg" data-time="521.23"><span class="seg-time">08:41</span><span class="seg-text">Has anybody been notified of</span></div>
+<div class="seg" data-time="529.07"><span class="seg-time">08:49</span><span class="seg-text">Of</span></div>
+<div class="seg" data-time="532.02"><span class="seg-time">08:52</span><span class="seg-text">You</span></div>
+<div class="seg" data-time="535.41"><span class="seg-time">08:55</span><span class="seg-text">Okay</span></div>
+<div class="seg" data-time="539.16"><span class="seg-time">08:59</span><span class="seg-text">I think they&#x27;ll appreciate our</span></div>
+<div class="seg" data-time="546.53"><span class="seg-time">09:06</span><span class="seg-text">Motor Zill</span></div>
+<div class="seg" data-time="551.47"><span class="seg-time">09:11</span><span class="seg-text">It&#x27;s nothing personal</span></div>
+<div class="seg" data-time="554.16"><span class="seg-time">09:14</span><span class="seg-text">But you know we preach</span></div>
+<div class="seg" data-time="556.16"><span class="seg-time">09:16</span><span class="seg-text">Local</span></div>
+<div class="seg" data-time="558.16"><span class="seg-time">09:18</span><span class="seg-text">This is one of the yellow</span></div>
+<div class="seg" data-time="560.78"><span class="seg-time">09:20</span><span class="seg-text">So from now on</span></div>
+<div class="seg" data-time="562.78"><span class="seg-time">09:22</span><span class="seg-text">We&#x27;re not going to give this</span></div>
+<div class="seg" data-time="566.42"><span class="seg-time">09:26</span><span class="seg-text">Thank You keep going</span></div>
+<div class="seg" data-time="568.42"><span class="seg-time">09:28</span><span class="seg-text">Going away your go and last be the decision</span></div>
+<div class="seg" data-time="570.42"><span class="seg-time">09:30</span><span class="seg-text">Because if it was like two thousand dollars</span></div>
+<div class="seg" data-time="572.42"><span class="seg-time">09:32</span><span class="seg-text">Different</span></div>
+<div class="seg" data-time="574.42"><span class="seg-time">09:34</span><span class="seg-text">That would bring me to the five hundred</span></div>
+<div class="seg" data-time="576.82"><span class="seg-time">09:36</span><span class="seg-text">That&#x27;s why for me it was worth keeping the local</span></div>
+<div class="seg" data-time="580.82"><span class="seg-time">09:40</span><span class="seg-text">For than I have four dollars</span></div>
+<div class="seg" data-time="582.82"><span class="seg-time">09:42</span><span class="seg-text">But like Brian said there is two thousand and probably different story</span></div>
+<div class="seg" data-time="586.34"><span class="seg-time">09:46</span><span class="seg-text">The other one that came in</span></div>
+<div class="seg" data-time="597.95"><span class="seg-time">09:57</span><span class="seg-text">What we can talk about</span></div>
+<div class="seg" data-time="600.96"><span class="seg-time">10:00</span><span class="seg-text">Yeah</span></div>
+<div class="seg" data-time="602.96"><span class="seg-time">10:02</span><span class="seg-text">And what&#x27;s the 10% of</span></div>
+<div class="seg" data-time="605.58"><span class="seg-time">10:05</span><span class="seg-text">Value at</span></div>
+<div class="seg" data-time="609.34"><span class="seg-time">10:09</span><span class="seg-text">Okay, yeah so</span></div>
+<div class="seg" data-time="611.34"><span class="seg-time">10:11</span><span class="seg-text">So</span></div>
+<div class="seg" data-time="614.0"><span class="seg-time">10:14</span><span class="seg-text">It&#x27;s a</span></div>
+<div class="seg" data-time="617.1"><span class="seg-time">10:17</span><span class="seg-text">It&#x27;s a</span></div>
+<div class="seg" data-time="618.1"><span class="seg-time">10:18</span><span class="seg-text">I think yeah, and</span></div>
+<div class="seg" data-time="620.1"><span class="seg-time">10:20</span><span class="seg-text">Yeah</span></div>
+<div class="seg" data-time="622.1"><span class="seg-time">10:22</span><span class="seg-text">And then</span></div>
+<div class="seg" data-time="624.1"><span class="seg-time">10:24</span><span class="seg-text">We know this</span></div>
+<div class="seg" data-time="626.1"><span class="seg-time">10:26</span><span class="seg-text">Well</span></div>
+<div class="seg" data-time="628.1"><span class="seg-time">10:28</span><span class="seg-text">No</span></div>
+<div class="seg" data-time="630.1"><span class="seg-time">10:30</span><span class="seg-text">So do we</span></div>
+<div class="seg" data-time="632.54"><span class="seg-time">10:32</span><span class="seg-text">All off on</span></div>
+<div class="seg" data-time="634.54"><span class="seg-time">10:34</span><span class="seg-text">This</span></div>
+<div class="seg" data-time="636.54"><span class="seg-time">10:36</span><span class="seg-text">We don&#x27;t</span></div>
+<div class="seg" data-time="639.06"><span class="seg-time">10:39</span><span class="seg-text">That&#x27;s a</span></div>
+<div class="seg" data-time="643.48"><span class="seg-time">10:43</span><span class="seg-text">Not all of us</span></div>
+<div class="seg" data-time="645.48"><span class="seg-time">10:45</span><span class="seg-text">For you</span></div>
+<div class="seg" data-time="647.48"><span class="seg-time">10:47</span><span class="seg-text">What</span></div>
+<div class="seg" data-time="648.48"><span class="seg-time">10:48</span><span class="seg-text">So what do you guys</span></div>
+<div class="seg" data-time="659.62"><span class="seg-time">10:59</span><span class="seg-text">Let me</span></div>
+<div class="seg" data-time="662.08"><span class="seg-time">11:02</span><span class="seg-text">I&#x27;ll go ahead and second your motion</span></div>
+<div class="seg" data-time="667.09"><span class="seg-time">11:07</span><span class="seg-text">Bye</span></div>
+<div class="seg" data-time="669.09"><span class="seg-time">11:09</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="672.42"><span class="seg-time">11:12</span><span class="seg-text">Debt protect contract</span></div>
+<div class="seg" data-time="674.42"><span class="seg-time">11:14</span><span class="seg-text">See 18-47</span></div>
+<div class="seg" data-time="676.42"><span class="seg-time">11:16</span><span class="seg-text">Extension for fiscal year 2324</span></div>
+<div class="seg" data-time="678.42"><span class="seg-time">11:18</span><span class="seg-text">The amount of 78,448</span></div>
+<div class="seg" data-time="686.2"><span class="seg-time">11:26</span><span class="seg-text">So may or members</span></div>
+<div class="seg" data-time="688.2"><span class="seg-time">11:28</span><span class="seg-text">This is our annual</span></div>
+<div class="seg" data-time="690.2"><span class="seg-time">11:30</span><span class="seg-text">Contract that just happens to be up</span></div>
+<div class="seg" data-time="692.2"><span class="seg-time">11:32</span><span class="seg-text">For renewal</span></div>
+<div class="seg" data-time="693.47"><span class="seg-time">11:33</span><span class="seg-text">This contract, however with Tetrotech</span></div>
+<div class="seg" data-time="696.47"><span class="seg-time">11:36</span><span class="seg-text">Is more than it has been in previous years</span></div>
+<div class="seg" data-time="700.47"><span class="seg-time">11:40</span><span class="seg-text">It does not mean that we have to modify the budget</span></div>
+<div class="seg" data-time="703.47"><span class="seg-time">11:43</span><span class="seg-text">In any way this amount of still taking into consideration</span></div>
+<div class="seg" data-time="706.47"><span class="seg-time">11:46</span><span class="seg-text">When</span></div>
+<div class="seg" data-time="708.47"><span class="seg-time">11:48</span><span class="seg-text">We set a bunch for next year</span></div>
+<div class="seg" data-time="710.47"><span class="seg-time">11:50</span><span class="seg-text">But all activities</span></div>
+<div class="seg" data-time="712.47"><span class="seg-time">11:52</span><span class="seg-text">That&#x27;s coming up</span></div>
+<div class="seg" data-time="715.47"><span class="seg-time">11:55</span><span class="seg-text">It is important</span></div>
+<div class="seg" data-time="716.47"><span class="seg-time">11:56</span><span class="seg-text">In this contract for them to complete</span></div>
+<div class="seg" data-time="719.47"><span class="seg-time">11:59</span><span class="seg-text">The services required</span></div>
+<div class="seg" data-time="721.47"><span class="seg-time">12:01</span><span class="seg-text">Which are all related</span></div>
+<div class="seg" data-time="723.47"><span class="seg-time">12:03</span><span class="seg-text">To the principal day of re-licensing</span></div>
+<div class="seg" data-time="725.47"><span class="seg-time">12:05</span><span class="seg-text">And somewhat</span></div>
+<div class="seg" data-time="727.47"><span class="seg-time">12:07</span><span class="seg-text">To</span></div>
+<div class="seg" data-time="729.71"><span class="seg-time">12:09</span><span class="seg-text">To</span></div>
+<div class="seg" data-time="731.71"><span class="seg-time">12:11</span><span class="seg-text">I can go through any</span></div>
+<div class="seg" data-time="733.71"><span class="seg-time">12:13</span><span class="seg-text">Of those activities but as you</span></div>
+<div class="seg" data-time="735.71"><span class="seg-time">12:15</span><span class="seg-text">You could see out there</span></div>
+<div class="seg" data-time="737.71"><span class="seg-time">12:17</span><span class="seg-text">There&#x27;s a lot</span></div>
+<div class="seg" data-time="740.71"><span class="seg-time">12:20</span><span class="seg-text">With</span></div>
+<div class="seg" data-time="741.95"><span class="seg-time">12:21</span><span class="seg-text">Protected mitigate enhancement measures</span></div>
+<div class="seg" data-time="744.95"><span class="seg-time">12:24</span><span class="seg-text">We&#x27;ve got to pull together</span></div>
+<div class="seg" data-time="746.95"><span class="seg-time">12:26</span><span class="seg-text">And then the summary report for GRA</span></div>
+<div class="seg" data-time="748.95"><span class="seg-time">12:28</span><span class="seg-text">Studies that we have</span></div>
+<div class="seg" data-time="750.95"><span class="seg-time">12:30</span><span class="seg-text">To produce a firm</span></div>
+<div class="seg" data-time="752.95"><span class="seg-time">12:32</span><span class="seg-text">That will be due early this September</span></div>
+<div class="seg" data-time="754.95"><span class="seg-time">12:34</span><span class="seg-text">So of course there&#x27;s just no whole live going on</span></div>
+<div class="seg" data-time="762.8"><span class="seg-time">12:42</span><span class="seg-text">This is kind</span></div>
+<div class="seg" data-time="764.8"><span class="seg-time">12:44</span><span class="seg-text">Of 45,000</span></div>
+<div class="seg" data-time="766.8"><span class="seg-time">12:46</span><span class="seg-text">So you had significantly more</span></div>
+<div class="seg" data-time="769.33"><span class="seg-time">12:49</span><span class="seg-text">But again lot more activity</span></div>
+<div class="seg" data-time="772.53"><span class="seg-time">12:52</span><span class="seg-text">In-world in</span></div>
+<div class="seg" data-time="774.53"><span class="seg-time">12:54</span><span class="seg-text">Is it for services already</span></div>
+<div class="seg" data-time="777.82"><span class="seg-time">12:57</span><span class="seg-text">Render services to me</span></div>
+<div class="seg" data-time="783.62"><span class="seg-time">13:03</span><span class="seg-text">To the render</span></div>
+<div class="seg" data-time="786.62"><span class="seg-time">13:06</span><span class="seg-text">It&#x27;s absolutely possible</span></div>
+<div class="seg" data-time="789.72"><span class="seg-time">13:09</span><span class="seg-text">They actually said it was really hard</span></div>
+<div class="seg" data-time="791.72"><span class="seg-time">13:11</span><span class="seg-text">Because they just don&#x27;t know what is going</span></div>
+<div class="seg" data-time="795.22"><span class="seg-time">13:15</span><span class="seg-text">You kind of depends on its influence</span></div>
+<div class="seg" data-time="798.52"><span class="seg-time">13:18</span><span class="seg-text">So again this</span></div>
+<div class="seg" data-time="802.62"><span class="seg-time">13:22</span><span class="seg-text">Just improving a number not exceeding at</span></div>
+<div class="seg" data-time="807.19"><span class="seg-time">13:27</span><span class="seg-text">Make emotional improvements</span></div>
+<div class="seg" data-time="810.47"><span class="seg-time">13:30</span><span class="seg-text">Okay</span></div>
+<div class="seg" data-time="814.22"><span class="seg-time">13:34</span><span class="seg-text">So,</span></div>
+<div class="seg" data-time="816.22"><span class="seg-time">13:36</span><span class="seg-text">10</span></div>
+<div class="seg" data-time="818.61"><span class="seg-time">13:38</span><span class="seg-text">And engagement letter with all of your</span></div>
+<div class="seg" data-time="821.61"><span class="seg-time">13:41</span><span class="seg-text">Sojits to conduct the fiscal year</span></div>
+<div class="seg" data-time="823.61"><span class="seg-time">13:43</span><span class="seg-text">2223 audit</span></div>
+<div class="seg" data-time="841.94"><span class="seg-time">14:01</span><span class="seg-text">Just letters giving them permission</span></div>
+<div class="seg" data-time="868.29"><span class="seg-time">14:28</span><span class="seg-text">To do our auditors that would</span></div>
+<div class="seg" data-time="872.38"><span class="seg-time">14:32</span><span class="seg-text">That&#x27;s what I thought</span></div>
+<div class="seg" data-time="874.78"><span class="seg-time">14:34</span><span class="seg-text">In this one</span></div>
+<div class="seg" data-time="889.63"><span class="seg-time">14:49</span><span class="seg-text">Rates from last year you know, I don&#x27;t</span></div>
+<div class="seg" data-time="891.63"><span class="seg-time">14:51</span><span class="seg-text">If talking my head if</span></div>
+<div class="seg" data-time="893.63"><span class="seg-time">14:53</span><span class="seg-text">This i think</span></div>
+<div class="seg" data-time="895.63"><span class="seg-time">14:55</span><span class="seg-text">It is just a</span></div>
+<div class="seg" data-time="898.29"><span class="seg-time">14:58</span><span class="seg-text">I though it sounded close</span></div>
+<div class="seg" data-time="900.29"><span class="seg-time">15:00</span><span class="seg-text">Yeah</span></div>
+<div class="seg" data-time="902.23"><span class="seg-time">15:02</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="911.18"><span class="seg-time">15:11</span><span class="seg-text">I</span></div>
+<div class="seg" data-time="913.18"><span class="seg-time">15:13</span><span class="seg-text">Thank you</span></div>
+<div class="seg" data-time="915.18"><span class="seg-time">15:15</span><span class="seg-text">Hello</span></div>
+<div class="seg" data-time="917.18"><span class="seg-time">15:17</span><span class="seg-text">Which is written since the post</span></div>
+<div class="seg" data-time="919.18"><span class="seg-time">15:19</span><span class="seg-text">Staff reports</span></div>
+<div class="seg" data-time="928.66"><span class="seg-time">15:28</span><span class="seg-text">Trustee community announcements and adjournment</span></div>
+<div class="seg" data-time="936.94"><span class="seg-time">15:36</span><span class="seg-text">That&#x27;s the point</span></div>
+<div class="seg" data-time="938.94"><span class="seg-time">15:38</span><span class="seg-text">Hi</span></div>
 
-<section class="documents">
-<h2>📄 Full Agenda</h2>
-<div class="doc-preview">NOTICE OF REGULAR MEETING AND AGENDA<br>OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)<br>Monday, July 17, 2023<br>6:00<br>				<br><br>				p.m.<br>MIAMI CIVIC CENTER<br>129 5th Avenue Northwest, Miami, Oklahoma<br>Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by<br>posting on www.miamiokla.net.<br>THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:<br>1.<br>Call to Order                                                                          Chairman Parker<br>2.<br>Invocation by Reverend of the All Saints Episcopal Church                                                   Mary Susan Whaley<br>3.<br>Pledge of Allegiance                                                                       Chairman Parker<br>4.<br>Public Input and Unscheduled Personal Appearances<br>Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:<br>www.miamiokla.net<br>5.<br>*Action Item* Claims                                                                 Trustees<br>Claims List FY 22-23<br>Claims List FY 23-24<br>Credit Cards 1<br>Credit Cards 2<br>6.<br>*Action Item* Minutes:  July 03, 2023 (Regular)                                              Trustees<br>Minutes<br>7.<br>*Action Item* Goodell, Stratton, Edmonds & Palmer Claim for GRDA Relicensing in the Amount of $1,710.00                Bo Reese<br>BA<br>Claims List<br>8.<br>*Action Item* Award Lease Purchase Agreement to Bank of Grand Lake for (Q23-40) Hyundai Excavator; Give Related Signing and Payment Authority to the City Manager or his Designee                          Brian Brassfield<br>BA<br>Arvest Bank Response<br>Bank of Grand Lake Response<br>First National Bank Response<br>US Bank Response<br>Welch State Bank Response<br>Solicitation<br>Quote<br>Letter of Intent<br>9.<br>*Action Item* Tetra Tech Contract C18-47 Extension for Fiscal Year 2023-2024 in the Amount of $78,448.00                                    Bo Reese<br>BA<br>Contract Extension<br>10.<br>*Action Item* Engagement Letter With Arledge & Associates to Conduct the Fiscal Year 2022-2023 Audit               Jennifer Watts<br>BA<br>11.<br>*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))                                              Trustees/Bo Reese<br>12.<br>Staff Reports (Written report included in packet, if available staff is present for questions)                                       Trustees<br>Pollution Control<br>Solid Waste<br>13.<br>Trustee Community Announcements                                                                       Trustees<br>14.<br>*Action Item* Adjournment                                                                    Trustees<br>The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager's office. We also ask that those in attendance place all electronic devices on silent. Thank you.</div>
-</section>
+</div>
+</div>
+</div>
 
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
+Monday, July 17, 2023
+6:00
+				
 
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+				p.m.
+MIAMI CIVIC CENTER
+129 5th Avenue Northwest, Miami, Oklahoma
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by
+posting on www.miamiokla.net.
+THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:
+1.
+Call to Order                                                                          Chairman Parker
+2.
+Invocation by Reverend of the All Saints Episcopal Church                                                   Mary Susan Whaley
+3.
+Pledge of Allegiance                                                                       Chairman Parker
+4.
+Public Input and Unscheduled Personal Appearances
+Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:
+www.miamiokla.net
+5.
+*Action Item* Claims                                                                 Trustees
+Claims List FY 22-23
+Claims List FY 23-24
+Credit Cards 1
+Credit Cards 2
+6.
+*Action Item* Minutes:  July 03, 2023 (Regular)                                              Trustees
+Minutes
+7.
+*Action Item* Goodell, Stratton, Edmonds &amp; Palmer Claim for GRDA Relicensing in the Amount of $1,710.00                Bo Reese
+BA
+Claims List
+8.
+*Action Item* Award Lease Purchase Agreement to Bank of Grand Lake for (Q23-40) Hyundai Excavator; Give Related Signing and Payment Authority to the City Manager or his Designee                          Brian Brassfield
+BA
+Arvest Bank Response
+Bank of Grand Lake Response
+First National Bank Response
+US Bank Response
+Welch State Bank Response
+Solicitation
+Quote
+Letter of Intent
+9.
+*Action Item* Tetra Tech Contract C18-47 Extension for Fiscal Year 2023-2024 in the Amount of $78,448.00                                    Bo Reese
+BA
+Contract Extension
+10.
+*Action Item* Engagement Letter With Arledge &amp; Associates to Conduct the Fiscal Year 2022-2023 Audit               Jennifer Watts
+BA
+11.
+*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))                                              Trustees/Bo Reese
+12.
+Staff Reports (Written report included in packet, if available staff is present for questions)                                       Trustees
+Pollution Control
+Solid Waste
+13.
+Trustee Community Announcements                                                                       Trustees
+14.
+*Action Item* Adjournment                                                                    Trustees
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>May 23, the invocation by The Reverend of All-Sate&#x27;s Pismar Church. of your authority, guide them to be the leaders for people need. Help them see humanity and dignity in those who disagree with Him into treat all persons no matter how weak or poor but reverence Your creation deserves And finally Father renewed him With a strength Of You&#x27;re Presence In The Joyof Helping To Build A Community Or Thief But Be Human Person We asked this through Jesus Christ our Lord Confident in Your Ignis and Love What do you think is just to the flag of the United States of America? And due The Republic for which your stands One Nation Under God In the Visible With a little liberty Just as far off Before public input I&#x27;m just good with personal appearances That&#x27;s where they come at Five Plain Bliss Make a motionary proof Some birth Hi So old High Parker Right Six minutes from the July 3rd 2023 regular meeting. Motion to approve? Second, second 7 7 7 It&#x27;s mayor members of Council These professionals services were incurred for June 20th I&#x27;ll be half of the city focusing on ongoing legal processes including review and recent GRDA in FERC filings, improper response. This is again this for last year&#x27;s fiscal budget because it was occurred June which has lasts a few years so that 750 thousand budgets we have 3700 dollars an eight dollar million dollars. If the 1,700-10 dollar invoice is approved that would leave a remaining balance of 305 thousand two hundred ninety eight billion dollars in this course and like involves it got to be used up for the right thank you sorry I was late giving You can&#x27;t get any middle out when there&#x27;s questions on number seven I read it earlier today. Motion to approve second, Mark? Eight Ward-Leasport&#x27;s agreement To bank the grant lake for Q23 dash 40 on that escuator You&#x27;ve related signing and payment authority The city manager or his days in need Mr Brown breasted Good The first day of the course And You know, you have a bank I came in at 6.9% Then we had 5.57 million more best 4.94 million per national Okay, four point eight five and thank your friends, way to pay me In 2.7 years per cent So he&#x27;s on top Of that which actually looks A little different there So I was looking at this one There were 94 Between bank and grant lake in first national 32 How can we stay local with it? Oh, so that only within being That close Well when i go out for a bit of a day And then you have to pay me And the next day How can we stay local with it? Oh, so that only within being That close Well when i go out for a bit of a day The blinds We&#x27;re going to launch the At here at this city bay So you know I&#x27;m in your six months now To Georgia do Do e have Within a certain range and this is within the monetary There&#x27;s authorization To pick If it That that&#x27;s What? It&#x27;s a percentage I don&#x27;t have an on me at But its considerable Its something On The Order of 10% It&#x27;s a significant We&#x27;re talking about it in this instance So for me i appreciate Back the grant lake and their bid But For my our other Spinnable 94 And stay with local bank With first national Since its ninety four dollars and thirty two cents I feel like Our previous one is I think i&#x27;ll hear a bit of my opinion That was not going to go with first national Since its on ninety four dollars So And Okay But What about the same way you have been doing We were just heard here About the time You know To that Things So We make a motion we can Make the second lowest or First national I&#x27;ll Make Motion The week From first National Bank Has anybody been notified of Of You Okay I think they&#x27;ll appreciate our Motor Zill It&#x27;s nothing personal But you know we preach Local This is one of the yellow So from now on We&#x27;re not going to give this Thank You keep going Going away your go and last be the decision Because if it was like two thousand dollars Different That would bring me to the five hundred That&#x27;s why for me it was worth keeping the local For than I have four dollars But like Brian said there is two thousand and probably different story The other one that came in What we can talk about Yeah And what&#x27;s the 10% of Value at Okay, yeah so So It&#x27;s a It&#x27;s a I think yeah, and Yeah And then We know this Well No So do we All off on This We don&#x27;t That&#x27;s a Not all of us For you What So what do you guys Let me I&#x27;ll go ahead and second your motion Bye Hi Debt protect contract See 18-47 Extension for fiscal year 2324 The amount of 78,448 So may or members This is our annual Contract that just happens to be up For renewal This contract, however with Tetrotech Is more than it has been in previous years It does not mean that we have to modify the budget In any way this amount of still taking into consideration When We set a bunch for next year But all activities That&#x27;s coming up It is important In this contract for them to complete The services required Which are all related To the principal day of re-licensing And somewhat To To I can go through any Of those activities but as you You could see o</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
+Monday, July 17, 2023
+6:00
+				
+
+				p.m.
+MIAMI CIVIC CENTER
+129 5th Avenue Northwest, Miami, Oklahoma
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by
+posting on www.miamiokla.net.
+THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:
+1.
+Call to Order                                                                          Chairman Parker
+2.
+Invocation by Reverend of the All Saints Episcopal Church                                                   Mary Susan Whaley
+3.
+Pledge of Allegiance                                                                       Chairman Parker
+4.
+Public Input and Unscheduled Personal Appearances
+Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:
+www.miamiokla.net
+5.
+*Action Item* Claims                                                                 Trustees
+Claims List FY 22-23
+Claims List FY 23-24
+Credit Cards 1
+Credit Cards 2
+6.
+*Action Item* Minutes:  July 03, 2023 (Regular)                                              Trustees
+Minutes
+7.
+*Action Item* Goodell, Stratton, Edmonds &amp; Palmer Claim for GRDA Relicensing in the Amount of $1,710.00                Bo Reese
+BA
+Claims List
+8.
+*Action Item* Award Lease Purchase Agreement to Bank of Grand Lake for (Q23-40) Hyundai Excavator; Give Related Signing and Payment Authority to the City Manager or his Designee                          Brian Brassfield
+BA
+Arvest Bank Response
+Bank of Grand Lake Response
+First National Bank Response
+US Bank Response
+Welch State Bank Response
+Solicitation
+Quote
+Letter of Intent
+9.
+*Action Item* Tetra Tech Contract C18-47 Extension for Fiscal Year 2023-2024 in the Amount of $78,448.00                                    Bo Reese
+BA
+Contract Extension
+10.
+*Action Item* Engagement Letter With Arledge &amp; Associates to Conduct the Fiscal Year 2022-2023 Audit               Jennifer Watts
+BA
+11.
+*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))                                              Trustees/Bo Reese
+12.
+Staff Reports (Written report included in packet, if available staff is present for questions)                                       Trustees
+Pollution Control
+Solid Waste
+13.
+Trustee Community Announcements                                                                       Trustees
+14.
+*Action Item* Adjournment                                                                    Trustees
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
+</div>
+
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

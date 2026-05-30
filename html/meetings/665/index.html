@@ -1,113 +1,449 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami City Council - Mar 31, 2026 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami City Council</h1>
-<div class="meta">📅 Mar 31, 2026 | Clip #665</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (2)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami City Council</h1>
+<div class="meeting-meta">
+<span>📅 Mar 31, 2026</span>
+<span>⏱️ 00h 01m</span>
+<span>🔖 Clip #665</span>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
 </div>
-</section>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/665" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
-<div class="seg"><a href="#" onclick="seekTo(2.7); return false;" class="ts">[00:02]</a>  I will call to order the regular scheduled meeting of the City Council for Tuesday, March 31st, 2026.</div>
-<div class="seg"><a href="#" onclick="seekTo(8.62); return false;" class="ts">[00:08]</a>  Item number 2A is consideration to take action with respect to Resolution CC-2026-06,</div>
-<div class="seg"><a href="#" onclick="seekTo(17.54); return false;" class="ts">[00:17]</a>  which is the same resolution we just passed on MSUA, but on the City Council side.</div>
-<div class="seg"><a href="#" onclick="seekTo(23.42); return false;" class="ts">[00:23]</a>  Motion approved.</div>
-<div class="seg"><a href="#" onclick="seekTo(60.2); return false;" class="ts">[01:00]</a>  2B, appoint Shannon Biggs and Hugh Murray to the Ottawa County Emergency Communications Center Resource Board.</div>
-<div class="seg"><a href="#" onclick="seekTo(74.18); return false;" class="ts">[01:14]</a>  Item number 2C, remove the issued weapon and badge from inventory for retiring Police Department employee Detective Kelly Johnson.</div>
-<div class="seg"><a href="#" onclick="seekTo(93.28); return false;" class="ts">[01:33]</a>  I make a motion to approve.</div>
-<div class="seg"><a href="#" onclick="seekTo(94.68); return false;" class="ts">[01:34]</a>  Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(95.76); return false;" class="ts">[01:35]</a>  Cool.</div>
-<div class="seg"><a href="#" onclick="seekTo(96.2); return false;" class="ts">[01:36]</a>  Parson.</div>
-<div class="seg"><a href="#" onclick="seekTo(96.82); return false;" class="ts">[01:36]</a>  Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(97.32); return false;" class="ts">[01:37]</a>  Easton.</div>
-<div class="seg"><a href="#" onclick="seekTo(97.74); return false;" class="ts">[01:37]</a>  Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(98.24); return false;" class="ts">[01:38]</a>  Jones.</div>
-<div class="seg"><a href="#" onclick="seekTo(98.76); return false;" class="ts">[01:38]</a>  Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(99.3); return false;" class="ts">[01:39]</a>  Barnes.</div>
-<div class="seg"><a href="#" onclick="seekTo(99.82); return false;" class="ts">[01:39]</a>  Aye.</div>
-<div class="seg"><a href="#" onclick="seekTo(101.02); return false;" class="ts">[01:41]</a>  Item 3, adjournment.</div>
-<div class="seg"><a href="#" onclick="seekTo(102.42); return false;" class="ts">[01:42]</a>  Motion.</div>
-<div class="seg"><a href="#" onclick="seekTo(103.1); return false;" class="ts">[01:43]</a>  Second.</div>
-</div></section>
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/665" allowfullscreen></iframe></div>
+<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (0.8 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+</div>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="2.7"><span class="seg-time">00:02</span><span class="seg-text">I will call to order the regular scheduled meeting of the City Council for Tuesday, March 31st, 2026.</span></div>
+<div class="seg" data-time="8.62"><span class="seg-time">00:08</span><span class="seg-text">Item number 2A is consideration to take action with respect to Resolution CC-2026-06,</span></div>
+<div class="seg" data-time="17.54"><span class="seg-time">00:17</span><span class="seg-text">which is the same resolution we just passed on MSUA, but on the City Council side.</span></div>
+<div class="seg" data-time="23.42"><span class="seg-time">00:23</span><span class="seg-text">Motion approved.</span></div>
+<div class="seg" data-time="60.2"><span class="seg-time">01:00</span><span class="seg-text">2B, appoint Shannon Biggs and Hugh Murray to the Ottawa County Emergency Communications Center Resource Board.</span></div>
+<div class="seg" data-time="74.18"><span class="seg-time">01:14</span><span class="seg-text">Item number 2C, remove the issued weapon and badge from inventory for retiring Police Department employee Detective Kelly Johnson.</span></div>
+<div class="seg" data-time="93.28"><span class="seg-time">01:33</span><span class="seg-text">I make a motion to approve.</span></div>
+<div class="seg" data-time="94.68"><span class="seg-time">01:34</span><span class="seg-text">Second.</span></div>
+<div class="seg" data-time="95.76"><span class="seg-time">01:35</span><span class="seg-text">Cool.</span></div>
+<div class="seg" data-time="96.2"><span class="seg-time">01:36</span><span class="seg-text">Parson.</span></div>
+<div class="seg" data-time="96.82"><span class="seg-time">01:36</span><span class="seg-text">Aye.</span></div>
+<div class="seg" data-time="97.32"><span class="seg-time">01:37</span><span class="seg-text">Easton.</span></div>
+<div class="seg" data-time="97.74"><span class="seg-time">01:37</span><span class="seg-text">Aye.</span></div>
+<div class="seg" data-time="98.24"><span class="seg-time">01:38</span><span class="seg-text">Jones.</span></div>
+<div class="seg" data-time="98.76"><span class="seg-time">01:38</span><span class="seg-text">Aye.</span></div>
+<div class="seg" data-time="99.3"><span class="seg-time">01:39</span><span class="seg-text">Barnes.</span></div>
+<div class="seg" data-time="99.82"><span class="seg-time">01:39</span><span class="seg-text">Aye.</span></div>
+<div class="seg" data-time="101.02"><span class="seg-time">01:41</span><span class="seg-text">Item 3, adjournment.</span></div>
+<div class="seg" data-time="102.42"><span class="seg-time">01:42</span><span class="seg-text">Motion.</span></div>
+<div class="seg" data-time="103.1"><span class="seg-time">01:43</span><span class="seg-text">Second.</span></div>
 
-<section class="documents">
-<h2>📄 Full Agenda</h2>
-<div class="doc-preview">K » arty aS<br>fied<br>i]<br><4 Wac oy<br>Mayor Bless Parker has called a Special Meeting of the City Council for Tuesday, March 31, 2026, at 5:30PM at the<br>Miami Civic Center 129 5'* Ave, NW, Miami, Oklahoma.<br>Viclirnan (Mon 4:30 _Am/6™M) MARCH Al , 2026<br>Melissa Moore, City Clerk<br>NOTICE OF SPECIAL MEETING<br>OF THE MIAMI CITY COUNCIL<br>TUESDAY, MARCH 31, 2026<br>5:30PM<br>MIAMI CIVIC CENTER<br>129 5™ AVE NW, Miami, Oklahoma<br></div>
-</section>
+</div>
+</div>
+</div>
 
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">📄 Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>K » arty aS
+fied
+i]
+&lt;4 Wac oy
+Mayor Bless Parker has called a Special Meeting of the City Council for Tuesday, March 31, 2026, at 5:30PM at the
+Miami Civic Center 129 5&#x27;* Ave, NW, Miami, Oklahoma.
+Viclirnan (Mon 4:30 _Am/6™M) MARCH Al , 2026
+Melissa Moore, City Clerk
+NOTICE OF SPECIAL MEETING
+OF THE MIAMI CITY COUNCIL
+TUESDAY, MARCH 31, 2026
+5:30PM
+MIAMI CIVIC CENTER
+129 5™ AVE NW, Miami, Oklahoma
+</pre></div><div class="tab-panel" id="panel-minutes"><pre>THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA) MET IN SPECIAL SESSION ON MARCH 31, 2026, IN THE
+MIAMI CIVIC CENTER COUNCIL CHAMBERS AT 5:30PM WITH THE FOLLOWING MEMBERS PRESENT:
 
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+Bless Parker, Chairman Tyler Cline, Trust Manager
+Brian Estep, Trustee Misty Barnes, City Attorney
+Kevin Dunkel, Trustee (Absent) Melissa Moore, City Clerk
+
+Kyla Jones, Trustee
+Haleigh Barnes, Trustee
+
+Notice of a special meeting of the Miami Special Utility Authority, Miami, Oklahoma, called by Chairman
+Bless Parker, was displayed in the main lobby of the Miami Civic Center and by posting on
+www.miamiokla.net starting at 5:30PM on March 26, 2026, pursuant to 25 O.S. §311(9) (a) and (b) and
+the agenda was displayed and posted in the same manner on March 30, 2026, at 2:00PM.
+
+THE TRUST MAY TAKE ANY OF THE. FOLLOWING ACTIONS: DISCUSS, CONSIDER AND VOTE FOR
+APPROVAL, ACCEPTANCE, REJECTION, AMENDMENT AND/OR POSTPONEMENT OF ANY ITEM LISTED IN
+THIS AGENDA:
+
+1. Call to Order
+Chairman Parker called the meeting to order at 5:31pm.
+
+2. Invocation
+Invocation by Deputy Chief of the Miami Fire Department, Shannon Biggs.
+
+3. Pledge of Allegiance
+Chairman Parker led the Pledge of Allegiance.
+
+4. Discussion and Possible Action Items
+
+A. Consider and Take Action With Respect to Resolution MSUA2026-05 Authorizing the Miami Special
+Utility Authority (&quot;Authority&quot;) to Issue its Utility System and Sales Tax Revenue Note, Series 2026 in
+the Aggregate Principal Amount of Not To Exceed $14,200,000.00; Waiving Competitive Bidding and
+Authorizing the Note to be Sold on a Negotiated Basis; Approving and Authorizing Execution of a Sales
+Tax Agreement By and Between the City of Miami, Oklahoma (&quot;City&quot;) and the Authority Pertaining to
+a Year-to Year Pledge of Certain Sales Tax Revenue; Approving and Authorizing Execution of an
+Indenture Authorizing the Issuance and Securing the Payment of the Note; Providing That the
+Organizational Document Creating the Authority is Subject to the Provisions of the Indenture;
+Ratifying and Confirming a Lease Pertaining to the City&#x27;s Water, Sanitary Sewer, Garbage, and Electric
+- Systems; Authorizing and Directing the Execution of the Note and Other Documents Relating to the
+Transaction, Including Professional Services Agreements and a Party Agreement; and Containing
+Other Provisions Relating Thereto
+
+Tyler Cline explained that this is the funding for the fiber, Advanced Metering Infrastructure (AMI)
+meters, and some work at the water plant. Cline introduced Chris Gander with BOK Financial Securities,
+and both Nathan Ellis and Allen Brooks with The Public Finance Law Group. Allen Brooks explained that
+Simmons Bank provided the best option for the interest rate and there is no pre-payment penalty, if the
+Trust would want to refinance in the future. Brooks explained that the representatives will monitor this
+project. The resolution authorizes the execution of various documents that are required to secure this
+
+MSUA - Spec Page 1 of 3 March 31, 2026
+funding. The anticipated fiber revenues are not pledged for this funding. Brooks explained that the
+recommendation is to approve this resolution and accept the bid from Simmons Bank. Crystal Wyrick
+expressed her appreciation to the representatives of BOK Financial Securities and The Public Finance
+Law Group for their assistance with this project. Chairman Parker expressed his appreciation for staff for
+working on this project and for getting a four-point four percent (4.4%) interest rate.
+
+Chairman Parker made a motion to approve Resolution MSUA2026-05 authorizing the Miami Special
+Utility Authority (&quot;Authority&quot;) to issue its Utility System and Sales Tax Revenue Note, Series 2026 in the
+aggregate principal amount of not to exceed $14,200,000.00; waiving competitive bidding and
+authorizing the note to be sold on a negotiated basis; approving and authorizing execution of a sales tax
+agreement by and between the City of Miami, Oklahoma (&quot;City&quot;) and the authority pertaining to a year-
+to year pledge of certain sales tax revenue; approving and authorizing execution of an indenture
+authorizing the issuance and securing the payment of the note; providing that the organizational
+document creating the authority is subject to the provisions of the indenture; ratifying and confirming a
+lease pertaining to the city&#x27;s water, sanitary sewer, garbage, and electric systems; authorizing and
+directing the execution of the note and other documents relating to the transaction, including
+professional services agreements and a party agreement; and containing other provisions relating
+thereto. The motion was seconded by Trustee Estep. The Trust was polled with the following results:
+
+Parker, Aye Estep, Aye Jones, Aye - Barnes, Aye Dunkel, Absent
+Chairman Parker declared the motion carried.
+
+5. The Meeting Will be Continued From the Council Chambers and Reconvened in the Staff Room for
+Purposes of the Executive Session at the Completion of the Special Meeting of the Miami City Council
+
+The Trust continued the meeting from the Council Chambers at 5:43PM and reconvened in the Staff Room
+for purposes of the executive session at the completion of the City Council meeting.
+
+The City Clerk left the meeting at 5:43PM, and minutes were taken by the City Attorney.
+
+6. Executive Session in the Staff Room to Review Previous Executive Session Minutes
+Chairman Parker asked Tyler Cline and Misty Barnes to remain for the executive session.
+
+Trustee Jones moved to go into executive session for the reasons stated in the agenda with the people
+listed above. Trustee Barnes made the second. The Trust was polled with the following results:
+
+Jones, Aye Barnes, Aye Estep, Aye . Parker, Aye Dunkel, Absent
+Chairman Parker declared the Trust in executive session at 5:53PM.
+
+Chairman Parker declared the Trust out of executive session at 6:23PM.
+
+7. Executive Session in the Staff Room Pursuant to 25 0.S. §307(B)(4) for Purposes of Confidential
+Communications Between the Trust and its Attorney Concerning a Pending Investigation, Claim, or
+
+Action, to wit: City of Miami, et al., v. GRDA CJ-08-619 and F.E.R.C. Project No. 1494
+Agenda Items 6 and 7 were discussed in the executive session.
+
+8. The Meeting Will be Reconvened in the Staff Room After the Executive Session
+
+MSUA - Spec Page 2 of 3 March 31, 2026
+The meeting reconvened in the staff room after the executive session at 6:24PM.
+
+9. Possible Action on Matters Addressed in Executive Session Agenda Item Number 7
+
+No action taken.
+
+10. Adjournment
+Trustee Barnes made a motion to adjourn. Trustee Estep made the second. The Trust was polled with the
+
+following results:
+
+Barnes, Aye Estep, Aye Jones, Aye Parker, Aye Dunkel, Absent
+
+Chairman Parker declared the meeting adjourned at 6:25PM.
+
+| AbSacn
+Trustee Baynes Trustee J S Za Trustee Dunkel
+
+YTD ZA : attest: (Veline. (Home
+Chairman Bless Parker Melissa Moore, City Clerk
+ates
+
+Um,
+Ee rICg 71%
+va iL Oh %
+
+&quot;
+“Hw
+
+MISUA - Spec Page 3 of 3 March 31, 2026
+</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>I will call to order the regular scheduled meeting of the City Council for Tuesday, March 31st, 2026.  Item number 2A is consideration to take action with respect to Resolution CC-2026-06,  which is the same resolution we just passed on MSUA, but on the City Council side.  Motion approved.  2B, appoint Shannon Biggs and Hugh Murray to the Ottawa County Emergency Communications Center Resource Board.  Item number 2C, remove the issued weapon and badge from inventory for retiring Police Department employee Detective Kelly Johnson.  I make a motion to approve.  Second.  Cool.  Parson.  Aye.  Easton.  Aye.  Jones.  Aye.  Barnes.  Aye.  Item 3, adjournment.  Motion.  Second.</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>K » arty aS
+fied
+i]
+&lt;4 Wac oy
+Mayor Bless Parker has called a Special Meeting of the City Council for Tuesday, March 31, 2026, at 5:30PM at the
+Miami Civic Center 129 5&#x27;* Ave, NW, Miami, Oklahoma.
+Viclirnan (Mon 4:30 _Am/6™M) MARCH Al , 2026
+Melissa Moore, City Clerk
+NOTICE OF SPECIAL MEETING
+OF THE MIAMI CITY COUNCIL
+TUESDAY, MARCH 31, 2026
+5:30PM
+MIAMI CIVIC CENTER
+129 5™ AVE NW, Miami, Oklahoma
+</pre></div></div><div><h3>Official Minutes</h3><div class="doc-panel"><pre>THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA) MET IN SPECIAL SESSION ON MARCH 31, 2026, IN THE
+MIAMI CIVIC CENTER COUNCIL CHAMBERS AT 5:30PM WITH THE FOLLOWING MEMBERS PRESENT:
+
+Bless Parker, Chairman Tyler Cline, Trust Manager
+Brian Estep, Trustee Misty Barnes, City Attorney
+Kevin Dunkel, Trustee (Absent) Melissa Moore, City Clerk
+
+Kyla Jones, Trustee
+Haleigh Barnes, Trustee
+
+Notice of a special meeting of the Miami Special Utility Authority, Miami, Oklahoma, called by Chairman
+Bless Parker, was displayed in the main lobby of the Miami Civic Center and by posting on
+www.miamiokla.net starting at 5:30PM on March 26, 2026, pursuant to 25 O.S. §311(9) (a) and (b) and
+the agenda was displayed and posted in the same manner on March 30, 2026, at 2:00PM.
+
+THE TRUST MAY TAKE ANY OF THE. FOLLOWING ACTIONS: DISCUSS, CONSIDER AND VOTE FOR
+APPROVAL, ACCEPTANCE, REJECTION, AMENDMENT AND/OR POSTPONEMENT OF ANY ITEM LISTED IN
+THIS AGENDA:
+
+1. Call to Order
+Chairman Parker called the meeting to order at 5:31pm.
+
+2. Invocation
+Invocation by Deputy Chief of the Miami Fire Department, Shannon Biggs.
+
+3. Pledge of Allegiance
+Chairman Parker led the Pledge of Allegiance.
+
+4. Discussion and Possible Action Items
+
+A. Consider and Take Action With Respect to Resolution MSUA2026-05 Authorizing the Miami Special
+Utility Authority (&quot;Authority&quot;) to Issue its Utility System and Sales Tax Revenue Note, Series 2026 in
+the Aggregate Principal Amount of Not To Exceed $14,200,000.00; Waiving Competitive Bidding and
+Authorizing the Note to be Sold on a Negotiated Basis; Approving and Authorizing Execution of a Sales
+Tax Agreement By and Between the City of Miami, Oklahoma (&quot;City&quot;) and the Authority Pertaining to
+a Year-to Year Pledge of Certain Sales Tax Revenue; Approving and Authorizing Execution of an
+Indenture Authorizing the Issuance and Securing the Payment of the Note; Providing That the
+Organizational Document Creating the Authority is Subject to the Provisions of the Indenture;
+Ratifying and Confirming a Lease Pertaining to the City&#x27;s Water, Sanitary Sewer, Garbage, and Electric
+- Systems; Authorizing and Directing the Execution of the Note and Other Documents Relating to the
+Transaction, Including Professional Services Agreements and a Party Agreement; and Containing
+Other Provisions Relating Thereto
+
+Tyler Cline explained that this is the funding for the fiber, Advanced Metering Infrastructure (AMI)
+meters, and some work at the water plant. Cline introduced Chris Gander with BOK Financial Securities,
+and both Nathan Ellis and Allen Brooks with The Public Finance Law Group. Allen Brooks explained that
+Simmons Bank provided the best option for the interest rate and there is no pre-payment penalty, if the
+Trust would want to refinance in the future. Brooks explained that the representatives will monitor this
+project. The resolution authorizes the execution of various documents that are required to secure this
+
+MSUA - Spec Page 1 of 3 March 31, 2026
+funding. The anticipated fiber revenues are not pledged for this funding. Brooks explained that the
+recommendation is to approve this resolution and accept the bid from Simmons Bank. Crystal Wyrick
+expressed her appreciation to the representatives of BOK Financial Securities and The Public Finance
+Law Group for their assistance with this project. Chairman Parker expressed his appreciation for staff for
+working on this project and for getting a four-point four percent (4.4%) interest rate.
+
+Chairman Parker made a motion to approve Resolution MSUA2026-05 authorizing the Miami Special
+Utility Authority (&quot;Authority&quot;) to issue its Utility System and Sales Tax Revenue Note, Series 2026 in the
+aggregate principal amount of not to exceed $14,200,000.00; waiving competitive bidding and
+authorizing the note to be sold on a negotiated basis; approving and authorizing execution of a sales tax
+agreement by and between the City of Miami, Oklahoma (&quot;City&quot;) and the authority pertaining to a year-
+to year pledge of certain sales tax revenue; approving and authorizing execution of an indenture
+authorizing the issuance and securing the payment of the note; providing that the organizational
+document creating the authority is subject to the provisions of the indenture; ratifying and confirming a
+lease pertaining to the city&#x27;s water, sanitary sewer, garbage, and electric systems; authorizing and
+directing the execution of the note and other documents relating to the transaction, including
+professional services agreements and a party agreement; and containing other provisions relating
+thereto. The motion was seconded by Trustee Estep. The Trust was polled with the following results:
+
+Parker, Aye Estep, Aye Jones, Aye - Barnes, Aye Dunkel, Absent
+Chairman Parker declared the motion carried.
+
+5. The Meeting Will be Continued From the Council Chambers and Reconvened in the Staff Room for
+Purposes of the Executive Session at the Completion of the Special Meeting of the Miami City Council
+
+The Trust continued the meeting from the Council Chambers at 5:43PM and reconvened in the Staff Room
+for purposes of the executive session at the completion of the City Council meeting.
+
+The City Clerk left the meeting at 5:43PM, and minutes were taken by the City Attorney.
+
+6. Executive Session in the Staff Room to Review Previous Executive Session Minutes
+Chairman Parker asked Tyler Cline and Misty Barnes to remain for the executive session.
+
+Trustee Jones moved to go into executive session for the reasons stated in the agenda with the people
+listed above. Trustee Barnes made the second. The Trust was polled with the following results:
+
+Jones, Aye Barnes, Aye Estep, Aye . Parker, Aye Dunkel, Absent
+Chairman Parker declared the Trust in executive session at 5:53PM.
+
+Chairman Parker declared the Trust out of executive session at 6:23PM.
+
+7. Executive Session in the Staff Room Pursuant to 25 0.S. §307(B)(4) for Purposes of Confidential
+Communications Between the Trust and its Attorney Concerning a Pending Investigation, Claim, or
+
+Action, to wit: City of Miami, et al., v. GRDA CJ-08-619 and F.E.R.C. Project No. 1494
+Agenda Items 6 and 7 were discussed in the executive session.
+
+8. The Meeting Will be Reconvened in the Staff Room After the Executive Session
+
+MSUA - Spec Page 2 of 3 March 31, 2026
+The meeting reconvened in the staff room after the executive session at 6:24PM.
+
+9. Possible Action on Matters Addressed in Executive Session Agenda Item Number 7
+
+No action taken.
+
+10. Adjournment
+Trustee Barnes made a motion to adjourn. Trustee Estep made the second. The Trust was polled with the
+
+following results:
+
+Barnes, Aye Estep, Aye Jones, Aye Parker, Aye Dunkel, Absent
+
+Chairman Parker declared the meeting adjourned at 6:25PM.
+
+| AbSacn
+Trustee Baynes Trustee J S Za Trustee Dunkel
+
+YTD ZA : attest: (Veline. (Home
+Chairman Bless Parker Melissa Moore, City Clerk
+ates
+
+Um,
+Ee rICg 71%
+va iL Oh %
+
+&quot;
+“Hw
+
+MISUA - Spec Page 3 of 3 March 31, 2026
+</pre></div></div></div></div></div>
+</div>
+
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

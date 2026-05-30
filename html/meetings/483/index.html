@@ -1,545 +1,630 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami City Council - Apr 17, 2023 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami City Council</h1>
-<div class="meta">📅 Apr 17, 2023 | Clip #483</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (3)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Agenda Document</div>
-  <div class="issue-desc">The city has not published an agenda document for this meeting on AgendaCenter. This is a transparency concern - agendas should be publicly available before meetings.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami City Council</h1>
+<div class="meeting-meta">
+<span>📅 Apr 17, 2023</span>
+<span>⏱️ 00h 30m</span>
+<span>🔖 Clip #483</span>
 </div>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
+
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/483" allowfullscreen></iframe></div>
+<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (14.1 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
-</section>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="4.5"><span class="seg-time">00:04</span><span class="seg-text">I&#x27;ll call the other records scheduled to be in my office at Council for Monday April 17th, 2023. Public input on schedule personal chances we have none three consent agenda staff recommends will approve items four and five?</span></div>
+<div class="seg" data-time="41.85"><span class="seg-time">00:41</span><span class="seg-text">Okay, I walked through it tonight and that&#x27;s like probably 60% complete maybe.</span></div>
+<div class="seg" data-time="54.5"><span class="seg-time">00:54</span><span class="seg-text">That is what i thought but</span></div>
+<div class="seg" data-time="58.5"><span class="seg-time">00:58</span><span class="seg-text">I just wanted to ask for a question.</span></div>
+<div class="seg" data-time="70.53"><span class="seg-time">01:10</span><span class="seg-text">Thank you, thank you.</span></div>
+<div class="seg" data-time="79.4"><span class="seg-time">01:19</span><span class="seg-text">Six bat six this bats services remember and of understanding with the auto county e911 trust authority</span></div>
+<div class="seg" data-time="87.93"><span class="seg-time">01:27</span><span class="seg-text">This is our annual contract on the number U at 9 one board it&#x27;s them given us money currently give us 5000 month</span></div>
+<div class="seg" data-time="95.26"><span class="seg-time">01:35</span><span class="seg-text">and 1211 dollars a month to help us dispatch incentive longevity incentive</span></div>
+<div class="seg" data-time="104.57"><span class="seg-time">01:44</span><span class="seg-text">And that was pretty too disposed.</span></div>
+<div class="seg" data-time="107.32"><span class="seg-time">01:47</span><span class="seg-text">We&#x27;re just renewing this amount of our MRE with 9 one board</span></div>
+<div class="seg" data-time="111.42"><span class="seg-time">01:51</span><span class="seg-text">It&#x27;s the same as last year is it?</span></div>
+<div class="seg" data-time="113.42"><span class="seg-time">01:53</span><span class="seg-text">Yes, yeah nothing has changed we are potentially looking change in future once</span></div>
+<div class="seg" data-time="119.01"><span class="seg-time">01:59</span><span class="seg-text">Once again on your center if not 1 more do start feed for over this batch 4</span></div>
+<div class="seg" data-time="125.78"><span class="seg-time">02:05</span><span class="seg-text">And how about a bill and other so we may have others in the future right now where state says well</span></div>
+<div class="seg" data-time="135.77"><span class="seg-time">02:15</span><span class="seg-text">That&#x27;s made down with a police on that building</span></div>
+<div class="seg" data-time="138.77"><span class="seg-time">02:18</span><span class="seg-text">I&#x27;m sorry, but there is no need to go</span></div>
+<div class="seg" data-time="141.77"><span class="seg-time">02:21</span><span class="seg-text">Right away from AT&amp;T</span></div>
+<div class="seg" data-time="144.77"><span class="seg-time">02:24</span><span class="seg-text">To do something</span></div>
+<div class="seg" data-time="146.77"><span class="seg-time">02:26</span><span class="seg-text">We can&#x27;t get some of those AT</span></div>
+<div class="seg" data-time="149.77"><span class="seg-time">02:29</span><span class="seg-text">We&#x27;ve been to the AT</span></div>
+<div class="seg" data-time="152.77"><span class="seg-time">02:32</span><span class="seg-text">We&#x27;ve been some really bad supply chain issues</span></div>
+<div class="seg" data-time="157.77"><span class="seg-time">02:37</span><span class="seg-text">Our project was the light almost a year it just came in last week</span></div>
+<div class="seg" data-time="161.46"><span class="seg-time">02:41</span><span class="seg-text">Generator is all here and half they couldn&#x27;t get one</span></div>
+<div class="seg" data-time="165.82"><span class="seg-time">02:45</span><span class="seg-text">This has always very highly proprietary equipment</span></div>
+<div class="seg" data-time="170.13"><span class="seg-time">02:50</span><span class="seg-text">From this game of this thing&#x27;s changed even for electrical</span></div>
+<div class="seg" data-time="174.13"><span class="seg-time">02:54</span><span class="seg-text">The equipment, you know</span></div>
+<div class="seg" data-time="176.13"><span class="seg-time">02:56</span><span class="seg-text">All of the systems are software, hardware all that stuff is now we&#x27;re getting in</span></div>
+<div class="seg" data-time="181.13"><span class="seg-time">03:01</span><span class="seg-text">And even proprietary stuff and God love them</span></div>
+<div class="seg" data-time="184.13"><span class="seg-time">03:04</span><span class="seg-text">Everything it&#x27;s just like</span></div>
+<div class="seg" data-time="186.13"><span class="seg-time">03:06</span><span class="seg-text">Even a new deal</span></div>
+<div class="seg" data-time="188.4"><span class="seg-time">03:08</span><span class="seg-text">We&#x27;ve got correct if were responded to the mistake</span></div>
+<div class="seg" data-time="192.4"><span class="seg-time">03:12</span><span class="seg-text">Our dispatch can actually put him on video</span></div>
+<div class="seg" data-time="196.4"><span class="seg-time">03:16</span><span class="seg-text">Tell what going onto us no while I&#x27;m running around</span></div>
+<div class="seg" data-time="200.4"><span class="seg-time">03:20</span><span class="seg-text">That&#x27;s why</span></div>
+<div class="seg" data-time="202.4"><span class="seg-time">03:22</span><span class="seg-text">That&#x27;s a lot of stuff</span></div>
+<div class="seg" data-time="204.4"><span class="seg-time">03:24</span><span class="seg-text">Absolutely</span></div>
+<div class="seg" data-time="206.4"><span class="seg-time">03:26</span><span class="seg-text">We&#x27;re exciting stuff in this package and be wide saving</span></div>
+<div class="seg" data-time="208.4"><span class="seg-time">03:28</span><span class="seg-text">Great stuff, unfortunately it just putting a lot</span></div>
+<div class="seg" data-time="211.67"><span class="seg-time">03:31</span><span class="seg-text">Up his the pot together</span></div>
+<div class="seg" data-time="215.22"><span class="seg-time">03:35</span><span class="seg-text">It has been time consuming to get that done</span></div>
+<div class="seg" data-time="218.22"><span class="seg-time">03:38</span><span class="seg-text">I really feel like we are getting close</span></div>
+<div class="seg" data-time="220.5"><span class="seg-time">03:40</span><span class="seg-text">Put on a bit around</span></div>
+<div class="seg" data-time="226.39"><span class="seg-time">03:46</span><span class="seg-text">Stretch out about 100 times</span></div>
+<div class="seg" data-time="228.39"><span class="seg-time">03:48</span><span class="seg-text">Literally thought</span></div>
+<div class="seg" data-time="230.39"><span class="seg-time">03:50</span><span class="seg-text">Last summer last fall, last year</span></div>
+<div class="seg" data-time="232.39"><span class="seg-time">03:52</span><span class="seg-text">First day, I&#x27;m going go for a lot more</span></div>
+<div class="seg" data-time="233.39"><span class="seg-time">03:53</span><span class="seg-text">If I had to put it on</span></div>
+<div class="seg" data-time="237.98"><span class="seg-time">03:57</span><span class="seg-text">From a construction perspective, the standard answer is two weeks</span></div>
+<div class="seg" data-time="240.98"><span class="seg-time">04:00</span><span class="seg-text">Two week&#x27;s has 2-weeks</span></div>
+<div class="seg" data-time="242.98"><span class="seg-time">04:02</span><span class="seg-text">So you know no more than just bought a rainy rain</span></div>
+<div class="seg" data-time="247.44"><span class="seg-time">04:07</span><span class="seg-text">Some scorned candy wine for everybody</span></div>
+<div class="seg" data-time="249.44"><span class="seg-time">04:09</span><span class="seg-text">Candy was dressed up and he puts my funds in that</span></div>
+<div class="seg" data-time="253.44"><span class="seg-time">04:13</span><span class="seg-text">We spend about 1.5 year ready</span></div>
+<div class="seg" data-time="256.68"><span class="seg-time">04:16</span><span class="seg-text">We have a lot of them with this product</span></div>
+<div class="seg" data-time="260.95"><span class="seg-time">04:20</span><span class="seg-text">I think car radios and water</span></div>
+<div class="seg" data-time="262.95"><span class="seg-time">04:22</span><span class="seg-text">And the water drive all other parts</span></div>
+<div class="seg" data-time="267.29"><span class="seg-time">04:27</span><span class="seg-text">It&#x27;s just been a lot of moving parts and take one time in your life</span></div>
+<div class="seg" data-time="276.91"><span class="seg-time">04:36</span><span class="seg-text">Been down close wanting to know if he can vote on this</span></div>
+<div class="seg" data-time="279.91"><span class="seg-time">04:39</span><span class="seg-text">Or if you need lipstick stain</span></div>
+<div class="seg" data-time="286.6"><span class="seg-time">04:46</span><span class="seg-text">Okay, thank goodness for me</span></div>
+<div class="seg" data-time="294.06"><span class="seg-time">04:54</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="296.06"><span class="seg-time">04:56</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="298.06"><span class="seg-time">04:58</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="300.06"><span class="seg-time">05:00</span><span class="seg-text">Thank you</span></div>
+<div class="seg" data-time="302.53"><span class="seg-time">05:02</span><span class="seg-text">The discussion regarding the status is public works building fire</span></div>
+<div class="seg" data-time="304.53"><span class="seg-time">05:04</span><span class="seg-text">We&#x27;ll see you in the next steps</span></div>
+<div class="seg" data-time="318.34"><span class="seg-time">05:18</span><span class="seg-text">Mr. Markew</span></div>
+<div class="seg" data-time="349.54"><span class="seg-time">05:49</span><span class="seg-text">He is 5 years older than he came from static light choice</span></div>
+<div class="seg" data-time="354.1"><span class="seg-time">05:54</span><span class="seg-text">We had vapor to build up this trans burn</span></div>
+<div class="seg" data-time="356.1"><span class="seg-time">05:56</span><span class="seg-text">Feel over into the bulk of time</span></div>
+<div class="seg" data-time="359.59"><span class="seg-time">05:59</span><span class="seg-text">Either a static set it off or</span></div>
+<div class="seg" data-time="361.59"><span class="seg-time">06:01</span><span class="seg-text">Hes said we have electrical sparks on layers</span></div>
+<div class="seg" data-time="364.59"><span class="seg-time">06:04</span><span class="seg-text">Had been in condoned wall with there&#x27;s nothing</span></div>
+<div class="seg" data-time="366.59"><span class="seg-time">06:06</span><span class="seg-text">Vibrs when you watch video</span></div>
+<div class="seg" data-time="368.59"><span class="seg-time">06:08</span><span class="seg-text">It was big cloud</span></div>
+<div class="seg" data-time="370.96"><span class="seg-time">06:10</span><span class="seg-text">Explosions</span></div>
+<div class="seg" data-time="372.96"><span class="seg-time">06:12</span><span class="seg-text">One along the layer, air, air, air, air</span></div>
+<div class="seg" data-time="376.42"><span class="seg-time">06:16</span><span class="seg-text">He released two days later</span></div>
+<div class="seg" data-time="379.11"><span class="seg-time">06:19</span><span class="seg-text">Said we&#x27;re done, you are good</span></div>
+<div class="seg" data-time="382.11"><span class="seg-time">06:22</span><span class="seg-text">We don&#x27;t suspect anything</span></div>
+<div class="seg" data-time="384.38"><span class="seg-time">06:24</span><span class="seg-text">And then I&#x27;m going to send in regular driver of the gestures</span></div>
+<div class="seg" data-time="387.38"><span class="seg-time">06:27</span><span class="seg-text">They were flying into the house and he was George&#x27;s and I</span></div>
+<div class="seg" data-time="391.69"><span class="seg-time">06:31</span><span class="seg-text">There would be a gesture coming in</span></div>
+<div class="seg" data-time="393.69"><span class="seg-time">06:33</span><span class="seg-text">A structural engineer coming</span></div>
+<div class="seg" data-time="397.54"><span class="seg-time">06:37</span><span class="seg-text">In tomorrows been taken through that point</span></div>
+<div class="seg" data-time="401.94"><span class="seg-time">06:41</span><span class="seg-text">The beams could have built</span></div>
+<div class="seg" data-time="405.32"><span class="seg-time">06:45</span><span class="seg-text">The heat was tremendous just giving idea</span></div>
+<div class="seg" data-time="409.32"><span class="seg-time">06:49</span><span class="seg-text">Fire wasn&#x27;t in the northwest corner</span></div>
+<div class="seg" data-time="415.24"><span class="seg-time">06:55</span><span class="seg-text">Offs a catacorn, southeast quarters</span></div>
+<div class="seg" data-time="418.24"><span class="seg-time">06:58</span><span class="seg-text">Far structure about waste time</span></div>
+<div class="seg" data-time="421.24"><span class="seg-time">07:01</span><span class="seg-text">There wouldnít no flame up there</span></div>
+<div class="seg" data-time="425.55"><span class="seg-time">07:05</span><span class="seg-text">It would have been this heat also</span></div>
+<div class="seg" data-time="427.55"><span class="seg-time">07:07</span><span class="seg-text">Everything that shot is devoured</span></div>
+<div class="seg" data-time="431.58"><span class="seg-time">07:11</span><span class="seg-text">To be able to do everything</span></div>
+<div class="seg" data-time="433.58"><span class="seg-time">07:13</span><span class="seg-text">We should track for an air</span></div>
+<div class="seg" data-time="436.9"><span class="seg-time">07:16</span><span class="seg-text">I&#x27;ll find it</span></div>
+<div class="seg" data-time="437.9"><span class="seg-time">07:17</span><span class="seg-text">It was an excavator in there</span></div>
+<div class="seg" data-time="440.9"><span class="seg-time">07:20</span><span class="seg-text">The tabs on the metal to be surrounded</span></div>
+<div class="seg" data-time="443.9"><span class="seg-time">07:23</span><span class="seg-text">Tires didn&#x27;t work</span></div>
+<div class="seg" data-time="446.5"><span class="seg-time">07:26</span><span class="seg-text">Tires were built and it ran away</span></div>
+<div class="seg" data-time="449.6"><span class="seg-time">07:29</span><span class="seg-text">Was that kind of heat higher you go</span></div>
+<div class="seg" data-time="451.6"><span class="seg-time">07:31</span><span class="seg-text">To eat its worst</span></div>
+<div class="seg" data-time="453.6"><span class="seg-time">07:33</span><span class="seg-text">That fire specter said he is probably a 1,300 degree city</span></div>
+<div class="seg" data-time="457.29"><span class="seg-time">07:37</span><span class="seg-text">Mark or have done an excellent job</span></div>
+<div class="seg" data-time="459.29"><span class="seg-time">07:39</span><span class="seg-text">We did not hold off fire</span></div>
+<div class="seg" data-time="461.29"><span class="seg-time">07:41</span><span class="seg-text">But we had tremendous heat there</span></div>
+<div class="seg" data-time="463.29"><span class="seg-time">07:43</span><span class="seg-text">Through the problem</span></div>
+<div class="seg" data-time="466.49"><span class="seg-time">07:46</span><span class="seg-text">We had to do some other stuff</span></div>
+<div class="seg" data-time="469.49"><span class="seg-time">07:49</span><span class="seg-text">All the bulbs got spot</span></div>
+<div class="seg" data-time="472.49"><span class="seg-time">07:52</span><span class="seg-text">Now there is start a rest</span></div>
+<div class="seg" data-time="474.49"><span class="seg-time">07:54</span><span class="seg-text">We are going in there</span></div>
+<div class="seg" data-time="476.49"><span class="seg-time">07:56</span><span class="seg-text">Everything has lost</span></div>
+<div class="seg" data-time="479.46"><span class="seg-time">07:59</span><span class="seg-text">And that&#x27;s all five</span></div>
+<div class="seg" data-time="488.34"><span class="seg-time">08:08</span><span class="seg-text">Thatís where we were at</span></div>
+<div class="seg" data-time="490.34"><span class="seg-time">08:10</span><span class="seg-text">When you go through all this process</span></div>
+<div class="seg" data-time="492.34"><span class="seg-time">08:12</span><span class="seg-text">It also like</span></div>
+<div class="seg" data-time="497.15"><span class="seg-time">08:17</span><span class="seg-text">To make it clear</span></div>
+<div class="seg" data-time="499.15"><span class="seg-time">08:19</span><span class="seg-text">Our city procurement guidelines</span></div>
+<div class="seg" data-time="502.15"><span class="seg-time">08:22</span><span class="seg-text">Give us an interview</span></div>
+<div class="seg" data-time="503.15"><span class="seg-time">08:23</span><span class="seg-text">To wave formal bid procedures for most purchases</span></div>
+<div class="seg" data-time="507.15"><span class="seg-time">08:27</span><span class="seg-text">And after review of these and review them with council</span></div>
+<div class="seg" data-time="511.15"><span class="seg-time">08:31</span><span class="seg-text">I do believe that this justifies</span></div>
+<div class="seg" data-time="514.15"><span class="seg-time">08:34</span><span class="seg-text">In the situation</span></div>
+<div class="seg" data-time="516.15"><span class="seg-time">08:36</span><span class="seg-text">Using emergency permit</span></div>
+<div class="seg" data-time="518.15"><span class="seg-time">08:38</span><span class="seg-text">Wouldn&#x27;t be beneficial to city</span></div>
+<div class="seg" data-time="520.15"><span class="seg-time">08:40</span><span class="seg-text">Because it basically, if a jeopardizes public health</span></div>
+<div class="seg" data-time="524.15"><span class="seg-time">08:44</span><span class="seg-text">Safety economic loss</span></div>
+<div class="seg" data-time="526.15"><span class="seg-time">08:46</span><span class="seg-text">Or further damaged property of City money</span></div>
+<div class="seg" data-time="529.42"><span class="seg-time">08:49</span><span class="seg-text">It is in our best interest to move forward</span></div>
+<div class="seg" data-time="532.42"><span class="seg-time">08:52</span><span class="seg-text">We need the shop</span></div>
+<div class="seg" data-time="534.42"><span class="seg-time">08:54</span><span class="seg-text">To be up and running</span></div>
+<div class="seg" data-time="536.42"><span class="seg-time">08:56</span><span class="seg-text">And we have to maintain our equipment</span></div>
+<div class="seg" data-time="539.42"><span class="seg-time">08:59</span><span class="seg-text">We are planning on making our vehicles</span></div>
+<div class="seg" data-time="542.42"><span class="seg-time">09:02</span><span class="seg-text">Our machinery that</span></div>
+<div class="seg" data-time="545.42"><span class="seg-time">09:05</span><span class="seg-text">That will count every day</span></div>
+<div class="seg" data-time="547.42"><span class="seg-time">09:07</span><span class="seg-text">To keep city running</span></div>
+<div class="seg" data-time="549.42"><span class="seg-time">09:09</span><span class="seg-text">Weíre going into taking place</span></div>
+<div class="seg" data-time="552.38"><span class="seg-time">09:12</span><span class="seg-text">First of all, what I am gonna take place</span></div>
+<div class="seg" data-time="554.38"><span class="seg-time">09:14</span><span class="seg-text">Whoís a new shopping</span></div>
+<div class="seg" data-time="556.04"><span class="seg-time">09:16</span><span class="seg-text">Weíre going to use these procedures</span></div>
+<div class="seg" data-time="561.04"><span class="seg-time">09:21</span><span class="seg-text">To get this facility up and running</span></div>
+<div class="seg" data-time="564.04"><span class="seg-time">09:24</span><span class="seg-text">I think it is a good spot</span></div>
+<div class="seg" data-time="566.31"><span class="seg-time">09:26</span><span class="seg-text">Just on the way out</span></div>
+<div class="seg" data-time="568.31"><span class="seg-time">09:28</span><span class="seg-text">Which kept sound bay functional</span></div>
+<div class="seg" data-time="571.31"><span class="seg-time">09:31</span><span class="seg-text">Something more place</span></div>
+<div class="seg" data-time="573.31"><span class="seg-time">09:33</span><span class="seg-text">Or right now they can still function</span></div>
+<div class="seg" data-time="576.31"><span class="seg-time">09:36</span><span class="seg-text">Some one in south bay</span></div>
+<div class="seg" data-time="579.31"><span class="seg-time">09:39</span><span class="seg-text">So if we could start getting equipment</span></div>
+<div class="seg" data-time="580.31"><span class="seg-time">09:40</span><span class="seg-text">Some of the machinery and equipment</span></div>
+<div class="seg" data-time="583.31"><span class="seg-time">09:43</span><span class="seg-text">It tools in things replace</span></div>
+<div class="seg" data-time="585.31"><span class="seg-time">09:45</span><span class="seg-text">They can use them over there on south bay</span></div>
+<div class="seg" data-time="588.31"><span class="seg-time">09:48</span><span class="seg-text">While weíre rebuilding structure</span></div>
+<div class="seg" data-time="591.31"><span class="seg-time">09:51</span><span class="seg-text">On this way, it will be a bit more safe</span></div>
+<div class="seg" data-time="594.31"><span class="seg-time">09:54</span><span class="seg-text">I think itís our best interest</span></div>
+<div class="seg" data-time="596.31"><span class="seg-time">09:56</span><span class="seg-text">We could basically responsible</span></div>
+<div class="seg" data-time="599.31"><span class="seg-time">09:59</span><span class="seg-text">while doing that quickly</span></div>
+<div class="seg" data-time="602.31"><span class="seg-time">10:02</span><span class="seg-text">So then you get up</span></div>
+<div class="seg" data-time="604.31"><span class="seg-time">10:04</span><span class="seg-text">Where is your funds?</span></div>
+<div class="seg" data-time="605.31"><span class="seg-time">10:05</span><span class="seg-text">Iíve got 5.3 million currently in our rainy day fund</span></div>
+<div class="seg" data-time="608.31"><span class="seg-time">10:08</span><span class="seg-text">We can use those funds</span></div>
+<div class="seg" data-time="611.31"><span class="seg-time">10:11</span><span class="seg-text">Until we start getting refunded from insurance</span></div>
+<div class="seg" data-time="616.31"><span class="seg-time">10:16</span><span class="seg-text">That was just a long-term day</span></div>
+<div class="seg" data-time="619.31"><span class="seg-time">10:19</span><span class="seg-text">And one of the next few days</span></div>
+<div class="seg" data-time="622.1"><span class="seg-time">10:22</span><span class="seg-text">If you came, fit it into that south bay</span></div>
+<div class="seg" data-time="625.1"><span class="seg-time">10:25</span><span class="seg-text">So itís going to have be far and about</span></div>
+<div class="seg" data-time="627.1"><span class="seg-time">10:27</span><span class="seg-text">The labor bill will make 1517,000</span></div>
+<div class="seg" data-time="631.33"><span class="seg-time">10:31</span><span class="seg-text">Just lost at them</span></div>
+<div class="seg" data-time="633.33"><span class="seg-time">10:33</span><span class="seg-text">Before they were caught up with this cost</span></div>
+<div class="seg" data-time="636.3"><span class="seg-time">10:36</span><span class="seg-text">I think we got time to mess around guys</span></div>
+<div class="seg" data-time="639.3"><span class="seg-time">10:39</span><span class="seg-text">If the beams have been affected</span></div>
+<div class="seg" data-time="642.3"><span class="seg-time">10:42</span><span class="seg-text">It is safe for people being in a building hall</span></div>
+<div class="seg" data-time="644.67"><span class="seg-time">10:44</span><span class="seg-text">Nobodyís going into that section</span></div>
+<div class="seg" data-time="646.67"><span class="seg-time">10:46</span><span class="seg-text">The mechanics go there and try</span></div>
+<div class="seg" data-time="649.67"><span class="seg-time">10:49</span><span class="seg-text">To do an inventory</span></div>
+<div class="seg" data-time="651.67"><span class="seg-time">10:51</span><span class="seg-text">But as far or any work, looking at the freeing thing</span></div>
+<div class="seg" data-time="654.67"><span class="seg-time">10:54</span><span class="seg-text">They are not getting easily off limits</span></div>
+<div class="seg" data-time="658.0"><span class="seg-time">10:58</span><span class="seg-text">If it wins alone they donít want them</span></div>
+<div class="seg" data-time="661.73"><span class="seg-time">11:01</span><span class="seg-text">Ina Billion Hall?</span></div>
+<div class="seg" data-time="663.73"><span class="seg-time">11:03</span><span class="seg-text">Yes</span></div>
+<div class="seg" data-time="666.42"><span class="seg-time">11:06</span><span class="seg-text">They are not on the building?</span></div>
+<div class="seg" data-time="669.1"><span class="seg-time">11:09</span><span class="seg-text">I donít know, they donít have a bank still</span></div>
+<div class="seg" data-time="672.1"><span class="seg-time">11:12</span><span class="seg-text">On inventory</span></div>
+<div class="seg" data-time="674.1"><span class="seg-time">11:14</span><span class="seg-text">There was double wall in there</span></div>
+<div class="seg" data-time="676.54"><span class="seg-time">11:16</span><span class="seg-text">Weíve got tar off at Norris Wall</span></div>
+<div class="seg" data-time="679.54"><span class="seg-time">11:19</span><span class="seg-text">The vertical beams support both side and for damage</span></div>
+<div class="seg" data-time="683.54"><span class="seg-time">11:23</span><span class="seg-text">But weíre going to wait until their here tomorrow</span></div>
+<div class="seg" data-time="686.54"><span class="seg-time">11:26</span><span class="seg-text">To expose those things</span></div>
+<div class="seg" data-time="690.13"><span class="seg-time">11:30</span><span class="seg-text">Because if you want anything that comes back</span></div>
+<div class="seg" data-time="692.66"><span class="seg-time">11:32</span><span class="seg-text">And say ìYou should do somethingî</span></div>
+<div class="seg" data-time="733.98"><span class="seg-time">12:13</span><span class="seg-text">Iíll talk about the legal counsel</span></div>
+<div class="seg" data-time="737.22"><span class="seg-time">12:17</span><span class="seg-text">What that means</span></div>
+<div class="seg" data-time="739.22"><span class="seg-time">12:19</span><span class="seg-text">And what i read in those guidelines is it allows me to reach out</span></div>
+<div class="seg" data-time="742.22"><span class="seg-time">12:22</span><span class="seg-text">To a number of you all, just fine</span></div>
+<div class="seg" data-time="745.22"><span class="seg-time">12:25</span><span class="seg-text">Have quick discussion and say hereís going</span></div>
+<div class="seg" data-time="748.22"><span class="seg-time">12:28</span><span class="seg-text">Here are the main things</span></div>
+<div class="seg" data-time="751.68"><span class="seg-time">12:31</span><span class="seg-text">Thereíre funding</span></div>
+<div class="seg" data-time="753.68"><span class="seg-time">12:33</span><span class="seg-text">It says ìI have tipped at himî</span></div>
+<div class="seg" data-time="755.68"><span class="seg-time">12:35</span><span class="seg-text">So itís not stopping from doing something</span></div>
+<div class="seg" data-time="757.98"><span class="seg-time">12:37</span><span class="seg-text">But certainly why not?</span></div>
+<div class="seg" data-time="759.98"><span class="seg-time">12:39</span><span class="seg-text">As far as how thatís happening</span></div>
+<div class="seg" data-time="760.98"><span class="seg-time">12:40</span><span class="seg-text">It doesnít seem like we have to try this</span></div>
+<div class="seg" data-time="762.98"><span class="seg-time">12:42</span><span class="seg-text">Itís called a special meeting or anything</span></div>
+<div class="seg" data-time="765.29"><span class="seg-time">12:45</span><span class="seg-text">But all determined the appropriate steps in that</span></div>
+<div class="seg" data-time="769.82"><span class="seg-time">12:49</span><span class="seg-text">God willing what it means would be</span></div>
+<div class="seg" data-time="771.82"><span class="seg-time">12:51</span><span class="seg-text">And then I get a chance of talking about it</span></div>
+<div class="seg" data-time="775.25"><span class="seg-time">12:55</span><span class="seg-text">Weíve nowhere else, though</span></div>
+<div class="seg" data-time="777.25"><span class="seg-time">12:57</span><span class="seg-text">Thatís how itís going</span></div>
+<div class="seg" data-time="780.03"><span class="seg-time">13:00</span><span class="seg-text">To make sure youíre sitting on the right</span></div>
+<div class="seg" data-time="782.03"><span class="seg-time">13:02</span><span class="seg-text">There are some trucks and big issues</span></div>
+<div class="seg" data-time="791.96"><span class="seg-time">13:11</span><span class="seg-text">You can come from inside there with them</span></div>
+<div class="seg" data-time="850.61"><span class="seg-time">14:10</span><span class="seg-text">And once it was a heat issue you know, far</span></div>
+<div class="seg" data-time="853.61"><span class="seg-time">14:13</span><span class="seg-text">So letís fire each of those trucks</span></div>
+<div class="seg" data-time="855.61"><span class="seg-time">14:15</span><span class="seg-text">It looks like our company is over still good</span></div>
+<div class="seg" data-time="857.61"><span class="seg-time">14:17</span><span class="seg-text">Itís just about time right there</span></div>
+<div class="seg" data-time="860.81"><span class="seg-time">14:20</span><span class="seg-text">Covering the wall and its order that never&#x27;s going</span></div>
+<div class="seg" data-time="863.81"><span class="seg-time">14:23</span><span class="seg-text">But what I can tell i didnít see work</span></div>
+<div class="seg" data-time="865.81"><span class="seg-time">14:25</span><span class="seg-text">You donít have any thing to damage them, lower</span></div>
+<div class="seg" data-time="872.22"><span class="seg-time">14:32</span><span class="seg-text">Well luckily weíre talking around about red iron</span></div>
+<div class="seg" data-time="874.22"><span class="seg-time">14:34</span><span class="seg-text">Tanned</span></div>
+<div class="seg" data-time="876.22"><span class="seg-time">14:36</span><span class="seg-text">Not talkin&#x27;about employee they got hurt</span></div>
+<div class="seg" data-time="878.22"><span class="seg-time">14:38</span><span class="seg-text">That thatís all right</span></div>
+<div class="seg" data-time="882.89"><span class="seg-time">14:42</span><span class="seg-text">Iím getting in</span></div>
+<div class="seg" data-time="884.89"><span class="seg-time">14:44</span><span class="seg-text">I will definitely fill you all in</span></div>
+<div class="seg" data-time="887.89"><span class="seg-time">14:47</span><span class="seg-text">The more i learned about how we can do this</span></div>
+<div class="seg" data-time="892.11"><span class="seg-time">14:52</span><span class="seg-text">Alright number eight, ordinance 2023-03</span></div>
+<div class="seg" data-time="896.11"><span class="seg-time">14:56</span><span class="seg-text">The closing and says vacation</span></div>
+<div class="seg" data-time="899.51"><span class="seg-time">14:59</span><span class="seg-text">Thank you</span></div>
+<div class="seg" data-time="901.82"><span class="seg-time">15:01</span><span class="seg-text">To public use of the Public Way and Aliy Located</span></div>
+<div class="seg" data-time="905.82"><span class="seg-time">15:05</span><span class="seg-text">In a city my am situated on block 25</span></div>
+<div class="seg" data-time="909.39"><span class="seg-time">15:09</span><span class="seg-text">Result plat</span></div>
+<div class="seg" data-time="911.39"><span class="seg-time">15:11</span><span class="seg-text">And retaining right at any holder, the franchise</span></div>
+<div class="seg" data-time="914.39"><span class="seg-time">15:14</span><span class="seg-text">Determined by governing body to have</span></div>
+<div class="seg" data-time="916.39"><span class="seg-time">15:16</span><span class="seg-text">Relage granted by the ordinance or legislative</span></div>
+<div class="seg" data-time="919.39"><span class="seg-time">15:19</span><span class="seg-text">An actment maintain their existing utilities</span></div>
+<div class="seg" data-time="922.39"><span class="seg-time">15:22</span><span class="seg-text">In a emergency, has recommended about</span></div>
+<div class="seg" data-time="925.39"><span class="seg-time">15:25</span><span class="seg-text">The city is only planning to mission</span></div>
+<div class="seg" data-time="929.36"><span class="seg-time">15:29</span><span class="seg-text">Thereís your whole presentation. You donít even need top there</span></div>
+<div class="seg" data-time="933.24"><span class="seg-time">15:33</span><span class="seg-text">I know</span></div>
+<div class="seg" data-time="936.15"><span class="seg-time">15:36</span><span class="seg-text">So basically block 25</span></div>
+<div class="seg" data-time="939.58"><span class="seg-time">15:39</span><span class="seg-text">Reginald plat</span></div>
+<div class="seg" data-time="942.05"><span class="seg-time">15:42</span><span class="seg-text">Itís where nine tribes</span></div>
+<div class="seg" data-time="944.85"><span class="seg-time">15:44</span><span class="seg-text">And theyíre reasonable high school set</span></div>
+<div class="seg" data-time="946.85"><span class="seg-time">15:46</span><span class="seg-text">I got marked down here with the Momma Hazard Authority</span></div>
+<div class="seg" data-time="951.5"><span class="seg-time">15:51</span><span class="seg-text">So, i was called basically</span></div>
+<div class="seg" data-time="953.74"><span class="seg-time">15:53</span><span class="seg-text">It is told that</span></div>
+<div class="seg" data-time="957.33"><span class="seg-time">15:57</span><span class="seg-text">The Aliy original in</span></div>
+<div class="seg" data-time="960.33"><span class="seg-time">16:00</span><span class="seg-text">Inthe Interatory plat from like 1896</span></div>
+<div class="seg" data-time="963.33"><span class="seg-time">16:03</span><span class="seg-text">1897</span></div>
+<div class="seg" data-time="965.33"><span class="seg-time">16:05</span><span class="seg-text">Thereís never vacated</span></div>
+<div class="seg" data-time="970.41"><span class="seg-time">16:10</span><span class="seg-text">So i went and looked at the replay of 1919</span></div>
+<div class="seg" data-time="977.63"><span class="seg-time">16:17</span><span class="seg-text">It has been vacated, it is high school all a lot</span></div>
+<div class="seg" data-time="981.63"><span class="seg-time">16:21</span><span class="seg-text">All that Aliy&#x27;s being vacationed</span></div>
+<div class="seg" data-time="984.63"><span class="seg-time">16:24</span><span class="seg-text">When High School was built</span></div>
+<div class="seg" data-time="987.83"><span class="seg-time">16:27</span><span class="seg-text">I am not sure what year were built</span></div>
+<div class="seg" data-time="989.83"><span class="seg-time">16:29</span><span class="seg-text">Thatís where we have our back to plat</span></div>
+<div class="seg" data-time="991.83"><span class="seg-time">16:31</span><span class="seg-text">It goes 1919</span></div>
+<div class="seg" data-time="995.3"><span class="seg-time">16:35</span><span class="seg-text">Youíre good build, Uncle</span></div>
+<div class="seg" data-time="998.3"><span class="seg-time">16:38</span><span class="seg-text">We know in 1969</span></div>
+<div class="seg" data-time="1000.3"><span class="seg-time">16:40</span><span class="seg-text">When it was the last high school class</span></div>
+<div class="seg" data-time="1003.3"><span class="seg-time">16:43</span><span class="seg-text">They tore down build mine tribes</span></div>
+<div class="seg" data-time="1007.4"><span class="seg-time">16:47</span><span class="seg-text">Apparently, apparently wasnít caught in</span></div>
+<div class="seg" data-time="1013.18"><span class="seg-time">16:53</span><span class="seg-text">So weíre getting max credit on this project they are doing</span></div>
+<div class="seg" data-time="1018.18"><span class="seg-time">16:58</span><span class="seg-text">At my time towers nine tribes</span></div>
+<div class="seg" data-time="1021.18"><span class="seg-time">17:01</span><span class="seg-text">Discovered that</span></div>
+<div class="seg" data-time="1023.18"><span class="seg-time">17:03</span><span class="seg-text">It is never officially vacated</span></div>
+<div class="seg" data-time="1026.18"><span class="seg-time">17:06</span><span class="seg-text">Hereís our underbureth later</span></div>
+<div class="seg" data-time="1030.9"><span class="seg-time">17:10</span><span class="seg-text">Doing right and making an official</span></div>
+<div class="seg" data-time="1032.9"><span class="seg-time">17:12</span><span class="seg-text">So thatís what this one is</span></div>
+<div class="seg" data-time="1036.62"><span class="seg-time">17:16</span><span class="seg-text">Basically vacated the Aliy</span></div>
+<div class="seg" data-time="1039.22"><span class="seg-time">17:19</span><span class="seg-text">Block when I drive sits</span></div>
+<div class="seg" data-time="1044.69"><span class="seg-time">17:24</span><span class="seg-text">Marks your thing questions</span></div>
+<div class="seg" data-time="1046.69"><span class="seg-time">17:26</span><span class="seg-text">Why does he catch it now?</span></div>
+<div class="seg" data-time="1049.57"><span class="seg-time">17:29</span><span class="seg-text">You have a plat show, you got a plat</span></div>
+<div class="seg" data-time="1052.87"><span class="seg-time">17:32</span><span class="seg-text">There are his ones in here</span></div>
+<div class="seg" data-time="1054.87"><span class="seg-time">17:34</span><span class="seg-text">If look on to very last page</span></div>
+<div class="seg" data-time="1056.87"><span class="seg-time">17:36</span><span class="seg-text">Itís for the...</span></div>
+<div class="seg" data-time="1060.63"><span class="seg-time">17:40</span><span class="seg-text">Yeah</span></div>
+<div class="seg" data-time="1063.34"><span class="seg-time">17:43</span><span class="seg-text">That&#x27;s on page</span></div>
+<div class="seg" data-time="1066.58"><span class="seg-time">17:46</span><span class="seg-text">Inthe Interatory</span></div>
+<div class="seg" data-time="1068.58"><span class="seg-time">17:48</span><span class="seg-text">Page 6</span></div>
+<div class="seg" data-time="1073.27"><span class="seg-time">17:53</span><span class="seg-text">Look thatís the original Indian territory plat</span></div>
+<div class="seg" data-time="1077.27"><span class="seg-time">17:57</span><span class="seg-text">From 1987</span></div>
+<div class="seg" data-time="1079.27"><span class="seg-time">17:59</span><span class="seg-text">I didnít play them all</span></div>
+<div class="seg" data-time="1081.27"><span class="seg-time">18:01</span><span class="seg-text">Iím not playing the whole plat</span></div>
+<div class="seg" data-time="1083.27"><span class="seg-time">18:03</span><span class="seg-text">So they became a good tell</span></div>
+<div class="seg" data-time="1086.27"><span class="seg-time">18:06</span><span class="seg-text">Thatís from 1947</span></div>
+<div class="seg" data-time="1090.22"><span class="seg-time">18:10</span><span class="seg-text">Then, The Replats</span></div>
+<div class="seg" data-time="1092.22"><span class="seg-time">18:12</span><span class="seg-text">From 1919</span></div>
+<div class="seg" data-time="1100.42"><span class="seg-time">18:20</span><span class="seg-text">Showing when High School</span></div>
+<div class="seg" data-time="1102.42"><span class="seg-time">18:22</span><span class="seg-text">Clearly see that it is the Aliyas in the Hots are on plat</span></div>
+<div class="seg" data-time="1108.31"><span class="seg-time">18:28</span><span class="seg-text">And again It wasn&#x27;t caught</span></div>
+<div class="seg" data-time="1110.81"><span class="seg-time">18:30</span><span class="seg-text">For 70s when Nontraps built</span></div>
+<div class="seg" data-time="1112.59"><span class="seg-time">18:32</span><span class="seg-text">I guess it wasnít the Skogi title</span></div>
+<div class="seg" data-time="1116.42"><span class="seg-time">18:36</span><span class="seg-text">They are those ones that researched</span></div>
+<div class="seg" data-time="1118.76"><span class="seg-time">18:38</span><span class="seg-text">For The Minimum Housing Authority</span></div>
+<div class="seg" data-time="1120.76"><span class="seg-time">18:40</span><span class="seg-text">And thereís a one thats discovered</span></div>
+<div class="seg" data-time="1124.14"><span class="seg-time">18:44</span><span class="seg-text">That is never vacated</span></div>
+<div class="seg" data-time="1133.35"><span class="seg-time">18:53</span><span class="seg-text">So, if you check</span></div>
+<div class="seg" data-time="1135.35"><span class="seg-time">18:55</span><span class="seg-text">Iím making most of them improve</span></div>
+<div class="seg" data-time="1140.54"><span class="seg-time">19:00</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="1143.64"><span class="seg-time">19:03</span><span class="seg-text">Five</span></div>
+<div class="seg" data-time="1145.64"><span class="seg-time">19:05</span><span class="seg-text">Five</span></div>
+<div class="seg" data-time="1148.49"><span class="seg-time">19:08</span><span class="seg-text">Number 9 will be emergency cause for that same ordinance</span></div>
+<div class="seg" data-time="1152.49"><span class="seg-time">19:12</span><span class="seg-text">Take a lot of time to prove</span></div>
+<div class="seg" data-time="1155.0"><span class="seg-time">19:15</span><span class="seg-text">Number 5</span></div>
+<div class="seg" data-time="1158.46"><span class="seg-time">19:18</span><span class="seg-text">So full of Williams</span></div>
+<div class="seg" data-time="1160.46"><span class="seg-time">19:20</span><span class="seg-text">Alright</span></div>
+<div class="seg" data-time="1162.46"><span class="seg-time">19:22</span><span class="seg-text">This is a occasion to write</span></div>
+<div class="seg" data-time="1166.36"><span class="seg-time">19:26</span><span class="seg-text">The Martian ordinance 20</span></div>
+<div class="seg" data-time="1168.92"><span class="seg-time">19:28</span><span class="seg-text">Do it</span></div>
+<div class="seg" data-time="1173.37"><span class="seg-time">19:33</span><span class="seg-text">Oh, shut up, damn</span></div>
+<div class="seg" data-time="1177.1"><span class="seg-time">19:37</span><span class="seg-text">It&#x27;s kind too late now</span></div>
+<div class="seg" data-time="1182.62"><span class="seg-time">19:42</span><span class="seg-text">But the Martians 2020</span></div>
+<div class="seg" data-time="1187.2"><span class="seg-time">19:47</span><span class="seg-text">2012 A E Mending in rewriting chapter 4</span></div>
+<div class="seg" data-time="1190.2"><span class="seg-time">19:50</span><span class="seg-text">Animals OfThe Code Abortances</span></div>
+<div class="seg" data-time="1192.2"><span class="seg-time">19:52</span><span class="seg-text">Providing Surability</span></div>
+<div class="seg" data-time="1195.2"><span class="seg-time">19:55</span><span class="seg-text">Providing for conflicting provisions</span></div>
+<div class="seg" data-time="1197.2"><span class="seg-time">19:57</span><span class="seg-text">For building all conflicting ordinances</span></div>
+<div class="seg" data-time="1199.2"><span class="seg-time">19:59</span><span class="seg-text">And establishing effective date</span></div>
+<div class="seg" data-time="1233.33"><span class="seg-time">20:33</span><span class="seg-text">Most importantly, this incorporates the peace schedule</span></div>
+<div class="seg" data-time="1238.33"><span class="seg-time">20:38</span><span class="seg-text">That you all prove it to theory</span></div>
+<div class="seg" data-time="1242.11"><span class="seg-time">20:42</span><span class="seg-text">A couple weeks ago</span></div>
+<div class="seg" data-time="1245.42"><span class="seg-time">20:45</span><span class="seg-text">As far as the substantive changes</span></div>
+<div class="seg" data-time="1249.72"><span class="seg-time">20:49</span><span class="seg-text">Probably a major issue</span></div>
+<div class="seg" data-time="1253.18"><span class="seg-time">20:53</span><span class="seg-text">And basically I think of some others</span></div>
+<div class="seg" data-time="1257.1"><span class="seg-time">20:57</span><span class="seg-text">Weíve had some issues come up</span></div>
+<div class="seg" data-time="1259.1"><span class="seg-time">20:59</span><span class="seg-text">Somebody has had possession of an animal for years</span></div>
+<div class="seg" data-time="1264.1"><span class="seg-time">21:04</span><span class="seg-text">But they say, well I Iím not the owner</span></div>
+<div class="seg" data-time="1266.1"><span class="seg-time">21:06</span><span class="seg-text">Itís my sister.</span></div>
+<div class="seg" data-time="1268.1"><span class="seg-time">21:08</span><span class="seg-text">Just holding this thought on her sister</span></div>
+<div class="seg" data-time="1270.1"><span class="seg-time">21:10</span><span class="seg-text">Well that is caused some problems</span></div>
+<div class="seg" data-time="1273.69"><span class="seg-time">21:13</span><span class="seg-text">And itís just clarifies</span></div>
+<div class="seg" data-time="1275.69"><span class="seg-time">21:15</span><span class="seg-text">If you are really asking like never</span></div>
+<div class="seg" data-time="1278.69"><span class="seg-time">21:18</span><span class="seg-text">Before a long period</span></div>
+<div class="seg" data-time="1280.69"><span class="seg-time">21:20</span><span class="seg-text">At least between</span></div>
+<div class="seg" data-time="1282.69"><span class="seg-time">21:22</span><span class="seg-text">That person in city</span></div>
+<div class="seg" data-time="1285.69"><span class="seg-time">21:25</span><span class="seg-text">You Are The Elper</span></div>
+<div class="seg" data-time="1286.69"><span class="seg-time">21:26</span><span class="seg-text">It doesnít address the issue between</span></div>
+<div class="seg" data-time="1289.69"><span class="seg-time">21:29</span><span class="seg-text">That person and whoever theyíre saying</span></div>
+<div class="seg" data-time="1293.12"><span class="seg-time">21:33</span><span class="seg-text">The real other is, but for purposes of our own</span></div>
+<div class="seg" data-time="1296.12"><span class="seg-time">21:36</span><span class="seg-text">Thatís just saying that They are</span></div>
+<div class="seg" data-time="1298.78"><span class="seg-time">21:38</span><span class="seg-text">I donít know if weíll make it a couple</span></div>
+<div class="seg" data-time="1301.78"><span class="seg-time">21:41</span><span class="seg-text">Other substantive changes</span></div>
+<div class="seg" data-time="1303.78"><span class="seg-time">21:43</span><span class="seg-text">But i think there was one main thing</span></div>
+<div class="seg" data-time="1305.78"><span class="seg-time">21:45</span><span class="seg-text">Weíve changed again</span></div>
+<div class="seg" data-time="1307.78"><span class="seg-time">21:47</span><span class="seg-text">Because the type load has been confirmed</span></div>
+<div class="seg" data-time="1311.78"><span class="seg-time">21:51</span><span class="seg-text">We have already seen changes</span></div>
+<div class="seg" data-time="1312.78"><span class="seg-time">21:52</span><span class="seg-text">Weíre kind of going through our whole thing</span></div>
+<div class="seg" data-time="1315.78"><span class="seg-time">21:55</span><span class="seg-text">And we try to be best</span></div>
+<div class="seg" data-time="1318.78"><span class="seg-time">21:58</span><span class="seg-text">To just redraft the entire order</span></div>
+<div class="seg" data-time="1346.16"><span class="seg-time">22:26</span><span class="seg-text">Talking about only helps with personal and that</span></div>
+<div class="seg" data-time="1349.16"><span class="seg-time">22:29</span><span class="seg-text">What That allows them</span></div>
+<div class="seg" data-time="1351.16"><span class="seg-time">22:31</span><span class="seg-text">Is if it would have room for an actual owner</span></div>
+<div class="seg" data-time="1354.16"><span class="seg-time">22:34</span><span class="seg-text">It will allow a person thats cared</span></div>
+<div class="seg" data-time="1357.16"><span class="seg-time">22:37</span><span class="seg-text">For The Dog, or two years</span></div>
+<div class="seg" data-time="1360.16"><span class="seg-time">22:40</span><span class="seg-text">Or whatever they are doing at this sort</span></div>
+<div class="seg" data-time="1363.16"><span class="seg-time">22:43</span><span class="seg-text">If you donít know how itís done</span></div>
+<div class="seg" data-time="1364.16"><span class="seg-time">22:44</span><span class="seg-text">If you start using this order in the 30</span></div>
+<div class="seg" data-time="1387.58"><span class="seg-time">23:07</span><span class="seg-text">We have room for surrenders</span></div>
+<div class="seg" data-time="1390.88"><span class="seg-time">23:10</span><span class="seg-text">So we can&#x27;t be all opportunity to put that into effect</span></div>
+<div class="seg" data-time="1394.58"><span class="seg-time">23:14</span><span class="seg-text">You guys Have a starting running your ticket yet</span></div>
+<div class="seg" data-time="1411.66"><span class="seg-time">23:31</span><span class="seg-text">Because they donít kind of get hooked</span></div>
+<div class="seg" data-time="1414.66"><span class="seg-time">23:34</span><span class="seg-text">That will do an act as if it is going</span></div>
+<div class="seg" data-time="1422.44"><span class="seg-time">23:42</span><span class="seg-text">I hear yu got its still getting called out alot</span></div>
+<div class="seg" data-time="1432.91"><span class="seg-time">23:52</span><span class="seg-text">Make A Motion, and we improve</span></div>
+<div class="seg" data-time="1437.2"><span class="seg-time">23:57</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="1438.73"><span class="seg-time">23:58</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="1442.73"><span class="seg-time">24:02</span><span class="seg-text">Alright, 11 is the emergency clause for that same ordinance</span></div>
+<div class="seg" data-time="1447.32"><span class="seg-time">24:07</span><span class="seg-text">Motion</span></div>
+<div class="seg" data-time="1450.81"><span class="seg-time">24:10</span><span class="seg-text">So go to the police</span></div>
+<div class="seg" data-time="1452.81"><span class="seg-time">24:12</span><span class="seg-text">Aye</span></div>
+<div class="seg" data-time="1455.85"><span class="seg-time">24:15</span><span class="seg-text">12 open-way litigation settlement</span></div>
+<div class="seg" data-time="1457.85"><span class="seg-time">24:17</span><span class="seg-text">Through The Attorney Generalís Office, Authorities City Manager Sign</span></div>
+<div class="seg" data-time="1460.85"><span class="seg-time">24:20</span><span class="seg-text">We said division settlement participation</span></div>
+<div class="seg" data-time="1469.92"><span class="seg-time">24:29</span><span class="seg-text">The lady got some shame in regards to the opioid litigation</span></div>
+<div class="seg" data-time="1476.26"><span class="seg-time">24:36</span><span class="seg-text">That we agreed</span></div>
+<div class="seg" data-time="1478.26"><span class="seg-time">24:38</span><span class="seg-text">To participate in a year ago</span></div>
+<div class="seg" data-time="1483.1"><span class="seg-time">24:43</span><span class="seg-text">Although, he has not gotten here</span></div>
+<div class="seg" data-time="1485.1"><span class="seg-time">24:45</span><span class="seg-text">But detail about this one</span></div>
+<div class="seg" data-time="1487.1"><span class="seg-time">24:47</span><span class="seg-text">As We did with previous ones</span></div>
+<div class="seg" data-time="1490.1"><span class="seg-time">24:50</span><span class="seg-text">I would point out that</span></div>
+<div class="seg" data-time="1492.1"><span class="seg-time">24:52</span><span class="seg-text">We havenít actually recently received many from the prior one</span></div>
+<div class="seg" data-time="1496.1"><span class="seg-time">24:56</span><span class="seg-text">But the first litigation</span></div>
+<div class="seg" data-time="1502.62"><span class="seg-time">25:02</span><span class="seg-text">Belt with The Attorney General&#x27;s settlement</span></div>
+<div class="seg" data-time="1506.21"><span class="seg-time">25:06</span><span class="seg-text">With some of its drug manufacturing</span></div>
+<div class="seg" data-time="1509.74"><span class="seg-time">25:09</span><span class="seg-text">This one is by</span></div>
+<div class="seg" data-time="1515.81"><span class="seg-time">25:15</span><span class="seg-text">Of these largest drugs distribution companies</span></div>
+<div class="seg" data-time="1520.24"><span class="seg-time">25:20</span><span class="seg-text">They include Tiva, Outletune</span></div>
+<div class="seg" data-time="1522.24"><span class="seg-time">25:22</span><span class="seg-text">CBS World Reams and Wallmark</span></div>
+<div class="seg" data-time="1526.02"><span class="seg-time">25:26</span><span class="seg-text">Beyond that</span></div>
+<div class="seg" data-time="1528.64"><span class="seg-time">25:28</span><span class="seg-text">We donít have a lot more information</span></div>
+<div class="seg" data-time="1533.26"><span class="seg-time">25:33</span><span class="seg-text">Other than the deadline</span></div>
+<div class="seg" data-time="1535.26"><span class="seg-time">25:35</span><span class="seg-text">The Board Getting It Turned In is tomorrow</span></div>
+<div class="seg" data-time="1538.26"><span class="seg-time">25:38</span><span class="seg-text">I m like A Motion, we give this any manager authorization</span></div>
+<div class="seg" data-time="1561.1"><span class="seg-time">26:01</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="1566.02"><span class="seg-time">26:06</span><span class="seg-text">Aye</span></div>
+<div class="seg" data-time="1568.02"><span class="seg-time">26:08</span><span class="seg-text">13 other new business of Any which is a residence post in</span></div>
+<div class="seg" data-time="1573.88"><span class="seg-time">26:13</span><span class="seg-text">This agenda</span></div>
+<div class="seg" data-time="1580.25"><span class="seg-time">26:20</span><span class="seg-text">14 staff reports 15 Mayor Council Community and Naltzments</span></div>
+<div class="seg" data-time="1582.25"><span class="seg-time">26:22</span><span class="seg-text">I want to say the community cleanups</span></div>
+<div class="seg" data-time="1593.08"><span class="seg-time">26:33</span><span class="seg-text">We have been going on for probably a month or so</span></div>
+<div class="seg" data-time="1598.32"><span class="seg-time">26:38</span><span class="seg-text">Maybe it will be longer in that</span></div>
+<div class="seg" data-time="1601.32"><span class="seg-time">26:41</span><span class="seg-text">Of course, Berkeley has done several years</span></div>
+<div class="seg" data-time="1605.32"><span class="seg-time">26:45</span><span class="seg-text">That is part of the time</span></div>
+<div class="seg" data-time="1607.32"><span class="seg-time">26:47</span><span class="seg-text">Just having as parents</span></div>
+<div class="seg" data-time="1610.32"><span class="seg-time">26:50</span><span class="seg-text">It started changing things</span></div>
+<div class="seg" data-time="1612.32"><span class="seg-time">26:52</span><span class="seg-text">A little bit</span></div>
+<div class="seg" data-time="1614.56"><span class="seg-time">26:54</span><span class="seg-text">In general with the show page</span></div>
+<div class="seg" data-time="1617.56"><span class="seg-time">26:57</span><span class="seg-text">I started a little bit</span></div>
+<div class="seg" data-time="1619.56"><span class="seg-time">26:59</span><span class="seg-text">Yesterday they did one from about 22nd</span></div>
+<div class="seg" data-time="1623.9"><span class="seg-time">27:03</span><span class="seg-text">And went east to Mushroom Farm Road</span></div>
+<div class="seg" data-time="1628.14"><span class="seg-time">27:08</span><span class="seg-text">and picked up 8,000 pounds of trash</span></div>
+<div class="seg" data-time="1633.45"><span class="seg-time">27:13</span><span class="seg-text">Which was pretty amazing</span></div>
+<div class="seg" data-time="1636.45"><span class="seg-time">27:16</span><span class="seg-text">That is really shocking</span></div>
+<div class="seg" data-time="1640.45"><span class="seg-time">27:20</span><span class="seg-text">There&#x27;s that much trash there</span></div>
+<div class="seg" data-time="1641.45"><span class="seg-time">27:21</span><span class="seg-text">And I have helped with a few of them</span></div>
+<div class="seg" data-time="1644.45"><span class="seg-time">27:24</span><span class="seg-text">When you start, that much trash here</span></div>
+<div class="seg" data-time="1647.45"><span class="seg-time">27:27</span><span class="seg-text">But then when it is done</span></div>
+<div class="seg" data-time="1649.45"><span class="seg-time">27:29</span><span class="seg-text">You see all the bags picked up</span></div>
+<div class="seg" data-time="1651.75"><span class="seg-time">27:31</span><span class="seg-text">Gosh what else?</span></div>
+<div class="seg" data-time="1653.75"><span class="seg-time">27:33</span><span class="seg-text">My grandpa would whip my tail</span></div>
+<div class="seg" data-time="1655.75"><span class="seg-time">27:35</span><span class="seg-text">Throw stuff out like this</span></div>
+<div class="seg" data-time="1657.75"><span class="seg-time">27:37</span><span class="seg-text">We had the young boys J. and Osborne</span></div>
+<div class="seg" data-time="1662.75"><span class="seg-time">27:42</span><span class="seg-text">Jay was probably 7 or 8 years old</span></div>
+<div class="seg" data-time="1665.75"><span class="seg-time">27:45</span><span class="seg-text">He did a trash pick-up</span></div>
+<div class="seg" data-time="1666.75"><span class="seg-time">27:46</span><span class="seg-text">He picked up 4,5 bags of trash there</span></div>
+<div class="seg" data-time="1672.75"><span class="seg-time">27:52</span><span class="seg-text">I like where it is going</span></div>
+<div class="seg" data-time="1674.75"><span class="seg-time">27:54</span><span class="seg-text">Like the fact that people are getting involved</span></div>
+<div class="seg" data-time="1676.75"><span class="seg-time">27:56</span><span class="seg-text">Getting down really helps</span></div>
+<div class="seg" data-time="1678.75"><span class="seg-time">27:58</span><span class="seg-text">Makes things look a lot better</span></div>
+<div class="seg" data-time="1680.75"><span class="seg-time">28:00</span><span class="seg-text">You don&#x27;t realize how to drive by</span></div>
+<div class="seg" data-time="1683.75"><span class="seg-time">28:03</span><span class="seg-text">Did make big difference</span></div>
+<div class="seg" data-time="1687.02"><span class="seg-time">28:07</span><span class="seg-text">So probably put on our parcel, having less of them</span></div>
+<div class="seg" data-time="1691.02"><span class="seg-time">28:11</span><span class="seg-text">Our next council meeting will be</span></div>
+<div class="seg" data-time="1693.02"><span class="seg-time">28:13</span><span class="seg-text">The study station</span></div>
+<div class="seg" data-time="1695.02"><span class="seg-time">28:15</span><span class="seg-text">And I would like to have it on there for us</span></div>
+<div class="seg" data-time="1698.02"><span class="seg-time">28:18</span><span class="seg-text">To talk about</span></div>
+<div class="seg" data-time="1700.02"><span class="seg-time">28:20</span><span class="seg-text">Leaders of the community, they need some of them</span></div>
+<div class="seg" data-time="1702.02"><span class="seg-time">28:22</span><span class="seg-text">Our districts</span></div>
+<div class="seg" data-time="1704.02"><span class="seg-time">28:24</span><span class="seg-text">The track is going behind us</span></div>
+<div class="seg" data-time="1706.02"><span class="seg-time">28:26</span><span class="seg-text">That&#x27;s lead at trying get stuff done</span></div>
+<div class="seg" data-time="1709.3"><span class="seg-time">28:29</span><span class="seg-text">So we talked back next time around</span></div>
+<div class="seg" data-time="1711.3"><span class="seg-time">28:31</span><span class="seg-text">He&#x27;d come out down if he liked or whatever</span></div>
+<div class="seg" data-time="1714.3"><span class="seg-time">28:34</span><span class="seg-text">We&#x27;ll just talk right now</span></div>
+<div class="seg" data-time="1716.3"><span class="seg-time">28:36</span><span class="seg-text">Next time around</span></div>
+<div class="seg" data-time="1718.54"><span class="seg-time">28:38</span><span class="seg-text">If you give a chance</span></div>
+<div class="seg" data-time="1720.54"><span class="seg-time">28:40</span><span class="seg-text">Join in one piece</span></div>
+<div class="seg" data-time="1721.54"><span class="seg-time">28:41</span><span class="seg-text">It&#x27;s pretty rewarding actually</span></div>
+<div class="seg" data-time="1724.54"><span class="seg-time">28:44</span><span class="seg-text">When you see it when your done</span></div>
+<div class="seg" data-time="1727.58"><span class="seg-time">28:47</span><span class="seg-text">Number 16</span></div>
+<div class="seg" data-time="1731.13"><span class="seg-time">28:51</span><span class="seg-text">City Manager Communications</span></div>
+<div class="seg" data-time="1733.56"><span class="seg-time">28:53</span><span class="seg-text">Some members of the council I got a couple items on here</span></div>
+<div class="seg" data-time="1736.56"><span class="seg-time">28:56</span><span class="seg-text">One dimension first this week</span></div>
+<div class="seg" data-time="1740.41"><span class="seg-time">29:00</span><span class="seg-text">Starting Thursday and running through Saturday</span></div>
+<div class="seg" data-time="1743.41"><span class="seg-time">29:03</span><span class="seg-text">We have The Mymlittle Theatre Production</span></div>
+<div class="seg" data-time="1745.41"><span class="seg-time">29:05</span><span class="seg-text">Of 25th Annual Putnam County Spelling B</span></div>
+<div class="seg" data-time="1750.06"><span class="seg-time">29:10</span><span class="seg-text">So that is my mlittle theatre production</span></div>
+<div class="seg" data-time="1752.06"><span class="seg-time">29:12</span><span class="seg-text">7 to 9 p.m</span></div>
+<div class="seg" data-time="1755.06"><span class="seg-time">29:15</span><span class="seg-text">And then Saturday</span></div>
+<div class="seg" data-time="1757.06"><span class="seg-time">29:17</span><span class="seg-text">230-4 30</span></div>
+<div class="seg" data-time="1759.34"><span class="seg-time">29:19</span><span class="seg-text">One of the things that&#x27;s kind different from this particular production</span></div>
+<div class="seg" data-time="1762.34"><span class="seg-time">29:22</span><span class="seg-text">The others is they will actually have four audience members</span></div>
+<div class="seg" data-time="1767.67"><span class="seg-time">29:27</span><span class="seg-text">That would participate on stage in the spelling B as part</span></div>
+<div class="seg" data-time="1771.67"><span class="seg-time">29:31</span><span class="seg-text">Of</span></div>
+<div class="seg" data-time="1774.62"><span class="seg-time">29:34</span><span class="seg-text">Production</span></div>
+<div class="seg" data-time="1777.3"><span class="seg-time">29:37</span><span class="seg-text">Of the spelling B</span></div>
+<div class="seg" data-time="1780.3"><span class="seg-time">29:40</span><span class="seg-text">You should be there</span></div>
+<div class="seg" data-time="1782.3"><span class="seg-time">29:42</span><span class="seg-text">See if you can get a response to it</span></div>
+<div class="seg" data-time="1784.3"><span class="seg-time">29:44</span><span class="seg-text">I think that&#x27;s what they would do</span></div>
+<div class="seg" data-time="1786.3"><span class="seg-time">29:46</span><span class="seg-text">It was for me</span></div>
+<div class="seg" data-time="1790.71"><span class="seg-time">29:50</span><span class="seg-text">But we&#x27;re excited about</span></div>
+<div class="seg" data-time="1792.71"><span class="seg-time">29:52</span><span class="seg-text">They always did fantastic job with their productions</span></div>
+<div class="seg" data-time="1795.71"><span class="seg-time">29:55</span><span class="seg-text">And then of course, thats this week</span></div>
+<div class="seg" data-time="1798.71"><span class="seg-time">29:58</span><span class="seg-text">Then also wanted mention again</span></div>
+<div class="seg" data-time="1800.71"><span class="seg-time">30:00</span><span class="seg-text">The mural fest is coming up on 29th</span></div>
+<div class="seg" data-time="1803.71"><span class="seg-time">30:03</span><span class="seg-text">We have a 10 year list of this month</span></div>
+<div class="seg" data-time="1807.3"><span class="seg-time">30:07</span><span class="seg-text">And that&#x27;s ten A.M to 3 p.m</span></div>
+<div class="seg" data-time="1809.3"><span class="seg-time">30:09</span><span class="seg-text">On Saturday April 29th</span></div>
+<div class="seg" data-time="1812.3"><span class="seg-time">30:12</span><span class="seg-text">we&#x27;ll be having 10 muralist painting</span></div>
+<div class="seg" data-time="1815.3"><span class="seg-time">30:15</span><span class="seg-text">With the art market, car show</span></div>
+<div class="seg" data-time="1819.3"><span class="seg-time">30:19</span><span class="seg-text">Vintertans food trucks</span></div>
+<div class="seg" data-time="1821.3"><span class="seg-time">30:21</span><span class="seg-text">I believe our chickenful egg</span></div>
+<div class="seg" data-time="1823.3"><span class="seg-time">30:23</span><span class="seg-text">Food truck will either as well</span></div>
+<div class="seg" data-time="1826.3"><span class="seg-time">30:26</span><span class="seg-text">So it should turn out</span></div>
+<div class="seg" data-time="1828.3"><span class="seg-time">30:28</span><span class="seg-text">It certainly won everybody in the community</span></div>
+<div class="seg" data-time="1830.3"><span class="seg-time">30:30</span><span class="seg-text">I&#x27;m your office</span></div>
+<div class="seg" data-time="1835.47"><span class="seg-time">30:35</span><span class="seg-text">17 in German motion</span></div>
+<div class="seg" data-time="1840.81"><span class="seg-time">30:40</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="1842.81"><span class="seg-time">30:42</span><span class="seg-text">Okay</span></div>
+<div class="seg" data-time="1844.81"><span class="seg-time">30:44</span><span class="seg-text">Thank you</span></div>
+<div class="seg" data-time="1847.3"><span class="seg-time">30:47</span><span class="seg-text">Thanks man</span></div>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/483" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
-<div class="seg"><a href="#" onclick="seekTo(4.4); return false;" class="ts">[00:04]</a> I&#x27;ll call it a little bit of the reggae of the meeting minus the council from Monday April 17th, 2023.</div>
-<div class="seg"><a href="#" onclick="seekTo(10.94); return false;" class="ts">[00:10]</a> Public input runs get the personal chances we have none.</div>
-<div class="seg"><a href="#" onclick="seekTo(13.94); return false;" class="ts">[00:13]</a> Three considered gender staff recommends we approve items four and five.</div>
-<div class="seg"><a href="#" onclick="seekTo(17.94); return false;" class="ts">[00:17]</a> I got a question on this one too.</div>
-<div class="seg"><a href="#" onclick="seekTo(19.98); return false;" class="ts">[00:19]</a> Cabinal probably had to answer this one.</div>
-<div class="seg"><a href="#" onclick="seekTo(24.64); return false;" class="ts">[00:24]</a> The payment on here for the locker rooms.</div>
-<div class="seg"><a href="#" onclick="seekTo(30.41); return false;" class="ts">[00:30]</a> Is this like a progress payment for them?</div>
-<div class="seg"><a href="#" onclick="seekTo(32.5); return false;" class="ts">[00:32]</a> Is it a check being cut to them?</div>
-<div class="seg"><a href="#" onclick="seekTo(34.5); return false;" class="ts">[00:34]</a> It&#x27;s the second half completion.</div>
-<div class="seg"><a href="#" onclick="seekTo(39.04); return false;" class="ts">[00:39]</a> It will not be paid until it is completed in Walker.</div>
-<div class="seg"><a href="#" onclick="seekTo(43.04); return false;" class="ts">[00:43]</a> Okay, because I walked through it tonight.</div>
-<div class="seg"><a href="#" onclick="seekTo(46.3); return false;" class="ts">[00:46]</a> And it&#x27;s like probably 60% complete, maybe.</div>
-<div class="seg"><a href="#" onclick="seekTo(50.3); return false;" class="ts">[00:50]</a> This will just put this home in this jet or the end until the walk through.</div>
-<div class="seg"><a href="#" onclick="seekTo(55.3); return false;" class="ts">[00:55]</a> Okay.</div>
-<div class="seg"><a href="#" onclick="seekTo(56.3); return false;" class="ts">[00:56]</a> That&#x27;s what I thought.</div>
-<div class="seg"><a href="#" onclick="seekTo(57.3); return false;" class="ts">[00:57]</a> But I just wanted to ask.</div>
-<div class="seg"><a href="#" onclick="seekTo(59.3); return false;" class="ts">[00:59]</a> Yes.</div>
-<div class="seg"><a href="#" onclick="seekTo(60.3); return false;" class="ts">[01:00]</a> For sure.</div>
-<div class="seg"><a href="#" onclick="seekTo(61.3); return false;" class="ts">[01:01]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(62.3); return false;" class="ts">[01:02]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(69.92); return false;" class="ts">[01:09]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(70.92); return false;" class="ts">[01:10]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(73.56); return false;" class="ts">[01:13]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(74.56); return false;" class="ts">[01:14]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(75.56); return false;" class="ts">[01:15]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(76.56); return false;" class="ts">[01:16]</a> All right.</div>
-<div class="seg"><a href="#" onclick="seekTo(77.56); return false;" class="ts">[01:17]</a> All right.</div>
-<div class="seg"><a href="#" onclick="seekTo(78.56); return false;" class="ts">[01:18]</a> All right.</div>
-<div class="seg"><a href="#" onclick="seekTo(79.62); return false;" class="ts">[01:19]</a> Six.</div>
-<div class="seg"><a href="#" onclick="seekTo(80.62); return false;" class="ts">[01:20]</a> Six.</div>
-<div class="seg"><a href="#" onclick="seekTo(81.62); return false;" class="ts">[01:21]</a> Six.</div>
-<div class="seg"><a href="#" onclick="seekTo(82.62); return false;" class="ts">[01:22]</a> This bat services.</div>
-<div class="seg"><a href="#" onclick="seekTo(83.62); return false;" class="ts">[01:23]</a> Remember random of understanding.</div>
-<div class="seg"><a href="#" onclick="seekTo(84.62); return false;" class="ts">[01:24]</a> With the auto county e9.</div>
-<div class="seg"><a href="#" onclick="seekTo(85.62); return false;" class="ts">[01:25]</a> One.</div>
-<div class="seg"><a href="#" onclick="seekTo(86.62); return false;" class="ts">[01:26]</a> Trust authority.</div>
-<div class="seg"><a href="#" onclick="seekTo(87.75); return false;" class="ts">[01:27]</a> This is our annual contract with the MOU with the 911 board.</div>
-<div class="seg"><a href="#" onclick="seekTo(91.75); return false;" class="ts">[01:31]</a> It&#x27;s them giving us money.</div>
-<div class="seg"><a href="#" onclick="seekTo(93.75); return false;" class="ts">[01:33]</a> I currently give us $5,000.</div>
-<div class="seg"><a href="#" onclick="seekTo(95.75); return false;" class="ts">[01:35]</a> And $1,111 a month to help is a dispatch incentive.</div>
-<div class="seg"><a href="#" onclick="seekTo(102.12); return false;" class="ts">[01:42]</a> And they were afraid to dispatch.</div>
-<div class="seg"><a href="#" onclick="seekTo(105.12); return false;" class="ts">[01:45]</a> And we&#x27;re just renewing this amount for MOU with 911 board.</div>
-<div class="seg"><a href="#" onclick="seekTo(109.47); return false;" class="ts">[01:49]</a> It&#x27;s the same as last years isn&#x27;t it?</div>
-<div class="seg"><a href="#" onclick="seekTo(112.18); return false;" class="ts">[01:52]</a> Yes.</div>
-<div class="seg"><a href="#" onclick="seekTo(113.18); return false;" class="ts">[01:53]</a> Yeah.</div>
-<div class="seg"><a href="#" onclick="seekTo(114.18); return false;" class="ts">[01:54]</a> That nothing&#x27;s changed.</div>
-<div class="seg"><a href="#" onclick="seekTo(116.36); return false;" class="ts">[01:56]</a> We are potentially looking to change the future.</div>
-<div class="seg"><a href="#" onclick="seekTo(118.36); return false;" class="ts">[01:58]</a> Once we get our new center.</div>
-<div class="seg"><a href="#" onclick="seekTo(120.36); return false;" class="ts">[02:00]</a> The 911 board to start a fee for a really dispatch for.</div>
-<div class="seg"><a href="#" onclick="seekTo(126.03); return false;" class="ts">[02:06]</a> And how about the bills and everything.</div>
-<div class="seg"><a href="#" onclick="seekTo(128.03); return false;" class="ts">[02:08]</a> So we may have others in the future.</div>
-<div class="seg"><a href="#" onclick="seekTo(131.03); return false;" class="ts">[02:11]</a> And right now.</div>
-<div class="seg"><a href="#" onclick="seekTo(132.03); return false;" class="ts">[02:12]</a> Where&#x27;s that?</div>
-<div class="seg"><a href="#" onclick="seekTo(133.03); return false;" class="ts">[02:13]</a> That&#x27;s well.</div>
-<div class="seg"><a href="#" onclick="seekTo(134.03); return false;" class="ts">[02:14]</a> That&#x27;s made down with the police on that building.</div>
-<div class="seg"><a href="#" onclick="seekTo(137.25); return false;" class="ts">[02:17]</a> Sorry?</div>
-<div class="seg"><a href="#" onclick="seekTo(138.25); return false;" class="ts">[02:18]</a> That&#x27;s made down with the police on that building.</div>
-<div class="seg"><a href="#" onclick="seekTo(140.25); return false;" class="ts">[02:20]</a> About two years ago.</div>
-<div class="seg"><a href="#" onclick="seekTo(141.25); return false;" class="ts">[02:21]</a> All right.</div>
-<div class="seg"><a href="#" onclick="seekTo(142.25); return false;" class="ts">[02:22]</a> Now we&#x27;re going to AT&amp;T to do something.</div>
-<div class="seg"><a href="#" onclick="seekTo(145.25); return false;" class="ts">[02:25]</a> I can&#x27;t get some of those AT&amp;T.</div>
-<div class="seg"><a href="#" onclick="seekTo(148.25); return false;" class="ts">[02:28]</a> If anybody knows that we&#x27;re AT&amp;T.</div>
-<div class="seg"><a href="#" onclick="seekTo(151.25); return false;" class="ts">[02:31]</a> They&#x27;re not.</div>
-<div class="seg"><a href="#" onclick="seekTo(152.25); return false;" class="ts">[02:32]</a> Yeah.</div>
-<div class="seg"><a href="#" onclick="seekTo(153.25); return false;" class="ts">[02:33]</a> We&#x27;ve had some really bad supply changes.</div>
-<div class="seg"><a href="#" onclick="seekTo(156.25); return false;" class="ts">[02:36]</a> Our project was the light almost a year.</div>
-<div class="seg"><a href="#" onclick="seekTo(158.25); return false;" class="ts">[02:38]</a> It just came in last week.</div>
-<div class="seg"><a href="#" onclick="seekTo(160.25); return false;" class="ts">[02:40]</a> Generator was almost a year and a half.</div>
-<div class="seg"><a href="#" onclick="seekTo(162.54); return false;" class="ts">[02:42]</a> They couldn&#x27;t get one.</div>
-<div class="seg"><a href="#" onclick="seekTo(165.57); return false;" class="ts">[02:45]</a> This is all very, very highly proprietary equipment.</div>
-<div class="seg"><a href="#" onclick="seekTo(169.57); return false;" class="ts">[02:49]</a> From the get-go, this thing&#x27;s been challenged even for the electrical equipment.</div>
-<div class="seg"><a href="#" onclick="seekTo(174.57); return false;" class="ts">[02:54]</a> The equipment in all of the systems is software, the hardware.</div>
-<div class="seg"><a href="#" onclick="seekTo(178.57); return false;" class="ts">[02:58]</a> All that stuff is now.</div>
-<div class="seg"><a href="#" onclick="seekTo(180.0); return false;" class="ts">[03:00]</a> we&#x27;re getting it in the proprietary stuff.</div>
-<div class="seg"><a href="#" onclick="seekTo(182.0); return false;" class="ts">[03:02]</a> God love them, I mean, everything is just...</div>
-<div class="seg"><a href="#" onclick="seekTo(184.0); return false;" class="ts">[03:04]</a> Even the new deal that we just got, correct?</div>
-<div class="seg"><a href="#" onclick="seekTo(188.0); return false;" class="ts">[03:08]</a> If we&#x27;re responding to a domestic, we can actually...</div>
-<div class="seg"><a href="#" onclick="seekTo(193.0); return false;" class="ts">[03:13]</a> Our dispatch can actually put them on video,</div>
-<div class="seg"><a href="#" onclick="seekTo(195.0); return false;" class="ts">[03:15]</a> and they just tell what&#x27;s going on and tell that us,</div>
-<div class="seg"><a href="#" onclick="seekTo(198.0); return false;" class="ts">[03:18]</a> no, while we&#x27;re in the route.</div>
-<div class="seg"><a href="#" onclick="seekTo(200.0); return false;" class="ts">[03:20]</a> That&#x27;s a lot, that&#x27;s awesome.</div>
-<div class="seg"><a href="#" onclick="seekTo(204.0); return false;" class="ts">[03:24]</a> Absolutely.</div>
-<div class="seg"><a href="#" onclick="seekTo(205.0); return false;" class="ts">[03:25]</a> I&#x27;m sorry, signing stuff in this package and being...</div>
-<div class="seg"><a href="#" onclick="seekTo(207.0); return false;" class="ts">[03:27]</a> Why I&#x27;m say being great stuff...</div>
-<div class="seg"><a href="#" onclick="seekTo(209.0); return false;" class="ts">[03:29]</a> on 4 or 20, it&#x27;s just putting a lot of pieces of pot together.</div>
-<div class="seg"><a href="#" onclick="seekTo(212.0); return false;" class="ts">[03:32]</a> And it&#x27;s been time consuming to get that done.</div>
-<div class="seg"><a href="#" onclick="seekTo(217.15); return false;" class="ts">[03:37]</a> I really feel like we&#x27;re getting close.</div>
-<div class="seg"><a href="#" onclick="seekTo(219.15); return false;" class="ts">[03:39]</a> I would put a date on it, but I&#x27;d be wrong.</div>
-<div class="seg"><a href="#" onclick="seekTo(224.65); return false;" class="ts">[03:44]</a> So I&#x27;m...</div>
-<div class="seg"><a href="#" onclick="seekTo(225.65); return false;" class="ts">[03:45]</a> We stretch that out a hundred times.</div>
-<div class="seg"><a href="#" onclick="seekTo(227.65); return false;" class="ts">[03:47]</a> We literally thought it was last summer, last fall.</div>
-<div class="seg"><a href="#" onclick="seekTo(229.65); return false;" class="ts">[03:49]</a> Last year.</div>
-<div class="seg"><a href="#" onclick="seekTo(230.65); return false;" class="ts">[03:50]</a> First year.</div>
-<div class="seg"><a href="#" onclick="seekTo(231.65); return false;" class="ts">[03:51]</a> First year.</div>
-<div class="seg"><a href="#" onclick="seekTo(232.65); return false;" class="ts">[03:52]</a> I&#x27;m gonna go to a lot of 4.</div>
-<div class="seg"><a href="#" onclick="seekTo(233.65); return false;" class="ts">[03:53]</a> If I had...</div>
-<div class="seg"><a href="#" onclick="seekTo(234.78); return false;" class="ts">[03:54]</a> But...</div>
-<div class="seg"><a href="#" onclick="seekTo(235.97); return false;" class="ts">[03:55]</a> I&#x27;d probably run.</div>
-<div class="seg"><a href="#" onclick="seekTo(237.13); return false;" class="ts">[03:57]</a> Hey, from a construction perspective,</div>
-<div class="seg"><a href="#" onclick="seekTo(239.13); return false;" class="ts">[03:59]</a> the standard answer is two weeks.</div>
-<div class="seg"><a href="#" onclick="seekTo(241.13); return false;" class="ts">[04:01]</a> Two weeks, yes, two weeks.</div>
-<div class="seg"><a href="#" onclick="seekTo(242.13); return false;" class="ts">[04:02]</a> Three.</div>
-<div class="seg"><a href="#" onclick="seekTo(243.13); return false;" class="ts">[04:03]</a> So...</div>
-<div class="seg"><a href="#" onclick="seekTo(244.19); return false;" class="ts">[04:04]</a> You know, no one bought that date.</div>
-<div class="seg"><a href="#" onclick="seekTo(245.19); return false;" class="ts">[04:05]</a> They just bought a brand new radio system.</div>
-<div class="seg"><a href="#" onclick="seekTo(247.19); return false;" class="ts">[04:07]</a> It&#x27;s going to hang you wide for everybody.</div>
-<div class="seg"><a href="#" onclick="seekTo(249.19); return false;" class="ts">[04:09]</a> Kenny was...</div>
-<div class="seg"><a href="#" onclick="seekTo(250.19); return false;" class="ts">[04:10]</a> He put my funds in that.</div>
-<div class="seg"><a href="#" onclick="seekTo(252.19); return false;" class="ts">[04:12]</a> He&#x27;s been about 1.5.</div>
-<div class="seg"><a href="#" onclick="seekTo(254.19); return false;" class="ts">[04:14]</a> You&#x27;re ready for everybody to frequencies.</div>
-<div class="seg"><a href="#" onclick="seekTo(257.19); return false;" class="ts">[04:17]</a> So we have a lot to go on with this project.</div>
-<div class="seg"><a href="#" onclick="seekTo(260.19); return false;" class="ts">[04:20]</a> I think car radios in.</div>
-<div class="seg"><a href="#" onclick="seekTo(261.19); return false;" class="ts">[04:21]</a> You car radios walkies in.</div>
-<div class="seg"><a href="#" onclick="seekTo(264.19); return false;" class="ts">[04:24]</a> What a drive.</div>
-<div class="seg"><a href="#" onclick="seekTo(265.19); return false;" class="ts">[04:25]</a> All the other parts.</div>
-<div class="seg"><a href="#" onclick="seekTo(266.19); return false;" class="ts">[04:26]</a> It&#x27;s been just great.</div>
-<div class="seg"><a href="#" onclick="seekTo(267.19); return false;" class="ts">[04:27]</a> It&#x27;s just been a lot of moving parts.</div>
-<div class="seg"><a href="#" onclick="seekTo(270.19); return false;" class="ts">[04:30]</a> And...</div>
-<div class="seg"><a href="#" onclick="seekTo(271.38); return false;" class="ts">[04:31]</a> Take a lot of time to go.</div>
-<div class="seg"><a href="#" onclick="seekTo(276.78); return false;" class="ts">[04:36]</a> I&#x27;ve been...</div>
-<div class="seg"><a href="#" onclick="seekTo(277.78); return false;" class="ts">[04:37]</a> Don&#x27;t call this one.</div>
-<div class="seg"><a href="#" onclick="seekTo(278.78); return false;" class="ts">[04:38]</a> If he can vote on this.</div>
-<div class="seg"><a href="#" onclick="seekTo(279.78); return false;" class="ts">[04:39]</a> Or if he needs to abstain.</div>
-<div class="seg"><a href="#" onclick="seekTo(280.78); return false;" class="ts">[04:40]</a> He&#x27;s direct on with.</div>
-<div class="seg"><a href="#" onclick="seekTo(286.13); return false;" class="ts">[04:46]</a> Okay.</div>
-<div class="seg"><a href="#" onclick="seekTo(287.13); return false;" class="ts">[04:47]</a> Think about us when we approve.</div>
-<div class="seg"><a href="#" onclick="seekTo(291.37); return false;" class="ts">[04:51]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(292.72); return false;" class="ts">[04:52]</a> Seven.</div>
-<div class="seg"><a href="#" onclick="seekTo(294.39); return false;" class="ts">[04:54]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(295.39); return false;" class="ts">[04:55]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(296.39); return false;" class="ts">[04:56]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(297.39); return false;" class="ts">[04:57]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(298.39); return false;" class="ts">[04:58]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(299.39); return false;" class="ts">[04:59]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(300.46); return false;" class="ts">[05:00]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(301.46); return false;" class="ts">[05:01]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(302.46); return false;" class="ts">[05:02]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(303.46); return false;" class="ts">[05:03]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(304.46); return false;" class="ts">[05:04]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(305.46); return false;" class="ts">[05:05]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(306.46); return false;" class="ts">[05:06]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(318.34000000000003); return false;" class="ts">[05:18]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(319.34000000000003); return false;" class="ts">[05:19]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(320.34000000000003); return false;" class="ts">[05:20]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(321.34000000000003); return false;" class="ts">[05:21]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(322.34000000000003); return false;" class="ts">[05:22]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(323.34000000000003); return false;" class="ts">[05:23]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(324.34000000000003); return false;" class="ts">[05:24]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(325.34000000000003); return false;" class="ts">[05:25]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(326.34000000000003); return false;" class="ts">[05:26]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(327.34000000000003); return false;" class="ts">[05:27]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(328.34000000000003); return false;" class="ts">[05:28]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(329.34000000000003); return false;" class="ts">[05:29]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(330.34000000000003); return false;" class="ts">[05:30]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(331.34000000000003); return false;" class="ts">[05:31]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(333.78); return false;" class="ts">[05:33]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(334.78); return false;" class="ts">[05:34]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(335.9); return false;" class="ts">[05:35]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(336.9); return false;" class="ts">[05:36]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(338.15999999999997); return false;" class="ts">[05:38]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(339.15999999999997); return false;" class="ts">[05:39]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(340.15999999999997); return false;" class="ts">[05:40]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(341.15999999999997); return false;" class="ts">[05:41]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(342.15999999999997); return false;" class="ts">[05:42]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(343.15999999999997); return false;" class="ts">[05:43]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(344.15999999999997); return false;" class="ts">[05:44]</a> Eight.</div>
-<div class="seg"><a href="#" onclick="seekTo(345.45); return false;" class="ts">[05:45]</a> like he did not find it. He&#x27;s dying wrong. His prime is more or the E to Kang for static</div>
-<div class="seg"><a href="#" onclick="seekTo(352.73); return false;" class="ts">[05:52]</a> light choice. Do we have bike or to build up as this transfer, be it lower into the bulk</div>
-<div class="seg"><a href="#" onclick="seekTo(357.61); return false;" class="ts">[05:57]</a> of time, either static.</div>
-<div class="seg"><a href="#" onclick="seekTo(360.0); return false;" class="ts">[06:00]</a> set it off or he said we had an electrical spark somewhere so it could have been in a condom wall, but there&#x27;s enough</div>
-<div class="seg"><a href="#" onclick="seekTo(365.84); return false;" class="ts">[06:05]</a> diapers when you watch the video, it was a big cloud, it was a big explosion, you know what I mean, it&#x27;s just one, one along the way, the whole air atmosphere</div>
-<div class="seg"><a href="#" onclick="seekTo(375.71); return false;" class="ts">[06:15]</a> per part. He released it two days later, said we&#x27;re done, you&#x27;re good. We don&#x27;t suspect anything.</div>
-<div class="seg"><a href="#" onclick="seekTo(383.69); return false;" class="ts">[06:23]</a> We&#x27;re going to send in regular travel with the gestures. They&#x27;re flying in from Athens, Georgia tonight. There&#x27;ll be a gesture coming in and there will be a structural engineer coming in.</div>
-<div class="seg"><a href="#" onclick="seekTo(395.69); return false;" class="ts">[06:35]</a> And then tomorrow, we&#x27;ll spend a day going through it at that point of time, though something goes on. The veins can top that building. The heat was tremendous, just giving an idea that the fire was in the northwest corner of the</div>
-<div class="seg"><a href="#" onclick="seekTo(413.31); return false;" class="ts">[06:53]</a> office of Cati Corner, southeast quarters, farstakes, we&#x27;ve got a waste of time now, a little while we get milked at night. There wasn&#x27;t no flame up earth, it was just like the wind, this heat, all that, everything in that shop is devolent.</div>
-<div class="seg"><a href="#" onclick="seekTo(430.39); return false;" class="ts">[07:10]</a> It&#x27;s being melted in everything, there was a tractor in there, a little on, I&#x27;ll fire it, and it&#x27;s lost and there was an excavator in there, that was a excavator. The tabs on the milked, which were on that, the towers didn&#x27;t burn.</div>
-<div class="seg"><a href="#" onclick="seekTo(444.67); return false;" class="ts">[07:24]</a> The tabs were melted in the rain, there was that kind of heat, the higher you go to heat, it&#x27;s worse. That fire specter said he was probably 1,300 degrees in here.</div>
-<div class="seg"><a href="#" onclick="seekTo(455.65999999999997); return false;" class="ts">[07:35]</a> The fire department done an excellent job. We didn&#x27;t have a whole lot of fire. We had tremendous heat there for probably 10 to 10 minutes from there.</div>
-<div class="seg"><a href="#" onclick="seekTo(463.65999999999997); return false;" class="ts">[07:43]</a> And that&#x27;s the thing about the bulbs, all the bands and air stuff, I was just over at that, all the bulbs got spot. Now they&#x27;re starting to rust from the humidity in there.</div>
-<div class="seg"><a href="#" onclick="seekTo(473.5); return false;" class="ts">[07:53]</a> They&#x27;re going to have to be replaced, everything in there is, it&#x27;s my opinion is lost, and that&#x27;s all five bulbs, that&#x27;s where we&#x27;re at.</div>
-<div class="seg"><a href="#" onclick="seekTo(488.57); return false;" class="ts">[08:08]</a> And we&#x27;re going to go through all this process because it is large, large.</div>
-<div class="seg"><a href="#" onclick="seekTo(492.57); return false;" class="ts">[08:12]</a> So I&#x27;d also like to make the council aware that our city procurement guidelines give the city manager the authority to waive formal bid procedures for emergencies.</div>
-<div class="seg"><a href="#" onclick="seekTo(507.07); return false;" class="ts">[08:27]</a> And after review of these and review them with council, I do believe that this justifies in this situation that using emergency care, it wouldn&#x27;t be beneficial to the city.</div>
-<div class="seg"><a href="#" onclick="seekTo(519.0699999999999); return false;" class="ts">[08:39]</a> Because it, basically, the criteria is if it jeopardizes public health or safety, economic loss to the city, or further damage to property of city money.</div>
-<div class="seg"><a href="#" onclick="seekTo(529.0699999999999); return false;" class="ts">[08:49]</a> It&#x27;s in our best interest to move forward and get these things replaced. We need the shop to be up and running.</div>
-<div class="seg"><a href="#" onclick="seekTo(535.0699999999999); return false;" class="ts">[08:55]</a> We need to be able to maintain our equipment. We need to be able to maintain our...</div>
-<div class="seg"><a href="#" onclick="seekTo(540.0); return false;" class="ts">[09:00]</a> police vehicles are fire vehicles are machinery that we count on every day to keep City running.</div>
-<div class="seg"><a href="#" onclick="seekTo(548.0); return false;" class="ts">[09:08]</a> We&#x27;re saying you&#x27;re going to take place now.</div>
-<div class="seg"><a href="#" onclick="seekTo(549.96); return false;" class="ts">[09:09]</a> First we&#x27;re going to take place out.</div>
-<div class="seg"><a href="#" onclick="seekTo(552.15); return false;" class="ts">[09:12]</a> Who is the blue shop going to be one of this one&#x27;s not in our creation.</div>
-<div class="seg"><a href="#" onclick="seekTo(556.38); return false;" class="ts">[09:16]</a> Well, that&#x27;s what I&#x27;m saying is we&#x27;re going to use these procedures to get this facility up and running.</div>
-<div class="seg"><a href="#" onclick="seekTo(562.38); return false;" class="ts">[09:22]</a> So if we can start getting a quick, you know, some of the machinery and some of the equipment</div>
-<div class="seg"><a href="#" onclick="seekTo(582.06); return false;" class="ts">[09:42]</a> tools and things replace, they can use them over there in the South Bay while we&#x27;re rebuilding</div>
-<div class="seg"><a href="#" onclick="seekTo(585.46); return false;" class="ts">[09:45]</a> the structure on the other side, but this would allow us to wave the formal bidding procedures</div>
-<div class="seg"><a href="#" onclick="seekTo(591.98); return false;" class="ts">[09:51]</a> so that we can go on and I think it&#x27;s in our best interest honestly.</div>
-<div class="seg"><a href="#" onclick="seekTo(596.74); return false;" class="ts">[09:56]</a> We can be physically responsible while doing this quickly so that we can get up and run.</div>
-<div class="seg"><a href="#" onclick="seekTo(603.5); return false;" class="ts">[10:03]</a> Where&#x27;s the funds can come from?</div>
-<div class="seg"><a href="#" onclick="seekTo(604.86); return false;" class="ts">[10:04]</a> We have 5.3 million currently in our rainy day fund.</div>
-<div class="seg"><a href="#" onclick="seekTo(608.86); return false;" class="ts">[10:08]</a> We can use those funds until we start getting refunded from the insurance.</div>
-<div class="seg"><a href="#" onclick="seekTo(614.02); return false;" class="ts">[10:14]</a> And I&#x27;m going to tell this just on our third day, we was one of the names in one of the trash</div>
-<div class="seg"><a href="#" onclick="seekTo(622.12); return false;" class="ts">[10:22]</a> we came fitted in that South Bay so we don&#x27;t have to be far about the labor bill I&#x27;m having for the 15, 17,000.</div>
-<div class="seg"><a href="#" onclick="seekTo(629.12); return false;" class="ts">[10:29]</a> We just lost that.</div>
-<div class="seg"><a href="#" onclick="seekTo(631.95); return false;" class="ts">[10:31]</a> I&#x27;m going to put the debt before them.</div>
-<div class="seg"><a href="#" onclick="seekTo(634.62); return false;" class="ts">[10:34]</a> This is what this is cost us.</div>
-<div class="seg"><a href="#" onclick="seekTo(636.62); return false;" class="ts">[10:36]</a> We ain&#x27;t got time mess around guys.</div>
-<div class="seg"><a href="#" onclick="seekTo(638.62); return false;" class="ts">[10:38]</a> If the beams have been affected as it&#x27;s safe for people to be in the building hall, nobody&#x27;s going in that section.</div>
-<div class="seg"><a href="#" onclick="seekTo(646.62); return false;" class="ts">[10:46]</a> The mechanics go in there to just try to do an inventory, but as far as any work or looking for anything or anything like that,</div>
-<div class="seg"><a href="#" onclick="seekTo(653.62); return false;" class="ts">[10:53]</a> you just totally offland us.</div>
-<div class="seg"><a href="#" onclick="seekTo(656.6800000000001); return false;" class="ts">[10:56]</a> If the winds are blowing, I don&#x27;t go in there.</div>
-<div class="seg"><a href="#" onclick="seekTo(659.54); return false;" class="ts">[10:59]</a> In the building hall?</div>
-<div class="seg"><a href="#" onclick="seekTo(661.61); return false;" class="ts">[11:01]</a> Yes.</div>
-<div class="seg"><a href="#" onclick="seekTo(662.61); return false;" class="ts">[11:02]</a> That bay.</div>
-<div class="seg"><a href="#" onclick="seekTo(663.61); return false;" class="ts">[11:03]</a> Just that bay.</div>
-<div class="seg"><a href="#" onclick="seekTo(664.9300000000001); return false;" class="ts">[11:04]</a> But it didn&#x27;t affect the beams anywhere else in the building?</div>
-<div class="seg"><a href="#" onclick="seekTo(668.25); return false;" class="ts">[11:08]</a> Not to our knowledge.</div>
-<div class="seg"><a href="#" onclick="seekTo(669.25); return false;" class="ts">[11:09]</a> They don&#x27;t.</div>
-<div class="seg"><a href="#" onclick="seekTo(670.25); return false;" class="ts">[11:10]</a> The paint&#x27;s still on in there.</div>
-<div class="seg"><a href="#" onclick="seekTo(672.25); return false;" class="ts">[11:12]</a> There was a double wall in there.</div>
-<div class="seg"><a href="#" onclick="seekTo(676.28); return false;" class="ts">[11:16]</a> We&#x27;ve got tar off that north wall to see if the vertical beams supporting both sides were damaged,</div>
-<div class="seg"><a href="#" onclick="seekTo(682.28); return false;" class="ts">[11:22]</a> but we&#x27;re going to wait until they&#x27;re here tomorrow to expose those.</div>
-<div class="seg"><a href="#" onclick="seekTo(686.28); return false;" class="ts">[11:26]</a> Because they don&#x27;t want to do anything to damage anything and they come back and say, well, you should wait to do something.</div>
-<div class="seg"><a href="#" onclick="seekTo(691.47); return false;" class="ts">[11:31]</a> They&#x27;re actually going to bring a structure engineer with them.</div>
-<div class="seg"><a href="#" onclick="seekTo(694.6); return false;" class="ts">[11:34]</a> Let him crawl the ladder and jerk the can of the walls.</div>
-<div class="seg"><a href="#" onclick="seekTo(698.73); return false;" class="ts">[11:38]</a> So are you asking us for a boat to do the roof?</div>
-<div class="seg"><a href="#" onclick="seekTo(711.8); return false;" class="ts">[11:51]</a> I&#x27;m not saying the guidelines that have been approved by Councils in the past.</div>
-<div class="seg"><a href="#" onclick="seekTo(716.8); return false;" class="ts">[11:56]</a> So give me the authority to do that.</div>
-<div class="seg"><a href="#" onclick="seekTo(720.0); return false;" class="ts">[12:00]</a> I will exercise the ability to attempt to gain approval through what they</div>
-<div class="seg"><a href="#" onclick="seekTo(729.02); return false;" class="ts">[12:09]</a> convolve a quorum.</div>
-<div class="seg"><a href="#" onclick="seekTo(731.66); return false;" class="ts">[12:11]</a> I&#x27;ll try attempt to convene a quorum.</div>
-<div class="seg"><a href="#" onclick="seekTo(734.66); return false;" class="ts">[12:14]</a> I&#x27;ll talk to legal counsel what that actually means.</div>
-<div class="seg"><a href="#" onclick="seekTo(738.1); return false;" class="ts">[12:18]</a> And I think what I read in the guidelines is it allows me to reach out to a number of</div>
-<div class="seg"><a href="#" onclick="seekTo(743.38); return false;" class="ts">[12:23]</a> you all to it would justify a quorum and have a quick discussion and say here&#x27;s what we&#x27;re</div>
-<div class="seg"><a href="#" onclick="seekTo(747.82); return false;" class="ts">[12:27]</a> doing.</div>
-<div class="seg"><a href="#" onclick="seekTo(748.82); return false;" class="ts">[12:28]</a> Here&#x27;s what we&#x27;re doing.</div>
-<div class="seg"><a href="#" onclick="seekTo(749.82); return false;" class="ts">[12:29]</a> Here&#x27;s the funding and it says all I have to do is attempt to do that so it wouldn&#x27;t stop us</div>
-<div class="seg"><a href="#" onclick="seekTo(755.17); return false;" class="ts">[12:35]</a> from doing something but certainly why not.</div>
-<div class="seg"><a href="#" onclick="seekTo(758.69); return false;" class="ts">[12:38]</a> But as far as how that happens, it doesn&#x27;t sound like we have to try to call a special meeting</div>
-<div class="seg"><a href="#" onclick="seekTo(763.25); return false;" class="ts">[12:43]</a> or anything but I&#x27;ll determine the appropriate steps in that guideline what it means.</div>
-<div class="seg"><a href="#" onclick="seekTo(770.5); return false;" class="ts">[12:50]</a> We&#x27;ve been in an and I get a chance to talk about further.</div>
-<div class="seg"><a href="#" onclick="seekTo(774.38); return false;" class="ts">[12:54]</a> We have nowhere else that we can change up and hold her out and that tries to, I mean the</div>
-<div class="seg"><a href="#" onclick="seekTo(779.77); return false;" class="ts">[12:59]</a> other city barn hard than it, you tell me.</div>
-<div class="seg"><a href="#" onclick="seekTo(783.69); return false;" class="ts">[13:03]</a> It&#x27;s their own trucks and big and yes it&#x27;s a cab over which we can come in from the side and</div>
-<div class="seg"><a href="#" onclick="seekTo(793.46); return false;" class="ts">[13:13]</a> they were saying but I discussed that with him and he said, no, we could have done it that</div>
-<div class="seg"><a href="#" onclick="seekTo(800.16); return false;" class="ts">[13:20]</a> by he said if we tried to do it in air, it just won&#x27;t work and I&#x27;ll say anywhere else.</div>
-<div class="seg"><a href="#" onclick="seekTo(807.08); return false;" class="ts">[13:27]</a> I&#x27;ll say anywhere we can rent.</div>
-<div class="seg"><a href="#" onclick="seekTo(808.6800000000001); return false;" class="ts">[13:28]</a> I&#x27;ll show you.</div>
-<div class="seg"><a href="#" onclick="seekTo(809.87); return false;" class="ts">[13:29]</a> And the base of my Robert has there, his barn, they&#x27;re not tall enough.</div>
-<div class="seg"><a href="#" onclick="seekTo(815.5); return false;" class="ts">[13:35]</a> I don&#x27;t have the room maneuver around the lift, that engine up out of there and get it over</div>
-<div class="seg"><a href="#" onclick="seekTo(819.88); return false;" class="ts">[13:39]</a> to the side.</div>
-<div class="seg"><a href="#" onclick="seekTo(820.88); return false;" class="ts">[13:40]</a> There&#x27;s nothing down there where you&#x27;re at, Tyler.</div>
-<div class="seg"><a href="#" onclick="seekTo(822.88); return false;" class="ts">[13:42]</a> I&#x27;m weird, I don&#x27;t know if I&#x27;ll be able to catch that anymore.</div>
-<div class="seg"><a href="#" onclick="seekTo(840.19); return false;" class="ts">[14:00]</a> It seems like a lot of money to have to farm it out.</div>
-<div class="seg"><a href="#" onclick="seekTo(843.23); return false;" class="ts">[14:03]</a> I&#x27;m going to try to get it back to you.</div>
-<div class="seg"><a href="#" onclick="seekTo(849.14); return false;" class="ts">[14:09]</a> And luckily since it was a heat issue, you know, far, so let&#x27;s far issue.</div>
-<div class="seg"><a href="#" onclick="seekTo(853.94); return false;" class="ts">[14:13]</a> It looks like our company&#x27;s floor still good, so it&#x27;s a bunch of time right there, it&#x27;s covered</div>
-<div class="seg"><a href="#" onclick="seekTo(860.06); return false;" class="ts">[14:20]</a> all and you know, Jordan, everything, but what I can tell, I didn&#x27;t see work, you know,</div>
-<div class="seg"><a href="#" onclick="seekTo(865.46); return false;" class="ts">[14:25]</a> anything that damaged the floor.</div>
-<div class="seg"><a href="#" onclick="seekTo(867.1800000000001); return false;" class="ts">[14:27]</a> Well, luckily, we&#x27;re just talking about Red Iron and TN and not talking about employee that got</div>
-<div class="seg"><a href="#" onclick="seekTo(875.95); return false;" class="ts">[14:35]</a> hurt, so that&#x27;s a great thing.</div>
-<div class="seg"><a href="#" onclick="seekTo(877.99); return false;" class="ts">[14:37]</a> I guess let us know what you find out for somebody who lives in a trip.</div>
-<div class="seg"><a href="#" onclick="seekTo(884.78); return false;" class="ts">[14:44]</a> I will definitely fill you all in.</div>
-<div class="seg"><a href="#" onclick="seekTo(886.78); return false;" class="ts">[14:46]</a> The more I learn about how we can do this, I&#x27;ll fill you in.</div>
-<div class="seg"><a href="#" onclick="seekTo(889.46); return false;" class="ts">[14:49]</a> All right.</div>
-<div class="seg"><a href="#" onclick="seekTo(892.29); return false;" class="ts">[14:52]</a> All right.</div>
-<div class="seg"><a href="#" onclick="seekTo(893.29); return false;" class="ts">[14:53]</a> Or, it&#x27;s 2023-03 occurring, the closing and says vacation, but it says,</div>
-<div class="seg"><a href="#" onclick="seekTo(900.0); return false;" class="ts">[15:00]</a> to public use of the public way in Ali located in the city of Miami.</div>
-<div class="seg"><a href="#" onclick="seekTo(905.78); return false;" class="ts">[15:05]</a> 6.8 in Block 25, original plaque and retaining the right of any holder, the franchise</div>
-<div class="seg"><a href="#" onclick="seekTo(912.54); return false;" class="ts">[15:12]</a> other determined by the governing body to have a special right or privilege granted by the</div>
-<div class="seg"><a href="#" onclick="seekTo(917.54); return false;" class="ts">[15:17]</a> ordinance or legislative enactment, maintain their existing utilities and declaring an</div>
-<div class="seg"><a href="#" onclick="seekTo(922.36); return false;" class="ts">[15:22]</a> emergency as recommended by the city&#x27;s only and planning commission.</div>
-<div class="seg"><a href="#" onclick="seekTo(926.36); return false;" class="ts">[15:26]</a> You put all of that in your whole presentation, you don&#x27;t even need to talk to her.</div>
-<div class="seg"><a href="#" onclick="seekTo(933.36); return false;" class="ts">[15:33]</a> I don&#x27;t know, so basically Block 25, original plaque is where nine tribes sits and the</div>
-<div class="seg"><a href="#" onclick="seekTo(945.1); return false;" class="ts">[15:45]</a> original high school sat.</div>
-<div class="seg"><a href="#" onclick="seekTo(946.58); return false;" class="ts">[15:46]</a> So I got Martin Dahlier with the Momma Asmothori, so I was called and basically was told</div>
-<div class="seg"><a href="#" onclick="seekTo(954.32); return false;" class="ts">[15:54]</a> that that Ali, original in the interior to re-plat from like 1896, I think 1897, was never</div>
-<div class="seg"><a href="#" onclick="seekTo(967.54); return false;" class="ts">[16:07]</a> vacated.</div>
-<div class="seg"><a href="#" onclick="seekTo(970.54); return false;" class="ts">[16:10]</a> So I went and looked, pulled the re-plat of 1919, it has been vacated, it has the high</div>
-<div class="seg"><a href="#" onclick="seekTo(979.37); return false;" class="ts">[16:19]</a> school, all the law, all the, the Ali&#x27;s been vacated, and the high school was built, I&#x27;m not sure</div>
-<div class="seg"><a href="#" onclick="seekTo(987.69); return false;" class="ts">[16:27]</a> what years built, that&#x27;s where we have far back to black, it was 19 19 19, you&#x27;re</div>
-<div class="seg"><a href="#" onclick="seekTo(992.03); return false;" class="ts">[16:32]</a> got built, don&#x27;t you?</div>
-<div class="seg"><a href="#" onclick="seekTo(996.3199999999999); return false;" class="ts">[16:36]</a> I can&#x27;t say.</div>
-<div class="seg"><a href="#" onclick="seekTo(997.3199999999999); return false;" class="ts">[16:37]</a> So in, we all know, in 1969, it was the last high school class they forward down and built nine tribes</div>
-<div class="seg"><a href="#" onclick="seekTo(1006.69); return false;" class="ts">[16:46]</a> early seven, apparently wasn&#x27;t caught in.</div>
-<div class="seg"><a href="#" onclick="seekTo(1012.75); return false;" class="ts">[16:52]</a> So we were getting mixed up on this project they&#x27;re doing with the Momma Towers nine tribes,</div>
-<div class="seg"><a href="#" onclick="seekTo(1020.91); return false;" class="ts">[17:00]</a> they discovered that it was never officially vacated or equal to this.</div>
-<div class="seg"><a href="#" onclick="seekTo(1025.43); return false;" class="ts">[17:05]</a> Here we are, over 100 years later, doing it right and making it official.</div>
-<div class="seg"><a href="#" onclick="seekTo(1033.77); return false;" class="ts">[17:13]</a> So that&#x27;s, that&#x27;s what this one is, it&#x27;s basically vacated the Ali of Block 19 tribes sits and</div>
-<div class="seg"><a href="#" onclick="seekTo(1044.71); return false;" class="ts">[17:24]</a> walks here with any questions if you have it.</div>
-<div class="seg"><a href="#" onclick="seekTo(1047.77); return false;" class="ts">[17:27]</a> Why does he get a flat, you got a flat shows, Ali, you got a flat shows, Ali.</div>
-<div class="seg"><a href="#" onclick="seekTo(1052.05); return false;" class="ts">[17:32]</a> There is one in here, if you look on the very last page, it&#x27;s the, yeah, oh, there we go,</div>
-<div class="seg"><a href="#" onclick="seekTo(1064.29); return false;" class="ts">[17:44]</a> it&#x27;s on page, Indian territory, oh, yeah, oh, yeah, page six, so if you look, that&#x27;s the original</div>
-<div class="seg"><a href="#" onclick="seekTo(1074.8600000000001); return false;" class="ts">[17:54]</a> Indian territory flat from 1957, I don&#x27;t know, I&#x27;m sorry, I didn&#x27;t.</div>
-<div class="seg"><a href="#" onclick="seekTo(1080.0); return false;" class="ts">[18:00]</a> I didn&#x27;t scan the whole plat, because it was so big.</div>
-<div class="seg"><a href="#" onclick="seekTo(1083.54); return false;" class="ts">[18:03]</a> I didn&#x27;t even think it could tell where it was on the area.</div>
-<div class="seg"><a href="#" onclick="seekTo(1087.35); return false;" class="ts">[18:07]</a> So that&#x27;s from 1947, and then the replays from 1919,</div>
-<div class="seg"><a href="#" onclick="seekTo(1092.07); return false;" class="ts">[18:12]</a> showing when high school, you clearly see that it&#x27;s the alley</div>
-<div class="seg"><a href="#" onclick="seekTo(1102.18); return false;" class="ts">[18:22]</a> in the hall to our flat, and again, it wasn&#x27;t caught in the early 70s</div>
-<div class="seg"><a href="#" onclick="seekTo(1109.47); return false;" class="ts">[18:29]</a> when nine tribes built either.</div>
-<div class="seg"><a href="#" onclick="seekTo(1111.82); return false;" class="ts">[18:31]</a> So I guess it wasn&#x27;t wasn&#x27;t scowy at all.</div>
-<div class="seg"><a href="#" onclick="seekTo(1115.78); return false;" class="ts">[18:35]</a> They, they&#x27;re the ones that researched it for the mind of housing authority,</div>
-<div class="seg"><a href="#" onclick="seekTo(1119.58); return false;" class="ts">[18:39]</a> and there&#x27;s the ones that discovered that.</div>
-<div class="seg"><a href="#" onclick="seekTo(1122.29); return false;" class="ts">[18:42]</a> They&#x27;re never making it.</div>
-<div class="seg"><a href="#" onclick="seekTo(1129.09); return false;" class="ts">[18:49]</a> So, if you, the jig.</div>
-<div class="seg"><a href="#" onclick="seekTo(1132.88); return false;" class="ts">[18:52]</a> I&#x27;m making most of them improve.</div>
-<div class="seg"><a href="#" onclick="seekTo(1140.04); return false;" class="ts">[19:00]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(1141.04); return false;" class="ts">[19:01]</a> Seven.</div>
-<div class="seg"><a href="#" onclick="seekTo(1142.74); return false;" class="ts">[19:02]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1143.74); return false;" class="ts">[19:03]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1144.74); return false;" class="ts">[19:04]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1145.74); return false;" class="ts">[19:05]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1146.74); return false;" class="ts">[19:06]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1148.19); return false;" class="ts">[19:08]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1149.19); return false;" class="ts">[19:09]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1150.19); return false;" class="ts">[19:10]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1151.19); return false;" class="ts">[19:11]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1152.19); return false;" class="ts">[19:12]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1153.19); return false;" class="ts">[19:13]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1154.19); return false;" class="ts">[19:14]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1156.5); return false;" class="ts">[19:16]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1157.5); return false;" class="ts">[19:17]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1158.5); return false;" class="ts">[19:18]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1159.5); return false;" class="ts">[19:19]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1160.5); return false;" class="ts">[19:20]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1161.5); return false;" class="ts">[19:21]</a> Nine.</div>
-<div class="seg"><a href="#" onclick="seekTo(1162.5); return false;" class="ts">[19:22]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1165.01); return false;" class="ts">[19:25]</a> Five.</div>
-<div class="seg"><a href="#" onclick="seekTo(1166.01); return false;" class="ts">[19:26]</a> Ten.</div>
-<div class="seg"><a href="#" onclick="seekTo(1167.01); return false;" class="ts">[19:27]</a> do that. So you&#x27;re just. Oh. Oh. Oh. Shut up Ben.</div>
-<div class="seg"><a href="#" onclick="seekTo(1177.02); return false;" class="ts">[19:37]</a> It&#x27;s kind of too late now.</div>
-<div class="seg"><a href="#" onclick="seekTo(1184.85); return false;" class="ts">[19:44]</a> Lieutenant ordnance 22-12 A.</div>
-<div class="seg"><a href="#" onclick="seekTo(1187.91); return false;" class="ts">[19:47]</a> Amending and rewriting Chapter Four animals of the code of ordinances,</div>
-<div class="seg"><a href="#" onclick="seekTo(1192.39); return false;" class="ts">[19:52]</a> providing severability, providing for conflicting provisions,</div>
-<div class="seg"><a href="#" onclick="seekTo(1196.39); return false;" class="ts">[19:56]</a> for appealing all conflicting ordinances and establishing effective date.</div>
-<div class="seg"><a href="#" onclick="seekTo(1200.17); return false;" class="ts">[20:00]</a> The red line copy should get in your packets.</div>
-<div class="seg"><a href="#" onclick="seekTo(1211.46); return false;" class="ts">[20:11]</a> You can see where we found some typographical errors.</div>
-<div class="seg"><a href="#" onclick="seekTo(1218.46); return false;" class="ts">[20:18]</a> As well as we&#x27;ve had some new issues that have come up that caused us to want to make some changes.</div>
-<div class="seg"><a href="#" onclick="seekTo(1225.46); return false;" class="ts">[20:25]</a> There are minor changes in my opinion, but the changes are all displayed for you in the red line copy.</div>
-<div class="seg"><a href="#" onclick="seekTo(1232.46); return false;" class="ts">[20:32]</a> Most importantly, this incorporates the piece schedule that you all proved it theory a couple of weeks ago.</div>
-<div class="seg"><a href="#" onclick="seekTo(1243.84); return false;" class="ts">[20:43]</a> As far as the substantive changes probably the major issue and basically maybe we&#x27;ll think of some others.</div>
-<div class="seg"><a href="#" onclick="seekTo(1254.87); return false;" class="ts">[20:54]</a> We&#x27;ve had some issues come up where somebody...</div>
-<div class="seg"><a href="#" onclick="seekTo(1260.02); return false;" class="ts">[21:00]</a> And I just had possession of an animal for years, but they say, well, I&#x27;m not the owner.</div>
-<div class="seg"><a href="#" onclick="seekTo(1265.02); return false;" class="ts">[21:05]</a> It&#x27;s my sister.</div>
-<div class="seg"><a href="#" onclick="seekTo(1266.02); return false;" class="ts">[21:06]</a> I&#x27;m just holding this thought on my sister.</div>
-<div class="seg"><a href="#" onclick="seekTo(1269.02); return false;" class="ts">[21:09]</a> Well, that has caused some problems.</div>
-<div class="seg"><a href="#" onclick="seekTo(1272.14); return false;" class="ts">[21:12]</a> And this just clarifies if you are really asking, like,</div>
-<div class="seg"><a href="#" onclick="seekTo(1277.14); return false;" class="ts">[21:17]</a> the owner before a long period of time,</div>
-<div class="seg"><a href="#" onclick="seekTo(1280.14); return false;" class="ts">[21:20]</a> at least between that person and the city, you are the owner.</div>
-<div class="seg"><a href="#" onclick="seekTo(1286.14); return false;" class="ts">[21:26]</a> But it doesn&#x27;t address the issue between that person and whoever they&#x27;re saying,</div>
-<div class="seg"><a href="#" onclick="seekTo(1291.14); return false;" class="ts">[21:31]</a> the real owner is, but for purposes of our own,</div>
-<div class="seg"><a href="#" onclick="seekTo(1294.18); return false;" class="ts">[21:34]</a> that&#x27;s just saying that they are the owner.</div>
-<div class="seg"><a href="#" onclick="seekTo(1297.18); return false;" class="ts">[21:37]</a> I don&#x27;t know.</div>
-<div class="seg"><a href="#" onclick="seekTo(1298.43); return false;" class="ts">[21:38]</a> I don&#x27;t know.</div>
-<div class="seg"><a href="#" onclick="seekTo(1299.43); return false;" class="ts">[21:39]</a> Maybe you&#x27;ll think of a couple of other substance and changes,</div>
-<div class="seg"><a href="#" onclick="seekTo(1302.43); return false;" class="ts">[21:42]</a> but I think that was the main thing.</div>
-<div class="seg"><a href="#" onclick="seekTo(1304.43); return false;" class="ts">[21:44]</a> But we&#x27;re changing it.</div>
-<div class="seg"><a href="#" onclick="seekTo(1306.43); return false;" class="ts">[21:46]</a> But because the type of owners, and the preferred work,</div>
-<div class="seg"><a href="#" onclick="seekTo(1311.43); return false;" class="ts">[21:51]</a> working changes kind of goes throughout the whole thing,</div>
-<div class="seg"><a href="#" onclick="seekTo(1315.43); return false;" class="ts">[21:55]</a> we try to be best to just redraft the entire ordinance.</div>
-<div class="seg"><a href="#" onclick="seekTo(1321.78); return false;" class="ts">[22:01]</a> We&#x27;re talking about almost the person holding it off,</div>
-<div class="seg"><a href="#" onclick="seekTo(1348.69); return false;" class="ts">[22:28]</a> but that allows them to do is that we have room for an actual owner surrender.</div>
-<div class="seg"><a href="#" onclick="seekTo(1353.69); return false;" class="ts">[22:33]</a> It allows that person that&#x27;s cared for the dog for the last year or two years,</div>
-<div class="seg"><a href="#" onclick="seekTo(1357.69); return false;" class="ts">[22:37]</a> or whatever, to go ahead and surrender that dog has to get her.</div>
-<div class="seg"><a href="#" onclick="seekTo(1360.69); return false;" class="ts">[22:40]</a> Because all of our horns say,</div>
-<div class="seg"><a href="#" onclick="seekTo(1362.69); return false;" class="ts">[22:42]</a> the owner has to make that for exactly what you&#x27;re saying.</div>
-<div class="seg"><a href="#" onclick="seekTo(1365.69); return false;" class="ts">[22:45]</a> So if you start using this ordinance already,</div>
-<div class="seg"><a href="#" onclick="seekTo(1385.22); return false;" class="ts">[23:05]</a> we have a room for surrender,</div>
-<div class="seg"><a href="#" onclick="seekTo(1388.6); return false;" class="ts">[23:08]</a> so we have the opportunity to put that into effect.</div>
-<div class="seg"><a href="#" onclick="seekTo(1392.6); return false;" class="ts">[23:12]</a> So we have that.</div>
-<div class="seg"><a href="#" onclick="seekTo(1394.63); return false;" class="ts">[23:14]</a> So you guys have to start running your ticket journey there.</div>
-<div class="seg"><a href="#" onclick="seekTo(1410.3); return false;" class="ts">[23:30]</a> And you have not because we don&#x27;t have the key schedule for that.</div>
-<div class="seg"><a href="#" onclick="seekTo(1413.3); return false;" class="ts">[23:33]</a> We have to be an act that is known as this appointment staff.</div>
-<div class="seg"><a href="#" onclick="seekTo(1416.3); return false;" class="ts">[23:36]</a> I hear you guys still getting called out a lot.</div>
-<div class="seg"><a href="#" onclick="seekTo(1423.72); return false;" class="ts">[23:43]</a> I make a motion we improve.</div>
-<div class="seg"><a href="#" onclick="seekTo(1433.79); return false;" class="ts">[23:53]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(1436.81); return false;" class="ts">[23:56]</a> Estep.</div>
-<div class="seg"><a href="#" onclick="seekTo(1437.97); return false;" class="ts">[23:57]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(1438.97); return false;" class="ts">[23:58]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(1440.05); return false;" class="ts">[24:00]</a> All right, 11 is the emergency clause for that same ordinance.</div>
-<div class="seg"><a href="#" onclick="seekTo(1447.11); return false;" class="ts">[24:07]</a> Motion.</div>
-<div class="seg"><a href="#" onclick="seekTo(1448.11); return false;" class="ts">[24:08]</a> All right.</div>
-<div class="seg"><a href="#" onclick="seekTo(1450.17); return false;" class="ts">[24:10]</a> 12 open-way litigation settlement through the attorney general&#x27;s office, authorized city manager sign.</div>
-<div class="seg"><a href="#" onclick="seekTo(1460.74); return false;" class="ts">[24:20]</a> The sub division settlement participation.</div>
-<div class="seg"><a href="#" onclick="seekTo(1468.97); return false;" class="ts">[24:28]</a> And recently got some more information in regards to the opioid litigation that we agreed to participate</div>
-<div class="seg"><a href="#" onclick="seekTo(1478.97); return false;" class="ts">[24:38]</a> in a year ago, although we have not gotten here the detail.</div>
-<div class="seg"><a href="#" onclick="seekTo(1485.1); return false;" class="ts">[24:45]</a> That this was, as we did with the previous one, I would point out that the A&#x27;s as we haven&#x27;t actually recently</div>
-<div class="seg"><a href="#" onclick="seekTo(1493.1); return false;" class="ts">[24:53]</a> and did many from the prior one.</div>
-<div class="seg"><a href="#" onclick="seekTo(1496.1); return false;" class="ts">[24:56]</a> But the first litigation dealt with the attorney general&#x27;s settlement with some of the drug</div>
-<div class="seg"><a href="#" onclick="seekTo(1507.54); return false;" class="ts">[25:07]</a> manufacturing companies.</div>
-<div class="seg"><a href="#" onclick="seekTo(1510.54); return false;" class="ts">[25:10]</a> This one is with five of the largest drug distribution companies.</div>
-<div class="seg"><a href="#" onclick="seekTo(1519.21); return false;" class="ts">[25:19]</a> They include PDA, LRQ, CVS, Walgreens, and Walgreens beyond that.</div>
-<div class="seg"><a href="#" onclick="seekTo(1528.78); return false;" class="ts">[25:28]</a> On the break, we don&#x27;t have a whole lot more information.</div>
-<div class="seg"><a href="#" onclick="seekTo(1533.03); return false;" class="ts">[25:33]</a> Other than the deadline before getting it turned in is tomorrow.</div>
-<div class="seg"><a href="#" onclick="seekTo(1538.03); return false;" class="ts">[25:38]</a> I like the motion.</div>
-<div class="seg"><a href="#" onclick="seekTo(1556.16); return false;" class="ts">[25:56]</a> We give the city manager authorization.</div>
-<div class="seg"><a href="#" onclick="seekTo(1558.61); return false;" class="ts">[25:58]</a> Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(1561.82); return false;" class="ts">[26:01]</a> Third.</div>
-<div class="seg"><a href="#" onclick="seekTo(1562.86); return false;" class="ts">[26:02]</a> Third.</div>
-<div class="seg"><a href="#" onclick="seekTo(1563.86); return false;" class="ts">[26:03]</a> One.</div>
-<div class="seg"><a href="#" onclick="seekTo(1564.86); return false;" class="ts">[26:04]</a> Third.</div>
-<div class="seg"><a href="#" onclick="seekTo(1566.18); return false;" class="ts">[26:06]</a> Third.</div>
-<div class="seg"><a href="#" onclick="seekTo(1567.18); return false;" class="ts">[26:07]</a> Third.</div>
-<div class="seg"><a href="#" onclick="seekTo(1568.18); return false;" class="ts">[26:08]</a> Another new business of any, which is a...</div>
-<div class="seg"><a href="#" onclick="seekTo(1569.18); return false;" class="ts">[26:09]</a> Raisinsants posting this agenda.</div>
-<div class="seg"><a href="#" onclick="seekTo(1573.6399999999999); return false;" class="ts">[26:13]</a> Fourteen staff reports.</div>
-<div class="seg"><a href="#" onclick="seekTo(1579.6100000000001); return false;" class="ts">[26:19]</a> Fifteen.</div>
-<div class="seg"><a href="#" onclick="seekTo(1580.6100000000001); return false;" class="ts">[26:20]</a> Mayor counsel community announcements.</div>
-<div class="seg"><a href="#" onclick="seekTo(1582.6100000000001); return false;" class="ts">[26:22]</a> I want to say to talk about the community clean-ups a little bit.</div>
-<div class="seg"><a href="#" onclick="seekTo(1594.1); return false;" class="ts">[26:34]</a> I&#x27;ve been going on for probably a month or so.</div>
-<div class="seg"><a href="#" onclick="seekTo(1597.1); return false;" class="ts">[26:37]</a> Maybe a little longer in that.</div>
-<div class="seg"><a href="#" onclick="seekTo(1600.1); return false;" class="ts">[26:40]</a> Of course, Berkeley, already has been doing it for several years now, the rear view part, and really, both the time it was just having as parents, that&#x27;s starting to change a little bit, he&#x27;s actually getting a crowd there to help him come.</div>
-<div class="seg"><a href="#" onclick="seekTo(1614.1); return false;" class="ts">[26:54]</a> And, Gerald with the show page has started a little bit, and yesterday they did-</div>
-<div class="seg"><a href="#" onclick="seekTo(1620.0); return false;" class="ts">[27:00]</a> one from about 22nd, 22nd album and went east to Mushroom Farm Road and picked up 8,000 pounds</div>
-<div class="seg"><a href="#" onclick="seekTo(1631.12); return false;" class="ts">[27:11]</a> of trash, which was pretty amazing.</div>
-<div class="seg"><a href="#" onclick="seekTo(1636.15); return false;" class="ts">[27:16]</a> Yeah, it&#x27;s a shocker, really, there was that much trash there and I&#x27;ve helped with a few</div>
-<div class="seg"><a href="#" onclick="seekTo(1642.99); return false;" class="ts">[27:22]</a> of them and when you start, you&#x27;re like, all right, that much trash here, but then when you&#x27;re</div>
-<div class="seg"><a href="#" onclick="seekTo(1647.71); return false;" class="ts">[27:27]</a> done, you see all the bags you picked up, you know, I got my gosh for all this comfort.</div>
-<div class="seg"><a href="#" onclick="seekTo(1652.03); return false;" class="ts">[27:32]</a> Now, my grandpa will whip my tail if he just throws it up like that, so I don&#x27;t know where</div>
-<div class="seg"><a href="#" onclick="seekTo(1656.75); return false;" class="ts">[27:36]</a> it&#x27;s all coming from, but, you know, we had the end boy, J.V. and Osborne, J.V. was probably</div>
-<div class="seg"><a href="#" onclick="seekTo(1663.93); return false;" class="ts">[27:43]</a> seven or eight years old, he did a trash pick up, those money will go pick up trash, he did</div>
-<div class="seg"><a href="#" onclick="seekTo(1668.25); return false;" class="ts">[27:48]</a> around in the air, and he picked up four or five bags of trash there, so I like where it&#x27;s</div>
-<div class="seg"><a href="#" onclick="seekTo(1674.21); return false;" class="ts">[27:54]</a> going, I like the fact that people are getting involved and getting down, it really helps.</div>
-<div class="seg"><a href="#" onclick="seekTo(1678.73); return false;" class="ts">[27:58]</a> Makes things look a lot better, and you really don&#x27;t realize it that you drive by, and you see</div>
-<div class="seg"><a href="#" onclick="seekTo(1683.49); return false;" class="ts">[28:03]</a> you, wow, it did make a big difference.</div>
-<div class="seg"><a href="#" onclick="seekTo(1686.13); return false;" class="ts">[28:06]</a> So I&#x27;m going to probably put it on our, in fact, I&#x27;ll have him listen to it now, our next council</div>
-<div class="seg"><a href="#" onclick="seekTo(1691.83); return false;" class="ts">[28:11]</a> meeting will be the study session, and I would like to have it on there for us to talk about,</div>
-<div class="seg"><a href="#" onclick="seekTo(1698.29); return false;" class="ts">[28:18]</a> so as leaders of the community, to lead something that are each of our districts, to</div>
-<div class="seg"><a href="#" onclick="seekTo(1703.95); return false;" class="ts">[28:23]</a> try and get to community behind us, and thus lead it, try to get some more stuff done, so we</div>
-<div class="seg"><a href="#" onclick="seekTo(1709.03); return false;" class="ts">[28:29]</a> talk about that next time around, he coming out of that one is, or if you like it or whatever, we&#x27;ll</div>
-<div class="seg"><a href="#" onclick="seekTo(1714.47); return false;" class="ts">[28:34]</a> talk about it next time around, so, but if you have a chance, join in to one of these, it&#x27;s pretty</div>
-<div class="seg"><a href="#" onclick="seekTo(1722.19); return false;" class="ts">[28:42]</a> very rewarding actually, when you see it, when you&#x27;re done, anybody else, number 16, City</div>
-<div class="seg"><a href="#" onclick="seekTo(1730.39); return false;" class="ts">[28:50]</a> Manager Communications.</div>
-<div class="seg"><a href="#" onclick="seekTo(1732.42); return false;" class="ts">[28:52]</a> So Mayor and members of the council, I got a couple items on here, I wanted to mention first,</div>
-<div class="seg"><a href="#" onclick="seekTo(1737.3); return false;" class="ts">[28:57]</a> this week, starting Thursday and running through Saturday, we have the my my little theater</div>
-<div class="seg"><a href="#" onclick="seekTo(1743.59); return false;" class="ts">[29:03]</a> production of the 25th annual Putnam County Spelling Bee, so that&#x27;s the my little theater</div>
-<div class="seg"><a href="#" onclick="seekTo(1750.45); return false;" class="ts">[29:10]</a> production, 7 to 9 p.m., and then Saturday, 230 to 430, and one of the things that&#x27;s kind</div>
-<div class="seg"><a href="#" onclick="seekTo(1759.85); return false;" class="ts">[29:19]</a> of different from this particular production, that others, is they will actually have four audience</div>
-<div class="seg"><a href="#" onclick="seekTo(1767.05); return false;" class="ts">[29:27]</a> members that will participate on stage in the Spelling Bee as part of the production, to</div>
-<div class="seg"><a href="#" onclick="seekTo(1773.8); return false;" class="ts">[29:33]</a> give it up, to challenge anyone in the production of the Spelling Bee, you should be there,</div>
-<div class="seg"><a href="#" onclick="seekTo(1781.2); return false;" class="ts">[29:41]</a> and see if you can hit upon state, I think the mayor needs to do it, I mean, I&#x27;m a bit</div>
-<div class="seg"><a href="#" onclick="seekTo(1785.48); return false;" class="ts">[29:45]</a> first of all, I certainly would not be mean, but we&#x27;re really excited about that, they always</div>
-<div class="seg"><a href="#" onclick="seekTo(1792.21); return false;" class="ts">[29:52]</a> do a fantastic job with their productions, and then of course that&#x27;s this week, and then</div>
-<div class="seg"><a href="#" onclick="seekTo(1798.25); return false;" class="ts">[29:58]</a> I also wanted to mention again that.</div>
-<div class="seg"><a href="#" onclick="seekTo(1800.0); return false;" class="ts">[30:00]</a> The mural fest is coming up on the 29th of this month, and that&#x27;s 10 a.m. to the 33 p.m.</div>
-<div class="seg"><a href="#" onclick="seekTo(1808.74); return false;" class="ts">[30:08]</a> on Saturday April 29th. We&#x27;ll have 10 muralists painting. We have kids area with</div>
-<div class="seg"><a href="#" onclick="seekTo(1815.22); return false;" class="ts">[30:15]</a> petting zoo, we have the art market, car show, vendor tents, food trucks, and I believe</div>
-<div class="seg"><a href="#" onclick="seekTo(1820.5); return false;" class="ts">[30:20]</a> our Chick-fil-A food truck will be there as well. So it should be a great turnout. It&#x27;s</div>
-<div class="seg"><a href="#" onclick="seekTo(1825.38); return false;" class="ts">[30:25]</a> certainly wanted everybody in the community to go out and take advantage of that on the 29th.</div>
-<div class="seg"><a href="#" onclick="seekTo(1829.5); return false;" class="ts">[30:29]</a> Saturday down town, mural fest.</div>
-<div class="seg"><a href="#" onclick="seekTo(1833.26); return false;" class="ts">[30:33]</a> I&#x27;m 17 in German. Motion. Second.</div>
-<div class="seg"><a href="#" onclick="seekTo(1838.31); return false;" class="ts">[30:38]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(1841.86); return false;" class="ts">[30:41]</a> Thanks, man.</div>
-</div></section>
+</div>
+</div>
+</div>
 
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag(&#x27;js&#x27;, new Date()); gtag(&#x27;config&#x27;, &#x27;G-X9VGCCGG49&#x27;, { &#x27;request_origin&#x27;:&#x27;external&#x27; }); City Council Regular Meeting body{ margin-top: .5in; margin-bottom: .5in; margin-right: .5in ; margin-left: .5in; text-align: justify; font-family: Calibri, Candara, Segoe, &#x27;Segoe UI&#x27;, Optima, Arial, sans-serif; font-size: 14px; } table{ text-align: justify; border-spacing: 5px; padding: 0; font-size: 11pt; } td { text-align: justify; vertical-align:top; } .numberspace { width: 30px; vertical-align: top; text-align: left; } .ul {text-decoration: underline;} /* Prevents logo resizing on print */ img { max-width: 100%; height: auto; } NOTICE OF REGULAR MEETING AND AGENDA OF THE MIAMI CITY COUNCIL Monday, April 17, 2023 6:15 p.m. OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY MIAMI CIVIC CENTER 129 5th Avenue Northwest, Miami, Oklahoma Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on www.miamiokla.net. THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA: blockquote { margin-left: 40px; margin-right: 0px; margin-top: 0px; margin-bottom: 0px; }@media print { a { color: black; } } 1. Call to Order&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 2. Public Input and Unscheduled Personal Appearances Each person will be limited to 3 minutes on agenda items only. The purpose of this agenda item is to provide an opportunity for citizens&#x27; comments on agenda items. Council members do not engage in discussion under this agenda item, and staff members are directed not to. If you seek discussion or inquiry, please contact your Councilmember, the Mayor or the office of the City Manager. Responses to citizen comments, if any, will occur under the applicable agenda item or may be reserved for further response by phone call, personal meeting, or a posting on the website: www.miamiokla.net 3. *Action Item* CONSENT AGENDA&amp;nbsp; By unanimous consent the public body may designate noncontroversial items to be considered in one motion and one vote.&amp;nbsp; The public body may add items from the regular agenda and approve. Posted agenda items not added to the consent docket will be considered separately. Staff recommends that Item 4 through Item 5 be placed on the consent agenda. 4. *Action Item* Claims&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Claims List Credit Cards 5. *Action Item* Minutes:&amp;nbsp; March 27, 2023 (Regular) and April 03, 2023 (Regular)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Minutes: March 27, 2023 Minutes: April 03, 2023 6. *Action Item* Dispatch Services Memorandum of Understanding With Ottawa County E911 Trust Authority&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; T. Anderson&amp;nbsp; &amp;nbsp; BA Memorandum of Understanding 7. Discussion Regarding the Status of the Public Works Building Fire and Possible Next Steps&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mark Hill BA 8. *Action Item* Ordinance 2023-03 Declaring the Closing and Vacation to Public Use of the Public Way and Alley Located in the City of Miami, Situated in Block 25 of the Original Plat I, and Retaining the Rights of Any Holder of a Franchise or Others Determined by the Governing Body to Have a Special Right or Privilege Granted by Ordinance or Legislative Enactment to Maintain Their Existing Utilities, And Declaring an Emergency, As Recommended by the City Zoning and Planning Commission&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Travis Jones BA Ordinance Supplemental Information 9. *Action Item* Emergency Clause for Ordinance 2023-03 Declaring the Closing and Vacation to Public Use of the Public Way and Alley Located in the City of Miami, Situated in Block 25 of the Original Plat I, and Retaining the Rights of Any Holder of a Franchise or Others Determined by the Governing Body to Have a Special Right or Privilege Granted by Ordinance or Legislative Enactment to Maintain Their Existing Utilities, And Declaring an Emergency&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Travis Jones 10. *Action Item* Ordinance 2022-12 (a) Amending and Rewriting Chapter 4 (Animals) of the Code of Ordinances; Providing Severability; Providing for Conflicting Provisions; Repealing all Conflicting Ordinances; and Establishing an Effective Date&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Ben Loring/Kevin Browning/Maycee Wilkins BA Ordinance Redlined Proposed Changes 11. *Action Item* Emergency Clause for Ordinance 2022-12 (a) Amending and Rewriting Chapter 4 (Animals) of the Code of Ordinances; Providing Severability; Providing for Conflicting Provisions; Repealing all Conflicting Ordinances; and Establishing an Effective Date&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 12. *Action Item* Opioid Litigation Settlement Through the Attorney General&amp;rsquo;s Office; Authorize City Manager to Sign the Subdivision Settlement Participation Forms&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Ben Loring BA Participation Forms 13. *Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9)) City Council/&amp;nbsp; Bo Reese 14. Staff Reports (Written report included in packet, if available staff is present for questions)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Facilities 15. Mayor and Council Community Announcements&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 16. City Manager&amp;rsquo;s Communications&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Bo Reese 17. *Action Item* Adjournment&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office. We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>I&#x27;ll call the other records scheduled to be in my office at Council for Monday April 17th, 2023. Public input on schedule personal chances we have none three consent agenda staff recommends will approve items four and five? Okay, I walked through it tonight and that&#x27;s like probably 60% complete maybe. That is what i thought but I just wanted to ask for a question. Thank you, thank you. Six bat six this bats services remember and of understanding with the auto county e911 trust authority This is our annual contract on the number U at 9 one board it&#x27;s them given us money currently give us 5000 month and 1211 dollars a month to help us dispatch incentive longevity incentive And that was pretty too disposed. We&#x27;re just renewing this amount of our MRE with 9 one board It&#x27;s the same as last year is it? Yes, yeah nothing has changed we are potentially looking change in future once Once again on your center if not 1 more do start feed for over this batch 4 And how about a bill and other so we may have others in the future right now where state says well That&#x27;s made down with a police on that building I&#x27;m sorry, but there is no need to go Right away from AT&amp;T To do something We can&#x27;t get some of those AT We&#x27;ve been to the AT We&#x27;ve been some really bad supply chain issues Our project was the light almost a year it just came in last week Generator is all here and half they couldn&#x27;t get one This has always very highly proprietary equipment From this game of this thing&#x27;s changed even for electrical The equipment, you know All of the systems are software, hardware all that stuff is now we&#x27;re getting in And even proprietary stuff and God love them Everything it&#x27;s just like Even a new deal We&#x27;ve got correct if were responded to the mistake Our dispatch can actually put him on video Tell what going onto us no while I&#x27;m running around That&#x27;s why That&#x27;s a lot of stuff Absolutely We&#x27;re exciting stuff in this package and be wide saving Great stuff, unfortunately it just putting a lot Up his the pot together It has been time consuming to get that done I really feel like we are getting close Put on a bit around Stretch out about 100 times Literally thought Last summer last fall, last year First day, I&#x27;m going go for a lot more If I had to put it on From a construction perspective, the standard answer is two weeks Two week&#x27;s has 2-weeks So you know no more than just bought a rainy rain Some scorned candy wine for everybody Candy was dressed up and he puts my funds in that We spend about 1.5 year ready We have a lot of them with this product I think car radios and water And the water drive all other parts It&#x27;s just been a lot of moving parts and take one time in your life Been down close wanting to know if he can vote on this Or if you need lipstick stain Okay, thank goodness for me Second Hi Hi Thank you The discussion regarding the status is public works building fire We&#x27;ll see you in the next steps Mr. Markew He is 5 years older than he came from static light choice We had vapor to build up this trans burn Feel over into the bulk of time Either a static set it off or Hes said we have electrical sparks on layers Had been in condoned wall with there&#x27;s nothing Vibrs when you watch video It was big cloud Explosions One along the layer, air, air, air, air He released two days later Said we&#x27;re done, you are good We don&#x27;t suspect anything And then I&#x27;m going to send in regular driver of the gestures They were flying into the house and he was George&#x27;s and I There would be a gesture coming in A structural engineer coming In tomorrows been taken through that point The beams could have built The heat was tremendous just giving idea Fire wasn&#x27;t in the northwest corner Offs a catacorn, southeast quarters Far structure about waste time There wouldnít no flame up there It would have been this heat also Everything that shot is devoured To be able to do everything We should track for an air I&#x27;ll find it It was an excavator in there The tabs on the metal to be surrounded Tires didn&#x27;t work Tires were built and it ran away Was that kind of heat higher you go To eat its worst That fire specter said he is probably a 1,300 degree city Mark or have done an excellent job We did not hold off fire But we had tremendous heat there Through the problem We had to do some other stuff All the bulbs got spot Now there is start a rest We are going in there Everything has lost And that&#x27;s all five Thatís where we were at When you go through all this process It also like To make it clear Our city procurement guidelines Give us an interview To wave formal bid procedures for most purchases And after review of these and review them with council I do believe that this justifies In the situation Using emergency permit Wouldn&#x27;t be beneficial to city Because it basically, if a jeopardizes public health Safety economic loss Or further damaged property of City money It is in our best interest to move forward We need the shop To be up and running And we have to maintain our eq</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag(&#x27;js&#x27;, new Date()); gtag(&#x27;config&#x27;, &#x27;G-X9VGCCGG49&#x27;, { &#x27;request_origin&#x27;:&#x27;external&#x27; }); City Council Regular Meeting body{ margin-top: .5in; margin-bottom: .5in; margin-right: .5in ; margin-left: .5in; text-align: justify; font-family: Calibri, Candara, Segoe, &#x27;Segoe UI&#x27;, Optima, Arial, sans-serif; font-size: 14px; } table{ text-align: justify; border-spacing: 5px; padding: 0; font-size: 11pt; } td { text-align: justify; vertical-align:top; } .numberspace { width: 30px; vertical-align: top; text-align: left; } .ul {text-decoration: underline;} /* Prevents logo resizing on print */ img { max-width: 100%; height: auto; } NOTICE OF REGULAR MEETING AND AGENDA OF THE MIAMI CITY COUNCIL Monday, April 17, 2023 6:15 p.m. OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY MIAMI CIVIC CENTER 129 5th Avenue Northwest, Miami, Oklahoma Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on www.miamiokla.net. THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA: blockquote { margin-left: 40px; margin-right: 0px; margin-top: 0px; margin-bottom: 0px; }@media print { a { color: black; } } 1. Call to Order&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 2. Public Input and Unscheduled Personal Appearances Each person will be limited to 3 minutes on agenda items only. The purpose of this agenda item is to provide an opportunity for citizens&#x27; comments on agenda items. Council members do not engage in discussion under this agenda item, and staff members are directed not to. If you seek discussion or inquiry, please contact your Councilmember, the Mayor or the office of the City Manager. Responses to citizen comments, if any, will occur under the applicable agenda item or may be reserved for further response by phone call, personal meeting, or a posting on the website: www.miamiokla.net 3. *Action Item* CONSENT AGENDA&amp;nbsp; By unanimous consent the public body may designate noncontroversial items to be considered in one motion and one vote.&amp;nbsp; The public body may add items from the regular agenda and approve. Posted agenda items not added to the consent docket will be considered separately. Staff recommends that Item 4 through Item 5 be placed on the consent agenda. 4. *Action Item* Claims&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Claims List Credit Cards 5. *Action Item* Minutes:&amp;nbsp; March 27, 2023 (Regular) and April 03, 2023 (Regular)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Minutes: March 27, 2023 Minutes: April 03, 2023 6. *Action Item* Dispatch Services Memorandum of Understanding With Ottawa County E911 Trust Authority&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; T. Anderson&amp;nbsp; &amp;nbsp; BA Memorandum of Understanding 7. Discussion Regarding the Status of the Public Works Building Fire and Possible Next Steps&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mark Hill BA 8. *Action Item* Ordinance 2023-03 Declaring the Closing and Vacation to Public Use of the Public Way and Alley Located in the City of Miami, Situated in Block 25 of the Original Plat I, and Retaining the Rights of Any Holder of a Franchise or Others Determined by the Governing Body to Have a Special Right or Privilege Granted by Ordinance or Legislative Enactment to Maintain Their Existing Utilities, And Declaring an Emergency, As Recommended by the City Zoning and Planning Commission&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Travis Jones BA Ordinance Supplemental Information 9. *Action Item* Emergency Clause for Ordinance 2023-03 Declaring the Closing and Vacation to Public Use of the Public Way and Alley Located in the City of Miami, Situated in Block 25 of the Original Plat I, and Retaining the Rights of Any Holder of a Franchise or Others Determined by the Governing Body to Have a Special Right or Privilege Granted by Ordinance or Legislative Enactment to Maintain Their Existing Utilities, And Declaring an Emergency&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Travis Jones 10. *Action Item* Ordinance 2022-12 (a) Amending and Rewriting Chapter 4 (Animals) of the Code of Ordinances; Providing Severability; Providing for Conflicting Provisions; Repealing all Conflicting Ordinances; and Establishing an Effective Date&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Ben Loring/Kevin Browning/Maycee Wilkins BA Ordinance Redlined Proposed Changes 11. *Action Item* Emergency Clause for Ordinance 2022-12 (a) Amending and Rewriting Chapter 4 (Animals) of the Code of Ordinances; Providing Severability; Providing for Conflicting Provisions; Repealing all Conflicting Ordinances; and Establishing an Effective Date&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 12. *Action Item* Opioid Litigation Settlement Through the Attorney General&amp;rsquo;s Office; Authorize City Manager to Sign the Subdivision Settlement Participation Forms&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Ben Loring BA Participation Forms 13. *Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9)) City Council/&amp;nbsp; Bo Reese 14. Staff Reports (Written report included in packet, if available staff is present for questions)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Facilities 15. Mayor and Council Community Announcements&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 16. City Manager&amp;rsquo;s Communications&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Bo Reese 17. *Action Item* Adjournment&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office. We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div></div></div></div></div>
+</div>
 
-
-
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

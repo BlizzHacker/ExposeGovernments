@@ -1,521 +1,880 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami Special Utility Authority (MSUA) - Jan 21, 2025 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami Special Utility Authority (MSUA)</h1>
-<div class="meta">📅 Jan 21, 2025 | Clip #589</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (2)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami Special Utility Authority (MSUA)</h1>
+<div class="meeting-meta">
+<span>📅 Jan 21, 2025</span>
+<span>⏱️ 00h 29m</span>
+<span>🔖 Clip #589</span>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
 </div>
-</section>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/589" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
-<div class="seg"><a href="#" onclick="seekTo(0.27); return false;" class="ts">[00:00]</a> I have a lot of the invocation of our chief, but Chris General, Heavenly Father, we&#x27;re thankful for you and we&#x27;re thankful for this community and the blessing it is for so many ways to ask that you leave the meeting tonight that the discussion that&#x27;s had is honest and respectful and productive and give our council members wisdom as they make decisions for the community that affect us as all in your name we pray.</div>
-<div class="seg"><a href="#" onclick="seekTo(23.74); return false;" class="ts">[00:23]</a> Congratulations to the flag of the United States of America and to the Republic for which it stands, one nation under God in a visible liberty and justice for our.</div>
-<div class="seg"><a href="#" onclick="seekTo(37.74); return false;" class="ts">[00:37]</a> For the people of the world, a personal.</div>
-<div class="seg"><a href="#" onclick="seekTo(45.13); return false;" class="ts">[00:45]</a> Parents.</div>
-<div class="seg"><a href="#" onclick="seekTo(46.67); return false;" class="ts">[00:46]</a> 5.</div>
-<div class="seg"><a href="#" onclick="seekTo(47.67); return false;" class="ts">[00:47]</a> Plains list.</div>
-<div class="seg"><a href="#" onclick="seekTo(48.67); return false;" class="ts">[00:48]</a> Most of the proof.</div>
-<div class="seg"><a href="#" onclick="seekTo(49.67); return false;" class="ts">[00:49]</a> 2.</div>
-<div class="seg"><a href="#" onclick="seekTo(51.98); return false;" class="ts">[00:51]</a> 5.</div>
-<div class="seg"><a href="#" onclick="seekTo(52.98); return false;" class="ts">[00:52]</a> 5.</div>
-<div class="seg"><a href="#" onclick="seekTo(57.98); return false;" class="ts">[00:57]</a> 6.</div>
-<div class="seg"><a href="#" onclick="seekTo(61.07); return false;" class="ts">[01:01]</a> 4.</div>
-<div class="seg"><a href="#" onclick="seekTo(62.07); return false;" class="ts">[01:02]</a> 4.</div>
-<div class="seg"><a href="#" onclick="seekTo(67.11); return false;" class="ts">[01:07]</a> 6.</div>
-<div class="seg"><a href="#" onclick="seekTo(68.11); return false;" class="ts">[01:08]</a> 7.</div>
-<div class="seg"><a href="#" onclick="seekTo(69.11); return false;" class="ts">[01:09]</a> 5.</div>
-<div class="seg"><a href="#" onclick="seekTo(70.11); return false;" class="ts">[01:10]</a> 5.</div>
-<div class="seg"><a href="#" onclick="seekTo(71.11); return false;" class="ts">[01:11]</a> 7.</div>
-<div class="seg"><a href="#" onclick="seekTo(72.11); return false;" class="ts">[01:12]</a> 7.</div>
-<div class="seg"><a href="#" onclick="seekTo(73.37); return false;" class="ts">[01:13]</a> 7.</div>
-<div class="seg"><a href="#" onclick="seekTo(74.37); return false;" class="ts">[01:14]</a> 7.</div>
-<div class="seg"><a href="#" onclick="seekTo(76.37); return false;" class="ts">[01:16]</a> meeting.</div>
-<div class="seg"><a href="#" onclick="seekTo(77.37); return false;" class="ts">[01:17]</a> Motion approved.</div>
-<div class="seg"><a href="#" onclick="seekTo(80.83); return false;" class="ts">[01:20]</a> Stoneball.</div>
-<div class="seg"><a href="#" onclick="seekTo(81.83); return false;" class="ts">[01:21]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(82.83); return false;" class="ts">[01:22]</a> Barnes.</div>
-<div class="seg"><a href="#" onclick="seekTo(83.83); return false;" class="ts">[01:23]</a> Jones.</div>
-<div class="seg"><a href="#" onclick="seekTo(84.83); return false;" class="ts">[01:24]</a> Estep.</div>
-<div class="seg"><a href="#" onclick="seekTo(85.86); return false;" class="ts">[01:25]</a> Parker.</div>
-<div class="seg"><a href="#" onclick="seekTo(86.86); return false;" class="ts">[01:26]</a> Hey, you know, Stratten Edmonds and Palmer Claim for PIN School of G.R.D.A.</div>
-<div class="seg"><a href="#" onclick="seekTo(90.86); return false;" class="ts">[01:30]</a> Realizing Associated Complaint.</div>
-<div class="seg"><a href="#" onclick="seekTo(92.86); return false;" class="ts">[01:32]</a> We&#x27;re seeing proceeding in the amount of $945 dollars.</div>
-<div class="seg"><a href="#" onclick="seekTo(97.86); return false;" class="ts">[01:37]</a> I guess we&#x27;re getting this.</div>
-<div class="seg"><a href="#" onclick="seekTo(99.86); return false;" class="ts">[01:39]</a> That he said $9 or $4 or $5 or we spend.</div>
-<div class="seg"><a href="#" onclick="seekTo(102.86); return false;" class="ts">[01:42]</a> If this is approved in the $104,000, $8,000, $8,000, $8,000, $8,000, $8,000.</div>
-<div class="seg"><a href="#" onclick="seekTo(109.46); return false;" class="ts">[01:49]</a> As you all are.</div>
-<div class="seg"><a href="#" onclick="seekTo(111.78); return false;" class="ts">[01:51]</a> I&#x27;m listening.</div>
-<div class="seg"><a href="#" onclick="seekTo(119.53); return false;" class="ts">[01:59]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(121.62); return false;" class="ts">[02:01]</a> Jones.</div>
-<div class="seg"><a href="#" onclick="seekTo(123.83); return false;" class="ts">[02:03]</a> Don&#x27;t pull.</div>
-<div class="seg"><a href="#" onclick="seekTo(125.02); return false;" class="ts">[02:05]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(126.02); return false;" class="ts">[02:06]</a> Barnes.</div>
-<div class="seg"><a href="#" onclick="seekTo(127.02); return false;" class="ts">[02:07]</a> Estep.</div>
-<div class="seg"><a href="#" onclick="seekTo(128.02); return false;" class="ts">[02:08]</a> Parker.</div>
-<div class="seg"><a href="#" onclick="seekTo(129.02); return false;" class="ts">[02:09]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(130.02); return false;" class="ts">[02:10]</a> Not in discussion.</div>
-<div class="seg"><a href="#" onclick="seekTo(131.02); return false;" class="ts">[02:11]</a> I&#x27;m sorry to waste management alternatives.</div>
-<div class="seg"><a href="#" onclick="seekTo(132.02); return false;" class="ts">[02:12]</a> The valuation.</div>
-<div class="seg"><a href="#" onclick="seekTo(133.02); return false;" class="ts">[02:13]</a> Percented by burns.</div>
-<div class="seg"><a href="#" onclick="seekTo(134.02); return false;" class="ts">[02:14]</a> And make Donald.</div>
-<div class="seg"><a href="#" onclick="seekTo(135.02); return false;" class="ts">[02:15]</a> Julie Davis.</div>
-<div class="seg"><a href="#" onclick="seekTo(136.15); return false;" class="ts">[02:16]</a> Tyler Pomp.</div>
-<div class="seg"><a href="#" onclick="seekTo(137.15); return false;" class="ts">[02:17]</a> So we have.</div>
-<div class="seg"><a href="#" onclick="seekTo(138.18); return false;" class="ts">[02:18]</a> We actually have a Laura here today.</div>
-<div class="seg"><a href="#" onclick="seekTo(141.18); return false;" class="ts">[02:21]</a> Julie.</div>
-<div class="seg"><a href="#" onclick="seekTo(142.18); return false;" class="ts">[02:22]</a> Well, in the high-cester day in Kansas City.</div>
-<div class="seg"><a href="#" onclick="seekTo(144.18); return false;" class="ts">[02:24]</a> Oh.</div>
-<div class="seg"><a href="#" onclick="seekTo(145.18); return false;" class="ts">[02:25]</a> Thanks.</div>
-<div class="seg"><a href="#" onclick="seekTo(146.41); return false;" class="ts">[02:26]</a> You broke the tickets.</div>
-<div class="seg"><a href="#" onclick="seekTo(148.41); return false;" class="ts">[02:28]</a> Hi.</div>
-<div class="seg"><a href="#" onclick="seekTo(149.41); return false;" class="ts">[02:29]</a> I&#x27;m happy to be here.</div>
-<div class="seg"><a href="#" onclick="seekTo(151.5); return false;" class="ts">[02:31]</a> Okay.</div>
-<div class="seg"><a href="#" onclick="seekTo(152.5); return false;" class="ts">[02:32]</a> It&#x27;s started.</div>
-<div class="seg"><a href="#" onclick="seekTo(153.5); return false;" class="ts">[02:33]</a> All right.</div>
-<div class="seg"><a href="#" onclick="seekTo(154.5); return false;" class="ts">[02:34]</a> So more of us are going to run in Act 4 on the 15 years.</div>
-<div class="seg"><a href="#" onclick="seekTo(157.5); return false;" class="ts">[02:37]</a> And we&#x27;re going to fire my own generic team.</div>
-<div class="seg"><a href="#" onclick="seekTo(159.5); return false;" class="ts">[02:39]</a> So we focus on.</div>
-<div class="seg"><a href="#" onclick="seekTo(160.5); return false;" class="ts">[02:40]</a> Solidly, it&#x27;s form of our environmental system.</div>
-<div class="seg"><a href="#" onclick="seekTo(163.5); return false;" class="ts">[02:43]</a> There&#x27;s more of this region.</div>
-<div class="seg"><a href="#" onclick="seekTo(165.5); return false;" class="ts">[02:45]</a> I hope that the Oklahoma Department will fire my quality on the top 3 of YouTube.</div>
-<div class="seg"><a href="#" onclick="seekTo(170.5); return false;" class="ts">[02:50]</a> Contrast.</div>
-<div class="seg"><a href="#" onclick="seekTo(171.5); return false;" class="ts">[02:51]</a> But we recently wrapped up a study for the solid waste alternatives.</div>
-<div class="seg"><a href="#" onclick="seekTo(176.5); return false;" class="ts">[02:56]</a> We&#x27;re looking at opportunities for future facility.</div>
-<div class="seg"><a href="#" onclick="seekTo(179.5); return false;" class="ts">[02:59]</a> I&#x27;m doing this.</div>
-<div class="seg"><a href="#" onclick="seekTo(180.82); return false;" class="ts">[03:00]</a> in one of my installs over here?</div>
-<div class="seg"><a href="#" onclick="seekTo(196.9); return false;" class="ts">[03:16]</a> It might be turned off.</div>
-<div class="seg"><a href="#" onclick="seekTo(197.9); return false;" class="ts">[03:17]</a> All right.</div>
-<div class="seg"><a href="#" onclick="seekTo(207.54); return false;" class="ts">[03:27]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(208.54); return false;" class="ts">[03:28]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(209.54); return false;" class="ts">[03:29]</a> I&#x27;ll do a quick overview of the process</div>
-<div class="seg"><a href="#" onclick="seekTo(212.73); return false;" class="ts">[03:32]</a> and you have your project overview.</div>
-<div class="seg"><a href="#" onclick="seekTo(214.73); return false;" class="ts">[03:34]</a> We&#x27;ll go over a new Transversation Serial Analysis.</div>
-<div class="seg"><a href="#" onclick="seekTo(217.73); return false;" class="ts">[03:37]</a> I mean, when we install scenario analysis, we do two different versions of that,</div>
-<div class="seg"><a href="#" onclick="seekTo(221.73); return false;" class="ts">[03:41]</a> and then I&#x27;ll present our key findings and recommendations for next steps.</div>
-<div class="seg"><a href="#" onclick="seekTo(225.73); return false;" class="ts">[03:45]</a> So you&#x27;re current Transversation.</div>
-<div class="seg"><a href="#" onclick="seekTo(228.24); return false;" class="ts">[03:48]</a> You take in about 20,000 tons per year from the city,</div>
-<div class="seg"><a href="#" onclick="seekTo(232.24); return false;" class="ts">[03:52]</a> the city has residential and commercial customers,</div>
-<div class="seg"><a href="#" onclick="seekTo(235.24); return false;" class="ts">[03:55]</a> additional residents in the city.</div>
-<div class="seg"><a href="#" onclick="seekTo(237.24); return false;" class="ts">[03:57]</a> The facility as well as external customers.</div>
-<div class="seg"><a href="#" onclick="seekTo(241.72); return false;" class="ts">[04:01]</a> It&#x27;s reached the end of its useful life.</div>
-<div class="seg"><a href="#" onclick="seekTo(243.72); return false;" class="ts">[04:03]</a> So it&#x27;s very common facilities are used for 30 years.</div>
-<div class="seg"><a href="#" onclick="seekTo(247.72); return false;" class="ts">[04:07]</a> And significant improvement to continue operations.</div>
-<div class="seg"><a href="#" onclick="seekTo(251.72); return false;" class="ts">[04:11]</a> The facility also was on a former incinerator site,</div>
-<div class="seg"><a href="#" onclick="seekTo(255.72); return false;" class="ts">[04:15]</a> so it wasn&#x27;t originally designed to be a Transversation facility.</div>
-<div class="seg"><a href="#" onclick="seekTo(260.72); return false;" class="ts">[04:20]</a> We&#x27;ve seen contracts with a landfill.</div>
-<div class="seg"><a href="#" onclick="seekTo(262.72); return false;" class="ts">[04:22]</a> 70 miles away for the actual disposal.</div>
-<div class="seg"><a href="#" onclick="seekTo(265.72); return false;" class="ts">[04:25]</a> So that&#x27;s for public and limaar.</div>
-<div class="seg"><a href="#" onclick="seekTo(267.72); return false;" class="ts">[04:27]</a> And the waste is combined at the Transversation and then</div>
-<div class="seg"><a href="#" onclick="seekTo(270.72); return false;" class="ts">[04:30]</a> transport it to the landfill in limaar.</div>
-<div class="seg"><a href="#" onclick="seekTo(273.72); return false;" class="ts">[04:33]</a> That is contract with a private hauler for transportation.</div>
-<div class="seg"><a href="#" onclick="seekTo(277.33); return false;" class="ts">[04:37]</a> And the city has seen increases in the cost.</div>
-<div class="seg"><a href="#" onclick="seekTo(281.33); return false;" class="ts">[04:41]</a> Significantly through those transportation costs as well as disposal costs.</div>
-<div class="seg"><a href="#" onclick="seekTo(285.33); return false;" class="ts">[04:45]</a> So that&#x27;s very common.</div>
-<div class="seg"><a href="#" onclick="seekTo(287.33); return false;" class="ts">[04:47]</a> As we see capacity and land fill is going down in the region.</div>
-<div class="seg"><a href="#" onclick="seekTo(291.33); return false;" class="ts">[04:51]</a> That the cost per time at the gate would increase and the transportation costs as well.</div>
-<div class="seg"><a href="#" onclick="seekTo(296.33); return false;" class="ts">[04:56]</a> 70 miles is quite a long way to take that waste.</div>
-<div class="seg"><a href="#" onclick="seekTo(299.33); return false;" class="ts">[04:59]</a> So the city offerings have been down on.</div>
-<div class="seg"><a href="#" onclick="seekTo(303.34000000000003); return false;" class="ts">[05:03]</a> We&#x27;ve worked for a number of local governments across the nation.</div>
-<div class="seg"><a href="#" onclick="seekTo(306.34000000000003); return false;" class="ts">[05:06]</a> And on tons of hundreds of studies.</div>
-<div class="seg"><a href="#" onclick="seekTo(308.34000000000003); return false;" class="ts">[05:08]</a> So I&#x27;ll always consider the plans, facility analyses.</div>
-<div class="seg"><a href="#" onclick="seekTo(310.34000000000003); return false;" class="ts">[05:10]</a> To look at what could be options to make improvements to your existing facility.</div>
-<div class="seg"><a href="#" onclick="seekTo(315.34000000000003); return false;" class="ts">[05:15]</a> It can be a new transportation or develop a landfill.</div>
-<div class="seg"><a href="#" onclick="seekTo(319.34000000000003); return false;" class="ts">[05:19]</a> We looked at two different scenarios for a new landfill.</div>
-<div class="seg"><a href="#" onclick="seekTo(322.34000000000003); return false;" class="ts">[05:22]</a> One would be a minimum tonnage scenario.</div>
-<div class="seg"><a href="#" onclick="seekTo(325.34000000000003); return false;" class="ts">[05:25]</a> So that is take to me.</div>
-<div class="seg"><a href="#" onclick="seekTo(327.34000000000003); return false;" class="ts">[05:27]</a> Sorry.</div>
-<div class="seg"><a href="#" onclick="seekTo(328.34000000000003); return false;" class="ts">[05:28]</a> As the city.</div>
-<div class="seg"><a href="#" onclick="seekTo(329.34000000000003); return false;" class="ts">[05:29]</a> Plus what could be expected from some of the other</div>
-<div class="seg"><a href="#" onclick="seekTo(331.34000000000003); return false;" class="ts">[05:31]</a> Transversations within the region.</div>
-<div class="seg"><a href="#" onclick="seekTo(333.34000000000003); return false;" class="ts">[05:33]</a> And then a maximum tonnage scenario.</div>
-<div class="seg"><a href="#" onclick="seekTo(336.34000000000003); return false;" class="ts">[05:36]</a> So if you were to really market that material or market the capacity.</div>
-<div class="seg"><a href="#" onclick="seekTo(340.34000000000003); return false;" class="ts">[05:40]</a> Get additional tonnage coming through.</div>
-<div class="seg"><a href="#" onclick="seekTo(343.34000000000003); return false;" class="ts">[05:43]</a> What facility would look like with a larger landfill.</div>
-<div class="seg"><a href="#" onclick="seekTo(347.34000000000003); return false;" class="ts">[05:47]</a> The larger the landfill oftentimes.</div>
-<div class="seg"><a href="#" onclick="seekTo(349.34000000000003); return false;" class="ts">[05:49]</a> You know, the lower the cost.</div>
-<div class="seg"><a href="#" onclick="seekTo(351.34000000000003); return false;" class="ts">[05:51]</a> Just based on some of those large capital improvement costs.</div>
-<div class="seg"><a href="#" onclick="seekTo(356.18); return false;" class="ts">[05:56]</a> We looked at waste projections again for the new transportation.</div>
-<div class="seg"><a href="#" onclick="seekTo(359.18); return false;" class="ts">[05:59]</a> Who&#x27;s based on the world.</div>
-<div class="seg"><a href="#" onclick="seekTo(362.99); return false;" class="ts">[06:02]</a> materials was both at the region and taking in the</div>
-<div class="seg"><a href="#" onclick="seekTo(365.95); return false;" class="ts">[06:05]</a> consideration some of the other regional facilities that are existing.</div>
-<div class="seg"><a href="#" onclick="seekTo(372.34); return false;" class="ts">[06:12]</a> So with this conversation, TUNISH looked at population</div>
-<div class="seg"><a href="#" onclick="seekTo(376.5); return false;" class="ts">[06:16]</a> for within the area, but there&#x27;s not a lot of projected</div>
-<div class="seg"><a href="#" onclick="seekTo(382.02); return false;" class="ts">[06:22]</a> population for currently or hasn&#x27;t been here recently, but you</div>
-<div class="seg"><a href="#" onclick="seekTo(386.26); return false;" class="ts">[06:26]</a> have seen increases in your TUNISH still.</div>
-<div class="seg"><a href="#" onclick="seekTo(388.74); return false;" class="ts">[06:28]</a> And so to be conservative, we wanted to maintain that</div>
-<div class="seg"><a href="#" onclick="seekTo(391.7); return false;" class="ts">[06:31]</a> estimated increase year over year that you&#x27;ve occurred in the last</div>
-<div class="seg"><a href="#" onclick="seekTo(395.7); return false;" class="ts">[06:35]</a> few years for your TUNISH.</div>
-<div class="seg"><a href="#" onclick="seekTo(399.58); return false;" class="ts">[06:39]</a> So we use that to be conservative, your gate fees, so how much it costs for</div>
-<div class="seg"><a href="#" onclick="seekTo(406.26); return false;" class="ts">[06:46]</a> folks to drop out of the conversation is low for the region.</div>
-<div class="seg"><a href="#" onclick="seekTo(411.38); return false;" class="ts">[06:51]</a> But if you invest significant amounts of money for a new</div>
-<div class="seg"><a href="#" onclick="seekTo(414.42); return false;" class="ts">[06:54]</a> transfer station, that rate could go up and could push waste other</div>
-<div class="seg"><a href="#" onclick="seekTo(418.18); return false;" class="ts">[06:58]</a> places to cheaper facilities. So just to note that that</div>
-<div class="seg"><a href="#" onclick="seekTo(422.1); return false;" class="ts">[07:02]</a> could be something that can&#x27;t guarantee that TUNISH until you look at what</div>
-<div class="seg"><a href="#" onclick="seekTo(426.5); return false;" class="ts">[07:06]</a> at the costs are within the region.</div>
-<div class="seg"><a href="#" onclick="seekTo(428.65999999999997); return false;" class="ts">[07:08]</a> And that transportation and disposal costs would still be with a third</div>
-<div class="seg"><a href="#" onclick="seekTo(432.65999999999997); return false;" class="ts">[07:12]</a> party and could potentially will increase over time as</div>
-<div class="seg"><a href="#" onclick="seekTo(436.5); return false;" class="ts">[07:16]</a> landfill capacity decreases within the region.</div>
-<div class="seg"><a href="#" onclick="seekTo(440.99); return false;" class="ts">[07:20]</a> So looking at transportation design and cost assumptions,</div>
-<div class="seg"><a href="#" onclick="seekTo(444.19); return false;" class="ts">[07:24]</a> looks at a capacity of 25,700 tons per year, so a slight</div>
-<div class="seg"><a href="#" onclick="seekTo(448.51); return false;" class="ts">[07:28]</a> increase over time, 0.47 percent.</div>
-<div class="seg"><a href="#" onclick="seekTo(452.43); return false;" class="ts">[07:32]</a> I didn&#x27;t interest rate of 3.5 percent,</div>
-<div class="seg"><a href="#" onclick="seekTo(454.99); return false;" class="ts">[07:34]</a> amortized over 20 years.</div>
-<div class="seg"><a href="#" onclick="seekTo(457.31); return false;" class="ts">[07:37]</a> Equipments on a lower five-year</div>
-<div class="seg"><a href="#" onclick="seekTo(459.79); return false;" class="ts">[07:39]</a> amortization, looking at a five-acre property, so using</div>
-<div class="seg"><a href="#" onclick="seekTo(463.87); return false;" class="ts">[07:43]</a> property that the city party has a transportation on.</div>
-<div class="seg"><a href="#" onclick="seekTo(466.83); return false;" class="ts">[07:46]</a> So it would be a new development on that site.</div>
-<div class="seg"><a href="#" onclick="seekTo(469.55); return false;" class="ts">[07:49]</a> 10,000 square foot building and put a contingency on that, which is</div>
-<div class="seg"><a href="#" onclick="seekTo(473.39); return false;" class="ts">[07:53]</a> consistency for our cost or consistent for our cost estimates.</div>
-<div class="seg"><a href="#" onclick="seekTo(478.27); return false;" class="ts">[07:58]</a> And we didn&#x27;t include revenues, so it didn&#x27;t include that,</div>
-<div class="seg"><a href="#" onclick="seekTo(480.67); return false;" class="ts">[08:00]</a> but you are bringing in charging your residents or people</div>
-<div class="seg"><a href="#" onclick="seekTo(484.83); return false;" class="ts">[08:04]</a> bringing in outside waste as a part of this assessment.</div>
-<div class="seg"><a href="#" onclick="seekTo(490.32); return false;" class="ts">[08:10]</a> So you&#x27;re looking around $7 million in capital costs,</div>
-<div class="seg"><a href="#" onclick="seekTo(493.68); return false;" class="ts">[08:13]</a> and that is for developing a new transportation facility,</div>
-<div class="seg"><a href="#" onclick="seekTo(498.88); return false;" class="ts">[08:18]</a> and purchasing equipment for the transfer station.</div>
-<div class="seg"><a href="#" onclick="seekTo(502.0); return false;" class="ts">[08:22]</a> This assumes that you would purchase a new equipment,</div>
-<div class="seg"><a href="#" onclick="seekTo(505.52); return false;" class="ts">[08:25]</a> because we&#x27;re not familiar with how old the input we have on site currently is,</div>
-<div class="seg"><a href="#" onclick="seekTo(510.45); return false;" class="ts">[08:30]</a> but it used to be, you know,</div>
-<div class="seg"><a href="#" onclick="seekTo(512.37); return false;" class="ts">[08:32]</a> refreshes every few years, and then regular operations and maintenance costs,</div>
-<div class="seg"><a href="#" onclick="seekTo(517.44); return false;" class="ts">[08:37]</a> we looked over that 20-year time frame, and it comes out to be $93.27.</div>
-<div class="seg"><a href="#" onclick="seekTo(524.48); return false;" class="ts">[08:44]</a> Well, $93.27 per ton, if you were to develop a new</div>
-<div class="seg"><a href="#" onclick="seekTo(529.3); return false;" class="ts">[08:49]</a> transfer station to replace the existing facility.</div>
-<div class="seg"><a href="#" onclick="seekTo(533.98); return false;" class="ts">[08:53]</a> Again, there may be opportunities to reduce that up front capital,</div>
-<div class="seg"><a href="#" onclick="seekTo(536.94); return false;" class="ts">[08:56]</a> or use any of the equipment.</div>
-<div class="seg"><a href="#" onclick="seekTo(540.14); return false;" class="ts">[09:00]</a> that you already have on site, but that was that analysis.</div>
-<div class="seg"><a href="#" onclick="seekTo(546.16); return false;" class="ts">[09:06]</a> For the landfill, we looked at within a 30 mile</div>
-<div class="seg"><a href="#" onclick="seekTo(549.08); return false;" class="ts">[09:09]</a> radius around the city.</div>
-<div class="seg"><a href="#" onclick="seekTo(551.28); return false;" class="ts">[09:11]</a> And there are seven transfer stations, including yours.</div>
-<div class="seg"><a href="#" onclick="seekTo(555.64); return false;" class="ts">[09:15]</a> Look to some of those transfer stations that currently</div>
-<div class="seg"><a href="#" onclick="seekTo(559.32); return false;" class="ts">[09:19]</a> fall a significant distance similar to you all.</div>
-<div class="seg"><a href="#" onclick="seekTo(562.56); return false;" class="ts">[09:22]</a> You&#x27;ll call 70 miles.</div>
-<div class="seg"><a href="#" onclick="seekTo(564.44); return false;" class="ts">[09:24]</a> What are the benefit with those transfer stations</div>
-<div class="seg"><a href="#" onclick="seekTo(566.76); return false;" class="ts">[09:26]</a> have to bring in ways to a new landfill here</div>
-<div class="seg"><a href="#" onclick="seekTo(569.08); return false;" class="ts">[09:29]</a> within this area, rather than going to some</div>
-<div class="seg"><a href="#" onclick="seekTo(572.32); return false;" class="ts">[09:32]</a> of the other facilities?</div>
-<div class="seg"><a href="#" onclick="seekTo(574.64); return false;" class="ts">[09:34]</a> We looked at ownership of facilities and assets.</div>
-<div class="seg"><a href="#" onclick="seekTo(576.8); return false;" class="ts">[09:36]</a> So for example, if transfer station is owned</div>
-<div class="seg"><a href="#" onclick="seekTo(580.24); return false;" class="ts">[09:40]</a> by a private waste entity, they would likely</div>
-<div class="seg"><a href="#" onclick="seekTo(582.76); return false;" class="ts">[09:42]</a> take their waste through their landfill, even though it&#x27;s further</div>
-<div class="seg"><a href="#" onclick="seekTo(586.12); return false;" class="ts">[09:46]</a> away because they can do that at a lower cost versus there</div>
-<div class="seg"><a href="#" onclick="seekTo(589.52); return false;" class="ts">[09:49]</a> were a number of transfer stations that were city owned,</div>
-<div class="seg"><a href="#" onclick="seekTo(592.76); return false;" class="ts">[09:52]</a> or by private entities that don&#x27;t have landfills,</div>
-<div class="seg"><a href="#" onclick="seekTo(594.88); return false;" class="ts">[09:54]</a> that would be more likely to be divided to a landfill here.</div>
-<div class="seg"><a href="#" onclick="seekTo(598.28); return false;" class="ts">[09:58]</a> Look to historical tonnage data and projections</div>
-<div class="seg"><a href="#" onclick="seekTo(601.2); return false;" class="ts">[10:01]</a> based on the population growth of the eight county region,</div>
-<div class="seg"><a href="#" onclick="seekTo(604.52); return false;" class="ts">[10:04]</a> because there is a larger waste shed</div>
-<div class="seg"><a href="#" onclick="seekTo(607.12); return false;" class="ts">[10:07]</a> that can be considered for a landfill.</div>
-<div class="seg"><a href="#" onclick="seekTo(609.76); return false;" class="ts">[10:09]</a> And we did minimum and maximum capture rates,</div>
-<div class="seg"><a href="#" onclick="seekTo(612.28); return false;" class="ts">[10:12]</a> which I&#x27;ll over here in a couple slides,</div>
-<div class="seg"><a href="#" onclick="seekTo(613.96); return false;" class="ts">[10:13]</a> just trying to be conservative on what those tonnages could look at.</div>
-<div class="seg"><a href="#" onclick="seekTo(618.44); return false;" class="ts">[10:18]</a> And this analysis that we&#x27;ve provided now</div>
-<div class="seg"><a href="#" onclick="seekTo(621.24); return false;" class="ts">[10:21]</a> assumes that the city would take full capital cost,</div>
-<div class="seg"><a href="#" onclick="seekTo(624.64); return false;" class="ts">[10:24]</a> full ownership and operation of this new landfill</div>
-<div class="seg"><a href="#" onclick="seekTo(627.92); return false;" class="ts">[10:27]</a> facility, and there are some options for alternatives with that.</div>
-<div class="seg"><a href="#" onclick="seekTo(634.62); return false;" class="ts">[10:34]</a> The minimum and maximum scenario tonnage scenarios,</div>
-<div class="seg"><a href="#" onclick="seekTo(639.8199999999999); return false;" class="ts">[10:39]</a> the minimum was based on assuming that 20% to 50%</div>
-<div class="seg"><a href="#" onclick="seekTo(645.74); return false;" class="ts">[10:45]</a> of the waste could be directed from other transfer stations</div>
-<div class="seg"><a href="#" onclick="seekTo(648.8199999999999); return false;" class="ts">[10:48]</a> that were owned by cities to this area.</div>
-<div class="seg"><a href="#" onclick="seekTo(653.34); return false;" class="ts">[10:53]</a> And then none of the waste would be divided</div>
-<div class="seg"><a href="#" onclick="seekTo(655.94); return false;" class="ts">[10:55]</a> from any of the privately owned transfer stations.</div>
-<div class="seg"><a href="#" onclick="seekTo(658.9); return false;" class="ts">[10:58]</a> The maximum tonnage assumed a 100% of the waste</div>
-<div class="seg"><a href="#" onclick="seekTo(662.1); return false;" class="ts">[11:02]</a> that would be currently generated</div>
-<div class="seg"><a href="#" onclick="seekTo(664.3); return false;" class="ts">[11:04]</a> at those transfer stations owned by cities would come to this new landfill,</div>
-<div class="seg"><a href="#" onclick="seekTo(669.5); return false;" class="ts">[11:09]</a> as well as some of the private waste that this may be a closer proximity for them.</div>
-<div class="seg"><a href="#" onclick="seekTo(675.14); return false;" class="ts">[11:15]</a> So that&#x27;s why we ran two different scenarios,</div>
-<div class="seg"><a href="#" onclick="seekTo(677.1); return false;" class="ts">[11:17]</a> just to try to show projections,</div>
-<div class="seg"><a href="#" onclick="seekTo(678.74); return false;" class="ts">[11:18]</a> again, if the city decided to move forward,</div>
-<div class="seg"><a href="#" onclick="seekTo(681.02); return false;" class="ts">[11:21]</a> there would be more discussions to really hone in on what that could look like long term.</div>
-<div class="seg"><a href="#" onclick="seekTo(685.8199999999999); return false;" class="ts">[11:25]</a> But that gave us a facility footprint acre of 250 to 300 acres,</div>
-<div class="seg"><a href="#" onclick="seekTo(690.34); return false;" class="ts">[11:30]</a> which is conservative.</div>
-<div class="seg"><a href="#" onclick="seekTo(692.1); return false;" class="ts">[11:32]</a> That&#x27;s not all area that would be developed into an actual landfill.</div>
-<div class="seg"><a href="#" onclick="seekTo(695.8199999999999); return false;" class="ts">[11:35]</a> The landfill footprint is much less closer to 30 acres,</div>
-<div class="seg"><a href="#" onclick="seekTo(700.58); return false;" class="ts">[11:40]</a> but you need a lot of area for borrow space,</div>
-<div class="seg"><a href="#" onclick="seekTo(706.66); return false;" class="ts">[11:46]</a> storm water ponds, leachade ponds, hall roads, scale houses,</div>
-<div class="seg"><a href="#" onclick="seekTo(711.1); return false;" class="ts">[11:51]</a> equipment building, which is a lot of other</div>
-<div class="seg"><a href="#" onclick="seekTo(713.26); return false;" class="ts">[11:53]</a> theancillary features that are on landfills that require that.</div>
-<div class="seg"><a href="#" onclick="seekTo(716.86); return false;" class="ts">[11:56]</a> That&#x27;s it.</div>
-<div class="seg"><a href="#" onclick="seekTo(720.75); return false;" class="ts">[12:00]</a> Similar design and cost assumptions, 3.5% interest rate over 20 years, equivalent at 5 years, assumed a cost per acre based on recent land value sales in Ottawa County. Again, no actual property or location was used for this study, so it was really just looking at if there was land available of this size within proximity.</div>
-<div class="seg"><a href="#" onclick="seekTo(745.75); return false;" class="ts">[12:25]</a> We assumed sell development every 5 years, so when you develop a landfill, you initially develop your scale house, your buildings, your ponds, and initial sell, and then every 5 years you will develop another area or open a new area and close the old areas.</div>
-<div class="seg"><a href="#" onclick="seekTo(761.75); return false;" class="ts">[12:41]</a> So, developing a new sell every 5 years, similar contingency, and then significant increase in staffing and equipment to account for this increase in your operation. Again, this included no revenue, so no house additional outside revenue generated by that gate tipping fees. So you would be able to set whatever rate you wanted, that you could charge to outside haulers bringing in waste.</div>
-<div class="seg"><a href="#" onclick="seekTo(792.88); return false;" class="ts">[13:12]</a> So total here for the minimum landfill alternative, it&#x27;s about 11.9 million, but over 20 years, a cost per time is 69, and 75 cents.</div>
-<div class="seg"><a href="#" onclick="seekTo(805.88); return false;" class="ts">[13:25]</a> Not as including that new landfill capital, a new sell development, equipment, again new equipment, all being purchased and then increased operations and maintenance. And then for the larger capacity, landfill facility for the larger ten-inch.</div>
-<div class="seg"><a href="#" onclick="seekTo(823.61); return false;" class="ts">[13:43]</a> A total of about 18 million, and that comes out to be $49.94 for ten. So as you can see, it comes much more cost effective to have a landfill when you have a lot larger waste shed or capacity of that landfill.</div>
-<div class="seg"><a href="#" onclick="seekTo(846.58); return false;" class="ts">[14:06]</a> So in summary, your current system, your annual throughput, 19,000 tons per year, as of 2023, and the cost per ten is $77.45, looking at a new transportation and increasing the tonnage to project out some growth within the next 20 years.</div>
-<div class="seg"><a href="#" onclick="seekTo(866.58); return false;" class="ts">[14:26]</a> We get $93.27 minimum landfill tonnage, $69.75, and then that maximum $49.94.</div>
-<div class="seg"><a href="#" onclick="seekTo(877.58); return false;" class="ts">[14:37]</a> How long are considerations and recommendations and recommendations?</div>
-<div class="seg"><a href="#" onclick="seekTo(885.62); return false;" class="ts">[14:45]</a> The minimum permitting design and construction timeline of a new transportation is three to five years, while the minimum equivalent for a landfill is five to seven years.</div>
-<div class="seg"><a href="#" onclick="seekTo(894.62); return false;" class="ts">[14:54]</a> I&#x27;ve been permitting designing, constructing landfills for 15 years, both here in O&#x27;Homme, Kim.</div>
-<div class="seg"><a href="#" onclick="seekTo(900.0); return false;" class="ts">[15:00]</a> Missouri. DQ has been good to work with, but there is time that is required to do</div>
-<div class="seg"><a href="#" onclick="seekTo(906.72); return false;" class="ts">[15:06]</a> hydrogeologic investigations and making sure that your site is really suitable for</div>
-<div class="seg"><a href="#" onclick="seekTo(912.4); return false;" class="ts">[15:12]</a> that use and then planning and permitting and design of that facility. So it&#x27;s a long-term</div>
-<div class="seg"><a href="#" onclick="seekTo(919.04); return false;" class="ts">[15:19]</a> process. Transfersation is much shorter, just based on the potential impacts and the size of</div>
-<div class="seg"><a href="#" onclick="seekTo(924.64); return false;" class="ts">[15:24]</a> the property, it&#x27;s a much different permitting process. This could be expedited. I think three to five</div>
-<div class="seg"><a href="#" onclick="seekTo(931.2); return false;" class="ts">[15:31]</a> years is probably the minimum if you are wanting to be aggressive. They do require the state</div>
-<div class="seg"><a href="#" onclick="seekTo(935.28); return false;" class="ts">[15:35]</a> does require at least a year of groundwater monitoring and hydrogeologic data, which this region</div>
-<div class="seg"><a href="#" onclick="seekTo(941.68); return false;" class="ts">[15:41]</a> has quite a bit already readily available. Conducting a more thorough review of available</div>
-<div class="seg"><a href="#" onclick="seekTo(947.89); return false;" class="ts">[15:47]</a> properties to determine cost impacts and sighting study to determine regulatory and environmental</div>
-<div class="seg"><a href="#" onclick="seekTo(952.77); return false;" class="ts">[15:52]</a> feasibility. So the landfill costs look great, but it&#x27;s all determined on viability of having a</div>
-<div class="seg"><a href="#" onclick="seekTo(959.25); return false;" class="ts">[15:59]</a> property that makes sense. Having land that is suitable enough in size and in nature</div>
-<div class="seg"><a href="#" onclick="seekTo(964.05); return false;" class="ts">[16:04]</a> of the state and the EPA have site location restrictions that say what is a suitable site? Let&#x27;s say</div>
-<div class="seg"><a href="#" onclick="seekTo(971.65); return false;" class="ts">[16:11]</a> proximity to groundwater, zoning, other properties, flood plains, wetlands, all of those are considerations</div>
-<div class="seg"><a href="#" onclick="seekTo(980.69); return false;" class="ts">[16:20]</a> as well as some operational things as it close to a highway or other residences. So that would</div>
-<div class="seg"><a href="#" onclick="seekTo(988.53); return false;" class="ts">[16:28]</a> be one of the priority next steps that have been part of that potential cost for that property purchase.</div>
-<div class="seg"><a href="#" onclick="seekTo(996.21); return false;" class="ts">[16:36]</a> Costs are highly dependent on the quantity of waste accepted. So you would want to continue</div>
-<div class="seg"><a href="#" onclick="seekTo(1000.45); return false;" class="ts">[16:40]</a> conversations. We&#x27;ve talked to different transfer stations on what their thoughts were bringing waste</div>
-<div class="seg"><a href="#" onclick="seekTo(1005.09); return false;" class="ts">[16:45]</a> this direction to a new landfill, but continue that to get permit commitments to better size that</div>
-<div class="seg"><a href="#" onclick="seekTo(1010.61); return false;" class="ts">[16:50]</a> for facility and look how far out you can project that waste generation. Typically when we site land</div>
-<div class="seg"><a href="#" onclick="seekTo(1017.17); return false;" class="ts">[16:57]</a> fields we&#x27;re looking at sighting them for 50, 80, 100 years of capacity because the investment for that</div>
-<div class="seg"><a href="#" onclick="seekTo(1023.5699999999999); return false;" class="ts">[17:03]</a> permitting is so significant. Evaluate transportation and landfill gate fees and landfill capacity within</div>
-<div class="seg"><a href="#" onclick="seekTo(1031.25); return false;" class="ts">[17:11]</a> the region. So again, that land that capacity goes down, that goes gate fees will go up for everyone.</div>
-<div class="seg"><a href="#" onclick="seekTo(1039.17); return false;" class="ts">[17:19]</a> It&#x27;s also good to look at right now your transportation. I looked very briefly is very competitively</div>
-<div class="seg"><a href="#" onclick="seekTo(1044.13); return false;" class="ts">[17:24]</a> price with others, but as you are making investments that price may go up in need of a waste elsewhere</div>
-<div class="seg"><a href="#" onclick="seekTo(1052.05); return false;" class="ts">[17:32]</a> and then consider partnerships to support the development of a new transportation or landfill to share</div>
-<div class="seg"><a href="#" onclick="seekTo(1056.69); return false;" class="ts">[17:36]</a> in a front capital cost and provide costability long term. So we work with a lot of our local</div>
-<div class="seg"><a href="#" onclick="seekTo(1061.81); return false;" class="ts">[17:41]</a> government clients that may partner with other entities so that could be partnering with other</div>
-<div class="seg"><a href="#" onclick="seekTo(1066.85); return false;" class="ts">[17:46]</a> local communities, other tribal, tribal agency with a private waste company that could then share</div>
-<div class="seg"><a href="#" onclick="seekTo(1073.33); return false;" class="ts">[17:53]</a> in that upfront cost or could share in the burden of operations. Whether that&#x27;s operational costs or</div>
-<div class="seg"><a href="#" onclick="seekTo(1080.56); return false;" class="ts">[18:00]</a> actually, we have some clients that they will pay to develop the facility and a private</div>
-<div class="seg"><a href="#" onclick="seekTo(1086.72); return false;" class="ts">[18:06]</a> waste company operates that facility on their behalf. In turn, the client that has a very</div>
-<div class="seg"><a href="#" onclick="seekTo(1091.92); return false;" class="ts">[18:11]</a> long-term, stable cost for waste management moving forward while not taking on</div>
-<div class="seg"><a href="#" onclick="seekTo(1097.12); return false;" class="ts">[18:17]</a> something that they may not be as familiar with in their data data operations. So there&#x27;s a lot</div>
-<div class="seg"><a href="#" onclick="seekTo(1102.9); return false;" class="ts">[18:22]</a> of opportunities for a partnership that the city could evaluate if you wanted to move forward with</div>
-<div class="seg"><a href="#" onclick="seekTo(1108.02); return false;" class="ts">[18:28]</a> developing more infrastructure. Thank you, I&#x27;ll take any questions. So you&#x27;ve done this. You&#x27;re</div>
-<div class="seg"><a href="#" onclick="seekTo(1131.34); return false;" class="ts">[18:51]</a> pretty familiar with these operations. Yes. And do you have you worked with both the transfer</div>
-<div class="seg"><a href="#" onclick="seekTo(1137.63); return false;" class="ts">[18:57]</a> station scenario and landfill scenario? Yes. So what&#x27;s your your personal preference? I mean,</div>
-<div class="seg"><a href="#" onclick="seekTo(1143.65); return false;" class="ts">[19:03]</a> what do you think is most, I guess the biggest bang for our buck? Sure. So if there are a number</div>
-<div class="seg"><a href="#" onclick="seekTo(1151.82); return false;" class="ts">[19:11]</a> of landfill facilities or processing facilities within the region, transfer stations allow</div>
-<div class="seg"><a href="#" onclick="seekTo(1156.54); return false;" class="ts">[19:16]</a> municipalities in general to have a lot of flexibility in their waste group,</div>
-<div class="seg"><a href="#" onclick="seekTo(1160.22); return false;" class="ts">[19:20]</a> where their waste can go over time, which makes other people competitive and pricing. So if you had</div>
-<div class="seg"><a href="#" onclick="seekTo(1165.58); return false;" class="ts">[19:25]</a> a lot of other options, landfills in the region where you could be, you could get really competitive</div>
-<div class="seg"><a href="#" onclick="seekTo(1170.62); return false;" class="ts">[19:30]</a> pricing and long-term stability, transfer stations are a great way to go. In areas where there isn&#x27;t</div>
-<div class="seg"><a href="#" onclick="seekTo(1177.34); return false;" class="ts">[19:37]</a> a lot of other facilities, then a landfill does allow for the city to take control of their own</div>
-<div class="seg"><a href="#" onclick="seekTo(1183.9); return false;" class="ts">[19:43]</a> costs that they will have indefinitely and manage that cost to the development of a facility. And then</div>
-<div class="seg"><a href="#" onclick="seekTo(1190.48); return false;" class="ts">[19:50]</a> they can also, there is opportunities to generate revenue. I would say a lot of we work primarily</div>
-<div class="seg"><a href="#" onclick="seekTo(1197.92); return false;" class="ts">[19:57]</a> for local government clients and some of them operate landfill, some of them operate transfer stations,</div>
-<div class="seg"><a href="#" onclick="seekTo(1202.8); return false;" class="ts">[20:02]</a> some of them have both depending on how large they, how large of an operation they are. One of the</div>
-<div class="seg"><a href="#" onclick="seekTo(1210.08); return false;" class="ts">[20:10]</a> concerns that the cities have in transitioning from like a transfer station to a landfill, it is</div>
-<div class="seg"><a href="#" onclick="seekTo(1215.76); return false;" class="ts">[20:15]</a> it is a very different operation. It&#x27;s a very significant operation. If you have wastewater</div>
-<div class="seg"><a href="#" onclick="seekTo(1220.48); return false;" class="ts">[20:20]</a> stream of facilities, you know, you&#x27;re familiar with regulatory compliance and some of those things,</div>
-<div class="seg"><a href="#" onclick="seekTo(1225.44); return false;" class="ts">[20:25]</a> but there is sometimes a benefit to bringing a lot of partners that can help with ramping up and you</div>
-<div class="seg"><a href="#" onclick="seekTo(1231.92); return false;" class="ts">[20:31]</a> can do that even in a short-term period, whether it&#x27;s a 510-year contract or longer, up to 30 years</div>
-<div class="seg"><a href="#" onclick="seekTo(1237.76); return false;" class="ts">[20:37]</a> depending on what the state or what your city and state statues allow to have someone support the</div>
-<div class="seg"><a href="#" onclick="seekTo(1243.44); return false;" class="ts">[20:43]</a> operation of that facility. So kind of really depends on what the priorities are of the city,</div>
-<div class="seg"><a href="#" onclick="seekTo(1250.88); return false;" class="ts">[20:50]</a> as well as what their comfort level is and diving into something that might be new compared to what</div>
-<div class="seg"><a href="#" onclick="seekTo(1256.24); return false;" class="ts">[20:56]</a> you are. What do you do at the transfer station?</div>
-<div class="seg"><a href="#" onclick="seekTo(1260.0); return false;" class="ts">[21:00]</a> But earlier you touched on the subject of what materials you allow to come into your landfill.</div>
-<div class="seg"><a href="#" onclick="seekTo(1266.28); return false;" class="ts">[21:06]</a> Can you expand on that a little bit?</div>
-<div class="seg"><a href="#" onclick="seekTo(1267.96); return false;" class="ts">[21:07]</a> Are you talking like medical waste and things like that?</div>
-<div class="seg"><a href="#" onclick="seekTo(1271.04); return false;" class="ts">[21:11]</a> No, so this is what was evaluated as a municipal solid waste landfill.</div>
-<div class="seg"><a href="#" onclick="seekTo(1275.48); return false;" class="ts">[21:15]</a> So this would just be your household waste.</div>
-<div class="seg"><a href="#" onclick="seekTo(1277.64); return false;" class="ts">[21:17]</a> There would be an option of construction and demolishing waste could be included as well.</div>
-<div class="seg"><a href="#" onclick="seekTo(1282.08); return false;" class="ts">[21:22]</a> So that&#x27;s for construction materials that are generated.</div>
-<div class="seg"><a href="#" onclick="seekTo(1285.64); return false;" class="ts">[21:25]</a> There are opportunities if you do have enough acreage that you could even co-locate</div>
-<div class="seg"><a href="#" onclick="seekTo(1290.04); return false;" class="ts">[21:30]</a> perhaps a composting facility adjacent to that.</div>
-<div class="seg"><a href="#" onclick="seekTo(1293.72); return false;" class="ts">[21:33]</a> There might be opportunities for grant funding if you wanted to integrate something like</div>
-<div class="seg"><a href="#" onclick="seekTo(1297.48); return false;" class="ts">[21:37]</a> a composting facility.</div>
-<div class="seg"><a href="#" onclick="seekTo(1299.48); return false;" class="ts">[21:39]</a> But primarily the landfill that we evaluate with the municipal solid waste landfill, that</div>
-<div class="seg"><a href="#" onclick="seekTo(1305.2); return false;" class="ts">[21:45]</a> is the permit that would be valid for a facility like this.</div>
-<div class="seg"><a href="#" onclick="seekTo(1308.52); return false;" class="ts">[21:48]</a> So after looking at our transfer station, would you say whichever way we go, we need to be aggressive?</div>
-<div class="seg"><a href="#" onclick="seekTo(1316.52); return false;" class="ts">[21:56]</a> Yes, I would say so I personally, again, have not been to your transfer station because</div>
-<div class="seg"><a href="#" onclick="seekTo(1322.42); return false;" class="ts">[22:02]</a> I&#x27;m tagging in for someone but I have seen quite a few photos and work with a number of</div>
-<div class="seg"><a href="#" onclick="seekTo(1329.3); return false;" class="ts">[22:09]</a> transfer stations on improvement and I think that regardless, you have some work to do and quickly</div>
-<div class="seg"><a href="#" onclick="seekTo(1335.46); return false;" class="ts">[22:15]</a> would be beneficial, yes.</div>
-<div class="seg"><a href="#" onclick="seekTo(1337.74); return false;" class="ts">[22:17]</a> So again, my opinion, correct me if I&#x27;m wrong or if I&#x27;m so free jump in here as well, I feel</div>
-<div class="seg"><a href="#" onclick="seekTo(1345.5); return false;" class="ts">[22:25]</a> like we don&#x27;t do we need to be aggressive, we need to be aggressive on the landfill side, otherwise</div>
-<div class="seg"><a href="#" onclick="seekTo(1350.78); return false;" class="ts">[22:30]</a> if we go to the transfer station side, we&#x27;re going to have a crash problem there.</div>
-<div class="seg"><a href="#" onclick="seekTo(1355.42); return false;" class="ts">[22:35]</a> And this council, we&#x27;re kind of forward thinking, and I think we can solve a long-term problem</div>
-<div class="seg"><a href="#" onclick="seekTo(1361.3); return false;" class="ts">[22:41]</a> for our community by being aggressive and going to landfill around, it may be a little more expensive</div>
-<div class="seg"><a href="#" onclick="seekTo(1366.38); return false;" class="ts">[22:46]</a> at the beginning but I think we save money in the end.</div>
-<div class="seg"><a href="#" onclick="seekTo(1369.9); return false;" class="ts">[22:49]</a> Well, you also do, well, you also do in that situation is if you were to move forward with</div>
-<div class="seg"><a href="#" onclick="seekTo(1375.58); return false;" class="ts">[22:55]</a> citing a landfill, it would prevent others from doing so likely in the region so the city would</div>
-<div class="seg"><a href="#" onclick="seekTo(1381.42); return false;" class="ts">[23:01]</a> be kind of taking that control, where if you do not decide to pursue that, there may be private</div>
-<div class="seg"><a href="#" onclick="seekTo(1385.98); return false;" class="ts">[23:05]</a> entities or others that are looking in this region to develop facilities that would be a very</div>
-<div class="seg"><a href="#" onclick="seekTo(1392.38); return false;" class="ts">[23:12]</a> affich to the city if they had a transfer station but would be out of your control.</div>
-<div class="seg"><a href="#" onclick="seekTo(1397.8600000000001); return false;" class="ts">[23:17]</a> So-</div>
-<div class="seg"><a href="#" onclick="seekTo(1399.37); return false;" class="ts">[23:19]</a> Well, how much money was talent, while making a minimum of the digital, how do I want to tell</div>
-<div class="seg"><a href="#" onclick="seekTo(1404.09); return false;" class="ts">[23:24]</a> it&#x27;s a talent?</div>
-<div class="seg"><a href="#" onclick="seekTo(1405.09); return false;" class="ts">[23:25]</a> Yeah.</div>
-<div class="seg"><a href="#" onclick="seekTo(1406.09); return false;" class="ts">[23:26]</a> Except for one begins with the next one.</div>
-<div class="seg"><a href="#" onclick="seekTo(1410.37); return false;" class="ts">[23:30]</a> I just like the fact that we can control our destiny.</div>
-<div class="seg"><a href="#" onclick="seekTo(1418.23); return false;" class="ts">[23:38]</a> Yeah, true.</div>
-<div class="seg"><a href="#" onclick="seekTo(1419.23); return false;" class="ts">[23:39]</a> Then we need to.</div>
-<div class="seg"><a href="#" onclick="seekTo(1420.23); return false;" class="ts">[23:40]</a> And I think with the transfer station, we&#x27;re always at someone else&#x27;s mercy.</div>
-<div class="seg"><a href="#" onclick="seekTo(1424.59); return false;" class="ts">[23:44]</a> We&#x27;re going to see on the cost and that cost is going to continue to go up, it&#x27;s not going</div>
-<div class="seg"><a href="#" onclick="seekTo(1429.71); return false;" class="ts">[23:49]</a> to start going down.</div>
-<div class="seg"><a href="#" onclick="seekTo(1430.71); return false;" class="ts">[23:50]</a> And if we&#x27;re having all of the 70 miles, gas prices are playing with that, they&#x27;re fees.</div>
-<div class="seg"><a href="#" onclick="seekTo(1436.75); return false;" class="ts">[23:56]</a> We would kind of control ourselves here at least hours.</div>
-<div class="seg"><a href="#" onclick="seekTo(1440.5); return false;" class="ts">[24:00]</a> We actually make some revenue off others that want to use our way of doing so.</div>
-<div class="seg"><a href="#" onclick="seekTo(1445.53); return false;" class="ts">[24:05]</a> And, you know, other transfer stations are also hauling just as far or, you know, if not farther.</div>
-<div class="seg"><a href="#" onclick="seekTo(1451.53); return false;" class="ts">[24:11]</a> I do think that your location is a prime location for this.</div>
-<div class="seg"><a href="#" onclick="seekTo(1456.53); return false;" class="ts">[24:16]</a> I do think there are some private entities that would be interested in partnerships.</div>
-<div class="seg"><a href="#" onclick="seekTo(1460.53); return false;" class="ts">[24:20]</a> They would allow them to pull from regions that they don&#x27;t.</div>
-<div class="seg"><a href="#" onclick="seekTo(1464.53); return false;" class="ts">[24:24]</a> You know, it&#x27;s too far to get to their landfill, but to have something closer that they could have</div>
-<div class="seg"><a href="#" onclick="seekTo(1468.53); return false;" class="ts">[24:28]</a> either a transportation or landfill to would be very interested.</div>
-<div class="seg"><a href="#" onclick="seekTo(1472.53); return false;" class="ts">[24:32]</a> And then the city is that they control their destiny in terms of charging whatever they want at the gate.</div>
-<div class="seg"><a href="#" onclick="seekTo(1477.53); return false;" class="ts">[24:37]</a> You can negotiate different rates for different parties.</div>
-<div class="seg"><a href="#" onclick="seekTo(1480.53); return false;" class="ts">[24:40]</a> So you can still be this rate for your for your residents and for your residential and commercial collection that the city does.</div>
-<div class="seg"><a href="#" onclick="seekTo(1488.53); return false;" class="ts">[24:48]</a> And then you charge a higher rate for private waste that&#x27;s brought in.</div>
-<div class="seg"><a href="#" onclick="seekTo(1492.53); return false;" class="ts">[24:52]</a> Or negotiated rates in certain quantities.</div>
-<div class="seg"><a href="#" onclick="seekTo(1495.53); return false;" class="ts">[24:55]</a> So a lot of options and flexibility there of our time.</div>
-<div class="seg"><a href="#" onclick="seekTo(1502.54); return false;" class="ts">[25:02]</a> I&#x27;m good.</div>
-<div class="seg"><a href="#" onclick="seekTo(1512.03); return false;" class="ts">[25:12]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(1513.03); return false;" class="ts">[25:13]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(1518.61); return false;" class="ts">[25:18]</a> To end.</div>
-<div class="seg"><a href="#" onclick="seekTo(1519.61); return false;" class="ts">[25:19]</a> The Greenville SEL engineering services appropriate to conduct station or substation.</div>
-<div class="seg"><a href="#" onclick="seekTo(1524.61); return false;" class="ts">[25:24]</a> Three upgrades, not to exceed 248,000, seven or forty dollars contingent.</div>
-<div class="seg"><a href="#" onclick="seekTo(1528.61); return false;" class="ts">[25:28]</a> Cloncimation of required contact document.</div>
-<div class="seg"><a href="#" onclick="seekTo(1531.61); return false;" class="ts">[25:31]</a> There.</div>
-<div class="seg"><a href="#" onclick="seekTo(1534.43); return false;" class="ts">[25:34]</a> This will be for.</div>
-<div class="seg"><a href="#" onclick="seekTo(1535.43); return false;" class="ts">[25:35]</a> And be for some three time.</div>
-<div class="seg"><a href="#" onclick="seekTo(1537.43); return false;" class="ts">[25:37]</a> I don&#x27;t know.</div>
-<div class="seg"><a href="#" onclick="seekTo(1539.23); return false;" class="ts">[25:39]</a> For the protection and control.</div>
-<div class="seg"><a href="#" onclick="seekTo(1540.9); return false;" class="ts">[25:40]</a> And it&#x27;s.</div>
-<div class="seg"><a href="#" onclick="seekTo(1541.9); return false;" class="ts">[25:41]</a> So before.</div>
-<div class="seg"><a href="#" onclick="seekTo(1542.9); return false;" class="ts">[25:42]</a> New control house.</div>
-<div class="seg"><a href="#" onclick="seekTo(1545.74); return false;" class="ts">[25:45]</a> Breakers.</div>
-<div class="seg"><a href="#" onclick="seekTo(1548.85); return false;" class="ts">[25:48]</a> This is.</div>
-<div class="seg"><a href="#" onclick="seekTo(1549.85); return false;" class="ts">[25:49]</a> This is.</div>
-<div class="seg"><a href="#" onclick="seekTo(1552.54); return false;" class="ts">[25:52]</a> This is.</div>
-<div class="seg"><a href="#" onclick="seekTo(1554.76); return false;" class="ts">[25:54]</a> The new.</div>
-<div class="seg"><a href="#" onclick="seekTo(1561.71); return false;" class="ts">[26:01]</a> These breakers.</div>
-<div class="seg"><a href="#" onclick="seekTo(1569.88); return false;" class="ts">[26:09]</a> This part of it.</div>
-<div class="seg"><a href="#" onclick="seekTo(1570.88); return false;" class="ts">[26:10]</a> We&#x27;ve had.</div>
-<div class="seg"><a href="#" onclick="seekTo(1572.71); return false;" class="ts">[26:12]</a> We&#x27;ve had.</div>
-<div class="seg"><a href="#" onclick="seekTo(1573.87); return false;" class="ts">[26:13]</a> We&#x27;ve had.</div>
-<div class="seg"><a href="#" onclick="seekTo(1575.13); return false;" class="ts">[26:15]</a> We&#x27;ve had.</div>
-<div class="seg"><a href="#" onclick="seekTo(1576.13); return false;" class="ts">[26:16]</a> We&#x27;ve had.</div>
-<div class="seg"><a href="#" onclick="seekTo(1577.13); return false;" class="ts">[26:17]</a> We&#x27;ve had.</div>
-<div class="seg"><a href="#" onclick="seekTo(1578.13); return false;" class="ts">[26:18]</a> We&#x27;ve had.</div>
-<div class="seg"><a href="#" onclick="seekTo(1586.55); return false;" class="ts">[26:26]</a> We&#x27;ve had.</div>
-<div class="seg"><a href="#" onclick="seekTo(1587.55); return false;" class="ts">[26:27]</a> We&#x27;ve had.</div>
-<div class="seg"><a href="#" onclick="seekTo(1588.55); return false;" class="ts">[26:28]</a> We&#x27;ve had.</div>
-<div class="seg"><a href="#" onclick="seekTo(1589.55); return false;" class="ts">[26:29]</a> We&#x27;ve had.</div>
-<div class="seg"><a href="#" onclick="seekTo(1599.3899999999999); return false;" class="ts">[26:39]</a> We&#x27;ve had.</div>
-<div class="seg"><a href="#" onclick="seekTo(1600.3899999999999); return false;" class="ts">[26:40]</a> We&#x27;ve had.</div>
-<div class="seg"><a href="#" onclick="seekTo(1602.3899999999999); return false;" class="ts">[26:42]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(1603.3899999999999); return false;" class="ts">[26:43]</a> Thank you.</div>
-<div class="seg"><a href="#" onclick="seekTo(1605.3899999999999); return false;" class="ts">[26:45]</a> So, sir.</div>
-<div class="seg"><a href="#" onclick="seekTo(1606.3899999999999); return false;" class="ts">[26:46]</a> This.</div>
-<div class="seg"><a href="#" onclick="seekTo(1609.95); return false;" class="ts">[26:49]</a> This.</div>
-<div class="seg"><a href="#" onclick="seekTo(1610.95); return false;" class="ts">[26:50]</a> This.</div>
-<div class="seg"><a href="#" onclick="seekTo(1611.95); return false;" class="ts">[26:51]</a> This.</div>
-<div class="seg"><a href="#" onclick="seekTo(1613.95); return false;" class="ts">[26:53]</a> This.</div>
-<div class="seg"><a href="#" onclick="seekTo(1614.95); return false;" class="ts">[26:54]</a> Thank.</div>
-<div class="seg"><a href="#" onclick="seekTo(1615.95); return false;" class="ts">[26:55]</a> Open, disappears.</div>
-<div class="seg"><a href="#" onclick="seekTo(1617.95); return false;" class="ts">[26:57]</a> There&#x27;s.</div>
-<div class="seg"><a href="#" onclick="seekTo(1618.95); return false;" class="ts">[26:58]</a> That.</div>
-<div class="seg"><a href="#" onclick="seekTo(1620.95); return false;" class="ts">[27:00]</a> That.</div>
-<div class="seg"><a href="#" onclick="seekTo(1622.95); return false;" class="ts">[27:02]</a> That.</div>
-<div class="seg"><a href="#" onclick="seekTo(1624.95); return false;" class="ts">[27:04]</a> Say.</div>
-<div class="seg"><a href="#" onclick="seekTo(1625.95); return false;" class="ts">[27:05]</a> It.</div>
-<div class="seg"><a href="#" onclick="seekTo(1626.95); return false;" class="ts">[27:06]</a> I mean.</div>
-<div class="seg"><a href="#" onclick="seekTo(1629.95); return false;" class="ts">[27:09]</a> In a.</div>
-<div class="seg"><a href="#" onclick="seekTo(1626.16); return false;" class="ts">[27:06]</a> This also includes a commissioning of any equipment after they give us a big thank you</div>
-<div class="seg"><a href="#" onclick="seekTo(1653.77); return false;" class="ts">[27:33]</a> You know, I was gonna ask</div>
-<div class="seg"><a href="#" onclick="seekTo(1658.41); return false;" class="ts">[27:38]</a> Appreciate the forward-thinking</div>
-<div class="seg"><a href="#" onclick="seekTo(1660.17); return false;" class="ts">[27:40]</a> This is just this is like Eric said this is the last</div>
-<div class="seg"><a href="#" onclick="seekTo(1662.41); return false;" class="ts">[27:42]</a> Sceptition</div>
-<div class="seg"><a href="#" onclick="seekTo(1663.45); return false;" class="ts">[27:43]</a> We have not</div>
-<div class="seg"><a href="#" onclick="seekTo(1664.45); return false;" class="ts">[27:44]</a> This is just being</div>
-<div class="seg"><a href="#" onclick="seekTo(1665.45); return false;" class="ts">[27:45]</a> Jane and far in this season. Thank you. They&#x27;ll come to the Industrial Park</div>
-<div class="seg"><a href="#" onclick="seekTo(1668.73); return false;" class="ts">[27:48]</a> I mean it&#x27;s like you know the design of the new Sceptation then I&#x27;m so you</div>
-<div class="seg"><a href="#" onclick="seekTo(1675.07); return false;" class="ts">[27:55]</a> Pits approved account on for a new look at that</div>
-<div class="seg"><a href="#" onclick="seekTo(1677.59); return false;" class="ts">[27:57]</a> they had it in this it&#x27;s six to</div>
-<div class="seg"><a href="#" onclick="seekTo(1679.85); return false;" class="ts">[27:59]</a> Or eight to 12 weeks for</div>
-<div class="seg"><a href="#" onclick="seekTo(1683.65); return false;" class="ts">[28:03]</a> They can structure that it would be and then back to new rates that we&#x27;ve already seen the benefit of our infrastructure being</div>
-<div class="seg"><a href="#" onclick="seekTo(1701.61); return false;" class="ts">[28:21]</a> Upgraded, so I don&#x27;t I mean this is a no brain or to me. I make a motion. I approve</div>
-<div class="seg"><a href="#" onclick="seekTo(1712.75); return false;" class="ts">[28:32]</a> I&#x27;m gonna say real quick. Thank you guys</div>
-<div class="seg"><a href="#" onclick="seekTo(1714.59); return false;" class="ts">[28:34]</a> I keep it on top right in the structure. I know Tyler had that as a focus whenever he was in your spot</div>
-<div class="seg"><a href="#" onclick="seekTo(1721.97); return false;" class="ts">[28:41]</a> Now you&#x27;ve moved up and kept out as a focus. I&#x27;m appreciate it</div>
-<div class="seg"><a href="#" onclick="seekTo(1727.07); return false;" class="ts">[28:47]</a> 11</div>
-<div class="seg"><a href="#" onclick="seekTo(1728.39); return false;" class="ts">[28:48]</a> It would be business of any which is supposed to this agenda</div>
-<div class="seg"><a href="#" onclick="seekTo(1731.55); return false;" class="ts">[28:51]</a> 12 staff reports</div>
-<div class="seg"><a href="#" onclick="seekTo(1735.6); return false;" class="ts">[28:55]</a> I&#x27;m Jeremy now. We&#x27;re gonna make one at this later now. We need some minute. Our heat. We waste where if you&#x27;re gonna plant</div>
-<div class="seg"><a href="#" onclick="seekTo(1741.44); return false;" class="ts">[29:01]</a> We did every five years. It&#x27;s for the plant that we have done there by the Gulffield</div>
-<div class="seg"><a href="#" onclick="seekTo(1746.0); return false;" class="ts">[29:06]</a> We&#x27;ll have a notice on the paper that if anybody gets asked about it like what it was about I mean it&#x27;s for getting treated that every five years</div>
-<div class="seg"><a href="#" onclick="seekTo(1757.71); return false;" class="ts">[29:17]</a> 13 trustees men in office</div>
-<div class="seg"><a href="#" onclick="seekTo(1762.59); return false;" class="ts">[29:22]</a> 14 this may will be continued from counts of chamber to remain in the staff room for the purpose of executive session as</div>
-<div class="seg"><a href="#" onclick="seekTo(1768.51); return false;" class="ts">[29:28]</a> Completion of agenda item 17 of the regular meeting of the mindset again</div>
-</div></section>
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/589" allowfullscreen></iframe></div>
+<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (13.6 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+</div>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="0.38"><span class="seg-time">00:00</span><span class="seg-text">We&#x27;ll have the invocation on. Part T, the Chris General would definitely follow a thankful for you and we&#x27;re</span></div>
+<div class="seg" data-time="7.97"><span class="seg-time">00:07</span><span class="seg-text">grateful to this community in The Blessing It is For so many ways as that</span></div>
+<div class="seg" data-time="12.25"><span class="seg-time">00:12</span><span class="seg-text">You leave them meeting tonight That discussion with Matt has honest interspecial or productive</span></div>
+<div class="seg" data-time="17.39"><span class="seg-time">00:17</span><span class="seg-text">And give our council members list when they make decisions where their</span></div>
+<div class="seg" data-time="20.73"><span class="seg-time">00:20</span><span class="seg-text">community that affects us all in your name we pray.</span></div>
+<div class="seg" data-time="26.1"><span class="seg-time">00:26</span><span class="seg-text">We met them, and pledge allegiance to the flag of</span></div>
+<div class="seg" data-time="29.1"><span class="seg-time">00:29</span><span class="seg-text">The United States of America</span></div>
+<div class="seg" data-time="32.1"><span class="seg-time">00:32</span><span class="seg-text">And it&#x27;s just a republic for which is saying one nation under God</span></div>
+<div class="seg" data-time="35.1"><span class="seg-time">00:35</span><span class="seg-text">Invisible with liberty and justice for our</span></div>
+<div class="seg" data-time="43.85"><span class="seg-time">00:43</span><span class="seg-text">For Public Info and I&#x27;m getting personal parents</span></div>
+<div class="seg" data-time="47.79"><span class="seg-time">00:47</span><span class="seg-text">Five Plains List</span></div>
+<div class="seg" data-time="49.79"><span class="seg-time">00:49</span><span class="seg-text">Most true proof</span></div>
+<div class="seg" data-time="53.5"><span class="seg-time">00:53</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="55.5"><span class="seg-time">00:55</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="67.83"><span class="seg-time">01:07</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="71.83"><span class="seg-time">01:11</span><span class="seg-text">17</span></div>
+<div class="seg" data-time="75.49"><span class="seg-time">01:15</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="82.32"><span class="seg-time">01:22</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="84.32"><span class="seg-time">01:24</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="95.49"><span class="seg-time">01:35</span><span class="seg-text">of $945.</span></div>
+<div class="seg" data-time="99.82"><span class="seg-time">01:39</span><span class="seg-text">I guess we&#x27;re giving this a big set,</span></div>
+<div class="seg" data-time="101.82"><span class="seg-time">01:41</span><span class="seg-text">9 or $4000 that&#x27;s always been if</span></div>
+<div class="seg" data-time="105.06"><span class="seg-time">01:45</span><span class="seg-text">This is approved in the</span></div>
+<div class="seg" data-time="108.87"><span class="seg-time">01:48</span><span class="seg-text">In our $140860 as you all are cheap for</span></div>
+<div class="seg" data-time="121.17"><span class="seg-time">02:01</span><span class="seg-text">We can do something.</span></div>
+<div class="seg" data-time="125.38"><span class="seg-time">02:05</span><span class="seg-text">Thanks.</span></div>
+<div class="seg" data-time="127.38"><span class="seg-time">02:07</span><span class="seg-text">Thanks.</span></div>
+<div class="seg" data-time="129.38"><span class="seg-time">02:09</span><span class="seg-text">Hi.</span></div>
+<div class="seg" data-time="131.38"><span class="seg-time">02:11</span><span class="seg-text">No discussion on solid waste management</span></div>
+<div class="seg" data-time="133.38"><span class="seg-time">02:13</span><span class="seg-text">Alternatives evaluation</span></div>
+<div class="seg" data-time="135.38"><span class="seg-time">02:15</span><span class="seg-text">Percentive by Burns and McDonald</span></div>
+<div class="seg" data-time="138.3"><span class="seg-time">02:18</span><span class="seg-text">Julie Davis.</span></div>
+<div class="seg" data-time="140.3"><span class="seg-time">02:20</span><span class="seg-text">Hi.</span></div>
+<div class="seg" data-time="142.3"><span class="seg-time">02:22</span><span class="seg-text">I&#x27;m happy to be here,</span></div>
+<div class="seg" data-time="146.93"><span class="seg-time">02:26</span><span class="seg-text">Okay?</span></div>
+<div class="seg" data-time="148.93"><span class="seg-time">02:28</span><span class="seg-text">All right so more of us are the ones in</span></div>
+<div class="seg" data-time="155.42"><span class="seg-time">02:35</span><span class="seg-text">Act oral 15 years and you&#x27;re</span></div>
+<div class="seg" data-time="158.42"><span class="seg-time">02:38</span><span class="seg-text">Biominal engineering team</span></div>
+<div class="seg" data-time="160.42"><span class="seg-time">02:40</span><span class="seg-text">So we focus on solid waste form or</span></div>
+<div class="seg" data-time="163.42"><span class="seg-time">02:43</span><span class="seg-text">Environmental system</span></div>
+<div class="seg" data-time="165.42"><span class="seg-time">02:45</span><span class="seg-text">First Molyer with this region</span></div>
+<div class="seg" data-time="166.42"><span class="seg-time">02:46</span><span class="seg-text">We&#x27;re going to focus on the public and</span></div>
+<div class="seg" data-time="169.42"><span class="seg-time">02:49</span><span class="seg-text">On the public.</span></div>
+<div class="seg" data-time="171.42"><span class="seg-time">02:51</span><span class="seg-text">On the public,</span></div>
+<div class="seg" data-time="173.42"><span class="seg-time">02:53</span><span class="seg-text">But we recently wrapped up a study</span></div>
+<div class="seg" data-time="175.42"><span class="seg-time">02:55</span><span class="seg-text">To follow results from this looking at</span></div>
+<div class="seg" data-time="177.42"><span class="seg-time">02:57</span><span class="seg-text">Opportunities for future facility</span></div>
+<div class="seg" data-time="179.42"><span class="seg-time">02:59</span><span class="seg-text">Employment whether it&#x27;s</span></div>
+<div class="seg" data-time="181.42"><span class="seg-time">03:01</span><span class="seg-text">Persuasion or landfill.</span></div>
+<div class="seg" data-time="197.28"><span class="seg-time">03:17</span><span class="seg-text">Maybe turn off</span></div>
+<div class="seg" data-time="208.03"><span class="seg-time">03:28</span><span class="seg-text">Sorry.</span></div>
+<div class="seg" data-time="210.62"><span class="seg-time">03:30</span><span class="seg-text">I think you have a good three party</span></div>
+<div class="seg" data-time="212.62"><span class="seg-time">03:32</span><span class="seg-text">So do a quick overview of the</span></div>
+<div class="seg" data-time="214.62"><span class="seg-time">03:34</span><span class="seg-text">Participant in your project or</span></div>
+<div class="seg" data-time="215.62"><span class="seg-time">03:35</span><span class="seg-text">You&#x27;re going to have a new</span></div>
+<div class="seg" data-time="218.62"><span class="seg-time">03:38</span><span class="seg-text">Transversation Serial Analysis</span></div>
+<div class="seg" data-time="221.62"><span class="seg-time">03:41</span><span class="seg-text">New landfills.</span></div>
+<div class="seg" data-time="223.62"><span class="seg-time">03:43</span><span class="seg-text">We did two different versions of that</span></div>
+<div class="seg" data-time="225.62"><span class="seg-time">03:45</span><span class="seg-text">And then I present our key findings and recommendations for</span></div>
+<div class="seg" data-time="229.54"><span class="seg-time">03:49</span><span class="seg-text">Access so your current transportation</span></div>
+<div class="seg" data-time="232.54"><span class="seg-time">03:52</span><span class="seg-text">You take it at about 20,000 tons per year</span></div>
+<div class="seg" data-time="235.54"><span class="seg-time">03:55</span><span class="seg-text">From the city</span></div>
+<div class="seg" data-time="237.54"><span class="seg-time">03:57</span><span class="seg-text">The City&#x27;s residential and commercial</span></div>
+<div class="seg" data-time="241.1"><span class="seg-time">04:01</span><span class="seg-text">Customers</span></div>
+<div class="seg" data-time="243.1"><span class="seg-time">04:03</span><span class="seg-text">Additional resident through</span></div>
+<div class="seg" data-time="245.1"><span class="seg-time">04:05</span><span class="seg-text">The facilities are used for 30 years</span></div>
+<div class="seg" data-time="248.1"><span class="seg-time">04:08</span><span class="seg-text">And you need significant improvement to continue operations</span></div>
+<div class="seg" data-time="252.1"><span class="seg-time">04:12</span><span class="seg-text">So the facility also was on a former</span></div>
+<div class="seg" data-time="254.1"><span class="seg-time">04:14</span><span class="seg-text">Incentorator site so it wasn&#x27;t</span></div>
+<div class="seg" data-time="257.1"><span class="seg-time">04:17</span><span class="seg-text">Originally designed</span></div>
+<div class="seg" data-time="259.1"><span class="seg-time">04:19</span><span class="seg-text">To be a Transversation Facility</span></div>
+<div class="seg" data-time="261.5"><span class="seg-time">04:21</span><span class="seg-text">This contracts with only in fill</span></div>
+<div class="seg" data-time="263.5"><span class="seg-time">04:23</span><span class="seg-text">70 miles away from</span></div>
+<div class="seg" data-time="265.5"><span class="seg-time">04:25</span><span class="seg-text">The actual disposal so that&#x27;s</span></div>
+<div class="seg" data-time="267.5"><span class="seg-time">04:27</span><span class="seg-text">Public and Lamar</span></div>
+<div class="seg" data-time="269.5"><span class="seg-time">04:29</span><span class="seg-text">We saved the combined of</span></div>
+<div class="seg" data-time="271.5"><span class="seg-time">04:31</span><span class="seg-text">Transportation</span></div>
+<div class="seg" data-time="273.5"><span class="seg-time">04:33</span><span class="seg-text">That is contractive with a private</span></div>
+<div class="seg" data-time="277.47"><span class="seg-time">04:37</span><span class="seg-text">Haller for Transportation</span></div>
+<div class="seg" data-time="279.47"><span class="seg-time">04:39</span><span class="seg-text">And the city&#x27;s in</span></div>
+<div class="seg" data-time="281.47"><span class="seg-time">04:41</span><span class="seg-text">Increases and cost</span></div>
+<div class="seg" data-time="283.47"><span class="seg-time">04:43</span><span class="seg-text">Significantly through those transportation costs</span></div>
+<div class="seg" data-time="285.47"><span class="seg-time">04:45</span><span class="seg-text">As well as disposal costs</span></div>
+<div class="seg" data-time="287.47"><span class="seg-time">04:47</span><span class="seg-text">So that very common</span></div>
+<div class="seg" data-time="289.47"><span class="seg-time">04:49</span><span class="seg-text">As we see capacity and landfills going down</span></div>
+<div class="seg" data-time="291.47"><span class="seg-time">04:51</span><span class="seg-text">In an region</span></div>
+<div class="seg" data-time="293.47"><span class="seg-time">04:53</span><span class="seg-text">The Cost per time had to get</span></div>
+<div class="seg" data-time="296.47"><span class="seg-time">04:56</span><span class="seg-text">With increased and the</span></div>
+<div class="seg" data-time="299.47"><span class="seg-time">04:59</span><span class="seg-text">Transversation costs</span></div>
+<div class="seg" data-time="302.89"><span class="seg-time">05:02</span><span class="seg-text">We&#x27;ve worked for a number of local governments across</span></div>
+<div class="seg" data-time="306.89"><span class="seg-time">05:06</span><span class="seg-text">And on hundreds the cities</span></div>
+<div class="seg" data-time="308.89"><span class="seg-time">05:08</span><span class="seg-text">So we created that plan</span></div>
+<div class="seg" data-time="310.89"><span class="seg-time">05:10</span><span class="seg-text">Facility and Alicies</span></div>
+<div class="seg" data-time="312.89"><span class="seg-time">05:12</span><span class="seg-text">To look at what could be options to make</span></div>
+<div class="seg" data-time="314.89"><span class="seg-time">05:14</span><span class="seg-text">Infurзance to your existing facility</span></div>
+<div class="seg" data-time="316.89"><span class="seg-time">05:16</span><span class="seg-text">In New Transportation</span></div>
+<div class="seg" data-time="319.89"><span class="seg-time">05:19</span><span class="seg-text">For development of landfills</span></div>
+<div class="seg" data-time="322.89"><span class="seg-time">05:22</span><span class="seg-text">One would</span></div>
+<div class="seg" data-time="324.89"><span class="seg-time">05:24</span><span class="seg-text">Minimum tonnage scenario</span></div>
+<div class="seg" data-time="326.89"><span class="seg-time">05:26</span><span class="seg-text">As this city</span></div>
+<div class="seg" data-time="328.89"><span class="seg-time">05:28</span><span class="seg-text">More than a year</span></div>
+<div class="seg" data-time="331.89"><span class="seg-time">05:31</span><span class="seg-text">We&#x27;ve worked for the city</span></div>
+<div class="seg" data-time="334.89"><span class="seg-time">05:34</span><span class="seg-text">And we have to work</span></div>
+<div class="seg" data-time="337.89"><span class="seg-time">05:37</span><span class="seg-text">To make sure that the City</span></div>
+<div class="seg" data-time="339.89"><span class="seg-time">05:39</span><span class="seg-text">Plus what could be expected from some of</span></div>
+<div class="seg" data-time="341.89"><span class="seg-time">05:41</span><span class="seg-text">The other</span></div>
+<div class="seg" data-time="345.89"><span class="seg-time">05:45</span><span class="seg-text">Transversations within their region</span></div>
+<div class="seg" data-time="347.89"><span class="seg-time">05:47</span><span class="seg-text">Then it maximums tonnage scenario</span></div>
+<div class="seg" data-time="350.89"><span class="seg-time">05:50</span><span class="seg-text">So if you were</span></div>
+<div class="seg" data-time="352.89"><span class="seg-time">05:52</span><span class="seg-text">If your really market</span></div>
+<div class="seg" data-time="356.12"><span class="seg-time">05:56</span><span class="seg-text">That material or</span></div>
+<div class="seg" data-time="357.12"><span class="seg-time">05:57</span><span class="seg-text">The conditions again for the new transportation</span></div>
+<div class="seg" data-time="360.12"><span class="seg-time">06:00</span><span class="seg-text">It was based on this community</span></div>
+<div class="seg" data-time="362.12"><span class="seg-time">06:02</span><span class="seg-text">We&#x27;ll work with that</span></div>
+<div class="seg" data-time="364.12"><span class="seg-time">06:04</span><span class="seg-text">And then landfills scenarios</span></div>
+<div class="seg" data-time="366.12"><span class="seg-time">06:06</span><span class="seg-text">Both of their region</span></div>
+<div class="seg" data-time="369.12"><span class="seg-time">06:09</span><span class="seg-text">Taking in consideration some</span></div>
+<div class="seg" data-time="373.7"><span class="seg-time">06:13</span><span class="seg-text">Regional facilities that are existing</span></div>
+<div class="seg" data-time="376.7"><span class="seg-time">06:16</span><span class="seg-text">So within the area</span></div>
+<div class="seg" data-time="378.7"><span class="seg-time">06:18</span><span class="seg-text">But there&#x27;s not a lot</span></div>
+<div class="seg" data-time="381.7"><span class="seg-time">06:21</span><span class="seg-text">Projective population</span></div>
+<div class="seg" data-time="383.7"><span class="seg-time">06:23</span><span class="seg-text">Or has it been recently</span></div>
+<div class="seg" data-time="385.7"><span class="seg-time">06:25</span><span class="seg-text">Like you have seen increases in your tonnage still</span></div>
+<div class="seg" data-time="389.7"><span class="seg-time">06:29</span><span class="seg-text">And so to be conservative we wanted</span></div>
+<div class="seg" data-time="391.7"><span class="seg-time">06:31</span><span class="seg-text">To maintain that estimated increase year over a</span></div>
+<div class="seg" data-time="394.7"><span class="seg-time">06:34</span><span class="seg-text">Year</span></div>
+<div class="seg" data-time="396.7"><span class="seg-time">06:36</span><span class="seg-text">That You&#x27;ve occurred</span></div>
+<div class="seg" data-time="399.7"><span class="seg-time">06:39</span><span class="seg-text">In the last few years for Your Tonnage</span></div>
+<div class="seg" data-time="404.26"><span class="seg-time">06:44</span><span class="seg-text">So, We use it as a</span></div>
+<div class="seg" data-time="406.26"><span class="seg-time">06:46</span><span class="seg-text">Your gate fees</span></div>
+<div class="seg" data-time="409.26"><span class="seg-time">06:49</span><span class="seg-text">So how much It costs for folks</span></div>
+<div class="seg" data-time="412.26"><span class="seg-time">06:52</span><span class="seg-text">For The region</span></div>
+<div class="seg" data-time="414.26"><span class="seg-time">06:54</span><span class="seg-text">New Transversation that rate could go up</span></div>
+<div class="seg" data-time="417.26"><span class="seg-time">06:57</span><span class="seg-text">And Could push waste other places to cheaper facilities</span></div>
+<div class="seg" data-time="421.26"><span class="seg-time">07:01</span><span class="seg-text">So just To note, That</span></div>
+<div class="seg" data-time="423.26"><span class="seg-time">07:03</span><span class="seg-text">It should be something</span></div>
+<div class="seg" data-time="425.26"><span class="seg-time">07:05</span><span class="seg-text">Can&#x27;t guarantee the tonnage until you look at what it costs on within</span></div>
+<div class="seg" data-time="428.26"><span class="seg-time">07:08</span><span class="seg-text">The region</span></div>
+<div class="seg" data-time="430.26"><span class="seg-time">07:10</span><span class="seg-text">In transportation and disposal cost would still</span></div>
+<div class="seg" data-time="432.26"><span class="seg-time">07:12</span><span class="seg-text">With a third party</span></div>
+<div class="seg" data-time="434.26"><span class="seg-time">07:14</span><span class="seg-text">And potentially will increase over time</span></div>
+<div class="seg" data-time="437.26"><span class="seg-time">07:17</span><span class="seg-text">And focus capacity decreases with in Norwegian</span></div>
+<div class="seg" data-time="439.26"><span class="seg-time">07:19</span><span class="seg-text">So looking at transportation design and cost assumptions</span></div>
+<div class="seg" data-time="444.71"><span class="seg-time">07:24</span><span class="seg-text">Looked a capacity of 25,700</span></div>
+<div class="seg" data-time="447.71"><span class="seg-time">07:27</span><span class="seg-text">Ten years so a slight increase over time</span></div>
+<div class="seg" data-time="450.71"><span class="seg-time">07:30</span><span class="seg-text">Point 4 7%</span></div>
+<div class="seg" data-time="452.71"><span class="seg-time">07:32</span><span class="seg-text">I didn&#x27;t interest rate</span></div>
+<div class="seg" data-time="454.71"><span class="seg-time">07:34</span><span class="seg-text">Of 3.5 percent</span></div>
+<div class="seg" data-time="456.71"><span class="seg-time">07:36</span><span class="seg-text">Amortized Over 20 Years</span></div>
+<div class="seg" data-time="458.71"><span class="seg-time">07:38</span><span class="seg-text">A Putments on a lower five year</span></div>
+<div class="seg" data-time="460.71"><span class="seg-time">07:40</span><span class="seg-text">Immortalization</span></div>
+<div class="seg" data-time="462.95"><span class="seg-time">07:42</span><span class="seg-text">Looking At 5A for Properties</span></div>
+<div class="seg" data-time="464.95"><span class="seg-time">07:44</span><span class="seg-text">To use Property that the city party has a</span></div>
+<div class="seg" data-time="466.95"><span class="seg-time">07:46</span><span class="seg-text">Transversation On</span></div>
+<div class="seg" data-time="467.95"><span class="seg-time">07:47</span><span class="seg-text">That site, 10.000 square foot building</span></div>
+<div class="seg" data-time="471.95"><span class="seg-time">07:51</span><span class="seg-text">And Put a contingency on that</span></div>
+<div class="seg" data-time="473.95"><span class="seg-time">07:53</span><span class="seg-text">Which is consistency for our cost</span></div>
+<div class="seg" data-time="475.95"><span class="seg-time">07:55</span><span class="seg-text">Consistent For Our Cost Estimates</span></div>
+<div class="seg" data-time="478.95"><span class="seg-time">07:58</span><span class="seg-text">We didn&#x27;t include revenues</span></div>
+<div class="seg" data-time="480.95"><span class="seg-time">08:00</span><span class="seg-text">So Didn&#x27;n Include the you are</span></div>
+<div class="seg" data-time="482.95"><span class="seg-time">08:02</span><span class="seg-text">Bringing in Charging your</span></div>
+<div class="seg" data-time="484.95"><span class="seg-time">08:04</span><span class="seg-text">Residents or people bringing it outside waste as part of this assessment</span></div>
+<div class="seg" data-time="490.44"><span class="seg-time">08:10</span><span class="seg-text">You&#x27;re looking Around</span></div>
+<div class="seg" data-time="492.44"><span class="seg-time">08:12</span><span class="seg-text">7 million dollars in capital costs</span></div>
+<div class="seg" data-time="494.44"><span class="seg-time">08:14</span><span class="seg-text">Developing a new transportation facility</span></div>
+<div class="seg" data-time="499.44"><span class="seg-time">08:19</span><span class="seg-text">We&#x27;re looking at the purchase</span></div>
+<div class="seg" data-time="502.44"><span class="seg-time">08:22</span><span class="seg-text">A Putment for Transversation</span></div>
+<div class="seg" data-time="505.44"><span class="seg-time">08:25</span><span class="seg-text">This is a new equipment</span></div>
+<div class="seg" data-time="509.13"><span class="seg-time">08:29</span><span class="seg-text">Because we are not familiar with how old and open you have on site currently</span></div>
+<div class="seg" data-time="512.13"><span class="seg-time">08:32</span><span class="seg-text">But it used to be, you know</span></div>
+<div class="seg" data-time="514.13"><span class="seg-time">08:34</span><span class="seg-text">Refurches every few years</span></div>
+<div class="seg" data-time="516.72"><span class="seg-time">08:36</span><span class="seg-text">And then regular operations in maintenance cost</span></div>
+<div class="seg" data-time="519.72"><span class="seg-time">08:39</span><span class="seg-text">We looked Over that 20 year time frame</span></div>
+<div class="seg" data-time="521.72"><span class="seg-time">08:41</span><span class="seg-text">It comes out To Be 93 dollars</span></div>
+<div class="seg" data-time="524.72"><span class="seg-time">08:44</span><span class="seg-text">27 Doll</span></div>
+<div class="seg" data-time="525.72"><span class="seg-time">08:45</span><span class="seg-text">27 cents per time</span></div>
+<div class="seg" data-time="529.22"><span class="seg-time">08:49</span><span class="seg-text">If you were to Develop a new transportation</span></div>
+<div class="seg" data-time="531.22"><span class="seg-time">08:51</span><span class="seg-text">To replace the existing facility</span></div>
+<div class="seg" data-time="534.86"><span class="seg-time">08:54</span><span class="seg-text">Again, there may be opportunities</span></div>
+<div class="seg" data-time="536.86"><span class="seg-time">08:56</span><span class="seg-text">To reduce that up front capital</span></div>
+<div class="seg" data-time="538.86"><span class="seg-time">08:58</span><span class="seg-text">Or use any of The equipment</span></div>
+<div class="seg" data-time="540.86"><span class="seg-time">09:00</span><span class="seg-text">That You already have on site</span></div>
+<div class="seg" data-time="542.86"><span class="seg-time">09:02</span><span class="seg-text">But</span></div>
+<div class="seg" data-time="546.19"><span class="seg-time">09:06</span><span class="seg-text">So we looked at within A 30 mile radius around</span></div>
+<div class="seg" data-time="550.19"><span class="seg-time">09:10</span><span class="seg-text">This city</span></div>
+<div class="seg" data-time="552.19"><span class="seg-time">09:12</span><span class="seg-text">There are 7 transfer stations including yours</span></div>
+<div class="seg" data-time="555.53"><span class="seg-time">09:15</span><span class="seg-text">Look to some of those transfer stations that</span></div>
+<div class="seg" data-time="559.53"><span class="seg-time">09:19</span><span class="seg-text">Currently Hall a significant distance similar</span></div>
+<div class="seg" data-time="562.53"><span class="seg-time">09:22</span><span class="seg-text">To you all, You call 70 miles</span></div>
+<div class="seg" data-time="564.53"><span class="seg-time">09:24</span><span class="seg-text">What benefit would Those</span></div>
+<div class="seg" data-time="566.53"><span class="seg-time">09:26</span><span class="seg-text">Transversations have?</span></div>
+<div class="seg" data-time="568.53"><span class="seg-time">09:28</span><span class="seg-text">Bringing waste into A new landfill here within this area</span></div>
+<div class="seg" data-time="571.53"><span class="seg-time">09:31</span><span class="seg-text">Rather than going</span></div>
+<div class="seg" data-time="573.53"><span class="seg-time">09:33</span><span class="seg-text">Some other facilities</span></div>
+<div class="seg" data-time="575.96"><span class="seg-time">09:35</span><span class="seg-text">We looked at ownership of the facility and assets</span></div>
+<div class="seg" data-time="577.96"><span class="seg-time">09:37</span><span class="seg-text">For example if</span></div>
+<div class="seg" data-time="579.96"><span class="seg-time">09:39</span><span class="seg-text">Transportation is owned by private waste entity</span></div>
+<div class="seg" data-time="581.96"><span class="seg-time">09:41</span><span class="seg-text">They would likely take their waste to Their</span></div>
+<div class="seg" data-time="584.96"><span class="seg-time">09:44</span><span class="seg-text">Landfill even though it&#x27;s further away</span></div>
+<div class="seg" data-time="586.96"><span class="seg-time">09:46</span><span class="seg-text">Because they can do that at a lower cost</span></div>
+<div class="seg" data-time="588.96"><span class="seg-time">09:48</span><span class="seg-text">Versus there were A number of transfer stations</span></div>
+<div class="seg" data-time="590.96"><span class="seg-time">09:50</span><span class="seg-text">That we&#x27;re city owned</span></div>
+<div class="seg" data-time="592.96"><span class="seg-time">09:52</span><span class="seg-text">Or by private entities</span></div>
+<div class="seg" data-time="594.96"><span class="seg-time">09:54</span><span class="seg-text">Don&#x27;t have landfills, It will be more likely To be</span></div>
+<div class="seg" data-time="596.96"><span class="seg-time">09:56</span><span class="seg-text">Divided into a landfill here</span></div>
+<div class="seg" data-time="598.96"><span class="seg-time">09:58</span><span class="seg-text">Look the historical tonnage data</span></div>
+<div class="seg" data-time="600.96"><span class="seg-time">10:00</span><span class="seg-text">And projections based on The population growth</span></div>
+<div class="seg" data-time="603.96"><span class="seg-time">10:03</span><span class="seg-text">Of the eight county region</span></div>
+<div class="seg" data-time="605.96"><span class="seg-time">10:05</span><span class="seg-text">There is a larger waste shed</span></div>
+<div class="seg" data-time="606.96"><span class="seg-time">10:06</span><span class="seg-text">That can be considered for a landfill</span></div>
+<div class="seg" data-time="609.96"><span class="seg-time">10:09</span><span class="seg-text">We did minimum and maximum cap</span></div>
+<div class="seg" data-time="612.96"><span class="seg-time">10:12</span><span class="seg-text">A couple slides just trying to Be conservative on</span></div>
+<div class="seg" data-time="615.96"><span class="seg-time">10:15</span><span class="seg-text">What those tonnages could look like</span></div>
+<div class="seg" data-time="618.96"><span class="seg-time">10:18</span><span class="seg-text">This analysis that we&#x27;ve provided now</span></div>
+<div class="seg" data-time="621.96"><span class="seg-time">10:21</span><span class="seg-text">The cities would take full capital cost</span></div>
+<div class="seg" data-time="624.96"><span class="seg-time">10:24</span><span class="seg-text">Ownership in operation of this new landfill facility</span></div>
+<div class="seg" data-time="628.96"><span class="seg-time">10:28</span><span class="seg-text">There are some options</span></div>
+<div class="seg" data-time="630.96"><span class="seg-time">10:30</span><span class="seg-text">For alternatives with</span></div>
+<div class="seg" data-time="631.96"><span class="seg-time">10:31</span><span class="seg-text">That the minimum and maximum scenario tonnage scenarios</span></div>
+<div class="seg" data-time="638.61"><span class="seg-time">10:38</span><span class="seg-text">The minimum was based on assuming that</span></div>
+<div class="seg" data-time="644.01"><span class="seg-time">10:44</span><span class="seg-text">20% to 50 percent of</span></div>
+<div class="seg" data-time="647.01"><span class="seg-time">10:47</span><span class="seg-text">Of waste could be directed from other transfer stations</span></div>
+<div class="seg" data-time="650.01"><span class="seg-time">10:50</span><span class="seg-text">We&#x27;re owned by cities</span></div>
+<div class="seg" data-time="652.01"><span class="seg-time">10:52</span><span class="seg-text">To this area</span></div>
+<div class="seg" data-time="654.01"><span class="seg-time">10:54</span><span class="seg-text">And then, none</span></div>
+<div class="seg" data-time="656.01"><span class="seg-time">10:56</span><span class="seg-text">Outof a waste would Be deverted</span></div>
+<div class="seg" data-time="658.01"><span class="seg-time">10:58</span><span class="seg-text">From any of their private land transfer stations</span></div>
+<div class="seg" data-time="659.01"><span class="seg-time">10:59</span><span class="seg-text">The maximum tonnage is assumed 100% of the waste</span></div>
+<div class="seg" data-time="663.01"><span class="seg-time">11:03</span><span class="seg-text">That would be currently generated at those</span></div>
+<div class="seg" data-time="666.01"><span class="seg-time">11:06</span><span class="seg-text">Transversations owned by cities</span></div>
+<div class="seg" data-time="668.01"><span class="seg-time">11:08</span><span class="seg-text">Would come to this new landfill</span></div>
+<div class="seg" data-time="670.01"><span class="seg-time">11:10</span><span class="seg-text">As well as some Of their private ways</span></div>
+<div class="seg" data-time="673.01"><span class="seg-time">11:13</span><span class="seg-text">To that, This may Be a closer proximity for them</span></div>
+<div class="seg" data-time="676.01"><span class="seg-time">11:16</span><span class="seg-text">So thats why we ran two different scenarios</span></div>
+<div class="seg" data-time="679.01"><span class="seg-time">11:19</span><span class="seg-text">Just try and show projections again</span></div>
+<div class="seg" data-time="681.01"><span class="seg-time">11:21</span><span class="seg-text">If city decided</span></div>
+<div class="seg" data-time="683.01"><span class="seg-time">11:23</span><span class="seg-text">To move forward</span></div>
+<div class="seg" data-time="684.01"><span class="seg-time">11:24</span><span class="seg-text">That could look like long term</span></div>
+<div class="seg" data-time="686.01"><span class="seg-time">11:26</span><span class="seg-text">But that gave us a facility footprint</span></div>
+<div class="seg" data-time="689.01"><span class="seg-time">11:29</span><span class="seg-text">Aker of 250 to 300 acres</span></div>
+<div class="seg" data-time="691.01"><span class="seg-time">11:31</span><span class="seg-text">Which is conservative</span></div>
+<div class="seg" data-time="693.01"><span class="seg-time">11:33</span><span class="seg-text">Thats not all area</span></div>
+<div class="seg" data-time="695.01"><span class="seg-time">11:35</span><span class="seg-text">It would be developed into an actual landfill</span></div>
+<div class="seg" data-time="698.01"><span class="seg-time">11:38</span><span class="seg-text">The landpilth footprint</span></div>
+<div class="seg" data-time="701.01"><span class="seg-time">11:41</span><span class="seg-text">Is much less closer</span></div>
+<div class="seg" data-time="704.01"><span class="seg-time">11:44</span><span class="seg-text">30 acre</span></div>
+<div class="seg" data-time="706.01"><span class="seg-time">11:46</span><span class="seg-text">You need lot Of areas for borrow soil, space</span></div>
+<div class="seg" data-time="708.01"><span class="seg-time">11:48</span><span class="seg-text">Storm water ponds, leachate pons</span></div>
+<div class="seg" data-time="710.01"><span class="seg-time">11:50</span><span class="seg-text">Hall roads</span></div>
+<div class="seg" data-time="711.01"><span class="seg-time">11:51</span><span class="seg-text">There&#x27;s a lot of other</span></div>
+<div class="seg" data-time="714.01"><span class="seg-time">11:54</span><span class="seg-text">Ancillary features that are on landfills</span></div>
+<div class="seg" data-time="717.01"><span class="seg-time">11:57</span><span class="seg-text">That require that acre</span></div>
+<div class="seg" data-time="721.74"><span class="seg-time">12:01</span><span class="seg-text">Similar design and cost assumptions</span></div>
+<div class="seg" data-time="724.74"><span class="seg-time">12:04</span><span class="seg-text">3.5% interest rate over 20 years</span></div>
+<div class="seg" data-time="727.74"><span class="seg-time">12:07</span><span class="seg-text">Equipment at 5 Years</span></div>
+<div class="seg" data-time="729.74"><span class="seg-time">12:09</span><span class="seg-text">Assumed a costs for acre based on</span></div>
+<div class="seg" data-time="731.74"><span class="seg-time">12:11</span><span class="seg-text">Recent Land Value sales in Ottawa County</span></div>
+<div class="seg" data-time="734.74"><span class="seg-time">12:14</span><span class="seg-text">Again, no actual property</span></div>
+<div class="seg" data-time="737.74"><span class="seg-time">12:17</span><span class="seg-text">Or location was used For this study</span></div>
+<div class="seg" data-time="739.74"><span class="seg-time">12:19</span><span class="seg-text">So it is really just looking at</span></div>
+<div class="seg" data-time="740.74"><span class="seg-time">12:20</span><span class="seg-text">Land available of this size</span></div>
+<div class="seg" data-time="743.74"><span class="seg-time">12:23</span><span class="seg-text">Within proximity</span></div>
+<div class="seg" data-time="745.74"><span class="seg-time">12:25</span><span class="seg-text">We assume sell development every five years</span></div>
+<div class="seg" data-time="748.74"><span class="seg-time">12:28</span><span class="seg-text">So when you develop a landfill</span></div>
+<div class="seg" data-time="750.74"><span class="seg-time">12:30</span><span class="seg-text">You initially developed your scale house, buildings</span></div>
+<div class="seg" data-time="753.74"><span class="seg-time">12:33</span><span class="seg-text">Your ponds and initial cell</span></div>
+<div class="seg" data-time="755.74"><span class="seg-time">12:35</span><span class="seg-text">And then every 5 Years</span></div>
+<div class="seg" data-time="757.74"><span class="seg-time">12:37</span><span class="seg-text">Develop another area</span></div>
+<div class="seg" data-time="759.74"><span class="seg-time">12:39</span><span class="seg-text">Or open in new areas</span></div>
+<div class="seg" data-time="761.74"><span class="seg-time">12:41</span><span class="seg-text">Close the old areas</span></div>
+<div class="seg" data-time="763.74"><span class="seg-time">12:43</span><span class="seg-text">So developing a new salary five</span></div>
+<div class="seg" data-time="765.74"><span class="seg-time">12:45</span><span class="seg-text">Similar contingency</span></div>
+<div class="seg" data-time="766.74"><span class="seg-time">12:46</span><span class="seg-text">And then significant increase in staffing and equipment</span></div>
+<div class="seg" data-time="770.74"><span class="seg-time">12:50</span><span class="seg-text">To account for this</span></div>
+<div class="seg" data-time="772.74"><span class="seg-time">12:52</span><span class="seg-text">Increased on your operation</span></div>
+<div class="seg" data-time="774.74"><span class="seg-time">12:54</span><span class="seg-text">Again, it&#x27;s included no revenue</span></div>
+<div class="seg" data-time="776.74"><span class="seg-time">12:56</span><span class="seg-text">So now outside</span></div>
+<div class="seg" data-time="779.98"><span class="seg-time">12:59</span><span class="seg-text">Revenue generated by that gate tipping fee</span></div>
+<div class="seg" data-time="782.98"><span class="seg-time">13:02</span><span class="seg-text">You would be able to set whatever rate you wanted</span></div>
+<div class="seg" data-time="785.98"><span class="seg-time">13:05</span><span class="seg-text">That the charge 2 outside</span></div>
+<div class="seg" data-time="788.98"><span class="seg-time">13:08</span><span class="seg-text">Hullers bring an invoice</span></div>
+<div class="seg" data-time="794.67"><span class="seg-time">13:14</span><span class="seg-text">Total here for the minimum landfill alternative</span></div>
+<div class="seg" data-time="797.67"><span class="seg-time">13:17</span><span class="seg-text">It is about 11.9 million</span></div>
+<div class="seg" data-time="798.67"><span class="seg-time">13:18</span><span class="seg-text">But over 20 years</span></div>
+<div class="seg" data-time="801.67"><span class="seg-time">13:21</span><span class="seg-text">It costs for time</span></div>
+<div class="seg" data-time="803.67"><span class="seg-time">13:23</span><span class="seg-text">Is 69.75 cents</span></div>
+<div class="seg" data-time="807.74"><span class="seg-time">13:27</span><span class="seg-text">Not including that new landfill capital</span></div>
+<div class="seg" data-time="809.74"><span class="seg-time">13:29</span><span class="seg-text">A New sell development</span></div>
+<div class="seg" data-time="811.74"><span class="seg-time">13:31</span><span class="seg-text">Equipment, again</span></div>
+<div class="seg" data-time="813.74"><span class="seg-time">13:33</span><span class="seg-text">New equipment all being purchased</span></div>
+<div class="seg" data-time="815.74"><span class="seg-time">13:35</span><span class="seg-text">And then increased operations and maintenance</span></div>
+<div class="seg" data-time="819.17"><span class="seg-time">13:39</span><span class="seg-text">Then before the larger capacity</span></div>
+<div class="seg" data-time="821.17"><span class="seg-time">13:41</span><span class="seg-text">Laying fell facility</span></div>
+<div class="seg" data-time="823.17"><span class="seg-time">13:43</span><span class="seg-text">For a large or 10-inch</span></div>
+<div class="seg" data-time="825.17"><span class="seg-time">13:45</span><span class="seg-text">Total of about</span></div>
+<div class="seg" data-time="826.57"><span class="seg-time">13:46</span><span class="seg-text">$1.9 million</span></div>
+<div class="seg" data-time="829.57"><span class="seg-time">13:49</span><span class="seg-text">And that comes out to be</span></div>
+<div class="seg" data-time="831.57"><span class="seg-time">13:51</span><span class="seg-text">49 dollars and 94 cents for a ton</span></div>
+<div class="seg" data-time="834.57"><span class="seg-time">13:54</span><span class="seg-text">So as you can see</span></div>
+<div class="seg" data-time="836.57"><span class="seg-time">13:56</span><span class="seg-text">It&#x27;s much more cost effective</span></div>
+<div class="seg" data-time="838.57"><span class="seg-time">13:58</span><span class="seg-text">To have the landfill when we had</span></div>
+<div class="seg" data-time="840.57"><span class="seg-time">14:00</span><span class="seg-text">A lot larger waste share or capacity of that landfo</span></div>
+<div class="seg" data-time="846.88"><span class="seg-time">14:06</span><span class="seg-text">In summary, your current system</span></div>
+<div class="seg" data-time="850.25"><span class="seg-time">14:10</span><span class="seg-text">Your annual throughput</span></div>
+<div class="seg" data-time="852.25"><span class="seg-time">14:12</span><span class="seg-text">19000 tons per year</span></div>
+<div class="seg" data-time="854.25"><span class="seg-time">14:14</span><span class="seg-text">As I&#x27;ve 2023</span></div>
+<div class="seg" data-time="856.25"><span class="seg-time">14:16</span><span class="seg-text">The costs are about</span></div>
+<div class="seg" data-time="857.25"><span class="seg-time">14:17</span><span class="seg-text">$1.4 million</span></div>
+<div class="seg" data-time="859.25"><span class="seg-time">14:19</span><span class="seg-text">And then the amount of</span></div>
+<div class="seg" data-time="863.25"><span class="seg-time">14:23</span><span class="seg-text">The amount is about</span></div>
+<div class="seg" data-time="865.25"><span class="seg-time">14:25</span><span class="seg-text">$2,000 and 45 cents</span></div>
+<div class="seg" data-time="868.25"><span class="seg-time">14:28</span><span class="seg-text">Looking at a new transportation</span></div>
+<div class="seg" data-time="870.52"><span class="seg-time">14:30</span><span class="seg-text">Increasing</span></div>
+<div class="seg" data-time="872.52"><span class="seg-time">14:32</span><span class="seg-text">To project out some growth</span></div>
+<div class="seg" data-time="874.52"><span class="seg-time">14:34</span><span class="seg-text">Within</span></div>
+<div class="seg" data-time="876.52"><span class="seg-time">14:36</span><span class="seg-text">In the next 20 years</span></div>
+<div class="seg" data-time="882.74"><span class="seg-time">14:42</span><span class="seg-text">You can get</span></div>
+<div class="seg" data-time="886.32"><span class="seg-time">14:46</span><span class="seg-text">The minimum permitting</span></div>
+<div class="seg" data-time="888.32"><span class="seg-time">14:48</span><span class="seg-text">Design and construction timeline of a new</span></div>
+<div class="seg" data-time="890.32"><span class="seg-time">14:50</span><span class="seg-text">Transpursation is 3 to 5 years</span></div>
+<div class="seg" data-time="892.32"><span class="seg-time">14:52</span><span class="seg-text">Well the minimum equivalent for</span></div>
+<div class="seg" data-time="894.32"><span class="seg-time">14:54</span><span class="seg-text">A landfill has five-to seven</span></div>
+<div class="seg" data-time="896.32"><span class="seg-time">14:56</span><span class="seg-text">Years</span></div>
+<div class="seg" data-time="899.32"><span class="seg-time">14:59</span><span class="seg-text">I&#x27;ve been permitting</span></div>
+<div class="seg" data-time="901.32"><span class="seg-time">15:01</span><span class="seg-text">Design, constructing landfills</span></div>
+<div class="seg" data-time="903.32"><span class="seg-time">15:03</span><span class="seg-text">For 15 year&#x27;s both here in O&#x27;Homach</span></div>
+<div class="seg" data-time="905.32"><span class="seg-time">15:05</span><span class="seg-text">Kansas, Missouri</span></div>
+<div class="seg" data-time="907.32"><span class="seg-time">15:07</span><span class="seg-text">DQ</span></div>
+<div class="seg" data-time="909.32"><span class="seg-time">15:09</span><span class="seg-text">Good job</span></div>
+<div class="seg" data-time="911.32"><span class="seg-time">15:11</span><span class="seg-text">But there are times</span></div>
+<div class="seg" data-time="912.32"><span class="seg-time">15:12</span><span class="seg-text">We have a lot of money</span></div>
+<div class="seg" data-time="916.32"><span class="seg-time">15:16</span><span class="seg-text">And we are planning and</span></div>
+<div class="seg" data-time="918.32"><span class="seg-time">15:18</span><span class="seg-text">And the planning</span></div>
+<div class="seg" data-time="921.59"><span class="seg-time">15:21</span><span class="seg-text">And that facility</span></div>
+<div class="seg" data-time="923.59"><span class="seg-time">15:23</span><span class="seg-text">So it&#x27;s</span></div>
+<div class="seg" data-time="926.59"><span class="seg-time">15:26</span><span class="seg-text">A long-term process</span></div>
+<div class="seg" data-time="929.96"><span class="seg-time">15:29</span><span class="seg-text">Transpursation is much shorter</span></div>
+<div class="seg" data-time="931.96"><span class="seg-time">15:31</span><span class="seg-text">Just based on potential impacts in</span></div>
+<div class="seg" data-time="933.96"><span class="seg-time">15:33</span><span class="seg-text">The size</span></div>
+<div class="seg" data-time="935.96"><span class="seg-time">15:35</span><span class="seg-text">Of property, its</span></div>
+<div class="seg" data-time="938.96"><span class="seg-time">15:38</span><span class="seg-text">Much different permitting</span></div>
+<div class="seg" data-time="940.96"><span class="seg-time">15:40</span><span class="seg-text">Process</span></div>
+<div class="seg" data-time="942.96"><span class="seg-time">15:42</span><span class="seg-text">It&#x27;s a very valuable</span></div>
+<div class="seg" data-time="946.81"><span class="seg-time">15:46</span><span class="seg-text">Conducting</span></div>
+<div class="seg" data-time="948.81"><span class="seg-time">15:48</span><span class="seg-text">Improving</span></div>
+<div class="seg" data-time="950.81"><span class="seg-time">15:50</span><span class="seg-text">Revealable properties to determine</span></div>
+<div class="seg" data-time="952.81"><span class="seg-time">15:52</span><span class="seg-text">Cost impacts and setting</span></div>
+<div class="seg" data-time="954.81"><span class="seg-time">15:54</span><span class="seg-text">To determine regulatory</span></div>
+<div class="seg" data-time="956.81"><span class="seg-time">15:56</span><span class="seg-text">And environmental feasibility</span></div>
+<div class="seg" data-time="959.81"><span class="seg-time">15:59</span><span class="seg-text">The landfill has cost</span></div>
+<div class="seg" data-time="961.81"><span class="seg-time">16:01</span><span class="seg-text">But it is all determined on viability of having</span></div>
+<div class="seg" data-time="963.81"><span class="seg-time">16:03</span><span class="seg-text">A property that makes sense</span></div>
+<div class="seg" data-time="965.81"><span class="seg-time">16:05</span><span class="seg-text">Having land, accessible</span></div>
+<div class="seg" data-time="967.81"><span class="seg-time">16:07</span><span class="seg-text">An off-and size</span></div>
+<div class="seg" data-time="969.81"><span class="seg-time">16:09</span><span class="seg-text">In nature</span></div>
+<div class="seg" data-time="971.81"><span class="seg-time">16:11</span><span class="seg-text">The property is a lot of</span></div>
+<div class="seg" data-time="976.81"><span class="seg-time">16:16</span><span class="seg-text">A lot of properties</span></div>
+<div class="seg" data-time="979.81"><span class="seg-time">16:19</span><span class="seg-text">The properties, water, zoning</span></div>
+<div class="seg" data-time="982.81"><span class="seg-time">16:22</span><span class="seg-text">Other properties</span></div>
+<div class="seg" data-time="984.81"><span class="seg-time">16:24</span><span class="seg-text">Flood plans</span></div>
+<div class="seg" data-time="986.81"><span class="seg-time">16:26</span><span class="seg-text">Wetlands</span></div>
+<div class="seg" data-time="988.81"><span class="seg-time">16:28</span><span class="seg-text">All those are considerations</span></div>
+<div class="seg" data-time="990.81"><span class="seg-time">16:30</span><span class="seg-text">As well as some operational things</span></div>
+<div class="seg" data-time="992.81"><span class="seg-time">16:32</span><span class="seg-text">Is it close to</span></div>
+<div class="seg" data-time="994.81"><span class="seg-time">16:34</span><span class="seg-text">Highway or other residences</span></div>
+<div class="seg" data-time="998.14"><span class="seg-time">16:38</span><span class="seg-text">So that would be one</span></div>
+<div class="seg" data-time="1000.14"><span class="seg-time">16:40</span><span class="seg-text">Continuous conversations we have talked to different</span></div>
+<div class="seg" data-time="1003.14"><span class="seg-time">16:43</span><span class="seg-text">Transpursations on what their thoughts</span></div>
+<div class="seg" data-time="1005.14"><span class="seg-time">16:45</span><span class="seg-text">Bringing waste this direction</span></div>
+<div class="seg" data-time="1007.14"><span class="seg-time">16:47</span><span class="seg-text">To a new landfill</span></div>
+<div class="seg" data-time="1009.14"><span class="seg-time">16:49</span><span class="seg-text">But continue that</span></div>
+<div class="seg" data-time="1011.14"><span class="seg-time">16:51</span><span class="seg-text">To get firm commitments</span></div>
+<div class="seg" data-time="1014.14"><span class="seg-time">16:54</span><span class="seg-text">To better size for facility</span></div>
+<div class="seg" data-time="1017.14"><span class="seg-time">16:57</span><span class="seg-text">And local farm out you can project</span></div>
+<div class="seg" data-time="1019.14"><span class="seg-time">16:59</span><span class="seg-text">That way is generation</span></div>
+<div class="seg" data-time="1021.14"><span class="seg-time">17:01</span><span class="seg-text">Typically when we cycle in</span></div>
+<div class="seg" data-time="1024.14"><span class="seg-time">17:04</span><span class="seg-text">Films, we are looking at silking them</span></div>
+<div class="seg" data-time="1026.14"><span class="seg-time">17:06</span><span class="seg-text">For 50-80 or 100 years of capacity</span></div>
+<div class="seg" data-time="1027.38"><span class="seg-time">17:07</span><span class="seg-text">And we are looking at the</span></div>
+<div class="seg" data-time="1032.38"><span class="seg-time">17:12</span><span class="seg-text">And landfill gate fees and landfill</span></div>
+<div class="seg" data-time="1035.38"><span class="seg-time">17:15</span><span class="seg-text">The gas is going to go up for everyone</span></div>
+<div class="seg" data-time="1039.38"><span class="seg-time">17:19</span><span class="seg-text">It&#x27;s also good</span></div>
+<div class="seg" data-time="1041.38"><span class="seg-time">17:21</span><span class="seg-text">To look right now your transportation</span></div>
+<div class="seg" data-time="1043.38"><span class="seg-time">17:23</span><span class="seg-text">I looked very briefly</span></div>
+<div class="seg" data-time="1045.38"><span class="seg-time">17:25</span><span class="seg-text">Is competitively price with others</span></div>
+<div class="seg" data-time="1047.72"><span class="seg-time">17:27</span><span class="seg-text">But as you</span></div>
+<div class="seg" data-time="1049.72"><span class="seg-time">17:29</span><span class="seg-text">Making investments that</span></div>
+<div class="seg" data-time="1052.25"><span class="seg-time">17:32</span><span class="seg-text">And then consider partnerships to support the development of a new</span></div>
+<div class="seg" data-time="1055.25"><span class="seg-time">17:35</span><span class="seg-text">Transpursation or landfill</span></div>
+<div class="seg" data-time="1057.25"><span class="seg-time">17:37</span><span class="seg-text">To share an upfront capital cost and provide</span></div>
+<div class="seg" data-time="1060.25"><span class="seg-time">17:40</span><span class="seg-text">Costability long-term</span></div>
+<div class="seg" data-time="1062.25"><span class="seg-time">17:42</span><span class="seg-text">So we work with all our local government clients that may partner</span></div>
+<div class="seg" data-time="1065.25"><span class="seg-time">17:45</span><span class="seg-text">With other entities</span></div>
+<div class="seg" data-time="1068.25"><span class="seg-time">17:48</span><span class="seg-text">That could be partnering</span></div>
+<div class="seg" data-time="1071.25"><span class="seg-time">17:51</span><span class="seg-text">Local communities, tribal agency</span></div>
+<div class="seg" data-time="1074.25"><span class="seg-time">17:54</span><span class="seg-text">With private waste company</span></div>
+<div class="seg" data-time="1076.25"><span class="seg-time">17:56</span><span class="seg-text">And we are looking at the</span></div>
+<div class="seg" data-time="1079.25"><span class="seg-time">17:59</span><span class="seg-text">Organic business</span></div>
+<div class="seg" data-time="1081.25"><span class="seg-time">18:01</span><span class="seg-text">We have a client that will pay to develop</span></div>
+<div class="seg" data-time="1084.25"><span class="seg-time">18:04</span><span class="seg-text">The facility and private waste company</span></div>
+<div class="seg" data-time="1087.25"><span class="seg-time">18:07</span><span class="seg-text">Operating on their behalf</span></div>
+<div class="seg" data-time="1090.25"><span class="seg-time">18:10</span><span class="seg-text">In turn, clients</span></div>
+<div class="seg" data-time="1092.25"><span class="seg-time">18:12</span><span class="seg-text">Long-term stable cost for waste management</span></div>
+<div class="seg" data-time="1096.25"><span class="seg-time">18:16</span><span class="seg-text">Moving forward</span></div>
+<div class="seg" data-time="1098.25"><span class="seg-time">18:18</span><span class="seg-text">We&#x27;re not taking anything they may be familiar with in</span></div>
+<div class="seg" data-time="1101.94"><span class="seg-time">18:21</span><span class="seg-text">So there&#x27;s a lot of opportunities for partnership</span></div>
+<div class="seg" data-time="1104.94"><span class="seg-time">18:24</span><span class="seg-text">The city could evaluate if you wanted to move forward with</span></div>
+<div class="seg" data-time="1108.94"><span class="seg-time">18:28</span><span class="seg-text">Developing more infrastructure</span></div>
+<div class="seg" data-time="1113.86"><span class="seg-time">18:33</span><span class="seg-text">Can we take any questions?</span></div>
+<div class="seg" data-time="1130.05"><span class="seg-time">18:50</span><span class="seg-text">You&#x27;ve done this</span></div>
+<div class="seg" data-time="1132.05"><span class="seg-time">18:52</span><span class="seg-text">Pretty familiar</span></div>
+<div class="seg" data-time="1135.67"><span class="seg-time">18:55</span><span class="seg-text">Have your work</span></div>
+<div class="seg" data-time="1137.67"><span class="seg-time">18:57</span><span class="seg-text">Both the transfer station scenario and landfill</span></div>
+<div class="seg" data-time="1141.17"><span class="seg-time">19:01</span><span class="seg-text">What are your personal preference</span></div>
+<div class="seg" data-time="1144.17"><span class="seg-time">19:04</span><span class="seg-text">I guess is most</span></div>
+<div class="seg" data-time="1145.17"><span class="seg-time">19:05</span><span class="seg-text">I guess the biggest bang for our buck</span></div>
+<div class="seg" data-time="1149.18"><span class="seg-time">19:09</span><span class="seg-text">Sure, so if there are a number of landfill facilities</span></div>
+<div class="seg" data-time="1154.38"><span class="seg-time">19:14</span><span class="seg-text">Or processing facility within</span></div>
+<div class="seg" data-time="1156.38"><span class="seg-time">19:16</span><span class="seg-text">The region and transfer stations allow municipalities in general to have</span></div>
+<div class="seg" data-time="1159.38"><span class="seg-time">19:19</span><span class="seg-text">A lot flexibility</span></div>
+<div class="seg" data-time="1161.38"><span class="seg-time">19:21</span><span class="seg-text">And their waste can go over time</span></div>
+<div class="seg" data-time="1163.38"><span class="seg-time">19:23</span><span class="seg-text">Which makes other people competitive</span></div>
+<div class="seg" data-time="1165.38"><span class="seg-time">19:25</span><span class="seg-text">In pricing</span></div>
+<div class="seg" data-time="1167.38"><span class="seg-time">19:27</span><span class="seg-text">So you had lots</span></div>
+<div class="seg" data-time="1169.38"><span class="seg-time">19:29</span><span class="seg-text">Of options, landslides</span></div>
+<div class="seg" data-time="1172.38"><span class="seg-time">19:32</span><span class="seg-text">You could get really competitive pricing</span></div>
+<div class="seg" data-time="1174.38"><span class="seg-time">19:34</span><span class="seg-text">In areas where there isn&#x27;t a lot of other facilities</span></div>
+<div class="seg" data-time="1179.38"><span class="seg-time">19:39</span><span class="seg-text">Then landfill does allow for the city to take control</span></div>
+<div class="seg" data-time="1183.38"><span class="seg-time">19:43</span><span class="seg-text">Of their own costs that they will have</span></div>
+<div class="seg" data-time="1186.87"><span class="seg-time">19:46</span><span class="seg-text">And manage</span></div>
+<div class="seg" data-time="1188.87"><span class="seg-time">19:48</span><span class="seg-text">That cost through development</span></div>
+<div class="seg" data-time="1190.87"><span class="seg-time">19:50</span><span class="seg-text">If it&#x27;s up facility and then</span></div>
+<div class="seg" data-time="1193.87"><span class="seg-time">19:53</span><span class="seg-text">There is opportunities</span></div>
+<div class="seg" data-time="1196.14"><span class="seg-time">19:56</span><span class="seg-text">To generate revenue</span></div>
+<div class="seg" data-time="1198.14"><span class="seg-time">19:58</span><span class="seg-text">I would say a lot</span></div>
+<div class="seg" data-time="1200.14"><span class="seg-time">20:00</span><span class="seg-text">Some of them operate landfill, some</span></div>
+<div class="seg" data-time="1205.14"><span class="seg-time">20:05</span><span class="seg-text">The mob rate transfer station and then have both</span></div>
+<div class="seg" data-time="1208.14"><span class="seg-time">20:08</span><span class="seg-text">Depending on how large they are</span></div>
+<div class="seg" data-time="1211.18"><span class="seg-time">20:11</span><span class="seg-text">How large the operation is</span></div>
+<div class="seg" data-time="1213.18"><span class="seg-time">20:13</span><span class="seg-text">One concerns that cities</span></div>
+<div class="seg" data-time="1215.18"><span class="seg-time">20:15</span><span class="seg-text">Have in transitioning from a transfer</span></div>
+<div class="seg" data-time="1218.18"><span class="seg-time">20:18</span><span class="seg-text">It&#x27;s very significant</span></div>
+<div class="seg" data-time="1220.18"><span class="seg-time">20:20</span><span class="seg-text">If you want to move</span></div>
+<div class="seg" data-time="1223.18"><span class="seg-time">20:23</span><span class="seg-text">You&#x27;re familiar with regulatory compliance</span></div>
+<div class="seg" data-time="1225.18"><span class="seg-time">20:25</span><span class="seg-text">But there sometimes benefits</span></div>
+<div class="seg" data-time="1227.18"><span class="seg-time">20:27</span><span class="seg-text">If you want to have a partner that can help with ramping up</span></div>
+<div class="seg" data-time="1231.49"><span class="seg-time">20:31</span><span class="seg-text">And even in the short term period</span></div>
+<div class="seg" data-time="1234.49"><span class="seg-time">20:34</span><span class="seg-text">Whether it&#x27;s 5 or 10 year contract</span></div>
+<div class="seg" data-time="1236.49"><span class="seg-time">20:36</span><span class="seg-text">Or longer, after 30 years depending on what</span></div>
+<div class="seg" data-time="1239.49"><span class="seg-time">20:39</span><span class="seg-text">What your city and state statutes allow</span></div>
+<div class="seg" data-time="1242.49"><span class="seg-time">20:42</span><span class="seg-text">To support</span></div>
+<div class="seg" data-time="1244.49"><span class="seg-time">20:44</span><span class="seg-text">Support</span></div>
+<div class="seg" data-time="1246.49"><span class="seg-time">20:46</span><span class="seg-text">The operation of this facility</span></div>
+<div class="seg" data-time="1249.49"><span class="seg-time">20:49</span><span class="seg-text">As well as their comfort level is</span></div>
+<div class="seg" data-time="1251.49"><span class="seg-time">20:51</span><span class="seg-text">And diving into something that might be new</span></div>
+<div class="seg" data-time="1255.76"><span class="seg-time">20:55</span><span class="seg-text">Compared to what you do at the transfer station</span></div>
+<div class="seg" data-time="1259.76"><span class="seg-time">20:59</span><span class="seg-text">Earlier, are we touched on</span></div>
+<div class="seg" data-time="1261.76"><span class="seg-time">21:01</span><span class="seg-text">The subject of what materials</span></div>
+<div class="seg" data-time="1264.76"><span class="seg-time">21:04</span><span class="seg-text">You allow for your landfill</span></div>
+<div class="seg" data-time="1267.76"><span class="seg-time">21:07</span><span class="seg-text">Can it expand a little bit?</span></div>
+<div class="seg" data-time="1270.76"><span class="seg-time">21:10</span><span class="seg-text">Are there medical waste and things like this</span></div>
+<div class="seg" data-time="1272.76"><span class="seg-time">21:12</span><span class="seg-text">What was evaluated in municipal solid wastewater</span></div>
+<div class="seg" data-time="1276.13"><span class="seg-time">21:16</span><span class="seg-text">This would just feed household waste</span></div>
+<div class="seg" data-time="1278.13"><span class="seg-time">21:18</span><span class="seg-text">There could be an option</span></div>
+<div class="seg" data-time="1279.13"><span class="seg-time">21:19</span><span class="seg-text">Construction and demolishing waste could be included as well</span></div>
+<div class="seg" data-time="1283.13"><span class="seg-time">21:23</span><span class="seg-text">So that&#x27;s for construction materials</span></div>
+<div class="seg" data-time="1285.13"><span class="seg-time">21:25</span><span class="seg-text">There are opportunities</span></div>
+<div class="seg" data-time="1288.13"><span class="seg-time">21:28</span><span class="seg-text">If you do have enough acreage, they would even co-locate</span></div>
+<div class="seg" data-time="1291.13"><span class="seg-time">21:31</span><span class="seg-text">Perhaps a composting facility</span></div>
+<div class="seg" data-time="1293.13"><span class="seg-time">21:33</span><span class="seg-text">A adjacent to it</span></div>
+<div class="seg" data-time="1295.13"><span class="seg-time">21:35</span><span class="seg-text">They might offer two newties for grant funding</span></div>
+<div class="seg" data-time="1297.13"><span class="seg-time">21:37</span><span class="seg-text">You wanted</span></div>
+<div class="seg" data-time="1299.13"><span class="seg-time">21:39</span><span class="seg-text">If we want into integrate something like a composting facility</span></div>
+<div class="seg" data-time="1301.13"><span class="seg-time">21:41</span><span class="seg-text">But primarily the landfill</span></div>
+<div class="seg" data-time="1303.13"><span class="seg-time">21:43</span><span class="seg-text">We evaluated with municipal solid wastewater</span></div>
+<div class="seg" data-time="1305.13"><span class="seg-time">21:45</span><span class="seg-text">That is an permit</span></div>
+<div class="seg" data-time="1306.13"><span class="seg-time">21:46</span><span class="seg-text">That would be valid for facility like this</span></div>
+<div class="seg" data-time="1311.29"><span class="seg-time">21:51</span><span class="seg-text">So I have to look at that our transfer station</span></div>
+<div class="seg" data-time="1314.29"><span class="seg-time">21:54</span><span class="seg-text">Would you say whatever way we go</span></div>
+<div class="seg" data-time="1316.29"><span class="seg-time">21:56</span><span class="seg-text">We need a big grant of</span></div>
+<div class="seg" data-time="1318.88"><span class="seg-time">21:58</span><span class="seg-text">Yes, so i personally again</span></div>
+<div class="seg" data-time="1320.88"><span class="seg-time">22:00</span><span class="seg-text">Have not been into your transportation</span></div>
+<div class="seg" data-time="1322.88"><span class="seg-time">22:02</span><span class="seg-text">Because im tagging in</span></div>
+<div class="seg" data-time="1324.88"><span class="seg-time">22:04</span><span class="seg-text">For someone but</span></div>
+<div class="seg" data-time="1326.88"><span class="seg-time">22:06</span><span class="seg-text">But Im seen quite few photos</span></div>
+<div class="seg" data-time="1328.88"><span class="seg-time">22:08</span><span class="seg-text">And work with a number</span></div>
+<div class="seg" data-time="1330.88"><span class="seg-time">22:10</span><span class="seg-text">Of transport stations on improvement</span></div>
+<div class="seg" data-time="1331.88"><span class="seg-time">22:11</span><span class="seg-text">Regardless you have some work to do</span></div>
+<div class="seg" data-time="1334.88"><span class="seg-time">22:14</span><span class="seg-text">And quickly would be beneficial</span></div>
+<div class="seg" data-time="1338.15"><span class="seg-time">22:18</span><span class="seg-text">So again my opinion correct me if i&#x27;m wrong</span></div>
+<div class="seg" data-time="1341.15"><span class="seg-time">22:21</span><span class="seg-text">I think Kevin, feel free jump in</span></div>
+<div class="seg" data-time="1343.15"><span class="seg-time">22:23</span><span class="seg-text">As well</span></div>
+<div class="seg" data-time="1345.15"><span class="seg-time">22:25</span><span class="seg-text">After like we all did</span></div>
+<div class="seg" data-time="1347.15"><span class="seg-time">22:27</span><span class="seg-text">We need a big aggressive on the land</span></div>
+<div class="seg" data-time="1350.15"><span class="seg-time">22:30</span><span class="seg-text">Otherwise</span></div>
+<div class="seg" data-time="1352.15"><span class="seg-time">22:32</span><span class="seg-text">If when going through transfer station</span></div>
+<div class="seg" data-time="1354.15"><span class="seg-time">22:34</span><span class="seg-text">We&#x27;re gonna</span></div>
+<div class="seg" data-time="1356.74"><span class="seg-time">22:36</span><span class="seg-text">Have a crash problem there</span></div>
+<div class="seg" data-time="1358.74"><span class="seg-time">22:38</span><span class="seg-text">And i think we can solve a long-term problem for our community</span></div>
+<div class="seg" data-time="1362.74"><span class="seg-time">22:42</span><span class="seg-text">By being aggressive and going to land fill around</span></div>
+<div class="seg" data-time="1366.02"><span class="seg-time">22:46</span><span class="seg-text">It may be more expensive at the beginning</span></div>
+<div class="seg" data-time="1368.02"><span class="seg-time">22:48</span><span class="seg-text">But I like that</span></div>
+<div class="seg" data-time="1370.29"><span class="seg-time">22:50</span><span class="seg-text">We save money in end</span></div>
+<div class="seg" data-time="1374.29"><span class="seg-time">22:54</span><span class="seg-text">If you were too moved forward with sighting of landfill</span></div>
+<div class="seg" data-time="1377.29"><span class="seg-time">22:57</span><span class="seg-text">it would prevent others from doing so</span></div>
+<div class="seg" data-time="1380.29"><span class="seg-time">23:00</span><span class="seg-text">Likely in their region</span></div>
+<div class="seg" data-time="1382.29"><span class="seg-time">23:02</span><span class="seg-text">So this city could kind</span></div>
+<div class="seg" data-time="1384.29"><span class="seg-time">23:04</span><span class="seg-text">Of taking natural</span></div>
+<div class="seg" data-time="1385.29"><span class="seg-time">23:05</span><span class="seg-text">Maybe private entities or others</span></div>
+<div class="seg" data-time="1388.29"><span class="seg-time">23:08</span><span class="seg-text">That are looking in this region to develop facilities</span></div>
+<div class="seg" data-time="1392.29"><span class="seg-time">23:12</span><span class="seg-text">To the city if they had a transfer station</span></div>
+<div class="seg" data-time="1396.29"><span class="seg-time">23:16</span><span class="seg-text">But would be out of your control</span></div>
+<div class="seg" data-time="1398.29"><span class="seg-time">23:18</span><span class="seg-text">How much money was teleported?</span></div>
+<div class="seg" data-time="1402.1"><span class="seg-time">23:22</span><span class="seg-text">I mean i didn&#x27;t know that it just looked</span></div>
+<div class="seg" data-time="1404.1"><span class="seg-time">23:24</span><span class="seg-text">Hard on what to tell</span></div>
+<div class="seg" data-time="1406.1"><span class="seg-time">23:26</span><span class="seg-text">It sounds like...</span></div>
+<div class="seg" data-time="1408.1"><span class="seg-time">23:28</span><span class="seg-text">Except for one begins with the next</span></div>
+<div class="seg" data-time="1411.1"><span class="seg-time">23:31</span><span class="seg-text">And then you have to do it</span></div>
+<div class="seg" data-time="1414.66"><span class="seg-time">23:34</span><span class="seg-text">I just like the fact that we can control our destiny</span></div>
+<div class="seg" data-time="1418.7"><span class="seg-time">23:38</span><span class="seg-text">And when you need to</span></div>
+<div class="seg" data-time="1420.7"><span class="seg-time">23:40</span><span class="seg-text">But i think with transfer station</span></div>
+<div class="seg" data-time="1423.7"><span class="seg-time">23:43</span><span class="seg-text">We&#x27;re always at someone else&#x27;s mercy on their cost</span></div>
+<div class="seg" data-time="1426.7"><span class="seg-time">23:46</span><span class="seg-text">That costs of them a continue</span></div>
+<div class="seg" data-time="1428.7"><span class="seg-time">23:48</span><span class="seg-text">To go up it started going down</span></div>
+<div class="seg" data-time="1430.7"><span class="seg-time">23:50</span><span class="seg-text">For having all 70 miles</span></div>
+<div class="seg" data-time="1434.03"><span class="seg-time">23:54</span><span class="seg-text">Gas prices play into there</span></div>
+<div class="seg" data-time="1436.03"><span class="seg-time">23:56</span><span class="seg-text">They are fees</span></div>
+<div class="seg" data-time="1438.03"><span class="seg-time">23:58</span><span class="seg-text">At least hours</span></div>
+<div class="seg" data-time="1440.03"><span class="seg-time">24:00</span><span class="seg-text">Then they actually make some revenue</span></div>
+<div class="seg" data-time="1443.03"><span class="seg-time">24:03</span><span class="seg-text">Others more user-away</span></div>
+<div class="seg" data-time="1446.5"><span class="seg-time">24:06</span><span class="seg-text">Other transfer stations are also hauling just as far</span></div>
+<div class="seg" data-time="1450.5"><span class="seg-time">24:10</span><span class="seg-text">Or if not farther</span></div>
+<div class="seg" data-time="1452.5"><span class="seg-time">24:12</span><span class="seg-text">I do think that your location is a</span></div>
+<div class="seg" data-time="1455.5"><span class="seg-time">24:15</span><span class="seg-text">A prime locations for this</span></div>
+<div class="seg" data-time="1458.5"><span class="seg-time">24:18</span><span class="seg-text">There&#x27;s some private entities</span></div>
+<div class="seg" data-time="1460.5"><span class="seg-time">24:20</span><span class="seg-text">That would be interested in partnerships</span></div>
+<div class="seg" data-time="1462.5"><span class="seg-time">24:22</span><span class="seg-text">They will allow them to pull from regions</span></div>
+<div class="seg" data-time="1464.5"><span class="seg-time">24:24</span><span class="seg-text">To get their landfill</span></div>
+<div class="seg" data-time="1467.5"><span class="seg-time">24:27</span><span class="seg-text">But they have something closer</span></div>
+<div class="seg" data-time="1469.5"><span class="seg-time">24:29</span><span class="seg-text">Either transportation or landfill</span></div>
+<div class="seg" data-time="1471.5"><span class="seg-time">24:31</span><span class="seg-text">Or you would be very interested in the city</span></div>
+<div class="seg" data-time="1474.5"><span class="seg-time">24:34</span><span class="seg-text">They control their destiny</span></div>
+<div class="seg" data-time="1476.5"><span class="seg-time">24:36</span><span class="seg-text">In terms of charging whatever they want</span></div>
+<div class="seg" data-time="1478.5"><span class="seg-time">24:38</span><span class="seg-text">You can negotiate different rates for</span></div>
+<div class="seg" data-time="1481.5"><span class="seg-time">24:41</span><span class="seg-text">Different parties so it could still</span></div>
+<div class="seg" data-time="1483.5"><span class="seg-time">24:43</span><span class="seg-text">Be this rate</span></div>
+<div class="seg" data-time="1485.5"><span class="seg-time">24:45</span><span class="seg-text">For your residents and</span></div>
+<div class="seg" data-time="1487.5"><span class="seg-time">24:47</span><span class="seg-text">For residential and commercial collection that</span></div>
+<div class="seg" data-time="1489.5"><span class="seg-time">24:49</span><span class="seg-text">The City does</span></div>
+<div class="seg" data-time="1491.5"><span class="seg-time">24:51</span><span class="seg-text">And then charge a higher rate</span></div>
+<div class="seg" data-time="1493.5"><span class="seg-time">24:53</span><span class="seg-text">Private waste is brought in</span></div>
+<div class="seg" data-time="1495.5"><span class="seg-time">24:55</span><span class="seg-text">We&#x27;re going to go sheated rates</span></div>
+<div class="seg" data-time="1496.5"><span class="seg-time">24:56</span><span class="seg-text">So a lot of options and flexibility there over time</span></div>
+<div class="seg" data-time="1502.91"><span class="seg-time">25:02</span><span class="seg-text">I&#x27;m good. Thank you</span></div>
+<div class="seg" data-time="1519.18"><span class="seg-time">25:19</span><span class="seg-text">The grant is the</span></div>
+<div class="seg" data-time="1521.18"><span class="seg-time">25:21</span><span class="seg-text">Engineering Services appropriate to conduct</span></div>
+<div class="seg" data-time="1524.18"><span class="seg-time">25:24</span><span class="seg-text">Our substation three upgrades not exceed</span></div>
+<div class="seg" data-time="1527.18"><span class="seg-time">25:27</span><span class="seg-text">$48,740 content</span></div>
+<div class="seg" data-time="1529.18"><span class="seg-time">25:29</span><span class="seg-text">Clopsimission required</span></div>
+<div class="seg" data-time="1531.18"><span class="seg-time">25:31</span><span class="seg-text">This will be for</span></div>
+<div class="seg" data-time="1536.76"><span class="seg-time">25:36</span><span class="seg-text">Section the control</span></div>
+<div class="seg" data-time="1610.62"><span class="seg-time">26:50</span><span class="seg-text">We&#x27;ll include in touch squirrel devices</span></div>
+<div class="seg" data-time="1613.62"><span class="seg-time">26:53</span><span class="seg-text">There&#x27;s so lot here</span></div>
+<div class="seg" data-time="1615.62"><span class="seg-time">26:55</span><span class="seg-text">I&#x27;m going to be able</span></div>
+<div class="seg" data-time="1617.62"><span class="seg-time">26:57</span><span class="seg-text">To clear that</span></div>
+<div class="seg" data-time="1619.62"><span class="seg-time">26:59</span><span class="seg-text">These are the just what a great</span></div>
+<div class="seg" data-time="1622.24"><span class="seg-time">27:02</span><span class="seg-text">Other place it is</span></div>
+<div class="seg" data-time="1627.1"><span class="seg-time">27:07</span><span class="seg-text">It also includes commissioning</span></div>
+<div class="seg" data-time="1633.08"><span class="seg-time">27:13</span><span class="seg-text">That equipment after</span></div>
+<div class="seg" data-time="1652.14"><span class="seg-time">27:32</span><span class="seg-text">Thank you</span></div>
+<div class="seg" data-time="1654.81"><span class="seg-time">27:34</span><span class="seg-text">She knows, gonna ask</span></div>
+<div class="seg" data-time="1659.42"><span class="seg-time">27:39</span><span class="seg-text">Appreciate</span></div>
+<div class="seg" data-time="1661.42"><span class="seg-time">27:41</span><span class="seg-text">This like Eric said this</span></div>
+<div class="seg" data-time="1664.42"><span class="seg-time">27:44</span><span class="seg-text">This is just being</span></div>
+<div class="seg" data-time="1666.42"><span class="seg-time">27:46</span><span class="seg-text">The speed and things you come to the industrial park</span></div>
+<div class="seg" data-time="1669.42"><span class="seg-time">27:49</span><span class="seg-text">Design of</span></div>
+<div class="seg" data-time="1672.58"><span class="seg-time">27:52</span><span class="seg-text">New sub station</span></div>
+<div class="seg" data-time="1676.1"><span class="seg-time">27:56</span><span class="seg-text">I&#x27;m sorry</span></div>
+<div class="seg" data-time="1678.73"><span class="seg-time">27:58</span><span class="seg-text">To</span></div>
+<div class="seg" data-time="1680.73"><span class="seg-time">28:00</span><span class="seg-text">Or</span></div>
+<div class="seg" data-time="1687.06"><span class="seg-time">28:07</span><span class="seg-text">They can structure that it would be</span></div>
+<div class="seg" data-time="1690.06"><span class="seg-time">28:10</span><span class="seg-text">We&#x27;ve already seen</span></div>
+<div class="seg" data-time="1699.4"><span class="seg-time">28:19</span><span class="seg-text">Benefit</span></div>
+<div class="seg" data-time="1701.4"><span class="seg-time">28:21</span><span class="seg-text">Abgraded so</span></div>
+<div class="seg" data-time="1702.4"><span class="seg-time">28:22</span><span class="seg-text">I don&#x27;t mean this is a no brainer to me</span></div>
+<div class="seg" data-time="1705.4"><span class="seg-time">28:25</span><span class="seg-text">Make it much my proof</span></div>
+<div class="seg" data-time="1708.58"><span class="seg-time">28:28</span><span class="seg-text">Thank you</span></div>
+<div class="seg" data-time="1710.58"><span class="seg-time">28:30</span><span class="seg-text">Thanks</span></div>
+<div class="seg" data-time="1712.58"><span class="seg-time">28:32</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="1714.58"><span class="seg-time">28:34</span><span class="seg-text">We&#x27;ll see</span></div>
+<div class="seg" data-time="1717.58"><span class="seg-time">28:37</span><span class="seg-text">You guys</span></div>
+<div class="seg" data-time="1719.58"><span class="seg-time">28:39</span><span class="seg-text">Keep on top of our infrastructure</span></div>
+<div class="seg" data-time="1722.58"><span class="seg-time">28:42</span><span class="seg-text">Now that&#x27;s the focus</span></div>
+<div class="seg" data-time="1725.58"><span class="seg-time">28:45</span><span class="seg-text">Thank you</span></div>
+<div class="seg" data-time="1726.92"><span class="seg-time">28:46</span><span class="seg-text">Hello</span></div>
+<div class="seg" data-time="1769.5"><span class="seg-time">29:29</span><span class="seg-text">In general, I&#x27;m 17 of the regular week</span></div>
+<div class="seg" data-time="1772.5"><span class="seg-time">29:32</span><span class="seg-text">The month is again</span></div>
 
-<section class="documents">
-<h2>📄 Full Agenda</h2>
-<div class="doc-preview">NOTICE OF REGULAR MEETING AND AGENDA<br>OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)<br>Tuesday, January 21, 2025<br>5:30<br>				<br><br>				p.m.<br>MIAMI CIVIC CENTER<br>129 5th Avenue Northwest, Miami, Oklahoma<br>Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by<br>posting on www.miamiokla.net.<br>THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:<br>1.<br>Call to Order                                                            Chairman Parker<br>2.<br>Invocation by the Fire Chief of the Miami Fire Department                                               Chris Chenoweth<br>3.<br>Pledge of Allegiance                                                     Trustee Estep<br>4.<br>Public Input and Unscheduled Personal Appearances<br>Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:<br>www.miamiokla.net<br>5.<br>*Action Item* Claims                                                                          Trustees<br>Claims List<br>Credit Cards<br>6.<br>*Action Item* Claim for Vance Ford                                                      Trustees<br>Claims List<br>7.<br>*Action Item* Minutes:  January 07, 2025 (Regular)                                                  Trustees<br>Minutes<br>8.<br>*Action Item* Goodell, Stratton, Edmonds & Palmer Claim for Pensacola/GRDA Relicensing and Associated Complaint Proceeding in the Amount of $945.00                       Tyler Cline/Misty Barnes<br>BA<br>Claims List<br>9.<br>Discussion of the Solid Waste Management Alternatives Evaluation, Presented by Burns & McDonnell                            Julie Davis/Tyler Cline<br>*Action Item* Agreement With SEL Engineering Services, Inc. to Conduct Substation 3 Upgrades Not to Exceed $248,740.00, Contingent Upon Submission of Required Contract Documents                Derric Lollar<br>BA<br>Agreement<br>PPT<br>11.<br>*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))             Trustees/Tyler Cline<br>12.<br>Staff Reports (Written report included in packet, if available staff is present for questions)                           Trustees<br>Pollution Control<br>Solid Waste<br>Storm Water<br>PCAX Collections and Miami Nation Credit Balance as of 12312024<br>13.<br>Trustee Community Announcements                                                     Trustees<br>14.<br>The Meeting Will be Continued From the Council Chambers and Reconvened in the Staff Room for Purposes of the Executive Session at the Completion of Agenda Item #17 of the Regular Meeting of the Miami City Council                Chairman Parker<br>15.<br>Executive Session in the Staff Room to Review Previous Executive Session Minutes                                 Trustees<br>16.<br>Executive Session in the Staff Room Pursuant to 25 O.S. §307(B)(4) for Purposes of Confidential Communications Between the Trust and its Attorney Concerning a Pending Investigation, Claim, or Action, to wit:  City of Miami, et al., v. GRDA CJ-08-619 and F.E.R.C. Project No. 1494             Trustees<br>17.<br>Executive Session in the Staff Room Pursuant to 25 O.S. 307(C)(11) for Purposes of Conferring on Matters Pertaining to Economic Development, Financing, or the Creation of a Proposal to Entice a Business to Locate or Expand Within the City of Miami or the Trust Service Area                   Trustees<br>18.<br>Executive Session in the Staff Room Pursuant to 25 O.S. 307(B)(3) and (4) for Discussing Potential Economic Development Through Purchase of Real Property or Enhancement of Real Property to be Provided by the City and/or one of its Trust Authorities as Part of an Economic Development Project                            Trustees<br>19.<br>The Meeting Will be Reconvened in the Staff Room After the Executive Session                                                      Trustees<br>20.<br>*Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 16                              Trustees<br>21.<br>*Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 17                                  Trustees<br>22.<br>*Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 18                                         Trustees<br>23.<br>*Action Item* Adjournment                                                                     Trustees<br>The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager's office. We also ask that those in attendance place all electronic devices on silent. Thank you.</div>
-</section>
+</div>
+</div>
+</div>
 
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
+Tuesday, January 21, 2025
+5:30
+				
 
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+				p.m.
+MIAMI CIVIC CENTER
+129 5th Avenue Northwest, Miami, Oklahoma
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by
+posting on www.miamiokla.net.
+THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:
+1.
+Call to Order                                                            Chairman Parker
+2.
+Invocation by the Fire Chief of the Miami Fire Department                                               Chris Chenoweth
+3.
+Pledge of Allegiance                                                     Trustee Estep
+4.
+Public Input and Unscheduled Personal Appearances
+Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:
+www.miamiokla.net
+5.
+*Action Item* Claims                                                                          Trustees
+Claims List
+Credit Cards
+6.
+*Action Item* Claim for Vance Ford                                                      Trustees
+Claims List
+7.
+*Action Item* Minutes:  January 07, 2025 (Regular)                                                  Trustees
+Minutes
+8.
+*Action Item* Goodell, Stratton, Edmonds &amp; Palmer Claim for Pensacola/GRDA Relicensing and Associated Complaint Proceeding in the Amount of $945.00                       Tyler Cline/Misty Barnes
+BA
+Claims List
+9.
+Discussion of the Solid Waste Management Alternatives Evaluation, Presented by Burns &amp; McDonnell                            Julie Davis/Tyler Cline
+*Action Item* Agreement With SEL Engineering Services, Inc. to Conduct Substation 3 Upgrades Not to Exceed $248,740.00, Contingent Upon Submission of Required Contract Documents                Derric Lollar
+BA
+Agreement
+PPT
+11.
+*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))             Trustees/Tyler Cline
+12.
+Staff Reports (Written report included in packet, if available staff is present for questions)                           Trustees
+Pollution Control
+Solid Waste
+Storm Water
+PCAX Collections and Miami Nation Credit Balance as of 12312024
+13.
+Trustee Community Announcements                                                     Trustees
+14.
+The Meeting Will be Continued From the Council Chambers and Reconvened in the Staff Room for Purposes of the Executive Session at the Completion of Agenda Item #17 of the Regular Meeting of the Miami City Council                Chairman Parker
+15.
+Executive Session in the Staff Room to Review Previous Executive Session Minutes                                 Trustees
+16.
+Executive Session in the Staff Room Pursuant to 25 O.S. §307(B)(4) for Purposes of Confidential Communications Between the Trust and its Attorney Concerning a Pending Investigation, Claim, or Action, to wit:  City of Miami, et al., v. GRDA CJ-08-619 and F.E.R.C. Project No. 1494             Trustees
+17.
+Executive Session in the Staff Room Pursuant to 25 O.S. 307(C)(11) for Purposes of Conferring on Matters Pertaining to Economic Development, Financing, or the Creation of a Proposal to Entice a Business to Locate or Expand Within the City of Miami or the Trust Service Area                   Trustees
+18.
+Executive Session in the Staff Room Pursuant to 25 O.S. 307(B)(3) and (4) for Discussing Potential Economic Development Through Purchase of Real Property or Enhancement of Real Property to be Provided by the City and/or one of its Trust Authorities as Part of an Economic Development Project                            Trustees
+19.
+The Meeting Will be Reconvened in the Staff Room After the Executive Session                                                      Trustees
+20.
+*Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 16                              Trustees
+21.
+*Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 17                                  Trustees
+22.
+*Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 18                                         Trustees
+23.
+*Action Item* Adjournment                                                                     Trustees
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>We&#x27;ll have the invocation on. Part T, the Chris General would definitely follow a thankful for you and we&#x27;re grateful to this community in The Blessing It is For so many ways as that You leave them meeting tonight That discussion with Matt has honest interspecial or productive And give our council members list when they make decisions where their community that affects us all in your name we pray. We met them, and pledge allegiance to the flag of The United States of America And it&#x27;s just a republic for which is saying one nation under God Invisible with liberty and justice for our For Public Info and I&#x27;m getting personal parents Five Plains List Most true proof Second Second Second 17 Second Second Second of $945. I guess we&#x27;re giving this a big set, 9 or $4000 that&#x27;s always been if This is approved in the In our $140860 as you all are cheap for We can do something. Thanks. Thanks. Hi. No discussion on solid waste management Alternatives evaluation Percentive by Burns and McDonald Julie Davis. Hi. I&#x27;m happy to be here, Okay? All right so more of us are the ones in Act oral 15 years and you&#x27;re Biominal engineering team So we focus on solid waste form or Environmental system First Molyer with this region We&#x27;re going to focus on the public and On the public. On the public, But we recently wrapped up a study To follow results from this looking at Opportunities for future facility Employment whether it&#x27;s Persuasion or landfill. Maybe turn off Sorry. I think you have a good three party So do a quick overview of the Participant in your project or You&#x27;re going to have a new Transversation Serial Analysis New landfills. We did two different versions of that And then I present our key findings and recommendations for Access so your current transportation You take it at about 20,000 tons per year From the city The City&#x27;s residential and commercial Customers Additional resident through The facilities are used for 30 years And you need significant improvement to continue operations So the facility also was on a former Incentorator site so it wasn&#x27;t Originally designed To be a Transversation Facility This contracts with only in fill 70 miles away from The actual disposal so that&#x27;s Public and Lamar We saved the combined of Transportation That is contractive with a private Haller for Transportation And the city&#x27;s in Increases and cost Significantly through those transportation costs As well as disposal costs So that very common As we see capacity and landfills going down In an region The Cost per time had to get With increased and the Transversation costs We&#x27;ve worked for a number of local governments across And on hundreds the cities So we created that plan Facility and Alicies To look at what could be options to make Infurзance to your existing facility In New Transportation For development of landfills One would Minimum tonnage scenario As this city More than a year We&#x27;ve worked for the city And we have to work To make sure that the City Plus what could be expected from some of The other Transversations within their region Then it maximums tonnage scenario So if you were If your really market That material or The conditions again for the new transportation It was based on this community We&#x27;ll work with that And then landfills scenarios Both of their region Taking in consideration some Regional facilities that are existing So within the area But there&#x27;s not a lot Projective population Or has it been recently Like you have seen increases in your tonnage still And so to be conservative we wanted To maintain that estimated increase year over a Year That You&#x27;ve occurred In the last few years for Your Tonnage So, We use it as a Your gate fees So how much It costs for folks For The region New Transversation that rate could go up And Could push waste other places to cheaper facilities So just To note, That It should be something Can&#x27;t guarantee the tonnage until you look at what it costs on within The region In transportation and disposal cost would still With a third party And potentially will increase over time And focus capacity decreases with in Norwegian So looking at transportation design and cost assumptions Looked a capacity of 25,700 Ten years so a slight increase over time Point 4 7% I didn&#x27;t interest rate Of 3.5 percent Amortized Over 20 Years A Putments on a lower five year Immortalization Looking At 5A for Properties To use Property that the city party has a Transversation On That site, 10.000 square foot building And Put a contingency on that Which is consistency for our cost Consistent For Our Cost Estimates We didn&#x27;t include revenues So Didn&#x27;n Include the you are Bringing in Charging your Residents or people bringing it outside waste as part of this assessment You&#x27;re looking Around 7 million dollars in capital costs Developing a new transportation facility We&#x27;re looking at the purchase A Putment for Transversation This is a new equipment Because we are not familiar with how old and open you have on site current</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
+Tuesday, January 21, 2025
+5:30
+				
+
+				p.m.
+MIAMI CIVIC CENTER
+129 5th Avenue Northwest, Miami, Oklahoma
+Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by
+posting on www.miamiokla.net.
+THE MSUA MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA:
+1.
+Call to Order                                                            Chairman Parker
+2.
+Invocation by the Fire Chief of the Miami Fire Department                                               Chris Chenoweth
+3.
+Pledge of Allegiance                                                     Trustee Estep
+4.
+Public Input and Unscheduled Personal Appearances
+Each person will be limited to three minutes.  The purpose of this agenda item is to provide an opportunity for citizens’ comments and public announcements.  In keeping with the principals of the Oklahoma Open Meeting Act, Council [or commission, authority or board] members and city staff will not engage in discussion or take any action under this agenda item.  If you seek discussion or further inquiry, please contact your Council Member, the Mayor or the office of the city manager.  Responses to citizen comments, if any, will occur under an applicable Agenda item at this or a future public meeting, or a response may be given by a phone call, personal meeting or a posting on the city website:
+www.miamiokla.net
+5.
+*Action Item* Claims                                                                          Trustees
+Claims List
+Credit Cards
+6.
+*Action Item* Claim for Vance Ford                                                      Trustees
+Claims List
+7.
+*Action Item* Minutes:  January 07, 2025 (Regular)                                                  Trustees
+Minutes
+8.
+*Action Item* Goodell, Stratton, Edmonds &amp; Palmer Claim for Pensacola/GRDA Relicensing and Associated Complaint Proceeding in the Amount of $945.00                       Tyler Cline/Misty Barnes
+BA
+Claims List
+9.
+Discussion of the Solid Waste Management Alternatives Evaluation, Presented by Burns &amp; McDonnell                            Julie Davis/Tyler Cline
+*Action Item* Agreement With SEL Engineering Services, Inc. to Conduct Substation 3 Upgrades Not to Exceed $248,740.00, Contingent Upon Submission of Required Contract Documents                Derric Lollar
+BA
+Agreement
+PPT
+11.
+*Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))             Trustees/Tyler Cline
+12.
+Staff Reports (Written report included in packet, if available staff is present for questions)                           Trustees
+Pollution Control
+Solid Waste
+Storm Water
+PCAX Collections and Miami Nation Credit Balance as of 12312024
+13.
+Trustee Community Announcements                                                     Trustees
+14.
+The Meeting Will be Continued From the Council Chambers and Reconvened in the Staff Room for Purposes of the Executive Session at the Completion of Agenda Item #17 of the Regular Meeting of the Miami City Council                Chairman Parker
+15.
+Executive Session in the Staff Room to Review Previous Executive Session Minutes                                 Trustees
+16.
+Executive Session in the Staff Room Pursuant to 25 O.S. §307(B)(4) for Purposes of Confidential Communications Between the Trust and its Attorney Concerning a Pending Investigation, Claim, or Action, to wit:  City of Miami, et al., v. GRDA CJ-08-619 and F.E.R.C. Project No. 1494             Trustees
+17.
+Executive Session in the Staff Room Pursuant to 25 O.S. 307(C)(11) for Purposes of Conferring on Matters Pertaining to Economic Development, Financing, or the Creation of a Proposal to Entice a Business to Locate or Expand Within the City of Miami or the Trust Service Area                   Trustees
+18.
+Executive Session in the Staff Room Pursuant to 25 O.S. 307(B)(3) and (4) for Discussing Potential Economic Development Through Purchase of Real Property or Enhancement of Real Property to be Provided by the City and/or one of its Trust Authorities as Part of an Economic Development Project                            Trustees
+19.
+The Meeting Will be Reconvened in the Staff Room After the Executive Session                                                      Trustees
+20.
+*Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 16                              Trustees
+21.
+*Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 17                                  Trustees
+22.
+*Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 18                                         Trustees
+23.
+*Action Item* Adjournment                                                                     Trustees
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
+</div>
+
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

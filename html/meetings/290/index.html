@@ -1,93 +1,865 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami City Council - Sep 15, 2020 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami City Council</h1>
-<div class="meta">📅 Sep 15, 2020 | Clip #290</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (3)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Agenda Document</div>
-  <div class="issue-desc">The city has not published an agenda document for this meeting on AgendaCenter. This is a transparency concern - agendas should be publicly available before meetings.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami City Council</h1>
+<div class="meeting-meta">
+<span>📅 Sep 15, 2020</span>
+<span>⏱️ 00h 21m</span>
+<span>🔖 Clip #290</span>
 </div>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
+
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/290" allowfullscreen></iframe></div>
+
 </div>
-</section>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="0.35"><span class="seg-time">00:00</span><span class="seg-text">*&gt;j_ z_ *z &quot;~ j *&gt;j j?J e}j j?*&quot;~z_</span></div>
+<div class="seg" data-time="2.37"><span class="seg-time">00:02</span><span class="seg-text">j j?J j @_ ~*.Z_ju*&gt;j?(b j?</span></div>
+<div class="seg" data-time="4.239"><span class="seg-time">00:04</span><span class="seg-text">*z zj Wu j *~ *uzz_ &quot;j @</span></div>
+<div class="seg" data-time="6.541"><span class="seg-time">00:06</span><span class="seg-text">*/ bu@u@_ j_ w j?*u} ~ */</span></div>
+<div class="seg" data-time="8.643"><span class="seg-time">00:08</span><span class="seg-text">b_*o *z Euz_*?&quot;z &quot;zj_ j? Qb_ *&gt; z_ j_j_</span></div>
+<div class="seg" data-time="10.755"><span class="seg-time">00:10</span><span class="seg-text">`+ j j w}* z*~*/* `/ j_</span></div>
+<div class="seg" data-time="13.49"><span class="seg-time">00:13</span><span class="seg-text">*&gt;@z_*z z_ #zj/ ~*&gt;&quot;z u +~&quot;</span></div>
+<div class="seg" data-time="15.184"><span class="seg-time">00:15</span><span class="seg-text">j? J_j? z_ @_*zz_z_@*~rWju</span></div>
+<div class="seg" data-time="17.219"><span class="seg-time">00:17</span><span class="seg-text">*&quot;} *&gt; z z_ *_ * u z_*j</span></div>
+<div class="seg" data-time="19.488"><span class="seg-time">00:19</span><span class="seg-text">z_ z_j Uuj z_ *&gt;j * ~</span></div>
+<div class="seg" data-time="21.657"><span class="seg-time">00:21</span><span class="seg-text">u ~ zw z_ &quot;~ &quot;~ @}</span></div>
+<div class="seg" data-time="23.859"><span class="seg-time">00:23</span><span class="seg-text">j&quot;~ *o e} *+ j/j_ j?+zu} **?</span></div>
+<div class="seg" data-time="25.918"><span class="seg-time">00:25</span><span class="seg-text">&quot;z ~ @e} *&gt; ~ z_ j?</span></div>
+<div class="seg" data-time="28.531"><span class="seg-time">00:28</span><span class="seg-text">H*~ju+ * j? Z_zw z? `_ *? Z</span></div>
+<div class="seg" data-time="30.734"><span class="seg-time">00:30</span><span class="seg-text">p_*&quot;~ u jj_ *? &quot;~ j `@</span></div>
+<div class="seg" data-time="33.203"><span class="seg-time">00:33</span><span class="seg-text">zw&quot;~ jbz * u}*~j/j*~j Uu</span></div>
+<div class="seg" data-time="35.338"><span class="seg-time">00:35</span><span class="seg-text">~*ur_ *? J? J? U ~j &quot;}*~ j_ *</span></div>
+<div class="seg" data-time="37.54"><span class="seg-time">00:37</span><span class="seg-text">j? Jj?J ~ @w *&gt; *o *z j_</span></div>
+<div class="seg" data-time="43.603"><span class="seg-time">00:43</span><span class="seg-text">j_ ~j*?&quot;&gt; **z zz_ * ~j ~ &quot;zj?J/ zWj *z */ ~_j/ j z_buz_ `_ z? *~</span></div>
+<div class="seg" data-time="45.646"><span class="seg-time">00:45</span><span class="seg-text">j j x_ u *&gt;x_ jb_ b z_*?Zw z?J *~&quot;</span></div>
+<div class="seg" data-time="47.918"><span class="seg-time">00:47</span><span class="seg-text">(*/ z_*zj? (~ ~*?( `_ j j&gt; e j j? *~*?</span></div>
+<div class="seg" data-time="50.53"><span class="seg-time">00:50</span><span class="seg-text">@j? J? J? J*z*j? J?J z_j?*xw</span></div>
+<div class="seg" data-time="52.222"><span class="seg-time">00:52</span><span class="seg-text">z_*&gt; p_ ~ @}*;j?J z @ **? J</span></div>
+<div class="seg" data-time="54.312"><span class="seg-time">00:54</span><span class="seg-text">j? Hj? * j/*zz_z_b Eu*~ j * ~</span></div>
+<div class="seg" data-time="56.345"><span class="seg-time">00:56</span><span class="seg-text">u j_ *~ *?J ~*+&quot;~ &quot;*u</span></div>
+<div class="seg" data-time="58.529"><span class="seg-time">00:58</span><span class="seg-text">e~*~ &quot;jj?B j?U} j z_ z_ j?W}z_</span></div>
+<div class="seg" data-time="60.564"><span class="seg-time">01:00</span><span class="seg-text">z_zw *? Z * * j? J z *?</span></div>
+<div class="seg" data-time="62.667"><span class="seg-time">01:02</span><span class="seg-text">*?X_ *? Uz_ j_ @b_ z? J_j_ *~*~*</span></div>
+<div class="seg" data-time="64.869"><span class="seg-time">01:04</span><span class="seg-text">*~*~ * uj &gt; z u}*</span></div>
+<div class="seg" data-time="67.38"><span class="seg-time">01:07</span><span class="seg-text">&quot;&quot;~*xWj *&gt;u z_ e} j_ *&gt;*~ ~ *?</span></div>
+<div class="seg" data-time="69.114"><span class="seg-time">01:09</span><span class="seg-text">J * +z j *~ ~_j_ j_ z_ j&quot;~ j</span></div>
+<div class="seg" data-time="71.175"><span class="seg-time">01:11</span><span class="seg-text">j_* z_&quot;~&quot;z *? ~ ~j bw @_ j</span></div>
+<div class="seg" data-time="73.411"><span class="seg-time">01:13</span><span class="seg-text">zzz_ j*b_ *: *?*~ j_ &quot;&gt; *?*</span></div>
+<div class="seg" data-time="75.746"><span class="seg-time">01:15</span><span class="seg-text">u} z zj *~ jj*~ */&quot;~ &quot;&gt; &quot;~ j?</span></div>
+<div class="seg" data-time="77.885"><span class="seg-time">01:17</span><span class="seg-text">@_j j/ *? J? *jj/ +z *~j?J_(* *?</span></div>
+<div class="seg" data-time="80.151"><span class="seg-time">01:20</span><span class="seg-text">J_* j &quot;&gt;@Wj? Jj?Ut*?J? Zw&quot;z</span></div>
+<div class="seg" data-time="82.15299999999999"><span class="seg-time">01:22</span><span class="seg-text">*~z_* *j *{ z ~ zWUu z_ j jz_&quot;~</span></div>
+<div class="seg" data-time="84.232"><span class="seg-time">01:24</span><span class="seg-text">j *z @ *?* * j? *~ j? Jz_</span></div>
+<div class="seg" data-time="86.458"><span class="seg-time">01:26</span><span class="seg-text">z_j?Z? Z_ z_&quot;~u} `_z_ h_ z j j_ z_ */</span></div>
+<div class="seg" data-time="88.76"><span class="seg-time">01:28</span><span class="seg-text">j_ jj z z *? W}b_</span></div>
+<div class="seg" data-time="91.462"><span class="seg-time">01:31</span><span class="seg-text">*?*z z *?J? *~*?J? b_ Eu*~ j_*&gt; b j_*?</span></div>
+<div class="seg" data-time="93.66499999999999"><span class="seg-time">01:33</span><span class="seg-text">*o *?*/j?*&gt;b_ j?/ j j_* x @j?</span></div>
+<div class="seg" data-time="95.667"><span class="seg-time">01:35</span><span class="seg-text">&quot;z *~ *~ *~ ~ j &quot;z u *~</span></div>
+<div class="seg" data-time="98.337"><span class="seg-time">01:38</span><span class="seg-text">hWj *?*~z_ * uj_ */ z z? J?</span></div>
+<div class="seg" data-time="100.439"><span class="seg-time">01:40</span><span class="seg-text">B_ j_ j */ ~ j *jz_ * *: _Euj?</span></div>
+<div class="seg" data-time="102.541"><span class="seg-time">01:42</span><span class="seg-text">*~ ~j? &quot;}&quot;z &quot;z ~e} &quot;z ~ j? *~ */* &quot;z</span></div>
+<div class="seg" data-time="104.71000000000001"><span class="seg-time">01:44</span><span class="seg-text">*: hj z?Z_ z *~*zj?@* z j_ * ju &quot;~j</span></div>
+<div class="seg" data-time="106.77799999999999"><span class="seg-time">01:46</span><span class="seg-text">+~ &quot; @_ &quot;*  z</span></div>
+<div class="seg" data-time="111.939"><span class="seg-time">01:51</span><span class="seg-text">jj u} *b_&quot; (k *?`_ &quot;&gt;z_j**?J? E} *zj_ ~ `_&quot;&gt; j@_ @ j&quot;j/</span></div>
+<div class="seg" data-time="114.55"><span class="seg-time">01:54</span><span class="seg-text">h ` ~ * ~ zj? &quot; &quot;. J_ z j?</span></div>
+<div class="seg" data-time="116.255"><span class="seg-time">01:56</span><span class="seg-text">J_*&gt;*?+z */ j &quot;~*@ j*</span></div>
+<div class="seg" data-time="118.324"><span class="seg-time">01:58</span><span class="seg-text">j *~ jzw* j? J ~ z(Z</span></div>
+<div class="seg" data-time="121.27"><span class="seg-time">02:01</span><span class="seg-text">*}j*~ ~ j_jzw *&gt; &quot;zJWh_j_j u *~</span></div>
+<div class="seg" data-time="123.229"><span class="seg-time">02:03</span><span class="seg-text">u}j j?*~*? J? Z * ~ +z</span></div>
+<div class="seg" data-time="125.431"><span class="seg-time">02:05</span><span class="seg-text">*~ w u} * @_ j j *b_z_</span></div>
+<div class="seg" data-time="127.5"><span class="seg-time">02:07</span><span class="seg-text">j? ~ j? ~ z_ j? Z &quot;n</span></div>
+<div class="seg" data-time="129.835"><span class="seg-time">02:09</span><span class="seg-text">z?Zj? */ (~ +z j j?*j?Eu&quot;o j?* u*j? U}</span></div>
+<div class="seg" data-time="131.887"><span class="seg-time">02:11</span><span class="seg-text">z &quot;*j/ jj*? J &quot;&gt; ~* *?*~ *z *</span></div>
+<div class="seg" data-time="134.4"><span class="seg-time">02:14</span><span class="seg-text">&quot;j_ j* @&quot;~j? J j_ z/ Eu</span></div>
+<div class="seg" data-time="136.743"><span class="seg-time">02:16</span><span class="seg-text">*&gt; ~* *</span></div>
+<div class="seg" data-time="142.223"><span class="seg-time">02:22</span><span class="seg-text">j *~z_ j? J/ j_ *?* * ~ q} &quot;&gt; *~ j?J_*&gt; j?</span></div>
+<div class="seg" data-time="144.368"><span class="seg-time">02:24</span><span class="seg-text">(~  &quot;~ j/*z &quot;~ + *? Z &quot;z * k *~z_ j_ (?*?</span></div>
+<div class="seg" data-time="146.464"><span class="seg-time">02:26</span><span class="seg-text">J *? &quot;~* j +~ z z j*z j? *~ @j&quot;~&quot;~</span></div>
+<div class="seg" data-time="148.756"><span class="seg-time">02:28</span><span class="seg-text">~*_ *? H_ &quot;/ j?J?*~ z z/h_*~</span></div>
+<div class="seg" data-time="150.871"><span class="seg-time">02:30</span><span class="seg-text">*z j j j_ zj_&quot;k#j z? Z j_</span></div>
+<div class="seg" data-time="153.227"><span class="seg-time">02:33</span><span class="seg-text">b j?J?@u *z *~@ Jw</span></div>
+<div class="seg" data-time="155.29500000000002"><span class="seg-time">02:35</span><span class="seg-text">*{ j j* ~ j? (Z jj z?</span></div>
+<div class="seg" data-time="157.31799999999998"><span class="seg-time">02:37</span><span class="seg-text">~ jj? * *~ j ( j@</span></div>
+<div class="seg" data-time="159.499"><span class="seg-time">02:39</span><span class="seg-text">z_ *?~_ j j_</span></div>
+<div class="seg" data-time="161.768"><span class="seg-time">02:41</span><span class="seg-text">* b_* j_` jj? U * j_</span></div>
+<div class="seg" data-time="163.88400000000001"><span class="seg-time">02:43</span><span class="seg-text">~@] &quot;~ * j?J?X_ *? (;@}&quot;&gt; z&quot;~ ~</span></div>
+<div class="seg" data-time="165.972"><span class="seg-time">02:45</span><span class="seg-text">*? Z z &quot;~ ~b} j_+zj/z?*z z_</span></div>
+<div class="seg" data-time="167.975"><span class="seg-time">02:47</span><span class="seg-text">*&gt;* ~ ~ z &quot;z&quot;~* &quot;. j_*?</span></div>
+<div class="seg" data-time="169.977"><span class="seg-time">02:49</span><span class="seg-text">J ~ *~ *? (? Z/j?R_*</span></div>
+<div class="seg" data-time="171.97899999999998"><span class="seg-time">02:51</span><span class="seg-text">~j *~zz e}j_ @w *~b: j?</span></div>
+<div class="seg" data-time="174.14"><span class="seg-time">02:54</span><span class="seg-text">J&quot;:&quot;?Pw*~j&quot;z*({ j_ u} j_ j?J &quot;~ j (~</span></div>
+<div class="seg" data-time="176.11599999999999"><span class="seg-time">02:56</span><span class="seg-text">j? X_ *j/ @ j *&gt;* j</span></div>
+<div class="seg" data-time="178.31900000000002"><span class="seg-time">02:58</span><span class="seg-text"> *? P_&quot;~ * ~ &quot;&quot;~ ~ */j_ *?</span></div>
+<div class="seg" data-time="180.487"><span class="seg-time">03:00</span><span class="seg-text">(~ zWj&quot;ze&quot;. &quot;*&quot;~ *zuwz_ j?* ~</span></div>
+<div class="seg" data-time="182.589"><span class="seg-time">03:02</span><span class="seg-text">*z* j? Uj* *?Z_</span></div>
+<div class="seg" data-time="184.593"><span class="seg-time">03:04</span><span class="seg-text">j j/ j j</span></div>
+<div class="seg" data-time="186.795"><span class="seg-time">03:06</span><span class="seg-text">u} z_z ~</span></div>
+<div class="seg" data-time="188.963"><span class="seg-time">03:08</span><span class="seg-text">*~ &quot;z *~ &quot;+*~ &quot;~j? *&quot;~</span></div>
+<div class="seg" data-time="190.965"><span class="seg-time">03:10</span><span class="seg-text">w} k z_*~ *b *z_ z_ j ~ z</span></div>
+<div class="seg" data-time="193.268"><span class="seg-time">03:13</span><span class="seg-text">`_&quot; @w*~*?`_z_ &quot;~&quot;?  *uz? Z `_</span></div>
+<div class="seg" data-time="195.703"><span class="seg-time">03:15</span><span class="seg-text">u} u&quot;&gt;e}u b_j? &quot;jj_ *&gt; ~ z zj_@z_</span></div>
+<div class="seg" data-time="197.71699999999998"><span class="seg-time">03:17</span><span class="seg-text">j Uu j?J? J? @ (Zj_j_ uz_</span></div>
+<div class="seg" data-time="199.841"><span class="seg-time">03:19</span><span class="seg-text">z_ z &quot;~`w *~ * z zj *z j</span></div>
+<div class="seg" data-time="201.91"><span class="seg-time">03:21</span><span class="seg-text">j&quot;~ h_(~ z@]*; j *~*?Z_*&gt;</span></div>
+<div class="seg" data-time="204.112"><span class="seg-time">03:24</span><span class="seg-text">*j? *. * j + * j_ j ~*?</span></div>
+<div class="seg" data-time="206.448"><span class="seg-time">03:26</span><span class="seg-text">B Ut ~ p_ z_@_* *:? U} ~</span></div>
+<div class="seg" data-time="208.71699999999998"><span class="seg-time">03:28</span><span class="seg-text">*/ u*? J r_ ~</span></div>
+<div class="seg" data-time="211.219"><span class="seg-time">03:31</span><span class="seg-text">j? J_ ( ~u z_</span></div>
+<div class="seg" data-time="217.496"><span class="seg-time">03:37</span><span class="seg-text">z_ */ jj j/ &quot;z +z jj_ z *n j_ u~ *~ (_ j_</span></div>
+<div class="seg" data-time="219.513"><span class="seg-time">03:39</span><span class="seg-text">&quot;j*. * b jjj?&quot;| h_ *?B* *&gt;`*~*~ z_ @ *o j z_&quot;zj u ~</span></div>
+<div class="seg" data-time="221.53"><span class="seg-time">03:41</span><span class="seg-text">~ j? A~(*@ z_ *? J j/ zw j*~u ~j_b z?Bw *?</span></div>
+<div class="seg" data-time="223.666"><span class="seg-time">03:43</span><span class="seg-text">*? * **&gt; j?U}jj? *?*? ~ b j/</span></div>
+<div class="seg" data-time="225.835"><span class="seg-time">03:45</span><span class="seg-text">*? *~z*~ ~ *~ z ~ * */j_@ &quot; z_</span></div>
+<div class="seg" data-time="227.86599999999999"><span class="seg-time">03:47</span><span class="seg-text">&quot;w j_ j_ z_j `_</span></div>
+<div class="seg" data-time="229.905"><span class="seg-time">03:49</span><span class="seg-text">`jju} h/ &quot;* j/ ~ z_ j/ ~ &quot;&gt;j?@}j? *&gt;</span></div>
+<div class="seg" data-time="231.90699999999998"><span class="seg-time">03:51</span><span class="seg-text">* * *~*?*ze * j z ~_</span></div>
+<div class="seg" data-time="234.476"><span class="seg-time">03:54</span><span class="seg-text">hWj?U*&gt;@} j?J j_ u ( * *&gt; j? *~&quot;z &quot;~</span></div>
+<div class="seg" data-time="236.47899999999998"><span class="seg-time">03:56</span><span class="seg-text">z_ *&gt;z_u e}* *? J@_ z_</span></div>
+<div class="seg" data-time="238.58100000000002"><span class="seg-time">03:58</span><span class="seg-text">z w &quot;~&quot;~ z *?*? J_</span></div>
+<div class="seg" data-time="240.717"><span class="seg-time">04:00</span><span class="seg-text">&quot;z*~ zrw x_ j z_ z_</span></div>
+<div class="seg" data-time="242.719"><span class="seg-time">04:02</span><span class="seg-text">&quot;~ &quot;~ j_ z ~ z_z_z_ j*~j? J/j~ @</span></div>
+<div class="seg" data-time="244.867"><span class="seg-time">04:04</span><span class="seg-text">&quot;~ ~ b_ b_ ~ jWn_ *</span></div>
+<div class="seg" data-time="247.223"><span class="seg-time">04:07</span><span class="seg-text">j * Quu z**? *&gt; bw+zj</span></div>
+<div class="seg" data-time="249.258"><span class="seg-time">04:09</span><span class="seg-text">&quot;. J z_ *{ u}z_z/ **</span></div>
+<div class="seg" data-time="251.494"><span class="seg-time">04:11</span><span class="seg-text">&quot;(/z_j *z j? *~ Eu *z jj?J j</span></div>
+<div class="seg" data-time="253.664"><span class="seg-time">04:13</span><span class="seg-text">b  (~b* &quot;~ ~ kw j?J*/</span></div>
+<div class="seg" data-time="255.999"><span class="seg-time">04:15</span><span class="seg-text">ju} *? J? Z_&quot;~u  b j/ x_*?Z</span></div>
+<div class="seg" data-time="258.402"><span class="seg-time">04:18</span><span class="seg-text">*~@*j *? &quot;~ &quot;~ +j * ~ *?Z z_ ~</span></div>
+<div class="seg" data-time="261.38"><span class="seg-time">04:21</span><span class="seg-text">z_ z_*~*z (&quot;~z_ zj u} &quot;~j/</span></div>
+<div class="seg" data-time="263.173"><span class="seg-time">04:23</span><span class="seg-text">z_j b &gt; *z u</span></div>
+<div class="seg" data-time="265.275"><span class="seg-time">04:25</span><span class="seg-text">x_z/ *j u j_u} z_*</span></div>
+<div class="seg" data-time="267.41"><span class="seg-time">04:27</span><span class="seg-text">j*? J_ (O * b_ *~</span></div>
+<div class="seg" data-time="269.446"><span class="seg-time">04:29</span><span class="seg-text">*~ u} j &quot; rw z_</span></div>
+<div class="seg" data-time="271.515"><span class="seg-time">04:31</span><span class="seg-text">j*/*z*zj? Z *&gt; z_ e}j_ z z_</span></div>
+<div class="seg" data-time="273.617"><span class="seg-time">04:33</span><span class="seg-text">bj? ~ *?Zj? &quot;&gt;*z z</span></div>
+<div class="seg" data-time="275.619"><span class="seg-time">04:35</span><span class="seg-text">j * j? ~j_ &quot;z *~zw j*j_ j/</span></div>
+<div class="seg" data-time="277.955"><span class="seg-time">04:37</span><span class="seg-text">j(~j/ * j z_ ~*j *&gt;</span></div>
+<div class="seg" data-time="279.957"><span class="seg-time">04:39</span><span class="seg-text">j ~ &quot;z &quot;~ jb */ju*~ &quot;}*n</span></div>
+<div class="seg" data-time="282.59000000000003"><span class="seg-time">04:42</span><span class="seg-text">j_z *? U j * *j*&gt;*z *?</span></div>
+<div class="seg" data-time="284.127"><span class="seg-time">04:44</span><span class="seg-text">*? j_ *j ~ j j</span></div>
+<div class="seg" data-time="286.33"><span class="seg-time">04:46</span><span class="seg-text">*&gt;&quot;~&quot;&gt; &quot;&gt;j? *~ j j*?*</span></div>
+<div class="seg" data-time="288.399"><span class="seg-time">04:48</span><span class="seg-text">j/j_ *&gt; *?J?</span></div>
+<div class="seg" data-time="290.702"><span class="seg-time">04:50</span><span class="seg-text">zw j_ j? J&quot;~</span></div>
+<div class="seg" data-time="292.737"><span class="seg-time">04:52</span><span class="seg-text">j j?W j?+~ * ~ j_* *</span></div>
+<div class="seg" data-time="294.739"><span class="seg-time">04:54</span><span class="seg-text">j j &quot;~ j_ j?*z*? J ~ j*j? ~</span></div>
+<div class="seg" data-time="296.874"><span class="seg-time">04:56</span><span class="seg-text">@x_&quot; * j/z_ jw ~u j? J/ z</span></div>
+<div class="seg" data-time="299.177"><span class="seg-time">04:59</span><span class="seg-text">b_ */ @ `_ ~(~</span></div>
+<div class="seg" data-time="302.413"><span class="seg-time">05:02</span><span class="seg-text">*?J? *? Z z/jzw */ j &quot;~ b_</span></div>
+<div class="seg" data-time="304.474"><span class="seg-time">05:04</span><span class="seg-text">z &quot;zj u j?*@j/@ j j *~j?B/Jw u</span></div>
+<div class="seg" data-time="306.786"><span class="seg-time">05:06</span><span class="seg-text">j?J z_ ~ j&quot;~ */ Eu&quot;~ *&gt;</span></div>
+<div class="seg" data-time="308.805"><span class="seg-time">05:08</span><span class="seg-text">* ~ *~* ~ `_ z ~ u} `j_ u}ej_ ~</span></div>
+<div class="seg" data-time="310.923"><span class="seg-time">05:10</span><span class="seg-text">j?*j_ @ jj j_+ * z j</span></div>
+<div class="seg" data-time="313.25"><span class="seg-time">05:13</span><span class="seg-text">j? **. #z u @jbz*/ *~j? ~j</span></div>
+<div class="seg" data-time="315.193"><span class="seg-time">05:15</span><span class="seg-text">~_ _&quot;~j?* j */z_ u} j* `_</span></div>
+<div class="seg" data-time="317.229"><span class="seg-time">05:17</span><span class="seg-text">z j_j_ *b_ j @Wj_ *&gt;z &quot;z&quot;~</span></div>
+<div class="seg" data-time="319.331"><span class="seg-time">05:19</span><span class="seg-text">j*? (+@j*~ *z &quot;~ *?Z? (~ *: &quot;z</span></div>
+<div class="seg" data-time="321.666"><span class="seg-time">05:21</span><span class="seg-text">*~*~ pWj_ z_ j? (+ j</span></div>
+<div class="seg" data-time="324.3"><span class="seg-time">05:24</span><span class="seg-text">*? &quot; j *~ *?B ~</span></div>
+<div class="seg" data-time="326.672"><span class="seg-time">05:26</span><span class="seg-text">j? *@] U* rw z`_ *?</span></div>
+<div class="seg" data-time="328.774"><span class="seg-time">05:28</span><span class="seg-text">*? Z_ * *z+j * j j?X_ b_ * z_ *?*~</span></div>
+<div class="seg" data-time="331.21"><span class="seg-time">05:31</span><span class="seg-text">(Z* &quot;~b *? ** z_ ~&quot;~*/</span></div>
+<div class="seg" data-time="333.212"><span class="seg-time">05:33</span><span class="seg-text">~ jUu j_u} w*/*&gt; j?@_ *?J zz_ z_j?</span></div>
+<div class="seg" data-time="335.381"><span class="seg-time">05:35</span><span class="seg-text">~ *&gt; *z j? U @_*? */ j *&gt; z_ j/ &quot;z*</span></div>
+<div class="seg" data-time="337.75"><span class="seg-time">05:37</span><span class="seg-text">*j? Jz? *? Z_ u}jb</span></div>
+<div class="seg" data-time="339.885"><span class="seg-time">05:39</span><span class="seg-text">b_ j(~ &quot;}j? *z * z_*~ u}* ~_</span></div>
+<div class="seg" data-time="341.988"><span class="seg-time">05:41</span><span class="seg-text">j j_z_ b*?E} *~* ~ j</span></div>
+<div class="seg" data-time="344.224"><span class="seg-time">05:44</span><span class="seg-text">*z j_j?J_ / &quot;z j zj_z? B u}z_*~</span></div>
+<div class="seg" data-time="347.6"><span class="seg-time">05:47</span><span class="seg-text">&quot;z j ** ~ * j_ z_ * j ~ j? &quot;{ jj/</span></div>
+<div class="seg" data-time="349.429"><span class="seg-time">05:49</span><span class="seg-text">u* *? J? * j?Z_*? * b*?Z</span></div>
+<div class="seg" data-time="351.564"><span class="seg-time">05:51</span><span class="seg-text">z? (j*~ j *~ *~ *zj b</span></div>
+<div class="seg" data-time="353.56600000000003"><span class="seg-time">05:53</span><span class="seg-text">~ j? ~ *~ j b_ zw j?B`_u&quot;&gt; *~</span></div>
+<div class="seg" data-time="355.968"><span class="seg-time">05:55</span><span class="seg-text">&quot;n*z *~ j j_ zu j *~ j_ z?</span></div>
+<div class="seg" data-time="358.104"><span class="seg-time">05:58</span><span class="seg-text">U} &quot;jz? B j?B_*&gt; */ &quot;&gt; */*?K*?</span></div>
+<div class="seg" data-time="360.15"><span class="seg-time">06:00</span><span class="seg-text">J jj *~z z_ u}z * *: *?J_</span></div>
+<div class="seg" data-time="362.234"><span class="seg-time">06:02</span><span class="seg-text">* *? J *z ~* *?**</span></div>
+<div class="seg" data-time="364.311"><span class="seg-time">06:04</span><span class="seg-text">j?J?J_ *?J &quot;~ j? N j_z z z @b ~</span></div>
+<div class="seg" data-time="366.58"><span class="seg-time">06:06</span><span class="seg-text">h ~**~ */ j?@w&quot;~ j? *~bw ~ */</span></div>
+<div class="seg" data-time="368.604"><span class="seg-time">06:08</span><span class="seg-text">~ ~ j j/ &quot;~ j *~ &quot;~ ~ j?</span></div>
+<div class="seg" data-time="370.617"><span class="seg-time">06:10</span><span class="seg-text">J?J_*. J_z_zw**n j?Z_ *z j/ (J</span></div>
+<div class="seg" data-time="372.619"><span class="seg-time">06:12</span><span class="seg-text">~ &quot;z j? ~ * &quot;~</span></div>
+<div class="seg" data-time="374.741"><span class="seg-time">06:14</span><span class="seg-text">*zz j + *? z_ Qu j?*~ j? @</span></div>
+<div class="seg" data-time="376.791"><span class="seg-time">06:16</span><span class="seg-text">j?U*~j?Uu u j ~*j j*/ @_ *?J ~ b*n</span></div>
+<div class="seg" data-time="378.793"><span class="seg-time">06:18</span><span class="seg-text">*? ~ ~*. *&gt;z_ @Uj_ j_ h_j?B* n *{j_*?</span></div>
+<div class="seg" data-time="381.28"><span class="seg-time">06:21</span><span class="seg-text">@_ ~*~zWj ~ *? Z_x_ &quot;z * jz_</span></div>
+<div class="seg" data-time="383.364"><span class="seg-time">06:23</span><span class="seg-text">z/j? J * j *</span></div>
+<div class="seg" data-time="385.83299999999997"><span class="seg-time">06:25</span><span class="seg-text">zz_*?*zj *~b z ** *? B_ */ &quot;&gt;@b j/</span></div>
+<div class="seg" data-time="387.935"><span class="seg-time">06:27</span><span class="seg-text">j_ ~ @ * z_u}b_</span></div>
+<div class="seg" data-time="390.3"><span class="seg-time">06:30</span><span class="seg-text">*z (&gt; z_ &quot;} *~ j</span></div>
+<div class="seg" data-time="392.72"><span class="seg-time">06:32</span><span class="seg-text">*z/ z_ j?Z&quot;~ ~@ *&gt;j?@ j_</span></div>
+<div class="seg" data-time="394.375"><span class="seg-time">06:34</span><span class="seg-text">*~ jj* jz z_j ~ j?</span></div>
+<div class="seg" data-time="396.478"><span class="seg-time">06:36</span><span class="seg-text">W j? J zr_ u j? &quot;j j_</span></div>
+<div class="seg" data-time="398.646"><span class="seg-time">06:38</span><span class="seg-text">*~ j? * ~ &quot;~*z z_ *&gt;j?@} j?*?</span></div>
+<div class="seg" data-time="400.849"><span class="seg-time">06:40</span><span class="seg-text">E}j*z z?Z_ ~j_ +*&quot;z j? ~j j *n</span></div>
+<div class="seg" data-time="403.418"><span class="seg-time">06:43</span><span class="seg-text">j *z */ *?*~ @ j w}z_</span></div>
+<div class="seg" data-time="405.887"><span class="seg-time">06:45</span><span class="seg-text">*?`w ~ *~ e} j j+z* *?B @ z_ *~</span></div>
+<div class="seg" data-time="407.989"><span class="seg-time">06:47</span><span class="seg-text">j_ ~z_ j_ &quot;/ z_*~ j_</span></div>
+<div class="seg" data-time="410.158"><span class="seg-time">06:50</span><span class="seg-text">@_*&gt;j ru */ z_r_ &quot;* j/*</span></div>
+<div class="seg" data-time="412.294"><span class="seg-time">06:52</span><span class="seg-text">*~r_*? J b ~j &quot;e} ~ &quot;}j*_</span></div>
+<div class="seg" data-time="414.496"><span class="seg-time">06:54</span><span class="seg-text">`j_ ~j_ (~ j* **/</span></div>
+<div class="seg" data-time="416.631"><span class="seg-time">06:56</span><span class="seg-text">~ @ ( *~ j_ ~ u* zw</span></div>
+<div class="seg" data-time="418.767"><span class="seg-time">06:58</span><span class="seg-text">j *z j_&quot;_ &quot;z(/ *z*z Wu u jr]J? R_</span></div>
+<div class="seg" data-time="424.687"><span class="seg-time">07:04</span><span class="seg-text">Uu j *? J z? *~ z_ j @w &quot; ~ z_</span></div>
+<div class="seg" data-time="426.845"><span class="seg-time">07:06</span><span class="seg-text">zw&quot;? &quot;z ~b_ z/**z *{ *; *bw ~ z_ ~ ~ j?</span></div>
+<div class="seg" data-time="428.956"><span class="seg-time">07:08</span><span class="seg-text">&quot;j +~ *? J * zw j j? Jj j_j? J</span></div>
+<div class="seg" data-time="431.277"><span class="seg-time">07:11</span><span class="seg-text">j? J JWz_ @w &quot;~ b_</span></div>
+<div class="seg" data-time="433.449"><span class="seg-time">07:13</span><span class="seg-text">*&gt;j z *j*? @ @@ */u}jj_ j? ~ j? J* ~</span></div>
+<div class="seg" data-time="435.651"><span class="seg-time">07:15</span><span class="seg-text">j+z z_* z u * &quot;.@w z j?J j</span></div>
+<div class="seg" data-time="437.753"><span class="seg-time">07:17</span><span class="seg-text">z_ *?* z z_ *z *?</span></div>
+<div class="seg" data-time="440.89"><span class="seg-time">07:20</span><span class="seg-text">J @u &quot;z e} ~&quot;~</span></div>
+<div class="seg" data-time="442.224"><span class="seg-time">07:22</span><span class="seg-text">b_*z *~ z? ~ j *~ *&gt; *+j_bw * *n</span></div>
+<div class="seg" data-time="444.326"><span class="seg-time">07:24</span><span class="seg-text">*/j_ *z zw j ~&quot;~*/</span></div>
+<div class="seg" data-time="446.329"><span class="seg-time">07:26</span><span class="seg-text">*? Zj b_ &quot;jzWj_*? *~*&quot;~ * *~j *zz</span></div>
+<div class="seg" data-time="448.531"><span class="seg-time">07:28</span><span class="seg-text">*? *? Z?*? J?Z/ j *z j j?J?* *?</span></div>
+<div class="seg" data-time="450.83299999999997"><span class="seg-time">07:30</span><span class="seg-text">J/ (*~ b_b &quot;~u}pw */j_*?@</span></div>
+<div class="seg" data-time="453.303"><span class="seg-time">07:33</span><span class="seg-text">&quot;z*?*&gt;z jz &quot;~*? *~ j</span></div>
+<div class="seg" data-time="455.905"><span class="seg-time">07:35</span><span class="seg-text">`*z&quot;~&quot;z*? J? ~ j? Z_ e}</span></div>
+<div class="seg" data-time="458.174"><span class="seg-time">07:38</span><span class="seg-text">*j/ j/z_u &quot;* j/ *?Z_ j? *z *~</span></div>
+<div class="seg" data-time="460.243"><span class="seg-time">07:40</span><span class="seg-text">~_j? U *?B&quot;z j + * *~ b_ *?</span></div>
+<div class="seg" data-time="462.678"><span class="seg-time">07:42</span><span class="seg-text">J? *? Z bj_ ~ zb *&gt;*&gt; @j?Z_*~j/ z_j_ z_ @u</span></div>
+<div class="seg" data-time="464.915"><span class="seg-time">07:44</span><span class="seg-text">j *~ j/ @ j? ~*(Z</span></div>
+<div class="seg" data-time="467.517"><span class="seg-time">07:47</span><span class="seg-text">j_ zz @_ b ~+z *r_ *&gt; &quot;~ z_</span></div>
+<div class="seg" data-time="469.63"><span class="seg-time">07:49</span><span class="seg-text">(~ zw*? J &quot;~j_ &quot;z *?*?. J_*~ *? Z*</span></div>
+<div class="seg" data-time="471.955"><span class="seg-time">07:51</span><span class="seg-text">u *~*&gt;@*~ j? *z z_</span></div>
+<div class="seg" data-time="474.257"><span class="seg-time">07:54</span><span class="seg-text">&quot;~ h_ @*? @_ *&gt;</span></div>
+<div class="seg" data-time="476.626"><span class="seg-time">07:56</span><span class="seg-text">j*~j?*zj +z *~ j_ @ &quot;z b_ b_@ *? &quot;z +</span></div>
+<div class="seg" data-time="478.76"><span class="seg-time">07:58</span><span class="seg-text">*&gt;j h_&quot;:j_* j]Z_&quot;~zw** h_</span></div>
+<div class="seg" data-time="481.132"><span class="seg-time">08:01</span><span class="seg-text">&quot;+@] * `_ *zb_ ~ z bw j</span></div>
+<div class="seg" data-time="483.467"><span class="seg-time">08:03</span><span class="seg-text">j_z_j *&gt;*/ z_(~ z z *~ jz_u}j</span></div>
+<div class="seg" data-time="485.502"><span class="seg-time">08:05</span><span class="seg-text">*{j?&quot;~ * *o j? Z/ */</span></div>
+<div class="seg" data-time="487.505"><span class="seg-time">08:07</span><span class="seg-text">&quot;Au h_&quot;~b&quot;~*?Z_ * j? J_b_ j?&quot;&gt;*~</span></div>
+<div class="seg" data-time="489.773"><span class="seg-time">08:09</span><span class="seg-text">&quot;z ~ u b *?* j &quot;z *&gt; ~</span></div>
+<div class="seg" data-time="491.863"><span class="seg-time">08:11</span><span class="seg-text">z&quot;~ b j * j? Zw j/ j_*zu}z &quot;z zw b_zz j&quot;~</span></div>
+<div class="seg" data-time="494.178"><span class="seg-time">08:14</span><span class="seg-text">j z*?*zj? *z &quot;}j? J_* *~ &quot;</span></div>
+<div class="seg" data-time="496.547"><span class="seg-time">08:16</span><span class="seg-text">&quot;&gt; j_z_ *?J*?*~ ~ @_*.*/ j</span></div>
+<div class="seg" data-time="498.783"><span class="seg-time">08:18</span><span class="seg-text">*? *~b * j?*.*&gt; (Z (Z z? @ *n</span></div>
+<div class="seg" data-time="501.85"><span class="seg-time">08:21</span><span class="seg-text">&quot;jz*z o * *&gt; z ~ *~ ju(~*z</span></div>
+<div class="seg" data-time="503.187"><span class="seg-time">08:23</span><span class="seg-text">z_&quot;~&quot;~ j?J? ~ &quot;{ *? @_ (? U}</span></div>
+<div class="seg" data-time="505.656"><span class="seg-time">08:25</span><span class="seg-text">j?*@_ z z_a}j? */ * n u</span></div>
+<div class="seg" data-time="507.846"><span class="seg-time">08:27</span><span class="seg-text">r_j/ + b_ zj? *j + *</span></div>
+<div class="seg" data-time="509.961"><span class="seg-time">08:29</span><span class="seg-text">jj_ ~e &quot; ~j? B_z_ (Z j &quot;z z *&gt;</span></div>
+<div class="seg" data-time="512.43"><span class="seg-time">08:32</span><span class="seg-text">**o&quot;* *z ~ } zw*/j *~ ~ j?</span></div>
+<div class="seg" data-time="514.432"><span class="seg-time">08:34</span><span class="seg-text">Ju j*&gt; j @_jo @_ j_</span></div>
+<div class="seg" data-time="516.568"><span class="seg-time">08:36</span><span class="seg-text">*zw +~k ~u*~ **? ~ &quot; }</span></div>
+<div class="seg" data-time="518.704"><span class="seg-time">08:38</span><span class="seg-text">*z j +~ (b *~ ~*? J</span></div>
+<div class="seg" data-time="521.39"><span class="seg-time">08:41</span><span class="seg-text">*&gt;j j@_ z_ j&quot;zj( jw h_ j_</span></div>
+<div class="seg" data-time="523.241"><span class="seg-time">08:43</span><span class="seg-text">~*&gt; * j?+ zj</span></div>
+<div class="seg" data-time="525.31"><span class="seg-time">08:45</span><span class="seg-text">*? J j? J `j/</span></div>
+<div class="seg" data-time="528.413"><span class="seg-time">08:48</span><span class="seg-text">*o j?&quot;~ @ j_ j_ j_ z j/ zz_</span></div>
+<div class="seg" data-time="530.682"><span class="seg-time">08:50</span><span class="seg-text">j j_j? J? B_ j</span></div>
+<div class="seg" data-time="532.851"><span class="seg-time">08:52</span><span class="seg-text">j? J_ * *`_ *~ z_ x_&quot;ojo@</span></div>
+<div class="seg" data-time="534.948"><span class="seg-time">08:54</span><span class="seg-text">j? ~ * e Eu (~*&gt;u</span></div>
+<div class="seg" data-time="536.989"><span class="seg-time">08:56</span><span class="seg-text">* *n * b_ `Uj? J? &quot;z x_j?</span></div>
+<div class="seg" data-time="539.391"><span class="seg-time">08:59</span><span class="seg-text">J&quot;z* j? ~e}*~ j  *z</span></div>
+<div class="seg" data-time="541.694"><span class="seg-time">09:01</span><span class="seg-text">(~ ~z? *j? ~ jj_*&gt; *~ j? @**x</span></div>
+<div class="seg" data-time="543.829"><span class="seg-time">09:03</span><span class="seg-text">j_ jz_ * &quot;? Z j? (.Jj?P_x} &gt;j*~&quot;~e}*&gt;*.J_j?</span></div>
+<div class="seg" data-time="546.365"><span class="seg-time">09:06</span><span class="seg-text">+z*/zw*~@_ *~*? * &quot;b_u z_ @u j_*~ Eu</span></div>
+<div class="seg" data-time="548.434"><span class="seg-time">09:08</span><span class="seg-text">j?*&gt;~_ z_j_ &quot;z &quot;. B</span></div>
+<div class="seg" data-time="550.702"><span class="seg-time">09:10</span><span class="seg-text">*.Z_ * *?B u j bjh *j_</span></div>
+<div class="seg" data-time="553.139"><span class="seg-time">09:13</span><span class="seg-text">&quot;~z &quot;~ j_j? U *? *j? */ j</span></div>
+<div class="seg" data-time="555.144"><span class="seg-time">09:15</span><span class="seg-text">zw&quot;z ~ j j_</span></div>
+<div class="seg" data-time="557.61"><span class="seg-time">09:17</span><span class="seg-text">*/&quot;~ &quot;~j*} *~ + z_ @_*?</span></div>
+<div class="seg" data-time="560.113"><span class="seg-time">09:20</span><span class="seg-text">Zrw */z_*? *~h_u} b ~ j b}  * h_</span></div>
+<div class="seg" data-time="562.248"><span class="seg-time">09:22</span><span class="seg-text">@}&quot;? K b#j* *?&quot;/ z? &quot;~ u e}* h_ z_&quot;}</span></div>
+<div class="seg" data-time="564.55"><span class="seg-time">09:24</span><span class="seg-text">&quot;~*? *?*~ * j/ *z u} z jj_</span></div>
+<div class="seg" data-time="566.752"><span class="seg-time">09:26</span><span class="seg-text">j * zw j? J j &quot;{ j</span></div>
+<div class="seg" data-time="568.922"><span class="seg-time">09:28</span><span class="seg-text">~j*j *? &quot;n z *? ~j j_*~&quot;&gt; ~</span></div>
+<div class="seg" data-time="571.124"><span class="seg-time">09:31</span><span class="seg-text">@ b] Jj z_*?J?B uj_ *? */</span></div>
+<div class="seg" data-time="573.393"><span class="seg-time">09:33</span><span class="seg-text">e} *&gt;jz_ *~ *z  b_*b &quot;j @ *~j? *&gt;z_</span></div>
+<div class="seg" data-time="575.528"><span class="seg-time">09:35</span><span class="seg-text">*&gt;&quot;~ + z_j?J_ ~ j/ *</span></div>
+<div class="seg" data-time="577.898"><span class="seg-time">09:37</span><span class="seg-text">z_j z_ j?&quot;&gt; j_ z</span></div>
+<div class="seg" data-time="583.0"><span class="seg-time">09:43</span><span class="seg-text">*? J u ~z? Uu j/ * j_@u @j ~j_ j_*z_ &quot;j z j *~</span></div>
+<div class="seg" data-time="585.119"><span class="seg-time">09:45</span><span class="seg-text">uj? J? Zj&quot;zz_Uuh_</span></div>
+<div class="seg" data-time="590.399"><span class="seg-time">09:50</span><span class="seg-text">(~ z_&quot;o z_ *? ** j? B @ j? &quot;b_ Uz_ ~ j? Z z_b</span></div>
+<div class="seg" data-time="592.48"><span class="seg-time">09:52</span><span class="seg-text">&quot;z b_ b_(~ j? *? ~ j_ j?Jz_ z*/ u `_ z_ ~_</span></div>
+<div class="seg" data-time="594.562"><span class="seg-time">09:54</span><span class="seg-text">j_*/z_ ju} *z * j_*? R_*z *}u *? *z */ z? @]*z*`_+z *</span></div>
+<div class="seg" data-time="596.65"><span class="seg-time">09:56</span><span class="seg-text">&quot;~*~*&gt; bj b_ ~ &quot;~ j ~*jjj *~u} *?U}z_@ j</span></div>
+<div class="seg" data-time="598.877"><span class="seg-time">09:58</span><span class="seg-text">z_ * z j? Z j_ j_*~ *&gt; *&gt; @</span></div>
+<div class="seg" data-time="600.921"><span class="seg-time">10:00</span><span class="seg-text">Uu j *.J?&quot;~ *? (</span></div>
+<div class="seg" data-time="603.258"><span class="seg-time">10:03</span><span class="seg-text">j?*?&quot;z&quot;z z_ +j*o &quot; h_b_ z_ * j&quot;z</span></div>
+<div class="seg" data-time="605.326"><span class="seg-time">10:05</span><span class="seg-text">z/ `_ (~ j* *z &quot;zj_ *? Z? ~* j+</span></div>
+<div class="seg" data-time="607.462"><span class="seg-time">10:07</span><span class="seg-text">&quot;+ *?Z_ * */ u} *: j? ~</span></div>
+<div class="seg" data-time="609.53"><span class="seg-time">10:09</span><span class="seg-text">@ z_Uu u} j_ +~j?*? *? U * *~</span></div>
+<div class="seg" data-time="611.566"><span class="seg-time">10:11</span><span class="seg-text">@ ` &quot;z u &quot;~h]&quot;z*} p_z_</span></div>
+<div class="seg" data-time="614.101"><span class="seg-time">10:14</span><span class="seg-text">*j_j :? jw b u *(j_@ zw j_</span></div>
+<div class="seg" data-time="616.437"><span class="seg-time">10:16</span><span class="seg-text">*~ j? *z @ j_*~ ** */ a} &quot;z</span></div>
+<div class="seg" data-time="618.806"><span class="seg-time">10:18</span><span class="seg-text">z?&quot; *~ e} *~ jj?Z_*.&quot; *~</span></div>
+<div class="seg" data-time="620.876"><span class="seg-time">10:20</span><span class="seg-text">+z? Z j_ ~&quot;~k *~ b_  *&gt; j *</span></div>
+<div class="seg" data-time="622.944"><span class="seg-time">10:22</span><span class="seg-text">b b_b_ j *&gt; n* jz_ e}</span></div>
+<div class="seg" data-time="625.13"><span class="seg-time">10:25</span><span class="seg-text">&quot;*/ z*/ */ *?&quot;_ +z ~ zw</span></div>
+<div class="seg" data-time="627.249"><span class="seg-time">10:27</span><span class="seg-text">j_j *.J* z_j */ j*~j_Uu*? *~ b</span></div>
+<div class="seg" data-time="629.451"><span class="seg-time">10:29</span><span class="seg-text">*?J_ *? J?J zj z_z_# j_j @_</span></div>
+<div class="seg" data-time="631.92"><span class="seg-time">10:31</span><span class="seg-text">*zj?*? Uju? * `} @ b_</span></div>
+<div class="seg" data-time="634.324"><span class="seg-time">10:34</span><span class="seg-text">*~</span></div>
+<div class="seg" data-time="637.146"><span class="seg-time">10:37</span><span class="seg-text">~ j@ */ j_ *? ~_ ** jbj*?*~*?E}j_ Euz z/ n&quot;? J?X_*z j_j? *</span></div>
+<div class="seg" data-time="639.233"><span class="seg-time">10:39</span><span class="seg-text">b *~ w}j?Z? &quot;j&quot;? B}@e~j_j j?*~*&gt;*u} z_ rw(+ j j/ z_ *z_r_j</span></div>
+<div class="seg" data-time="641.259"><span class="seg-time">10:41</span><span class="seg-text">j?J_ z j_ *~*?Z? Rw j? J?Uuzzw j_@}*z j *z z</span></div>
+<div class="seg" data-time="643.318"><span class="seg-time">10:43</span><span class="seg-text">*~ &quot;n @*~</span></div>
+<div class="seg" data-time="647.7909999999999"><span class="seg-time">10:47</span><span class="seg-text">&quot;~*/ j_ *&gt; j? *zb &quot; *: z_`_ j_ *</span></div>
+<div class="seg" data-time="649.912"><span class="seg-time">10:49</span><span class="seg-text">j_j j u} * *? Z / j_ (. */ *?W</span></div>
+<div class="seg" data-time="651.978"><span class="seg-time">10:51</span><span class="seg-text">z?*? U *z * z_zWz_ *~ *~j? J? U</span></div>
+<div class="seg" data-time="654.76"><span class="seg-time">10:54</span><span class="seg-text">*/ b_ z_ z_ (~a~ *~j_*?@Uz *+@j? H+</span></div>
+<div class="seg" data-time="656.153"><span class="seg-time">10:56</span><span class="seg-text">z *~u ~ * ** b_</span></div>
+<div class="seg" data-time="658.284"><span class="seg-time">10:58</span><span class="seg-text">*? ~ &quot;zk&quot;~j_ z_j_b`_*j_ ~</span></div>
+<div class="seg" data-time="660.411"><span class="seg-time">11:00</span><span class="seg-text">j/ ~ j &quot;.J_j? B &quot;zjj_ j</span></div>
+<div class="seg" data-time="662.552"><span class="seg-time">11:02</span><span class="seg-text">z_ *~ j? @} j_ &quot;*j/ j? J_ &quot;zb_</span></div>
+<div class="seg" data-time="664.821"><span class="seg-time">11:04</span><span class="seg-text">*/ ~ j *o*&gt;j &quot;z</span></div>
+<div class="seg" data-time="666.923"><span class="seg-time">11:06</span><span class="seg-text">pw*&gt; *~ ~ jj_ j *? *~ *~</span></div>
+<div class="seg" data-time="669.58"><span class="seg-time">11:09</span><span class="seg-text">*~u~ *j e} z_*~ j?Z_ j</span></div>
+<div class="seg" data-time="671.46"><span class="seg-time">11:11</span><span class="seg-text">*~@* *&gt;(@}&quot;~ b *~z_j_@] *z *? ~_ */</span></div>
+<div class="seg" data-time="674.564"><span class="seg-time">11:14</span><span class="seg-text">u}j? {*jj_@ z_&quot; */j? B_ *n *&gt; jz_*. ~ j</span></div>
+<div class="seg" data-time="676.6"><span class="seg-time">11:16</span><span class="seg-text">r_ e} j? u @ j/j</span></div>
+<div class="seg" data-time="678.768"><span class="seg-time">11:18</span><span class="seg-text">+z z z ~ ~*&gt;z&quot; w} (~</span></div>
+<div class="seg" data-time="680.971"><span class="seg-time">11:20</span><span class="seg-text">&quot;/ z_ j? Z_ &quot;~z_ j/j_*~j&gt;j z_ z_ j_</span></div>
+<div class="seg" data-time="683.173"><span class="seg-time">11:23</span><span class="seg-text">~*~ &quot;~ &quot;j j?*j ~&quot;~*~</span></div>
+<div class="seg" data-time="685.241"><span class="seg-time">11:25</span><span class="seg-text">+j?J? ~ &quot;.Bzw * * * wj e}*~ *zz_</span></div>
+<div class="seg" data-time="687.51"><span class="seg-time">11:27</span><span class="seg-text">**? &quot;~ j (**&gt; &quot;~ j/ z */ *?</span></div>
+<div class="seg" data-time="689.813"><span class="seg-time">11:29</span><span class="seg-text">*j j ~*? &quot;~ j? B} (~</span></div>
+<div class="seg" data-time="692.316"><span class="seg-time">11:32</span><span class="seg-text">* ~ b u(~ j?</span></div>
+<div class="seg" data-time="694.318"><span class="seg-time">11:34</span><span class="seg-text">j? *?(N j? ~*/*.J/ @j?U} ~ h*</span></div>
+<div class="seg" data-time="696.32"><span class="seg-time">11:36</span><span class="seg-text">* ` Eu jj_ z_ *&gt; zWz_</span></div>
+<div class="seg" data-time="698.422"><span class="seg-time">11:38</span><span class="seg-text">j?* * j  *? ~ z_ j?</span></div>
+<div class="seg" data-time="700.624"><span class="seg-time">11:40</span><span class="seg-text">Z_ jz_ j?` Uu z_ j_ zj*/ *</span></div>
+<div class="seg" data-time="702.702"><span class="seg-time">11:42</span><span class="seg-text">&quot;? J?P * b ~*? J?</span></div>
+<div class="seg" data-time="704.728"><span class="seg-time">11:44</span><span class="seg-text">*?*/z_ z j? *? ~ *~ j*+ z b_</span></div>
+<div class="seg" data-time="707.13"><span class="seg-time">11:47</span><span class="seg-text">j_ *zb_ &quot;~ j_ b_*/ z_ * x_</span></div>
+<div class="seg" data-time="709.701"><span class="seg-time">11:49</span><span class="seg-text">u ~ e}&quot;~ zj_ *? `_ b jj_ e}*/</span></div>
+<div class="seg" data-time="711.969"><span class="seg-time">11:51</span><span class="seg-text">u} ~&quot;zu}*/ j? &quot;~ */ &quot;~zw * @_*&gt;z/</span></div>
+<div class="seg" data-time="713.985"><span class="seg-time">11:53</span><span class="seg-text">z_ j? */ j jj/ *&gt; *?W</span></div>
+<div class="seg" data-time="716.118"><span class="seg-time">11:56</span><span class="seg-text">* j_ b_ * @_ z_ r ~j?</span></div>
+<div class="seg" data-time="718.309"><span class="seg-time">11:58</span><span class="seg-text">Wz_ ~ z j? BUu j_ ~ jju}*? &quot;~j? Z_</span></div>
+<div class="seg" data-time="720.389"><span class="seg-time">12:00</span><span class="seg-text">b j? U* ~&quot;zz *zz_(~z ~</span></div>
+<div class="seg" data-time="722.487"><span class="seg-time">12:02</span><span class="seg-text">(&gt; j*/ *. Z */j/</span></div>
+<div class="seg" data-time="724.749"><span class="seg-time">12:04</span><span class="seg-text">z_*&quot;z z *&gt;~j *&gt; *? @(.Z_ *&gt;*</span></div>
+<div class="seg" data-time="727.85"><span class="seg-time">12:07</span><span class="seg-text">b_ *~j? J_ `_j*/ z_ zj_ j  u uw}j_ *~j</span></div>
+<div class="seg" data-time="729.166"><span class="seg-time">12:09</span><span class="seg-text">*~ *o j? *&gt; *&gt; u} */ z j</span></div>
+<div class="seg" data-time="731.923"><span class="seg-time">12:11</span><span class="seg-text">j&quot;~*?*&gt; &quot;~ ~ * &quot;z &quot;j_h_ e}</span></div>
+<div class="seg" data-time="734.426"><span class="seg-time">12:14</span><span class="seg-text">j?**&gt;j_ u} @ bz_ &quot;(z?*&gt;zw j_*~</span></div>
+<div class="seg" data-time="736.461"><span class="seg-time">12:16</span><span class="seg-text">*j? J_ &quot;&gt; *zj ~ * *j? *~</span></div>
+<div class="seg" data-time="738.501"><span class="seg-time">12:18</span><span class="seg-text">* j_j?*~*~j?&quot;~ z j?&quot;zj_ *~ */ @*. *&gt;</span></div>
+<div class="seg" data-time="740.865"><span class="seg-time">12:20</span><span class="seg-text">~&quot;.@ z_ z_b_ *? @j *&quot;_&quot;z&quot;&gt;j/ j_</span></div>
+<div class="seg" data-time="743.135"><span class="seg-time">12:23</span><span class="seg-text">*/ &quot;z j zw *;</span></div>
+<div class="seg" data-time="745.17"><span class="seg-time">12:25</span><span class="seg-text">~ w} j?Z j zw</span></div>
+<div class="seg" data-time="747.439"><span class="seg-time">12:27</span><span class="seg-text">*?@_ *; @(Z j?*&gt;r_ &quot;. Z? J/&quot;~ z_u}</span></div>
+<div class="seg" data-time="749.641"><span class="seg-time">12:29</span><span class="seg-text">j?&quot;zu~ j? *?J u ` j? B_ j zw</span></div>
+<div class="seg" data-time="751.877"><span class="seg-time">12:31</span><span class="seg-text">j *~+(~ j? `} j? B_j_ (_ *?</span></div>
+<div class="seg" data-time="754.12"><span class="seg-time">12:34</span><span class="seg-text">*~j_ u}z_ #| jj_j/ j j_</span></div>
+<div class="seg" data-time="756.215"><span class="seg-time">12:36</span><span class="seg-text">&quot;/ e} *_j &quot;z *&gt; u}*~u} *</span></div>
+<div class="seg" data-time="758.65"><span class="seg-time">12:38</span><span class="seg-text">z_ * jj z *~ j_ *?*/* j?</span></div>
+<div class="seg" data-time="760.746"><span class="seg-time">12:40</span><span class="seg-text">Rw* j? **z *~ &quot;~@ */j</span></div>
+<div class="seg" data-time="762.822"><span class="seg-time">12:42</span><span class="seg-text">j? &quot;~ j/ u `_ *? &quot;n j_*z</span></div>
+<div class="seg" data-time="764.824"><span class="seg-time">12:44</span><span class="seg-text">z_ j*? Jxw ux_&quot;~j(? &quot;z u</span></div>
+<div class="seg" data-time="767.126"><span class="seg-time">12:47</span><span class="seg-text">j/ &quot;~j?&quot;~*~ h_p_ *uj</span></div>
+<div class="seg" data-time="769.262"><span class="seg-time">12:49</span><span class="seg-text">j &quot;z *? *?J_*?&quot; &quot;z j?Z_ w} j*? * j_z *}</span></div>
+<div class="seg" data-time="771.864"><span class="seg-time">12:51</span><span class="seg-text">uj_*? &quot;&gt; *~*&gt; u~ */ j @_</span></div>
+<div class="seg" data-time="774.867"><span class="seg-time">12:54</span><span class="seg-text">Uu z &quot;z +~</span></div>
+<div class="seg" data-time="777.169"><span class="seg-time">12:57</span><span class="seg-text">* zw j? ~*?*} &quot;~ * j?</span></div>
+<div class="seg" data-time="779.172"><span class="seg-time">12:59</span><span class="seg-text">*~ *? * + z_ *? * j_</span></div>
+<div class="seg" data-time="781.274"><span class="seg-time">13:01</span><span class="seg-text">*/ &quot;~ j_ jj_ z?*.*/ */&quot;}z_</span></div>
+<div class="seg" data-time="783.576"><span class="seg-time">13:03</span><span class="seg-text">j?* j? J? Ju&quot;~ z_ b*~*?</span></div>
+<div class="seg" data-time="785.912"><span class="seg-time">13:05</span><span class="seg-text">Euj&quot;~ z_ b jz_ z_ ubj_u */</span></div>
+<div class="seg" data-time="788.14"><span class="seg-time">13:08</span><span class="seg-text">~ j_ x *~ j*z *z_</span></div>
+<div class="seg" data-time="790.35"><span class="seg-time">13:10</span><span class="seg-text">p_j_*~@] J?J? Z j?U? U</span></div>
+<div class="seg" data-time="792.552"><span class="seg-time">13:12</span><span class="seg-text">ub*zk j_ ~ *z*&gt;j_ * ~@Uj? *&gt; z?</span></div>
+<div class="seg" data-time="794.988"><span class="seg-time">13:14</span><span class="seg-text">*~*z* uu &quot;&gt; &quot;: z +*</span></div>
+<div class="seg" data-time="797.191"><span class="seg-time">13:17</span><span class="seg-text">*?J? &quot;} oj *? J? J?</span></div>
+<div class="seg" data-time="799.793"><span class="seg-time">13:19</span><span class="seg-text">Bbj &quot;~ &quot;~+z * zw *? *z *  *</span></div>
+<div class="seg" data-time="801.939"><span class="seg-time">13:21</span><span class="seg-text">z_ &quot;_ z_ z_j/ ~ jj? Jz_ &quot;zz_&quot;zj_@</span></div>
+<div class="seg" data-time="804.74"><span class="seg-time">13:24</span><span class="seg-text"> j_x_j_z_j_ @ j_ ~ j&quot;~b} *@j</span></div>
+<div class="seg" data-time="806.21"><span class="seg-time">13:26</span><span class="seg-text">u j *? ~*/ * j?</span></div>
+<div class="seg" data-time="808.335"><span class="seg-time">13:28</span><span class="seg-text">*&gt; j*j? *?U} b *&gt; `_&quot;~*? *o*/</span></div>
+<div class="seg" data-time="810.671"><span class="seg-time">13:30</span><span class="seg-text">~@_j_j j *z *&gt;~_*?*&gt;j *j &quot;~</span></div>
+<div class="seg" data-time="812.826"><span class="seg-time">13:32</span><span class="seg-text">~ &quot;| ~ * j? J_&quot;z ub_* b z_j? @</span></div>
+<div class="seg" data-time="815.109"><span class="seg-time">13:35</span><span class="seg-text">zwj_*/ z*? Z_ j_ zw`_ @ &quot;~ z_ j/u}</span></div>
+<div class="seg" data-time="817.186"><span class="seg-time">13:37</span><span class="seg-text">j? U Uu e} b_ *? &quot;~ +</span></div>
+<div class="seg" data-time="819.19"><span class="seg-time">13:39</span><span class="seg-text">z_ * jj? *? &quot;j ~ h_&quot;:z_ xw ~</span></div>
+<div class="seg" data-time="822.16"><span class="seg-time">13:42</span><span class="seg-text">j_ j@ *~zw ~*? J_ */*/*?(</span></div>
+<div class="seg" data-time="824.118"><span class="seg-time">13:44</span><span class="seg-text">&quot;/ j j? ~z?Bj+ u?Z_*/ *?</span></div>
+<div class="seg" data-time="826.153"><span class="seg-time">13:46</span><span class="seg-text">J? J? ~ @j?@ ~ j?H_ j *(~ z_</span></div>
+<div class="seg" data-time="828.456"><span class="seg-time">13:48</span><span class="seg-text">*~*j? Z ~ &quot;z jj_ je~j &quot;~</span></div>
+<div class="seg" data-time="830.659"><span class="seg-time">13:50</span><span class="seg-text">j/ j?J z_ j_z &quot;~ j?</span></div>
+<div class="seg" data-time="832.861"><span class="seg-time">13:52</span><span class="seg-text">J&quot;~ z_*~* ~ j_*</span></div>
+<div class="seg" data-time="835.96"><span class="seg-time">13:55</span><span class="seg-text">j { ~ ~_ j? &quot;. (</span></div>
+<div class="seg" data-time="837.132"><span class="seg-time">13:57</span><span class="seg-text">z j_ &quot;~ u</span></div>
+<div class="seg" data-time="839.3340000000001"><span class="seg-time">13:59</span><span class="seg-text">*? J @_ jj? Bw *? +z z*j/j</span></div>
+<div class="seg" data-time="841.403"><span class="seg-time">14:01</span><span class="seg-text">* Bw j_ `_ */ jEuj_</span></div>
+<div class="seg" data-time="843.404"><span class="seg-time">14:03</span><span class="seg-text">x_+~*z*~ &quot;:j &quot;~ uj/ j j_</span></div>
+<div class="seg" data-time="845.415"><span class="seg-time">14:05</span><span class="seg-text">j bj?*/ z *~ ~ z_ b uz_u}</span></div>
+<div class="seg" data-time="847.508"><span class="seg-time">14:07</span><span class="seg-text">z_ rWj? H_ */ jz_* j_ *?*;</span></div>
+<div class="seg" data-time="849.511"><span class="seg-time">14:09</span><span class="seg-text">&quot;~ ~ *(/jj j uj?*? &quot;o `_</span></div>
+<div class="seg" data-time="851.947"><span class="seg-time">14:11</span><span class="seg-text">* ~ jj? J? &quot;* *n*~ bo</span></div>
+<div class="seg" data-time="854.49"><span class="seg-time">14:14</span><span class="seg-text">*~*&gt;&quot;~*&gt;@] H_@ z_&quot;? Jw j_ j? J *</span></div>
+<div class="seg" data-time="856.118"><span class="seg-time">14:16</span><span class="seg-text">j? Z&quot;b_b jj &quot;~j} j */z_z (</span></div>
+<div class="seg" data-time="858.387"><span class="seg-time">14:18</span><span class="seg-text">z_z?J_@ &quot;~j/&quot;~u j/ &quot;~*?+} h *</span></div>
+<div class="seg" data-time="860.389"><span class="seg-time">14:20</span><span class="seg-text">~ b z *~ *z &quot;~ j_ jj_ ~ *}</span></div>
+<div class="seg" data-time="862.424"><span class="seg-time">14:22</span><span class="seg-text">j/j_ ~ */@} *z *&gt; j_ * &quot;/*</span></div>
+<div class="seg" data-time="864.659"><span class="seg-time">14:24</span><span class="seg-text">~ b_*~ *? J*?J*?*</span></div>
+<div class="seg" data-time="866.763"><span class="seg-time">14:26</span><span class="seg-text">&quot;zj_ j?* * j b_</span></div>
+<div class="seg" data-time="869.232"><span class="seg-time">14:29</span><span class="seg-text">j_ j? U` ~*_*? Z_&quot;zh_ *~</span></div>
+<div class="seg" data-time="871.567"><span class="seg-time">14:31</span><span class="seg-text">b_z?Z? &quot;z *: w} j_&quot;~(/*~ ~ ~</span></div>
+<div class="seg" data-time="873.803"><span class="seg-time">14:33</span><span class="seg-text">j? */`_j_z_ *~ z * j hj **]B}*z &quot;_ j_</span></div>
+<div class="seg" data-time="876.372"><span class="seg-time">14:36</span><span class="seg-text">* @ *&gt;&quot;? &quot;ozw*z &quot;. &quot;~j?</span></div>
+<div class="seg" data-time="878.641"><span class="seg-time">14:38</span><span class="seg-text">~*+} j_ *; @_ @ z *?</span></div>
+<div class="seg" data-time="880.91"><span class="seg-time">14:40</span><span class="seg-text">J uu? J z*+| b_ j_ &quot;~ z_+z</span></div>
+<div class="seg" data-time="883.113"><span class="seg-time">14:43</span><span class="seg-text">*&quot;~*? * j j_j? @_ j_ *? J j? J?J?</span></div>
+<div class="seg" data-time="885.348"><span class="seg-time">14:45</span><span class="seg-text">J/*&gt;*?J ~ u*/j_+z j?J_</span></div>
+<div class="seg" data-time="887.617"><span class="seg-time">14:47</span><span class="seg-text">z_b_jj*zw* *~ Eu j x_ *~*z</span></div>
+<div class="seg" data-time="889.727"><span class="seg-time">14:49</span><span class="seg-text">z_ u} b &quot;~ *? J_ j?</span></div>
+<div class="seg" data-time="891.855"><span class="seg-time">14:51</span><span class="seg-text">Jb_*.@w ~ *n @ j z_</span></div>
+<div class="seg" data-time="894.124"><span class="seg-time">14:54</span><span class="seg-text">ej?U j_ *~z_j? &quot;~z_ j</span></div>
+<div class="seg" data-time="896.159"><span class="seg-time">14:56</span><span class="seg-text">z_&quot;~ z_ +z ~x_ j?*&quot;z</span></div>
+<div class="seg" data-time="898.194"><span class="seg-time">14:58</span><span class="seg-text">*zzj_ &quot;~ (~ */ ~j z?Z_ @_*~ j?</span></div>
+<div class="seg" data-time="900.396"><span class="seg-time">15:00</span><span class="seg-text">Z_ * j *j_ &quot;. Zjz/</span></div>
+<div class="seg" data-time="902.7"><span class="seg-time">15:02</span><span class="seg-text">j/*b_j? ~ e *z z ~ */*~_ b(?J</span></div>
+<div class="seg" data-time="904.902"><span class="seg-time">15:04</span><span class="seg-text">u} */ j_jWj?Juj_ *&gt;j_z &quot;j/ *~ j *z ~</span></div>
+<div class="seg" data-time="907.104"><span class="seg-time">15:07</span><span class="seg-text">u}j?*? J? Z_*/j_ * uz_ z_&quot;*?</span></div>
+<div class="seg" data-time="909.234"><span class="seg-time">15:09</span><span class="seg-text">@ j@ jz_ z_j+j@u(Z * h&quot;~j?J?@</span></div>
+<div class="seg" data-time="911.441"><span class="seg-time">15:11</span><span class="seg-text">j@*/ * j_ j</span></div>
+<div class="seg" data-time="913.61"><span class="seg-time">15:13</span><span class="seg-text">*&gt; *? *~ ~j_ j_</span></div>
+<div class="seg" data-time="915.779"><span class="seg-time">15:15</span><span class="seg-text">&quot; ( j? (Z *?H *_*~ *jw</span></div>
+<div class="seg" data-time="917.982"><span class="seg-time">15:17</span><span class="seg-text">j_j?*zWz_j ~*? B z_uj_ u ~ *?</span></div>
+<div class="seg" data-time="919.984"><span class="seg-time">15:19</span><span class="seg-text">U} ~ x_ *u ~jz z_*z z (/ */j_</span></div>
+<div class="seg" data-time="922.687"><span class="seg-time">15:22</span><span class="seg-text">*o b&quot;~j ~ (~ b_*?Z_ &quot;~b</span></div>
+<div class="seg" data-time="924.889"><span class="seg-time">15:24</span><span class="seg-text">*?*?(~ *?@z_ ~ *~ **&gt; u</span></div>
+<div class="seg" data-time="927.124"><span class="seg-time">15:27</span><span class="seg-text">&quot; u j_ w}j_z_ j? Z_j/r_jz_ j</span></div>
+<div class="seg" data-time="929.153"><span class="seg-time">15:29</span><span class="seg-text">(&gt; &quot;~ jj */ z? Z@} z `b</span></div>
+<div class="seg" data-time="931.362"><span class="seg-time">15:31</span><span class="seg-text">j? *. J/*&gt;@_ &quot;~b z</span></div>
+<div class="seg" data-time="933.364"><span class="seg-time">15:33</span><span class="seg-text">b_ &quot;~ ~ *~* ~ / j</span></div>
+<div class="seg" data-time="935.366"><span class="seg-time">15:35</span><span class="seg-text">*/j? J? J ~ *~*/j?(~</span></div>
+<div class="seg" data-time="937.602"><span class="seg-time">15:37</span><span class="seg-text">@_j?H/*/*?&quot;x_ ~ jj ~j&quot;~ uj? J_ h_ h_</span></div>
+<div class="seg" data-time="939.904"><span class="seg-time">15:39</span><span class="seg-text">~jz_&quot; j? J_* p_ &quot;~ b_ *?</span></div>
+<div class="seg" data-time="941.965"><span class="seg-time">15:41</span><span class="seg-text">* Uu *? *~ &quot; &quot;~</span></div>
+<div class="seg" data-time="944.109"><span class="seg-time">15:44</span><span class="seg-text">~ x_ j({ j/ z_ * ~ ~ &quot; *? &quot;~&quot;~ b_</span></div>
+<div class="seg" data-time="946.177"><span class="seg-time">15:46</span><span class="seg-text">j? Z_ ~z_@ *?Z_z?U *~ ~ j b_ *z z_</span></div>
+<div class="seg" data-time="948.446"><span class="seg-time">15:48</span><span class="seg-text"> *&gt; jz &quot;j+z * @_</span></div>
+<div class="seg" data-time="950.648"><span class="seg-time">15:50</span><span class="seg-text">&quot;~ &quot;z j *? J/z_ j/</span></div>
+<div class="seg" data-time="955.636"><span class="seg-time">15:55</span><span class="seg-text">z **? U} j_zWz_ *z */z_*?* (J *?J j j? H*? * uz_</span></div>
+<div class="seg" data-time="957.774"><span class="seg-time">15:57</span><span class="seg-text">@ &quot;: &quot;z jj/ j? J *~j ~@}*?Z &quot;? Zj z(~*/ z j_ j_ ~</span></div>
+<div class="seg" data-time="959.868"><span class="seg-time">15:59</span><span class="seg-text"> j_ `*b_ @h/ &quot;~ j_*? Z_ j*</span></div>
+<div class="seg" data-time="961.927"><span class="seg-time">16:01</span><span class="seg-text">*z*~ j *?* j/z_ pw z*&quot;~  j *? *</span></div>
+<div class="seg" data-time="964.463"><span class="seg-time">16:04</span><span class="seg-text">*? &quot;~ j*~ z_b_* +*~h_ *zr_* *~j?*&quot;</span></div>
+<div class="seg" data-time="967.132"><span class="seg-time">16:07</span><span class="seg-text">j? J_@*&gt; @} &quot;~`_bj*/j</span></div>
+<div class="seg" data-time="969.275"><span class="seg-time">16:09</span><span class="seg-text">@Wj_ a&gt;j? ~j&gt; (~  j_ *? Zw</span></div>
+<div class="seg" data-time="971.337"><span class="seg-time">16:11</span><span class="seg-text">j_z_ j_ j_ */ j&quot;~j?*&quot;~j_ j u ~ *z</span></div>
+<div class="seg" data-time="973.439"><span class="seg-time">16:13</span><span class="seg-text">&quot;z *~ j?*~ @ j&quot;z</span></div>
+<div class="seg" data-time="975.508"><span class="seg-time">16:15</span><span class="seg-text">&quot;z &quot;~**z *&gt; *</span></div>
+<div class="seg" data-time="980.702"><span class="seg-time">16:20</span><span class="seg-text">*? ~ */ ~ j?*/&quot;~ jj? J_ h &quot;~z_ j_ &quot;z*z j *&gt; *</span></div>
+<div class="seg" data-time="982.87"><span class="seg-time">16:22</span><span class="seg-text">&quot;/zWj? *~ *z_ x_ b_ &quot;z &quot;&gt; *&gt; j_ j_ z_ *~j/</span></div>
+<div class="seg" data-time="985.8"><span class="seg-time">16:25</span><span class="seg-text">h z_ z &quot;~ *. B_ *. Z_ z &quot;~ / *? J</span></div>
+<div class="seg" data-time="987.132"><span class="seg-time">16:27</span><span class="seg-text">*/*~*z ~j? &quot;~u j @u j ~ */ *</span></div>
+<div class="seg" data-time="989.389"><span class="seg-time">16:29</span><span class="seg-text">(J(~ ~ z_ *z</span></div>
+<div class="seg" data-time="991.524"><span class="seg-time">16:31</span><span class="seg-text">j_ j?J? *? */&quot;~ bw Uu &quot;~ *~ z_*:</span></div>
+<div class="seg" data-time="993.893"><span class="seg-time">16:33</span><span class="seg-text">j/j?@j_ *? J? @ *oz</span></div>
+<div class="seg" data-time="996.196"><span class="seg-time">16:36</span><span class="seg-text">@_ j? R_ *~ zw b</span></div>
+<div class="seg" data-time="998.264"><span class="seg-time">16:38</span><span class="seg-text">&quot;jj_ */ e} jw*? ** *~j &quot;/</span></div>
+<div class="seg" data-time="1000.355"><span class="seg-time">16:40</span><span class="seg-text">u z_* *j_ *?J_ *z jwjj j? *&gt; u</span></div>
+<div class="seg" data-time="1002.502"><span class="seg-time">16:42</span><span class="seg-text">*z ~ b}r_ +~*z *? @</span></div>
+<div class="seg" data-time="1004.537"><span class="seg-time">16:44</span><span class="seg-text">(~h j/ * jj? N u@ j?</span></div>
+<div class="seg" data-time="1006.64"><span class="seg-time">16:46</span><span class="seg-text">Ub z_*?B j jj/z_ +~p *</span></div>
+<div class="seg" data-time="1009.61"><span class="seg-time">16:49</span><span class="seg-text">j zw *b j? ~</span></div>
+<div class="seg" data-time="1011.945"><span class="seg-time">16:51</span><span class="seg-text">jb_ *?JzWj &quot;j?*? *~j_ ~*/</span></div>
+<div class="seg" data-time="1014.114"><span class="seg-time">16:54</span><span class="seg-text">*. J? *?*{ *? &quot; &quot;~u}j&quot;~ j( z</span></div>
+<div class="seg" data-time="1016.383"><span class="seg-time">16:56</span><span class="seg-text">j {@_ *?J_ *:*~ z? *~ b</span></div>
+<div class="seg" data-time="1018.479"><span class="seg-time">16:58</span><span class="seg-text">&quot;~ @ * *~ *z j_ j?J *j ~*~*&gt;*~~_</span></div>
+<div class="seg" data-time="1020.721"><span class="seg-time">17:00</span><span class="seg-text">z_* j_ j&quot;n*~ `w ~ * *~j_* *. B_*~ u}@</span></div>
+<div class="seg" data-time="1022.851"><span class="seg-time">17:02</span><span class="seg-text">*? Jj/*?*~ k*. U}*? J j j_ *? Z_</span></div>
+<div class="seg" data-time="1025.126"><span class="seg-time">17:05</span><span class="seg-text">j? * z*: *~*~ bj?</span></div>
+<div class="seg" data-time="1027.461"><span class="seg-time">17:07</span><span class="seg-text">*z_ ~ @_ * * ` e}*z* z_z *</span></div>
+<div class="seg" data-time="1029.463"><span class="seg-time">17:09</span><span class="seg-text">z_j_ (Z*&gt;u ` h_ z *? **/ j*:u j/ *&gt; &quot;~</span></div>
+<div class="seg" data-time="1031.524"><span class="seg-time">17:11</span><span class="seg-text">*/ *~ j@ z * u} u?&quot;?&quot; &quot;&gt; (~ z?&quot;z*</span></div>
+<div class="seg" data-time="1033.634"><span class="seg-time">17:13</span><span class="seg-text">~&quot;~ ~* k j+ @u h zb_* j</span></div>
+<div class="seg" data-time="1035.788"><span class="seg-time">17:15</span><span class="seg-text">*? Zj? J_ j_z_&quot;&gt; z_ bz_ b_</span></div>
+<div class="seg" data-time="1038.105"><span class="seg-time">17:18</span><span class="seg-text">j b_ *zj? Z?&quot;z z_ **o*/ @Uj</span></div>
+<div class="seg" data-time="1040.442"><span class="seg-time">17:20</span><span class="seg-text">j ~&quot;&gt;&quot;z z_ *~ j h_ +z*&gt; &quot;~ * ~</span></div>
+<div class="seg" data-time="1042.811"><span class="seg-time">17:22</span><span class="seg-text">*? *~ *? J@ @ b z? J</span></div>
+<div class="seg" data-time="1044.813"><span class="seg-time">17:24</span><span class="seg-text">*~ **/*? &quot;~j? ~z z_Eu*&gt; *? * j</span></div>
+<div class="seg" data-time="1046.981"><span class="seg-time">17:26</span><span class="seg-text">~* u}&quot;j *~@*~j? Z&quot;* j? * ~</span></div>
+<div class="seg" data-time="1049.117"><span class="seg-time">17:29</span><span class="seg-text">*~ u *?J&quot;z Eu+q~ j: (~</span></div>
+<div class="seg" data-time="1051.219"><span class="seg-time">17:31</span><span class="seg-text">j (Z *&gt; */ +*~ j_* z_ j j</span></div>
+<div class="seg" data-time="1053.354"><span class="seg-time">17:33</span><span class="seg-text">&quot;~ j ~ j? J b_ j w. ~ *</span></div>
+<div class="seg" data-time="1055.423"><span class="seg-time">17:35</span><span class="seg-text">*?(Z j_ j_`_ e} jb * **j?</span></div>
+<div class="seg" data-time="1057.658"><span class="seg-time">17:37</span><span class="seg-text">Z_ @}&quot;~j j &quot;z*zb ~j_*z j_ brw</span></div>
+<div class="seg" data-time="1059.754"><span class="seg-time">17:39</span><span class="seg-text">j? Z_ ~ ~ */ &quot;z ~_</span></div>
+<div class="seg" data-time="1062.3"><span class="seg-time">17:42</span><span class="seg-text">~j_j? J *?*/*~ **~ @} *~</span></div>
+<div class="seg" data-time="1064.62"><span class="seg-time">17:44</span><span class="seg-text">&quot;~ ~ &quot;/  z_j*?J? Wu z */ j? J&quot;j</span></div>
+<div class="seg" data-time="1066.368"><span class="seg-time">17:46</span><span class="seg-text">@_ j_ jw h z_&quot;z *~ j</span></div>
+<div class="seg" data-time="1068.437"><span class="seg-time">17:48</span><span class="seg-text">j_ j *? * &quot;~ @@ &quot;~ * *?~_</span></div>
+<div class="seg" data-time="1070.539"><span class="seg-time">17:50</span><span class="seg-text">*? ZWj?W&quot;z b_z_&quot;z *&gt;j? &quot;+ b j_z_</span></div>
+<div class="seg" data-time="1072.607"><span class="seg-time">17:52</span><span class="seg-text">z_ ~ u}j? J?U} r_ @ *&gt; *&gt; zjj_ * </span></div>
+<div class="seg" data-time="1074.776"><span class="seg-time">17:54</span><span class="seg-text">(~+ * @ z *? Jj ~ j_ bz_</span></div>
+<div class="seg" data-time="1077.79"><span class="seg-time">17:57</span><span class="seg-text">z_&quot; j? ~z_ +zj &quot;z j ~*~</span></div>
+<div class="seg" data-time="1079.148"><span class="seg-time">17:59</span><span class="seg-text">j * * ~ *&gt; j *z&quot;*z @ *&gt; ~</span></div>
+<div class="seg" data-time="1081.217"><span class="seg-time">18:01</span><span class="seg-text">z_ *~ h_ + z?*jj? J/ *j_j</span></div>
+<div class="seg" data-time="1083.219"><span class="seg-time">18:03</span><span class="seg-text">&quot;~ *? */*: j/ *&gt;z_ ~*?</span></div>
+<div class="seg" data-time="1085.321"><span class="seg-time">18:05</span><span class="seg-text">B_ j_ j? @* @</span></div>
+<div class="seg" data-time="1087.49"><span class="seg-time">18:07</span><span class="seg-text">jj_ ** *ze}*~j *? ~jEu&quot;~ *&gt; j? Jz_@</span></div>
+<div class="seg" data-time="1089.592"><span class="seg-time">18:09</span><span class="seg-text">* b} j_ j?J_*/ *~ z_ zw</span></div>
+<div class="seg" data-time="1092.127"><span class="seg-time">18:12</span><span class="seg-text">~ j u}  *~r_ *</span></div>
+<div class="seg" data-time="1094.264"><span class="seg-time">18:14</span><span class="seg-text">*z*~ &quot; * j? PWj b_ *_*</span></div>
+<div class="seg" data-time="1096.266"><span class="seg-time">18:16</span><span class="seg-text">j?&quot;~e} &quot;~j?*? *j j */ *?</span></div>
+<div class="seg" data-time="1098.301"><span class="seg-time">18:18</span><span class="seg-text">&quot;z*j z_j? Zj? J/ j_</span></div>
+<div class="seg" data-time="1100.303"><span class="seg-time">18:20</span><span class="seg-text">j? Z hj*&gt;&quot;z xw@u * &quot;*~jj</span></div>
+<div class="seg" data-time="1102.305"><span class="seg-time">18:22</span><span class="seg-text">*~j? J_j/ z?B_*?B * z_ *@} j? J/</span></div>
+<div class="seg" data-time="1104.607"><span class="seg-time">18:24</span><span class="seg-text">j? ~ *&quot;~~ j_j_j?* *~ *. J? *~</span></div>
+<div class="seg" data-time="1107.377"><span class="seg-time">18:27</span><span class="seg-text">j? * *z b_ j?&quot;~ zj j? */</span></div>
+<div class="seg" data-time="1109.506"><span class="seg-time">18:29</span><span class="seg-text">j?J &quot;~ j j?J&quot;&gt;j? &quot;/ zw j_z_j zWj_ j?</span></div>
+<div class="seg" data-time="1111.566"><span class="seg-time">18:31</span><span class="seg-text">&quot;~ j *~*~ j_ z_ ~ `_&quot; z_z_</span></div>
+<div class="seg" data-time="1113.617"><span class="seg-time">18:33</span><span class="seg-text">&quot;~j z j? `_ z_ `_ *~</span></div>
+<div class="seg" data-time="1115.986"><span class="seg-time">18:35</span><span class="seg-text">jz/j */j? &quot;z w} **&gt; j+z zj_ ~.</span></div>
+<div class="seg" data-time="1118.88"><span class="seg-time">18:38</span><span class="seg-text">*z*zu}z_ &quot;~ ~*~ j z&quot;zz_*~ ~j_*~ ~ u}&quot;~j*~</span></div>
+<div class="seg" data-time="1120.624"><span class="seg-time">18:40</span><span class="seg-text">***z j? *j&quot;&gt; z * *~ *~ *_zj?+~</span></div>
+<div class="seg" data-time="1122.793"><span class="seg-time">18:42</span><span class="seg-text">z?*z ~ j_ ~* &quot;~&quot;]*?*&gt; b</span></div>
+<div class="seg" data-time="1124.9279999999999"><span class="seg-time">18:44</span><span class="seg-text">z/j? *?**&gt; j? *? @ * j *~&quot;&gt;</span></div>
+<div class="seg" data-time="1127.1970000000001"><span class="seg-time">18:47</span><span class="seg-text">*n ~ *? &quot;z (~ b_jb_ (</span></div>
+<div class="seg" data-time="1129.767"><span class="seg-time">18:49</span><span class="seg-text">*~ z (_k z?&quot;{* b b  ~*&gt;</span></div>
+<div class="seg" data-time="1131.836"><span class="seg-time">18:51</span><span class="seg-text">j_j? J *?Z_*? *~j_*/ j_ j({ *?J/</span></div>
+<div class="seg" data-time="1134.238"><span class="seg-time">18:54</span><span class="seg-text">z_ z j*zj*/ *. Zw *? *?U*~j j j&quot;~</span></div>
+<div class="seg" data-time="1136.307"><span class="seg-time">18:56</span><span class="seg-text">z? `_ &quot;~j_ z_ `_ @_u}*+ z_*z j ~</span></div>
+<div class="seg" data-time="1138.451"><span class="seg-time">18:58</span><span class="seg-text">*/ j? &quot; u} ] Bu*z ~ z</span></div>
+<div class="seg" data-time="1140.477"><span class="seg-time">19:00</span><span class="seg-text">j*&gt;*? J/*_ *. * z &quot;~ &quot;:r *?</span></div>
+<div class="seg" data-time="1142.68"><span class="seg-time">19:02</span><span class="seg-text">J? Bw &quot;~ * j j j z *?J/ ~</span></div>
+<div class="seg" data-time="1144.982"><span class="seg-time">19:04</span><span class="seg-text">@bz_ *? *? (&quot;~*? *? J_</span></div>
+<div class="seg" data-time="1147.85"><span class="seg-time">19:07</span><span class="seg-text">*?&quot;~ @j_ * @*z uuu@je}j? ~ *? * *~</span></div>
+<div class="seg" data-time="1149.287"><span class="seg-time">19:09</span><span class="seg-text">@b j *z *; /*/ j_zw z *? ~ *~</span></div>
+<div class="seg" data-time="1151.456"><span class="seg-time">19:11</span><span class="seg-text">j? Z_ z_ &quot;~ b_ j z j_u</span></div>
+<div class="seg" data-time="1153.491"><span class="seg-time">19:13</span><span class="seg-text">j? * ~ *+~*~ *~j*~*zz_ z_ j j?</span></div>
+<div class="seg" data-time="1155.793"><span class="seg-time">19:15</span><span class="seg-text">(Z *z*? Z_ *~ j? J_ j? *? *j?</span></div>
+<div class="seg" data-time="1158.196"><span class="seg-time">19:18</span><span class="seg-text">H_.*~j? &quot;~@_ *? *z z j_ ~*~ z j? * ~*~</span></div>
+<div class="seg" data-time="1160.209"><span class="seg-time">19:20</span><span class="seg-text">&quot;zj/ z @ j?* j_  z?(~</span></div>
+<div class="seg" data-time="1162.3"><span class="seg-time">19:22</span><span class="seg-text">*j*~ u *?&quot;&quot;~x_ `_ ~ +~ *&gt;</span></div>
+<div class="seg" data-time="1164.436"><span class="seg-time">19:24</span><span class="seg-text">j?&quot; ~u u? ~ z_* z/*_ e~&quot;~ j? Z_ j</span></div>
+<div class="seg" data-time="1166.738"><span class="seg-time">19:26</span><span class="seg-text">~j? *&gt; z_ ~ j?@ ~ &quot;n *~Euh_j *~</span></div>
+<div class="seg" data-time="1168.974"><span class="seg-time">19:28</span><span class="seg-text">j_j*&gt; &quot;. *~ z*</span></div>
+<div class="seg" data-time="1171.9"><span class="seg-time">19:31</span><span class="seg-text">* j_ zzw :? Z? J jWUu</span></div>
+<div class="seg" data-time="1173.211"><span class="seg-time">19:33</span><span class="seg-text">**?*~z_ j? B@z?J(~j?B &quot;~ *? Z *&gt;</span></div>
+<div class="seg" data-time="1175.38"><span class="seg-time">19:35</span><span class="seg-text">~h_ *{ * ~ j*&gt; j? *~ b *&gt;</span></div>
+<div class="seg" data-time="1177.449"><span class="seg-time">19:37</span><span class="seg-text">&quot;zz_*? ( z_ j? J *&quot;&gt; j *</span></div>
+<div class="seg" data-time="1179.518"><span class="seg-time">19:39</span><span class="seg-text">~ j `u u o ~ * *? *</span></div>
+<div class="seg" data-time="1181.687"><span class="seg-time">19:41</span><span class="seg-text">j j_ j_</span></div>
+<div class="seg" data-time="1183.923"><span class="seg-time">19:43</span><span class="seg-text">j/ j/ &quot;} j jjj/*? Z_*/&quot;~*z</span></div>
+<div class="seg" data-time="1186.25"><span class="seg-time">19:46</span><span class="seg-text">j jjz_ Eu&quot;n *~ j?J b_ j_</span></div>
+<div class="seg" data-time="1188.6"><span class="seg-time">19:48</span><span class="seg-text">j?*z*&gt;(~*? *; j jj/ j?&quot;~*? J_ j</span></div>
+<div class="seg" data-time="1190.496"><span class="seg-time">19:50</span><span class="seg-text">Eu j? * jjx_* @_@*? J/</span></div>
+<div class="seg" data-time="1192.698"><span class="seg-time">19:52</span><span class="seg-text">j_+~j *~ j *~ @Uj_ &gt; ~</span></div>
+<div class="seg" data-time="1195.501"><span class="seg-time">19:55</span><span class="seg-text">u} u}z_j? Uz j *?</span></div>
+<div class="seg" data-time="1198.204"><span class="seg-time">19:58</span><span class="seg-text">J? Eu&quot;~j &quot;.*~*~z_*~ j *? + j*&gt; </span></div>
+<div class="seg" data-time="1200.34"><span class="seg-time">20:00</span><span class="seg-text">z_ *j ~*/z_*? B_*~j *~*?</span></div>
+<div class="seg" data-time="1202.842"><span class="seg-time">20:02</span><span class="seg-text">J? *&gt;j* */ *zj_ (} j_ (;</span></div>
+<div class="seg" data-time="1205.44"><span class="seg-time">20:05</span><span class="seg-text">*? ~ *~ ~ *? H j j_*~ *&gt;j_ r_</span></div>
+<div class="seg" data-time="1207.38"><span class="seg-time">20:07</span><span class="seg-text">z_ z_ @ z? */ *b j@z/ u z/*/</span></div>
+<div class="seg" data-time="1209.449"><span class="seg-time">20:09</span><span class="seg-text">j z j_ z*? J/j j?</span></div>
+<div class="seg" data-time="1211.484"><span class="seg-time">20:11</span><span class="seg-text">( *? J?*~ *~ @_ r_ *z x_ +&quot;</span></div>
+<div class="seg" data-time="1213.619"><span class="seg-time">20:13</span><span class="seg-text">~j_ j_&quot;~ j*? *&gt;u} z #*z</span></div>
+<div class="seg" data-time="1215.622"><span class="seg-time">20:15</span><span class="seg-text">j b_*z&quot;/ *z ~z_ *?J_ &quot;z jj?&quot;~</span></div>
+<div class="seg" data-time="1217.858"><span class="seg-time">20:17</span><span class="seg-text">jj@_ ~ u ~j*? (N*/jw j? *~ Au</span></div>
+<div class="seg" data-time="1219.993"><span class="seg-time">20:19</span><span class="seg-text">j_ bWj_ &quot;zj z?K&quot;&gt; &quot;z*&gt;</span></div>
+<div class="seg" data-time="1222.29"><span class="seg-time">20:22</span><span class="seg-text">&quot;z_*&gt;@_Uu&quot;}**z ~ *. J_z_ j @_&quot;~ j_ z_ *+ *;</span></div>
+<div class="seg" data-time="1224.85"><span class="seg-time">20:24</span><span class="seg-text">*?@w *~b_ *z h_h jj?*? ~&quot;~ z_*</span></div>
+<div class="seg" data-time="1226.1"><span class="seg-time">20:26</span><span class="seg-text">j * *? ~ j? ~ u}j</span></div>
+<div class="seg" data-time="1228.969"><span class="seg-time">20:28</span><span class="seg-text">j?J/j/j_j?*@ b j*~ h_*~ j**&gt; *? J_ j_&quot;~</span></div>
+<div class="seg" data-time="1231.471"><span class="seg-time">20:31</span><span class="seg-text">j_z*?*o*/ x_&quot;~&quot;z*? &quot; @ j * *?</span></div>
+<div class="seg" data-time="1233.574"><span class="seg-time">20:33</span><span class="seg-text">Z * +~z_&quot;~ *j * @_*j?* *{j? @j?*~</span></div>
+<div class="seg" data-time="1235.843"><span class="seg-time">20:35</span><span class="seg-text">*~jb_*?*~ &quot;: * j_*/* @w z_*</span></div>
+<div class="seg" data-time="1238.212"><span class="seg-time">20:38</span><span class="seg-text">*? Z_*? Z_ &quot; *? *&gt; @</span></div>
+<div class="seg" data-time="1240.948"><span class="seg-time">20:40</span><span class="seg-text">z_jj? * *&gt;z_z_ z? &quot;</span></div>
+<div class="seg" data-time="1242.983"><span class="seg-time">20:42</span><span class="seg-text">j**~z? + *&quot;~*j j? J_ *~ jj/ *z</span></div>
+<div class="seg" data-time="1245.85"><span class="seg-time">20:45</span><span class="seg-text">&quot; rWj `_ *~ j_j?&quot;n z_ *~u</span></div>
+<div class="seg" data-time="1247.154"><span class="seg-time">20:47</span><span class="seg-text">j Wu ~ z j u}*~ j_ @u</span></div>
+<div class="seg" data-time="1249.215"><span class="seg-time">20:49</span><span class="seg-text">@ r_**z*j ~ j_(+ j z?*?J_**?*/ z_</span></div>
+<div class="seg" data-time="1251.86"><span class="seg-time">20:51</span><span class="seg-text">kj j *&quot;~&quot;z &quot;z ~jj_ z/j</span></div>
+<div class="seg" data-time="1253.9279999999999"><span class="seg-time">20:53</span><span class="seg-text">*~ ~ j?Z_j/ *~</span></div>
+<div class="seg" data-time="1256.64"><span class="seg-time">20:56</span><span class="seg-text">@ z *j_ &quot;z z */ j z_a}j?</span></div>
+<div class="seg" data-time="1258.199"><span class="seg-time">20:58</span><span class="seg-text">R ~ j_ j?R_ &quot;~*? Z_h_*~*j?</span></div>
+<div class="seg" data-time="1260.293"><span class="seg-time">21:00</span><span class="seg-text">Z &quot;j_ ~ @ e~z_ z?@ } ~ *&gt;</span></div>
+<div class="seg" data-time="1265.259"><span class="seg-time">21:05</span><span class="seg-text">&quot;. *?Z_ &quot;zz_ *?B*z &quot;nj_j_j?J  ** *? *?B.@_ j_ j zw *z</span></div>
+<div class="seg" data-time="1267.308"><span class="seg-time">21:07</span><span class="seg-text">j *k*~h/ @jw j_ *~</span></div>
+<div class="seg" data-time="1269.397"><span class="seg-time">21:09</span><span class="seg-text">&quot;z ~ h@}xw j * z&quot;} b b</span></div>
+<div class="seg" data-time="1271.546"><span class="seg-time">21:11</span><span class="seg-text">j z_b_ */ *~z_ j? Bw</span></div>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/290" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
+</div>
+</div>
+</div>
 
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag(&#x27;js&#x27;, new Date()); gtag(&#x27;config&#x27;, &#x27;G-X9VGCCGG49&#x27;, { &#x27;request_origin&#x27;:&#x27;external&#x27; }); City Council Regular Meeting body{ margin-top: .5in; margin-bottom: .5in; margin-right: .5in ; margin-left: .5in; text-align: justify; font-family: Calibri, Candara, Segoe, &#x27;Segoe UI&#x27;, Optima, Arial, sans-serif; font-size: 14px; } table{ text-align: justify; border-spacing: 5px; padding: 0; font-size: 11pt; } td { text-align: justify; vertical-align:top; } .numberspace { width: 30px; vertical-align: top; text-align: left; } .ul {text-decoration: underline;} /* Prevents logo resizing on print */ img { max-width: 100%; height: auto; } NOTICE OF REGULAR MEETING AND AGENDA OF THE MIAMI CITY COUNCIL Tuesday, September 15, 2020 5:45 p.m. OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY MIAMI CIVIC CENTER 129 5th Avenue Northwest, Miami, Oklahoma Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on www.miamiokla.net. THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA: blockquote { margin-left: 40px; margin-right: 0px; margin-top: 0px; margin-bottom: 0px; }@media print { a { color: black; } } 1. Call to Order&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 2. Proclamation Declaring September 17-23, 2020, Constitution Week&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker Proclamation 3. Public Input and Unscheduled Personal Appearances Each person will be limited to 3 minutes on agenda items only. The purpose of this agenda item is to provide an opportunity for citizens&#x27; comments on agenda items. Council members do not engage in discussion under this agenda item, and staff members are directed not to. If you seek discussion or inquiry, please contact your Councilmember, the Mayor or the office of the City Manager. Responses to citizen comments, if any, will occur under the applicable agenda item or may be reserved for further response by phone call, personal meeting, or a posting on the website: www.miamiokla.net 4. CONSENT AGENDA&amp;nbsp; By unanimous consent the public body may designate noncontroversial items to be considered in one motion and one vote.&amp;nbsp; The public body may add items from the regular agenda and approve. Posted agenda items not added to the consent docket will be considered separately. Staff recommends that Item 5 through Item 12 be placed on the consent agenda. 5. Approve Claims&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Claims List Credit Cards 6. Approve Minutes:&amp;nbsp; September 01, 2020 (Regular)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Minutes 7. Budget Amendments: #21-02 Capital Improvement Projects - (Amending Capital Improvement Budget) #21-04 General Fund - (Correcting Library Payroll) 8. Approve Resolution for the City of Miami, Oklahoma Multi-Jurisdictional Hazard Mitigation Plan&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Thomas Anderson BA Resolution Plan FEMA Approval Letters Checklist 9. Approve Award of bid for Annual Asphalt Labor; Approve Contract Contingent Upon the Submission of Required Contract Documents and Approve Interim City Manager or his&amp;nbsp; Designee to Sign Notice to Proceed&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Robert Barger BA Contract Solicitation Packet 10. Approve Renew Lease Agreement With Lakeland Office Systems for City Printers and Multi-function Devices&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; David Ballard BA Agreement &amp; Supplemental Information 11. Approve Human Resources Client Engagement Agreement Between Results Performance Consulting, Inc. and Authorize City Manager&amp;rsquo;s Signature&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Kim Horn BA Contract Legal Opinion PPT 12. Approve Resolution C2020-17 Project Support and Match Funds Commitment for U.S. Department of Interior - Bureau of Reclamation FY121 WaterSMART: Water and Energy Efficiency Program BOR-DO-21-F001 for Automated Metering Infrastructure&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline BA Resolution Budget 13. Mayor&amp;rsquo;s Nomination to Appoint Sloane Arana to the Miami Public Library Board Replacing Nancy Gee, (Term to Expire 07/18/2023)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 14. Mayor&amp;rsquo;s Nomination to Appoint Bless Parker to the Miami Community Facilities Authority (MCFA) to Replace Rudy Schultz&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 15. Discussion of Upcoming Tourism Information Center Remodel&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Amanda Davis/Shanda Schertz BA Report Visitation Report Draft Layout PPT 16. Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 17. Staff Reports (Written report included in packet, if available staff is present for questions)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Customer Service 18. Mayor and Council Community Announcements&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 19. Interim City Manager&amp;rsquo;s Communications&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline 20. The Meeting Will be Continued From Council Chambers and Reconvened in the Staff Room for Purposes of the Executive Session&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 21. Executive Session Pursuant to 25 O.S. 307(B)(1) for Purposes of Discussing the Employment, Hiring, Appointment, Promotion, Demotion, Disciplining, or Resignation of any Individual Salaried Public Officer or Employee, to wit:&amp;nbsp; City Manager Executive Session Pursuant to 25 O.S. 307(B)(2) for Discussing Negotiations Concerning Employees and Representatives of Employee Groups, to wit: International Association of Firefighters (IAFF) Local #1969 22. Adjournment&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office. We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>*&gt;j_ z_ *z &quot;~ j *&gt;j j?J e}j j?*&quot;~z_
+j j?J j @_ ~*.Z_ju*&gt;j?(b j?
+*z zj Wu j *~ *uzz_ &quot;j @
+*/ bu@u@_ j_ w j?*u} ~ */
+b_*o *z Euz_*?&quot;z &quot;zj_ j? Qb_ *&gt; z_ j_j_
+`+ j j w}* z*~*/* `/ j_
+*&gt;@z_*z z_ #zj/ ~*&gt;&quot;z u +~&quot;
+j? J_j? z_ @_*zz_z_@*~rWju
+*&quot;} *&gt; z z_ *_ * u z_*j
+z_ z_j Uuj z_ *&gt;j * ~
+u ~ zw z_ &quot;~ &quot;~ @}
+j&quot;~ *o e} *+ j/j_ j?+zu} **?
+&quot;z ~ @e} *&gt; ~ z_ j?
+H*~ju+ * j? Z_zw z? `_ *? Z
+p_*&quot;~ u jj_ *? &quot;~ j `@
+zw&quot;~ jbz * u}*~j/j*~j Uu
+~*ur_ *? J? J? U ~j &quot;}*~ j_ *
+j? Jj?J ~ @w *&gt; *o *z j_
+j_ ~j*?&quot;&gt; **z zz_ * ~j ~ &quot;zj?J/ zWj *z */ ~_j/ j z_buz_ `_ z? *~
+j j x_ u *&gt;x_ jb_ b z_*?Zw z?J *~&quot;
+(*/ z_*zj? (~ ~*?( `_ j j&gt; e j j? *~*?
+@j? J? J? J*z*j? J?J z_j?*xw
+z_*&gt; p_ ~ @}*;j?J z @ **? J
+j? Hj? * j/*zz_z_b Eu*~ j * ~
+u j_ *~ *?J ~*+&quot;~ &quot;*u
+e~*~ &quot;jj?B j?U} j z_ z_ j?W}z_
+z_zw *? Z * * j? J z *?
+*?X_ *? Uz_ j_ @b_ z? J_j_ *~*~*
+*~*~ * uj &gt; z u}*
+&quot;&quot;~*xWj *&gt;u z_ e} j_ *&gt;*~ ~ *?
+J * +z j *~ ~_j_ j_ z_ j&quot;~ j
+j_* z_&quot;~&quot;z *? ~ ~j bw @_ j
+zzz_ j*b_ *: *?*~ j_ &quot;&gt; *?*
+u} z zj *~ jj*~ */&quot;~ &quot;&gt; &quot;~ j?
+@_j j/ *? J? *jj/ +z *~j?J_(* *?
+J_* j &quot;&gt;@Wj? Jj?Ut*?J? Zw&quot;z
+*~z_* *j *{ z ~ zWUu z_ j jz_&quot;~
+j *z @ *?* * j? *~ j? Jz_
+z_j?Z? Z_ z_&quot;~u} `_z_ h_ z j j_ z_ */
+j_ jj z z *? W}b_
+*?*z z *?J? *~*?J? b_ Eu*~ j_*&gt; b j_*?
+*o *?*/j?*&gt;b_ j?/ j j_* x @j?
+&quot;z *~ *~ *~ ~ j &quot;z u *~
+hWj *?*~z_ * uj_ */ z z? J?
+B_ j_ j */ ~ j *jz_ * *: _Euj?
+*~ ~j? &quot;}&quot;z &quot;z ~e} &quot;z ~ j? *~ */* &quot;z
+*: hj z?Z_ z *~*zj?@* z j_ * ju &quot;~j
++~ &quot; @_ &quot;*  z
+jj u} *b_&quot; (k *?`_ &quot;&gt;z_j**?J? E} *zj_ ~ `_&quot;&gt; j@_ @ j&quot;j/
+h ` ~ * ~ zj? &quot; &quot;. J_ z j?
+J_*&gt;*?+z */ j &quot;~*@ j*
+j *~ jzw* j? J ~ z(Z
+*}j*~ ~ j_jzw *&gt; &quot;zJWh_j_j u *~
+u}j j?*~*? J? Z * ~ +z
+*~ w u} * @_ j j *b_z_
+j? ~ j? ~ z_ j? Z &quot;n
+z?Zj? */ (~ +z j j?*j?Eu&quot;o j?* u*j? U}
+z &quot;*j/ jj*? J &quot;&gt; ~* *?*~ *z *
+&quot;j_ j* @&quot;~j? J j_ z/ Eu
+*&gt; ~* *
+j *~z_ j? J/ j_ *?* * ~ q} &quot;&gt; *~ j?J_*&gt; j?
+(~  &quot;~ j/*z &quot;~ + *? Z &quot;z * k *~z_ j_ (?*?
+J *? &quot;~* j +~ z z j*z j? *~ @j&quot;~&quot;~
+~*_ *? H_ &quot;/ j?J?*~ z z/h_*~
+*z j j j_ zj_&quot;k#j z? Z j_
+b j?J?@u *z *~@ Jw
+*{ j j* ~ j? (Z jj z?
+~ jj? * *~ j ( j@
+z_ *?~_ j j_
+* b_* j_` jj? U * j_
+~@] &quot;~ * j?J?X_ *? (;@}&quot;&gt; z&quot;~ ~
+*? Z z &quot;~ ~b} j_+zj/z?*z z_
+*&gt;* ~ ~ z &quot;z&quot;~* &quot;. j_*?
+J ~ *~ *? (? Z/j?R_*
+~j *~zz e}j_ @w *~b: j?
+J&quot;:&quot;?Pw*~j&quot;z*({ j_ u} j_ j?J &quot;~ j (~
+j? X_ *j/ @ j *&gt;* j
+ *? P_&quot;~ * ~ &quot;&quot;~ ~ */j_ *?
+(~ zWj&quot;ze&quot;. &quot;*&quot;~ *zuwz_ j?* ~
+*z* j? Uj* *?Z_
+j j/ j j
+u} z_z ~
+*~ &quot;z *~ &quot;+*~ &quot;~j? *&quot;~
+w} k z_*~ *b *z_ z_ j ~ z
+`_&quot; @w*~*?`_z_ &quot;~&quot;?  *uz? Z `_
+u} u&quot;&gt;e}u b_j? &quot;jj_ *&gt; ~ z zj_@z_
+j Uu j?J? J? @ (Zj_j_ uz_
+z_ z &quot;~`w *~ * z zj *z j
+j&quot;~ h_(~ z@]*; j *~*?Z_*&gt;
+*j? *. * j + * j_ j ~*?
+B Ut ~ p_ z_@_* *:? U} ~
+*/ u*? J r_ ~
+j? J_ ( ~u z_
+z_ */ jj j/ &quot;z +z jj_ z *n j_ u~ *~ (_ j_
+&quot;j*. * b jjj?&quot;| h_ *?B* *&gt;`*~*~ z_ @ *o j z_&quot;zj u ~
+~ j? A~(*@ z_ *? J j/ zw j*~u ~j_b z?Bw *?
+*? * **&gt; j?U}jj? *?*? ~ b j/
+*? *~z*~ ~ *~ z ~ * */j_@ &quot; z_
+&quot;w j_ j_ z_j `_
+`jju} h/ &quot;* j/ ~ z_ j/ ~ &quot;&gt;j?@}j? *&gt;
+* * *~*?*ze * j z ~_
+hWj?U*&gt;@} j?J j_ u ( * *&gt; j? *~&quot;z &quot;~
+z_ *&gt;z_u e}* *? J@_ z_
+z w &quot;~&quot;~ z *?*? J_
+&quot;z*~ zrw x_ j z_ z_
+&quot;~ &quot;~ j_ z ~ z_z_z_ j*~j? J/j~ @
+&quot;~ ~ b_ b_ ~ jWn_ *
+j * Quu z**? *&gt; bw+zj
+&quot;. J z_ *{ u}z_z/ **
+&quot;(/z_j *z j? *~ Eu *z jj?J j
+b  (~b* &quot;~ ~ kw j?J*/
+ju} *? J? Z_&quot;~u  b j/ x_*?Z
+*~@*j *? &quot;~ &quot;~ +j * ~ *?Z z_ ~
+z_ z_*~*z (&quot;~z_ zj u} &quot;~j/
+z_j b &gt; *z u
+x_z/ *j u j_u} z_*
+j*? J_ (O * b_ *~
+*~ u} j &quot; rw z_
+j*/*z*zj? Z *&gt; z_ e}j_ z z_
+bj? ~ *?Zj? &quot;&gt;*z z
+j * j? ~j_ &quot;z *~zw j*j_ j/
+j(~j/ * j z_ ~*j *&gt;
+j ~ &quot;z &quot;~ jb */ju*~ &quot;}*n
+j_z *? U j * *j*&gt;*z *?
+*? j_ *j ~ j j
+*&gt;&quot;~&quot;&gt; &quot;&gt;j? *~ j j*?*
+j/j_ *&gt; *?J?
+zw j_ j? J&quot;~
+j j?W j?+~ * ~ j_* *
+j j &quot;~ j_ j?*z*? J ~ j*j? ~
+@x_&quot; * j/z_ jw ~u j? J/ z
+b_ */ @ `_ ~(~
+*?J? *? Z z/jzw */ j &quot;~ b_
+z &quot;zj u j?*@j/@ j j *~j?B/Jw u
+j?J z_ ~ j&quot;~ */ Eu&quot;~ *&gt;
+* ~ *~* ~ `_ z ~ u} `j_ u}ej_ ~
+j?*j_ @ jj j_+ * z j
+j? **. #z u @jbz*/ *~j? ~j
+~_ _&quot;~j?* j */z_ u} j* `_
+z j_j_ *b_ j @Wj_ *&gt;z &quot;z&quot;~
+j*? (+@j*~ *z &quot;~ *?Z? (~ *: &quot;z
+*~*~ pWj_ z_ j? (+ j
+*? &quot; j *~ *?B ~
+j? *@] U* rw z`_ *?
+*? Z_ * *z+j * j j?X_ b_ * z_ *?*~
+(Z* &quot;~b *? ** z_ ~&quot;~*/
+~ jUu j_u} w*/*&gt; j?@_ *?J zz_ z_j?
+~ *&gt; *z j? U @_*? */ j *&gt; z_ j/ &quot;z*
+*j? Jz? *? Z_ u}jb
+b_ j(~ &quot;}j? *z * z_*~ u}* ~_
+j j_z_ b*?E} *~* ~ j
+*z j_j?J_ / &quot;z j zj_z? B u}z_*~
+&quot;z j ** ~ * j_ z_ * j ~ j? &quot;{ jj/
+u* *? J? * j?Z_*? * b*?Z
+z? (j*~ j *~ *~ *zj b
+~ j? ~ *~ j b_ zw j?B`_u&quot;&gt; *~
+&quot;n*z *~ j j_ zu j *~ j_ z?
+U} &quot;jz? B j?B_*&gt; */ &quot;&gt; */*?K*?
+J jj *~z z_ u}z * *: *?J_
+* *? J *z ~* *?**
+j?J?J_ *?J &quot;~ j? N j_z z z @b ~
+h ~**~ */ j?@w&quot;~ j? *~bw ~ */
+~ ~ j j/ &quot;~ j *~ &quot;~ ~ j?
+J?J_*. J_z_zw**n j?Z_ *z j/ (J
+~ &quot;z </pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag(&#x27;js&#x27;, new Date()); gtag(&#x27;config&#x27;, &#x27;G-X9VGCCGG49&#x27;, { &#x27;request_origin&#x27;:&#x27;external&#x27; }); City Council Regular Meeting body{ margin-top: .5in; margin-bottom: .5in; margin-right: .5in ; margin-left: .5in; text-align: justify; font-family: Calibri, Candara, Segoe, &#x27;Segoe UI&#x27;, Optima, Arial, sans-serif; font-size: 14px; } table{ text-align: justify; border-spacing: 5px; padding: 0; font-size: 11pt; } td { text-align: justify; vertical-align:top; } .numberspace { width: 30px; vertical-align: top; text-align: left; } .ul {text-decoration: underline;} /* Prevents logo resizing on print */ img { max-width: 100%; height: auto; } NOTICE OF REGULAR MEETING AND AGENDA OF THE MIAMI CITY COUNCIL Tuesday, September 15, 2020 5:45 p.m. OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY MIAMI CIVIC CENTER 129 5th Avenue Northwest, Miami, Oklahoma Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on www.miamiokla.net. THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA: blockquote { margin-left: 40px; margin-right: 0px; margin-top: 0px; margin-bottom: 0px; }@media print { a { color: black; } } 1. Call to Order&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 2. Proclamation Declaring September 17-23, 2020, Constitution Week&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker Proclamation 3. Public Input and Unscheduled Personal Appearances Each person will be limited to 3 minutes on agenda items only. The purpose of this agenda item is to provide an opportunity for citizens&#x27; comments on agenda items. Council members do not engage in discussion under this agenda item, and staff members are directed not to. If you seek discussion or inquiry, please contact your Councilmember, the Mayor or the office of the City Manager. Responses to citizen comments, if any, will occur under the applicable agenda item or may be reserved for further response by phone call, personal meeting, or a posting on the website: www.miamiokla.net 4. CONSENT AGENDA&amp;nbsp; By unanimous consent the public body may designate noncontroversial items to be considered in one motion and one vote.&amp;nbsp; The public body may add items from the regular agenda and approve. Posted agenda items not added to the consent docket will be considered separately. Staff recommends that Item 5 through Item 12 be placed on the consent agenda. 5. Approve Claims&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Claims List Credit Cards 6. Approve Minutes:&amp;nbsp; September 01, 2020 (Regular)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Minutes 7. Budget Amendments: #21-02 Capital Improvement Projects - (Amending Capital Improvement Budget) #21-04 General Fund - (Correcting Library Payroll) 8. Approve Resolution for the City of Miami, Oklahoma Multi-Jurisdictional Hazard Mitigation Plan&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Thomas Anderson BA Resolution Plan FEMA Approval Letters Checklist 9. Approve Award of bid for Annual Asphalt Labor; Approve Contract Contingent Upon the Submission of Required Contract Documents and Approve Interim City Manager or his&amp;nbsp; Designee to Sign Notice to Proceed&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Robert Barger BA Contract Solicitation Packet 10. Approve Renew Lease Agreement With Lakeland Office Systems for City Printers and Multi-function Devices&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; David Ballard BA Agreement &amp; Supplemental Information 11. Approve Human Resources Client Engagement Agreement Between Results Performance Consulting, Inc. and Authorize City Manager&amp;rsquo;s Signature&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Kim Horn BA Contract Legal Opinion PPT 12. Approve Resolution C2020-17 Project Support and Match Funds Commitment for U.S. Department of Interior - Bureau of Reclamation FY121 WaterSMART: Water and Energy Efficiency Program BOR-DO-21-F001 for Automated Metering Infrastructure&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline BA Resolution Budget 13. Mayor&amp;rsquo;s Nomination to Appoint Sloane Arana to the Miami Public Library Board Replacing Nancy Gee, (Term to Expire 07/18/2023)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 14. Mayor&amp;rsquo;s Nomination to Appoint Bless Parker to the Miami Community Facilities Authority (MCFA) to Replace Rudy Schultz&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 15. Discussion of Upcoming Tourism Information Center Remodel&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Amanda Davis/Shanda Schertz BA Report Visitation Report Draft Layout PPT 16. Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9))&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 17. Staff Reports (Written report included in packet, if available staff is present for questions)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Customer Service 18. Mayor and Council Community Announcements&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 19. Interim City Manager&amp;rsquo;s Communications&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline 20. The Meeting Will be Continued From Council Chambers and Reconvened in the Staff Room for Purposes of the Executive Session&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 21. Executive Session Pursuant to 25 O.S. 307(B)(1) for Purposes of Discussing the Employment, Hiring, Appointment, Promotion, Demotion, Disciplining, or Resignation of any Individual Salaried Public Officer or Employee, to wit:&amp;nbsp; City Manager Executive Session Pursuant to 25 O.S. 307(B)(2) for Discussing Negotiations Concerning Employees and Representatives of Employee Groups, to wit: International Association of Firefighters (IAFF) Local #1969 22. Adjournment&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office. We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div></div></div></div></div>
+</div>
 
-
-
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

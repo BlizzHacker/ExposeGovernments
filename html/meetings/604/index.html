@@ -1,240 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami City Council - Apr 15, 2025 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami City Council</h1>
-<div class="meta">📅 Apr 15, 2025 | Clip #604</div>
-<div class="status-badge status-warning">⚠️ DISCREPANCIES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (3)</h2>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Agenda Document</div>
-  <div class="issue-desc">The city has not published an agenda document for this meeting on AgendaCenter. This is a transparency concern - agendas should be publicly available before meetings.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami City Council</h1>
+<div class="meeting-meta">
+<span>📅 Apr 15, 2025</span>
+<span>⏱️ 00h 23m</span>
+<span>🔖 Clip #604</span>
 </div>
-<div class="issue issue-high">
-  <div class="issue-header">⚠️ No Official Minutes Published</div>
-  <div class="issue-desc">The city has not published official minutes for this meeting. Under Oklahoma Open Meeting Act (25 O.S. § 308), minutes of all public meetings must be kept and made available.</div>
 </div>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
+
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/604" allowfullscreen></iframe></div>
+<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (10.7 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
-</section>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="553.74"><span class="seg-time">09:13</span><span class="seg-text">Motion to approve.</span></div>
+<div class="seg" data-time="563.74"><span class="seg-time">09:23</span><span class="seg-text">Michael.</span></div>
+<div class="seg" data-time="564.74"><span class="seg-time">09:24</span><span class="seg-text">John.</span></div>
+<div class="seg" data-time="565.74"><span class="seg-time">09:25</span><span class="seg-text">I.</span></div>
+<div class="seg" data-time="566.74"><span class="seg-time">09:26</span><span class="seg-text">Parker.</span></div>
+<div class="seg" data-time="567.74"><span class="seg-time">09:27</span><span class="seg-text">I.</span></div>
+<div class="seg" data-time="569.22"><span class="seg-time">09:29</span><span class="seg-text">Ten.</span></div>
+<div class="seg" data-time="571.12"><span class="seg-time">09:31</span><span class="seg-text">The session possible.</span></div>
+<div class="seg" data-time="572.12"><span class="seg-time">09:32</span><span class="seg-text">I.</span></div>
+<div class="seg" data-time="573.12"><span class="seg-time">09:33</span><span class="seg-text">Regarding proposed Oklahoma National Gas.</span></div>
+<div class="seg" data-time="575.12"><span class="seg-time">09:35</span><span class="seg-text">Along the street to the east of the airport.</span></div>
+<div class="seg" data-time="578.12"><span class="seg-time">09:38</span><span class="seg-text">I have been in contact with Dustin Frederick of O.N.G.</span></div>
+<div class="seg" data-time="584.89"><span class="seg-time">09:44</span><span class="seg-text">And he has gotten the approval of the power that the two offer a $20,000.</span></div>
+<div class="seg" data-time="594.43"><span class="seg-time">09:54</span><span class="seg-text">The.</span></div>
+<div class="seg" data-time="595.43"><span class="seg-time">09:55</span><span class="seg-text">An exchange for a grant of the easement.</span></div>
+<div class="seg" data-time="597.43"><span class="seg-time">09:57</span><span class="seg-text">And they will come in and help us.</span></div>
+<div class="seg" data-time="600.43"><span class="seg-time">10:00</span><span class="seg-text">A tip to institute a franchise where in our percentage would be increased from.</span></div>
+<div class="seg" data-time="606.42"><span class="seg-time">10:06</span><span class="seg-text">Two percent to either three or four percent.</span></div>
+<div class="seg" data-time="609.42"><span class="seg-time">10:09</span><span class="seg-text">We have it.</span></div>
+<div class="seg" data-time="610.42"><span class="seg-time">10:10</span><span class="seg-text">Obviously that would all be negotiated at the time that the franchise is passed.</span></div>
+<div class="seg" data-time="615.34"><span class="seg-time">10:15</span><span class="seg-text">Is it for that new pipeline that&#x27;s going on by their report?</span></div>
+<div class="seg" data-time="618.34"><span class="seg-time">10:18</span><span class="seg-text">Yes, sir.</span></div>
+<div class="seg" data-time="619.34"><span class="seg-time">10:19</span><span class="seg-text">Sir, sir again.</span></div>
+<div class="seg" data-time="625.47"><span class="seg-time">10:25</span><span class="seg-text">Are you, sir?</span></div>
+<div class="seg" data-time="626.47"><span class="seg-time">10:26</span><span class="seg-text">So O.N.G.</span></div>
+<div class="seg" data-time="628.5699999999999"><span class="seg-time">10:28</span><span class="seg-text">Will pay the city $20,000 for the easement.</span></div>
+<div class="seg" data-time="632.5699999999999"><span class="seg-time">10:32</span><span class="seg-text">And then after that is done.</span></div>
+<div class="seg" data-time="635.86"><span class="seg-time">10:35</span><span class="seg-text">They will assist us with.</span></div>
+<div class="seg" data-time="637.86"><span class="seg-time">10:37</span><span class="seg-text">The franchise.</span></div>
+<div class="seg" data-time="639.86"><span class="seg-time">10:39</span><span class="seg-text">We would have to.</span></div>
+<div class="seg" data-time="640.86"><span class="seg-time">10:40</span><span class="seg-text">I can&#x27;t say they will help us get a franchise because that has to get to the.</span></div>
+<div class="seg" data-time="644.86"><span class="seg-time">10:44</span><span class="seg-text">But they will come in and work with us.</span></div>
+<div class="seg" data-time="647.86"><span class="seg-time">10:47</span><span class="seg-text">Help us do it and pay for the vote that we have to have.</span></div>
+<div class="seg" data-time="651.86"><span class="seg-time">10:51</span><span class="seg-text">And they are.</span></div>
+<div class="seg" data-time="653.86"><span class="seg-time">10:53</span><span class="seg-text">Mr. Frederick has acknowledged that 2 percent is below the state average.</span></div>
+<div class="seg" data-time="659.86"><span class="seg-time">10:59</span><span class="seg-text">So we would increase our percentage of collections from O.N.G.</span></div>
+<div class="seg" data-time="664.86"><span class="seg-time">11:04</span><span class="seg-text">Gatsails.</span></div>
+<div class="seg" data-time="665.86"><span class="seg-time">11:05</span><span class="seg-text">But at least 1 percent and.</span></div>
+<div class="seg" data-time="667.86"><span class="seg-time">11:07</span><span class="seg-text">Probably 2 percent.</span></div>
+<div class="seg" data-time="670.4300000000001"><span class="seg-time">11:10</span><span class="seg-text">Which would amount to about.</span></div>
+<div class="seg" data-time="674.04"><span class="seg-time">11:14</span><span class="seg-text">100.</span></div>
+<div class="seg" data-time="675.04"><span class="seg-time">11:15</span><span class="seg-text">And extra $100,000 revenue here.</span></div>
+<div class="seg" data-time="677.42"><span class="seg-time">11:17</span><span class="seg-text">Just from looking at what other cities charge the.</span></div>
+<div class="seg" data-time="679.42"><span class="seg-time">11:19</span><span class="seg-text">And a couple of their cities.</span></div>
+<div class="seg" data-time="683.41"><span class="seg-time">11:23</span><span class="seg-text">I&#x27;ve been had were like after so many years.</span></div>
+<div class="seg" data-time="685.41"><span class="seg-time">11:25</span><span class="seg-text">The city could buy out the utility.</span></div>
+<div class="seg" data-time="687.41"><span class="seg-time">11:27</span><span class="seg-text">If they wanted.</span></div>
+<div class="seg" data-time="688.44"><span class="seg-time">11:28</span><span class="seg-text">To take it over.</span></div>
+<div class="seg" data-time="689.44"><span class="seg-time">11:29</span><span class="seg-text">Do you know what?</span></div>
+<div class="seg" data-time="690.92"><span class="seg-time">11:30</span><span class="seg-text">Prior has their own gas.</span></div>
+<div class="seg" data-time="692.92"><span class="seg-time">11:32</span><span class="seg-text">We don&#x27;t have to move the fence or anything.</span></div>
+<div class="seg" data-time="697.54"><span class="seg-time">11:37</span><span class="seg-text">We&#x27;re at it.</span></div>
+<div class="seg" data-time="698.54"><span class="seg-time">11:38</span><span class="seg-text">Just a little side of the fence.</span></div>
+<div class="seg" data-time="700.54"><span class="seg-time">11:40</span><span class="seg-text">Correct.</span></div>
+<div class="seg" data-time="703.94"><span class="seg-time">11:43</span><span class="seg-text">And so that&#x27;s from.</span></div>
+<div class="seg" data-time="705.39"><span class="seg-time">11:45</span><span class="seg-text">Where to where.</span></div>
+<div class="seg" data-time="706.39"><span class="seg-time">11:46</span><span class="seg-text">Just along that fence.</span></div>
+<div class="seg" data-time="709.61"><span class="seg-time">11:49</span><span class="seg-text">5,000 something.</span></div>
+<div class="seg" data-time="710.61"><span class="seg-time">11:50</span><span class="seg-text">Yeah.</span></div>
+<div class="seg" data-time="711.61"><span class="seg-time">11:51</span><span class="seg-text">But it comes over from behind sector.</span></div>
+<div class="seg" data-time="716.14"><span class="seg-time">11:56</span><span class="seg-text">And into the front.</span></div>
+<div class="seg" data-time="719.04"><span class="seg-time">11:59</span><span class="seg-text">Done that one row.</span></div>
+<div class="seg" data-time="720.0"><span class="seg-time">12:00</span><span class="seg-text">do a cross or how&#x27;s it come, how&#x27;s it how they you know currently runs down the river</span></div>
+<div class="seg" data-time="724.32"><span class="seg-time">12:04</span><span class="seg-text">tracks of what they said and so they&#x27;re gonna cross and over etc. I don&#x27;t know</span></div>
+<div class="seg" data-time="729.26"><span class="seg-time">12:09</span><span class="seg-text">what that&#x27;s crossing. It would actually be Hopkins. Hopkins? Yeah. Okay, the</span></div>
+<div class="seg" data-time="733.4"><span class="seg-time">12:13</span><span class="seg-text">side to graveyard cemetery? No, they&#x27;re going by Hopkins and then they&#x27;re gonna</span></div>
+<div class="seg" data-time="740.65"><span class="seg-time">12:20</span><span class="seg-text">turn and go down. You know I&#x27;m saying no, I&#x27;m going to be going down the road</span></div>
+<div class="seg" data-time="747.06"><span class="seg-time">12:27</span><span class="seg-text">the concrete plan is on. Oh, by the concrete plan? That part. Yeah, but they&#x27;re</span></div>
+<div class="seg" data-time="753.2"><span class="seg-time">12:33</span><span class="seg-text">gonna you know they&#x27;re they&#x27;re bought they&#x27;ve purchased the easement from Hopkins</span></div>
+<div class="seg" data-time="756.96"><span class="seg-time">12:36</span><span class="seg-text">right there so they know they&#x27;re gonna have like their station or whatever they</span></div>
+<div class="seg" data-time="760.77"><span class="seg-time">12:40</span><span class="seg-text">said and then they would turn and I&#x27;m going down the road. On down by Westcoe, correct?</span></div>
+<div class="seg" data-time="766.41"><span class="seg-time">12:46</span><span class="seg-text">That&#x27;s where it is currently.</span></div>
+<div class="seg" data-time="769.53"><span class="seg-time">12:49</span><span class="seg-text">Yeah, it&#x27;s gonna be at Hopkins. It&#x27;s gonna be at Hopkins and Hopkins has settled according to</span></div>
+<div class="seg" data-time="773.53"><span class="seg-time">12:53</span><span class="seg-text">you know, and if the board has a different number I mean we&#x27;re happy to go back to them.</span></div>
+<div class="seg" data-time="784.5"><span class="seg-time">13:04</span><span class="seg-text">What&#x27;s a lot better and what they gave us before? What&#x27;d you say?</span></div>
+<div class="seg" data-time="796.33"><span class="seg-time">13:16</span><span class="seg-text">Yeah. Yeah. Yeah, that was my biggest concern, you know, being good neighbors is we don&#x27;t want</span></div>
+<div class="seg" data-time="802.49"><span class="seg-time">13:22</span><span class="seg-text">to agree to anything. Yeah, we&#x27;re talking about the summer period.</span></div>
+<div class="seg" data-time="836.35"><span class="seg-time">13:56</span><span class="seg-text">We too. The other side is the franchise. So we&#x27;re doing it on my two things. So the</span></div>
+<div class="seg" data-time="865.83"><span class="seg-time">14:25</span><span class="seg-text">franchise agreement is when we&#x27;ve just like pulled some cities, Travis up, pull some cities and</span></div>
+<div class="seg" data-time="870.31"><span class="seg-time">14:30</span><span class="seg-text">they were getting in my from what 3.25, the 4.25 person, you know. Yeah, so then you know, the only way to go</span></div>
+<div class="seg" data-time="881.42"><span class="seg-time">14:41</span><span class="seg-text">higher is by friends or the 20,000 is just for the easement so that&#x27;s a separate. So they&#x27;re</span></div>
+<div class="seg" data-time="905.81"><span class="seg-time">15:05</span><span class="seg-text">I&#x27;m here.</span></div>
+<div class="seg" data-time="908.57"><span class="seg-time">15:08</span><span class="seg-text">No land management here.</span></div>
+<div class="seg" data-time="909.57"><span class="seg-time">15:09</span><span class="seg-text">The land management actually, the two representatives who are here were not authorized to be here that night.</span></div>
+<div class="seg" data-time="918.13"><span class="seg-time">15:18</span><span class="seg-text">Really?</span></div>
+<div class="seg" data-time="921.88"><span class="seg-time">15:21</span><span class="seg-text">I don&#x27;t know.</span></div>
+<div class="seg" data-time="923.23"><span class="seg-time">15:23</span><span class="seg-text">Imagine that.</span></div>
+<div class="seg" data-time="924.23"><span class="seg-time">15:24</span><span class="seg-text">I make a motion to approve.</span></div>
+<div class="seg" data-time="928.98"><span class="seg-time">15:28</span><span class="seg-text">11.</span></div>
+<div class="seg" data-time="944.8"><span class="seg-time">15:44</span><span class="seg-text">This may have been being changed from counter chambers and reclaim the six-center gym for a tour and discussion</span></div>
+<div class="seg" data-time="950.8"><span class="seg-time">15:50</span><span class="seg-text">that is really a bit of a gym.</span></div>
+<div class="seg" data-time="954.53"><span class="seg-time">15:54</span><span class="seg-text">It is beautiful if you haven&#x27;t seen it.</span></div>
+<div class="seg" data-time="957.53"><span class="seg-time">15:57</span><span class="seg-text">First, me and me have that rapply metallic out there more now.</span></div>
+<div class="seg" data-time="964.09"><span class="seg-time">16:04</span><span class="seg-text">I don&#x27;t know.</span></div>
+<div class="seg" data-time="969.09"><span class="seg-time">16:09</span><span class="seg-text">I don&#x27;t know.</span></div>
+<div class="seg" data-time="977.74"><span class="seg-time">16:17</span><span class="seg-text">14.</span></div>
+<div class="seg" data-time="1006.05"><span class="seg-time">16:46</span><span class="seg-text">If any, which is a residence is opposing this agenda, 15 staff reports, 16 mayor, council community,</span></div>
+<div class="seg" data-time="1020.81"><span class="seg-time">17:00</span><span class="seg-text">announcements.</span></div>
+<div class="seg" data-time="1024.72"><span class="seg-time">17:04</span><span class="seg-text">Okay.</span></div>
+<div class="seg" data-time="1025.72"><span class="seg-time">17:05</span><span class="seg-text">So, we&#x27;re going to be somewhat different tonight for me.</span></div>
+<div class="seg" data-time="1030.26"><span class="seg-time">17:10</span><span class="seg-text">A lot of times, our firefighters, our police officers, our same police, and nothing</span></div>
+<div class="seg" data-time="1039.6399999999999"><span class="seg-time">17:19</span><span class="seg-text">but negative.</span></div>
+<div class="seg" data-time="1040.6399999999999"><span class="seg-time">17:20</span><span class="seg-text">And I know that&#x27;s got to be disheartening at some times because a lot of good things have</span></div>
+<div class="seg" data-time="1045.8"><span class="seg-time">17:25</span><span class="seg-text">them from our police.</span></div>
+<div class="seg" data-time="1047.8"><span class="seg-time">17:27</span><span class="seg-text">And one was brought to my attention.</span></div>
+<div class="seg" data-time="1050.8"><span class="seg-time">17:30</span><span class="seg-text">And we&#x27;re going to celebrate tonight.</span></div>
+<div class="seg" data-time="1052.8"><span class="seg-time">17:32</span><span class="seg-text">And deserve to be celebrated.</span></div>
+<div class="seg" data-time="1053.8"><span class="seg-time">17:33</span><span class="seg-text">And it&#x27;s a really cool thing.</span></div>
+<div class="seg" data-time="1055.8"><span class="seg-time">17:35</span><span class="seg-text">I got a text message.</span></div>
+<div class="seg" data-time="1057.6"><span class="seg-time">17:37</span><span class="seg-text">They brought me a private message from a gentleman.</span></div>
+<div class="seg" data-time="1063.6"><span class="seg-time">17:43</span><span class="seg-text">And he told me that he died in our firefighters&#x27; life.</span></div>
+<div class="seg" data-time="1072.6100000000001"><span class="seg-time">17:52</span><span class="seg-text">And he had been transferred to Mercy Hospital.</span></div>
+<div class="seg" data-time="1077.76"><span class="seg-time">17:57</span><span class="seg-text">And he&#x27;s the name of the Mercy Mirror.</span></div>
+<div class="seg" data-time="1080.98"><span class="seg-time">18:00</span><span class="seg-text">The Mercy City should not survive in our firefighters and I know they don&#x27;t do what they do to be celebrated</span></div>
+<div class="seg" data-time="1090.4"><span class="seg-time">18:10</span><span class="seg-text">They do what they do because they love it and I want to help our community</span></div>
+<div class="seg" data-time="1095.92"><span class="seg-time">18:15</span><span class="seg-text">But so often</span></div>
+<div class="seg" data-time="1097.92"><span class="seg-time">18:17</span><span class="seg-text">These guys see bad stuff</span></div>
+<div class="seg" data-time="1100.05"><span class="seg-time">18:20</span><span class="seg-text">They see somebody&#x27;s house burning the ground</span></div>
+<div class="seg" data-time="1102.45"><span class="seg-time">18:22</span><span class="seg-text">They see somebody that was a car wreck that didn&#x27;t make it in this case</span></div>
+<div class="seg" data-time="1107.65"><span class="seg-time">18:27</span><span class="seg-text">When they dropped this gentleman off the hospital they didn&#x27;t know if he was going to make it</span></div>
+<div class="seg" data-time="1113.12"><span class="seg-time">18:33</span><span class="seg-text">We did and I went to church last Wednesday</span></div>
+<div class="seg" data-time="1119.26"><span class="seg-time">18:39</span><span class="seg-text">Not knowing that gentleman at all as in the message we&#x27;ve exchanged and I told him that message that God wouldn&#x27;t done with him</span></div>
+<div class="seg" data-time="1127.89"><span class="seg-time">18:47</span><span class="seg-text">And that&#x27;s why still here</span></div>
+<div class="seg" data-time="1129.57"><span class="seg-time">18:49</span><span class="seg-text">God had a purpose for him</span></div>
+<div class="seg" data-time="1132.5"><span class="seg-time">18:52</span><span class="seg-text">So he&#x27;s here tonight</span></div>
+<div class="seg" data-time="1135.14"><span class="seg-time">18:55</span><span class="seg-text">He was in my son. He was in my men&#x27;s class that was denied when I walked in so I got to meeting face to face and he got to tell his story again to that men&#x27;s group</span></div>
+<div class="seg" data-time="1144.27"><span class="seg-time">19:04</span><span class="seg-text">And the leader of that men&#x27;s group here Mr. Steve Engelbrecht and Tom Jarvis is the man</span></div>
+<div class="seg" data-time="1151.92"><span class="seg-time">19:11</span><span class="seg-text">And he asked me if he could come here tonight and talk and he wanted the firefighters here to say his life</span></div>
+<div class="seg" data-time="1158.99"><span class="seg-time">19:18</span><span class="seg-text">And they&#x27;re also in the room</span></div>
+<div class="seg" data-time="1161.01"><span class="seg-time">19:21</span><span class="seg-text">So Tom if you&#x27;d like to go out to the podium and and you&#x27;re welcome to tell your story</span></div>
+<div class="seg" data-time="1169.17"><span class="seg-time">19:29</span><span class="seg-text">And underbistle and fire Parker for the two firefighters guys</span></div>
+<div class="seg" data-time="1175.97"><span class="seg-time">19:35</span><span class="seg-text">Would you guys let&#x27;s go up and stand by Tom</span></div>
+<div class="seg" data-time="1336.75"><span class="seg-time">22:16</span><span class="seg-text">Thank you for those guys.</span></div>
+<div class="seg" data-time="1337.75"><span class="seg-time">22:17</span><span class="seg-text">Thank you for starting our community.</span></div>
+<div class="seg" data-time="1364.67"><span class="seg-time">22:44</span><span class="seg-text">We appreciate you guys.</span></div>
+<div class="seg" data-time="1365.67"><span class="seg-time">22:45</span><span class="seg-text">And again, I know you don&#x27;t do this for this, but Tom wanted the opportunity to thank</span></div>
+<div class="seg" data-time="1372.62"><span class="seg-time">22:52</span><span class="seg-text">you and I felt like it was something we needed to do.</span></div>
+<div class="seg" data-time="1375.98"><span class="seg-time">22:55</span><span class="seg-text">So thank you guys for sort of mind.</span></div>
+<div class="seg" data-time="1377.82"><span class="seg-time">22:57</span><span class="seg-text">We appreciate you.</span></div>
+<div class="seg" data-time="1381.6"><span class="seg-time">23:01</span><span class="seg-text">17.</span></div>
+<div class="seg" data-time="1382.6"><span class="seg-time">23:02</span><span class="seg-text">City of Mayors for Communications.</span></div>
+<div class="seg" data-time="1384.6"><span class="seg-time">23:04</span><span class="seg-text">Nonsense.</span></div>
+<div class="seg" data-time="1385.66"><span class="seg-time">23:05</span><span class="seg-text">All right.</span></div>
+<div class="seg" data-time="1386.66"><span class="seg-time">23:06</span><span class="seg-text">18.</span></div>
+<div class="seg" data-time="1387.66"><span class="seg-time">23:07</span><span class="seg-text">This means I&#x27;ll be continued from the Kelp Tigers to the right.</span></div>
+<div class="seg" data-time="1389.66"><span class="seg-time">23:09</span><span class="seg-text">We&#x27;re in the staff room for the purpose of the executive session.</span></div>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/604" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
-<div class="seg"><a href="#" onclick="seekTo(553.74); return false;" class="ts">[09:13]</a> Motion to approve.</div>
-<div class="seg"><a href="#" onclick="seekTo(563.74); return false;" class="ts">[09:23]</a> Michael.</div>
-<div class="seg"><a href="#" onclick="seekTo(564.74); return false;" class="ts">[09:24]</a> John.</div>
-<div class="seg"><a href="#" onclick="seekTo(565.74); return false;" class="ts">[09:25]</a> I.</div>
-<div class="seg"><a href="#" onclick="seekTo(566.74); return false;" class="ts">[09:26]</a> Parker.</div>
-<div class="seg"><a href="#" onclick="seekTo(567.74); return false;" class="ts">[09:27]</a> I.</div>
-<div class="seg"><a href="#" onclick="seekTo(569.22); return false;" class="ts">[09:29]</a> Ten.</div>
-<div class="seg"><a href="#" onclick="seekTo(571.12); return false;" class="ts">[09:31]</a> The session possible.</div>
-<div class="seg"><a href="#" onclick="seekTo(572.12); return false;" class="ts">[09:32]</a> I.</div>
-<div class="seg"><a href="#" onclick="seekTo(573.12); return false;" class="ts">[09:33]</a> Regarding proposed Oklahoma National Gas.</div>
-<div class="seg"><a href="#" onclick="seekTo(575.12); return false;" class="ts">[09:35]</a> Along the street to the east of the airport.</div>
-<div class="seg"><a href="#" onclick="seekTo(578.12); return false;" class="ts">[09:38]</a> I have been in contact with Dustin Frederick of O.N.G.</div>
-<div class="seg"><a href="#" onclick="seekTo(584.89); return false;" class="ts">[09:44]</a> And he has gotten the approval of the power that the two offer a $20,000.</div>
-<div class="seg"><a href="#" onclick="seekTo(594.43); return false;" class="ts">[09:54]</a> The.</div>
-<div class="seg"><a href="#" onclick="seekTo(595.43); return false;" class="ts">[09:55]</a> An exchange for a grant of the easement.</div>
-<div class="seg"><a href="#" onclick="seekTo(597.43); return false;" class="ts">[09:57]</a> And they will come in and help us.</div>
-<div class="seg"><a href="#" onclick="seekTo(600.43); return false;" class="ts">[10:00]</a> A tip to institute a franchise where in our percentage would be increased from.</div>
-<div class="seg"><a href="#" onclick="seekTo(606.42); return false;" class="ts">[10:06]</a> Two percent to either three or four percent.</div>
-<div class="seg"><a href="#" onclick="seekTo(609.42); return false;" class="ts">[10:09]</a> We have it.</div>
-<div class="seg"><a href="#" onclick="seekTo(610.42); return false;" class="ts">[10:10]</a> Obviously that would all be negotiated at the time that the franchise is passed.</div>
-<div class="seg"><a href="#" onclick="seekTo(615.34); return false;" class="ts">[10:15]</a> Is it for that new pipeline that&#x27;s going on by their report?</div>
-<div class="seg"><a href="#" onclick="seekTo(618.34); return false;" class="ts">[10:18]</a> Yes, sir.</div>
-<div class="seg"><a href="#" onclick="seekTo(619.34); return false;" class="ts">[10:19]</a> Sir, sir again.</div>
-<div class="seg"><a href="#" onclick="seekTo(625.47); return false;" class="ts">[10:25]</a> Are you, sir?</div>
-<div class="seg"><a href="#" onclick="seekTo(626.47); return false;" class="ts">[10:26]</a> So O.N.G.</div>
-<div class="seg"><a href="#" onclick="seekTo(628.5699999999999); return false;" class="ts">[10:28]</a> Will pay the city $20,000 for the easement.</div>
-<div class="seg"><a href="#" onclick="seekTo(632.5699999999999); return false;" class="ts">[10:32]</a> And then after that is done.</div>
-<div class="seg"><a href="#" onclick="seekTo(635.86); return false;" class="ts">[10:35]</a> They will assist us with.</div>
-<div class="seg"><a href="#" onclick="seekTo(637.86); return false;" class="ts">[10:37]</a> The franchise.</div>
-<div class="seg"><a href="#" onclick="seekTo(639.86); return false;" class="ts">[10:39]</a> We would have to.</div>
-<div class="seg"><a href="#" onclick="seekTo(640.86); return false;" class="ts">[10:40]</a> I can&#x27;t say they will help us get a franchise because that has to get to the.</div>
-<div class="seg"><a href="#" onclick="seekTo(644.86); return false;" class="ts">[10:44]</a> But they will come in and work with us.</div>
-<div class="seg"><a href="#" onclick="seekTo(647.86); return false;" class="ts">[10:47]</a> Help us do it and pay for the vote that we have to have.</div>
-<div class="seg"><a href="#" onclick="seekTo(651.86); return false;" class="ts">[10:51]</a> And they are.</div>
-<div class="seg"><a href="#" onclick="seekTo(653.86); return false;" class="ts">[10:53]</a> Mr. Frederick has acknowledged that 2 percent is below the state average.</div>
-<div class="seg"><a href="#" onclick="seekTo(659.86); return false;" class="ts">[10:59]</a> So we would increase our percentage of collections from O.N.G.</div>
-<div class="seg"><a href="#" onclick="seekTo(664.86); return false;" class="ts">[11:04]</a> Gatsails.</div>
-<div class="seg"><a href="#" onclick="seekTo(665.86); return false;" class="ts">[11:05]</a> But at least 1 percent and.</div>
-<div class="seg"><a href="#" onclick="seekTo(667.86); return false;" class="ts">[11:07]</a> Probably 2 percent.</div>
-<div class="seg"><a href="#" onclick="seekTo(670.4300000000001); return false;" class="ts">[11:10]</a> Which would amount to about.</div>
-<div class="seg"><a href="#" onclick="seekTo(674.04); return false;" class="ts">[11:14]</a> 100.</div>
-<div class="seg"><a href="#" onclick="seekTo(675.04); return false;" class="ts">[11:15]</a> And extra $100,000 revenue here.</div>
-<div class="seg"><a href="#" onclick="seekTo(677.42); return false;" class="ts">[11:17]</a> Just from looking at what other cities charge the.</div>
-<div class="seg"><a href="#" onclick="seekTo(679.42); return false;" class="ts">[11:19]</a> And a couple of their cities.</div>
-<div class="seg"><a href="#" onclick="seekTo(683.41); return false;" class="ts">[11:23]</a> I&#x27;ve been had were like after so many years.</div>
-<div class="seg"><a href="#" onclick="seekTo(685.41); return false;" class="ts">[11:25]</a> The city could buy out the utility.</div>
-<div class="seg"><a href="#" onclick="seekTo(687.41); return false;" class="ts">[11:27]</a> If they wanted.</div>
-<div class="seg"><a href="#" onclick="seekTo(688.44); return false;" class="ts">[11:28]</a> To take it over.</div>
-<div class="seg"><a href="#" onclick="seekTo(689.44); return false;" class="ts">[11:29]</a> Do you know what?</div>
-<div class="seg"><a href="#" onclick="seekTo(690.92); return false;" class="ts">[11:30]</a> Prior has their own gas.</div>
-<div class="seg"><a href="#" onclick="seekTo(692.92); return false;" class="ts">[11:32]</a> We don&#x27;t have to move the fence or anything.</div>
-<div class="seg"><a href="#" onclick="seekTo(697.54); return false;" class="ts">[11:37]</a> We&#x27;re at it.</div>
-<div class="seg"><a href="#" onclick="seekTo(698.54); return false;" class="ts">[11:38]</a> Just a little side of the fence.</div>
-<div class="seg"><a href="#" onclick="seekTo(700.54); return false;" class="ts">[11:40]</a> Correct.</div>
-<div class="seg"><a href="#" onclick="seekTo(703.94); return false;" class="ts">[11:43]</a> And so that&#x27;s from.</div>
-<div class="seg"><a href="#" onclick="seekTo(705.39); return false;" class="ts">[11:45]</a> Where to where.</div>
-<div class="seg"><a href="#" onclick="seekTo(706.39); return false;" class="ts">[11:46]</a> Just along that fence.</div>
-<div class="seg"><a href="#" onclick="seekTo(709.61); return false;" class="ts">[11:49]</a> 5,000 something.</div>
-<div class="seg"><a href="#" onclick="seekTo(710.61); return false;" class="ts">[11:50]</a> Yeah.</div>
-<div class="seg"><a href="#" onclick="seekTo(711.61); return false;" class="ts">[11:51]</a> But it comes over from behind sector.</div>
-<div class="seg"><a href="#" onclick="seekTo(716.14); return false;" class="ts">[11:56]</a> And into the front.</div>
-<div class="seg"><a href="#" onclick="seekTo(719.04); return false;" class="ts">[11:59]</a> Done that one row.</div>
-<div class="seg"><a href="#" onclick="seekTo(720.0); return false;" class="ts">[12:00]</a> do a cross or how&#x27;s it come, how&#x27;s it how they you know currently runs down the river</div>
-<div class="seg"><a href="#" onclick="seekTo(724.32); return false;" class="ts">[12:04]</a> tracks of what they said and so they&#x27;re gonna cross and over etc. I don&#x27;t know</div>
-<div class="seg"><a href="#" onclick="seekTo(729.26); return false;" class="ts">[12:09]</a> what that&#x27;s crossing. It would actually be Hopkins. Hopkins? Yeah. Okay, the</div>
-<div class="seg"><a href="#" onclick="seekTo(733.4); return false;" class="ts">[12:13]</a> side to graveyard cemetery? No, they&#x27;re going by Hopkins and then they&#x27;re gonna</div>
-<div class="seg"><a href="#" onclick="seekTo(740.65); return false;" class="ts">[12:20]</a> turn and go down. You know I&#x27;m saying no, I&#x27;m going to be going down the road</div>
-<div class="seg"><a href="#" onclick="seekTo(747.06); return false;" class="ts">[12:27]</a> the concrete plan is on. Oh, by the concrete plan? That part. Yeah, but they&#x27;re</div>
-<div class="seg"><a href="#" onclick="seekTo(753.2); return false;" class="ts">[12:33]</a> gonna you know they&#x27;re they&#x27;re bought they&#x27;ve purchased the easement from Hopkins</div>
-<div class="seg"><a href="#" onclick="seekTo(756.96); return false;" class="ts">[12:36]</a> right there so they know they&#x27;re gonna have like their station or whatever they</div>
-<div class="seg"><a href="#" onclick="seekTo(760.77); return false;" class="ts">[12:40]</a> said and then they would turn and I&#x27;m going down the road. On down by Westcoe, correct?</div>
-<div class="seg"><a href="#" onclick="seekTo(766.41); return false;" class="ts">[12:46]</a> That&#x27;s where it is currently.</div>
-<div class="seg"><a href="#" onclick="seekTo(769.53); return false;" class="ts">[12:49]</a> Yeah, it&#x27;s gonna be at Hopkins. It&#x27;s gonna be at Hopkins and Hopkins has settled according to</div>
-<div class="seg"><a href="#" onclick="seekTo(773.53); return false;" class="ts">[12:53]</a> you know, and if the board has a different number I mean we&#x27;re happy to go back to them.</div>
-<div class="seg"><a href="#" onclick="seekTo(784.5); return false;" class="ts">[13:04]</a> What&#x27;s a lot better and what they gave us before? What&#x27;d you say?</div>
-<div class="seg"><a href="#" onclick="seekTo(796.33); return false;" class="ts">[13:16]</a> Yeah. Yeah. Yeah, that was my biggest concern, you know, being good neighbors is we don&#x27;t want</div>
-<div class="seg"><a href="#" onclick="seekTo(802.49); return false;" class="ts">[13:22]</a> to agree to anything. Yeah, we&#x27;re talking about the summer period.</div>
-<div class="seg"><a href="#" onclick="seekTo(836.35); return false;" class="ts">[13:56]</a> We too. The other side is the franchise. So we&#x27;re doing it on my two things. So the</div>
-<div class="seg"><a href="#" onclick="seekTo(865.83); return false;" class="ts">[14:25]</a> franchise agreement is when we&#x27;ve just like pulled some cities, Travis up, pull some cities and</div>
-<div class="seg"><a href="#" onclick="seekTo(870.31); return false;" class="ts">[14:30]</a> they were getting in my from what 3.25, the 4.25 person, you know. Yeah, so then you know, the only way to go</div>
-<div class="seg"><a href="#" onclick="seekTo(881.42); return false;" class="ts">[14:41]</a> higher is by friends or the 20,000 is just for the easement so that&#x27;s a separate. So they&#x27;re</div>
-<div class="seg"><a href="#" onclick="seekTo(905.81); return false;" class="ts">[15:05]</a> I&#x27;m here.</div>
-<div class="seg"><a href="#" onclick="seekTo(908.57); return false;" class="ts">[15:08]</a> No land management here.</div>
-<div class="seg"><a href="#" onclick="seekTo(909.57); return false;" class="ts">[15:09]</a> The land management actually, the two representatives who are here were not authorized to be here that night.</div>
-<div class="seg"><a href="#" onclick="seekTo(918.13); return false;" class="ts">[15:18]</a> Really?</div>
-<div class="seg"><a href="#" onclick="seekTo(921.88); return false;" class="ts">[15:21]</a> I don&#x27;t know.</div>
-<div class="seg"><a href="#" onclick="seekTo(923.23); return false;" class="ts">[15:23]</a> Imagine that.</div>
-<div class="seg"><a href="#" onclick="seekTo(924.23); return false;" class="ts">[15:24]</a> I make a motion to approve.</div>
-<div class="seg"><a href="#" onclick="seekTo(928.98); return false;" class="ts">[15:28]</a> 11.</div>
-<div class="seg"><a href="#" onclick="seekTo(944.8); return false;" class="ts">[15:44]</a> This may have been being changed from counter chambers and reclaim the six-center gym for a tour and discussion</div>
-<div class="seg"><a href="#" onclick="seekTo(950.8); return false;" class="ts">[15:50]</a> that is really a bit of a gym.</div>
-<div class="seg"><a href="#" onclick="seekTo(954.53); return false;" class="ts">[15:54]</a> It is beautiful if you haven&#x27;t seen it.</div>
-<div class="seg"><a href="#" onclick="seekTo(957.53); return false;" class="ts">[15:57]</a> First, me and me have that rapply metallic out there more now.</div>
-<div class="seg"><a href="#" onclick="seekTo(964.09); return false;" class="ts">[16:04]</a> I don&#x27;t know.</div>
-<div class="seg"><a href="#" onclick="seekTo(969.09); return false;" class="ts">[16:09]</a> I don&#x27;t know.</div>
-<div class="seg"><a href="#" onclick="seekTo(977.74); return false;" class="ts">[16:17]</a> 14.</div>
-<div class="seg"><a href="#" onclick="seekTo(1006.05); return false;" class="ts">[16:46]</a> If any, which is a residence is opposing this agenda, 15 staff reports, 16 mayor, council community,</div>
-<div class="seg"><a href="#" onclick="seekTo(1020.81); return false;" class="ts">[17:00]</a> announcements.</div>
-<div class="seg"><a href="#" onclick="seekTo(1024.72); return false;" class="ts">[17:04]</a> Okay.</div>
-<div class="seg"><a href="#" onclick="seekTo(1025.72); return false;" class="ts">[17:05]</a> So, we&#x27;re going to be somewhat different tonight for me.</div>
-<div class="seg"><a href="#" onclick="seekTo(1030.26); return false;" class="ts">[17:10]</a> A lot of times, our firefighters, our police officers, our same police, and nothing</div>
-<div class="seg"><a href="#" onclick="seekTo(1039.6399999999999); return false;" class="ts">[17:19]</a> but negative.</div>
-<div class="seg"><a href="#" onclick="seekTo(1040.6399999999999); return false;" class="ts">[17:20]</a> And I know that&#x27;s got to be disheartening at some times because a lot of good things have</div>
-<div class="seg"><a href="#" onclick="seekTo(1045.8); return false;" class="ts">[17:25]</a> them from our police.</div>
-<div class="seg"><a href="#" onclick="seekTo(1047.8); return false;" class="ts">[17:27]</a> And one was brought to my attention.</div>
-<div class="seg"><a href="#" onclick="seekTo(1050.8); return false;" class="ts">[17:30]</a> And we&#x27;re going to celebrate tonight.</div>
-<div class="seg"><a href="#" onclick="seekTo(1052.8); return false;" class="ts">[17:32]</a> And deserve to be celebrated.</div>
-<div class="seg"><a href="#" onclick="seekTo(1053.8); return false;" class="ts">[17:33]</a> And it&#x27;s a really cool thing.</div>
-<div class="seg"><a href="#" onclick="seekTo(1055.8); return false;" class="ts">[17:35]</a> I got a text message.</div>
-<div class="seg"><a href="#" onclick="seekTo(1057.6); return false;" class="ts">[17:37]</a> They brought me a private message from a gentleman.</div>
-<div class="seg"><a href="#" onclick="seekTo(1063.6); return false;" class="ts">[17:43]</a> And he told me that he died in our firefighters&#x27; life.</div>
-<div class="seg"><a href="#" onclick="seekTo(1072.6100000000001); return false;" class="ts">[17:52]</a> And he had been transferred to Mercy Hospital.</div>
-<div class="seg"><a href="#" onclick="seekTo(1077.76); return false;" class="ts">[17:57]</a> And he&#x27;s the name of the Mercy Mirror.</div>
-<div class="seg"><a href="#" onclick="seekTo(1080.98); return false;" class="ts">[18:00]</a> The Mercy City should not survive in our firefighters and I know they don&#x27;t do what they do to be celebrated</div>
-<div class="seg"><a href="#" onclick="seekTo(1090.4); return false;" class="ts">[18:10]</a> They do what they do because they love it and I want to help our community</div>
-<div class="seg"><a href="#" onclick="seekTo(1095.92); return false;" class="ts">[18:15]</a> But so often</div>
-<div class="seg"><a href="#" onclick="seekTo(1097.92); return false;" class="ts">[18:17]</a> These guys see bad stuff</div>
-<div class="seg"><a href="#" onclick="seekTo(1100.05); return false;" class="ts">[18:20]</a> They see somebody&#x27;s house burning the ground</div>
-<div class="seg"><a href="#" onclick="seekTo(1102.45); return false;" class="ts">[18:22]</a> They see somebody that was a car wreck that didn&#x27;t make it in this case</div>
-<div class="seg"><a href="#" onclick="seekTo(1107.65); return false;" class="ts">[18:27]</a> When they dropped this gentleman off the hospital they didn&#x27;t know if he was going to make it</div>
-<div class="seg"><a href="#" onclick="seekTo(1113.12); return false;" class="ts">[18:33]</a> We did and I went to church last Wednesday</div>
-<div class="seg"><a href="#" onclick="seekTo(1119.26); return false;" class="ts">[18:39]</a> Not knowing that gentleman at all as in the message we&#x27;ve exchanged and I told him that message that God wouldn&#x27;t done with him</div>
-<div class="seg"><a href="#" onclick="seekTo(1127.89); return false;" class="ts">[18:47]</a> And that&#x27;s why still here</div>
-<div class="seg"><a href="#" onclick="seekTo(1129.57); return false;" class="ts">[18:49]</a> God had a purpose for him</div>
-<div class="seg"><a href="#" onclick="seekTo(1132.5); return false;" class="ts">[18:52]</a> So he&#x27;s here tonight</div>
-<div class="seg"><a href="#" onclick="seekTo(1135.14); return false;" class="ts">[18:55]</a> He was in my son. He was in my men&#x27;s class that was denied when I walked in so I got to meeting face to face and he got to tell his story again to that men&#x27;s group</div>
-<div class="seg"><a href="#" onclick="seekTo(1144.27); return false;" class="ts">[19:04]</a> And the leader of that men&#x27;s group here Mr. Steve Engelbrecht and Tom Jarvis is the man</div>
-<div class="seg"><a href="#" onclick="seekTo(1151.92); return false;" class="ts">[19:11]</a> And he asked me if he could come here tonight and talk and he wanted the firefighters here to say his life</div>
-<div class="seg"><a href="#" onclick="seekTo(1158.99); return false;" class="ts">[19:18]</a> And they&#x27;re also in the room</div>
-<div class="seg"><a href="#" onclick="seekTo(1161.01); return false;" class="ts">[19:21]</a> So Tom if you&#x27;d like to go out to the podium and and you&#x27;re welcome to tell your story</div>
-<div class="seg"><a href="#" onclick="seekTo(1169.17); return false;" class="ts">[19:29]</a> And underbistle and fire Parker for the two firefighters guys</div>
-<div class="seg"><a href="#" onclick="seekTo(1175.97); return false;" class="ts">[19:35]</a> Would you guys let&#x27;s go up and stand by Tom</div>
-<div class="seg"><a href="#" onclick="seekTo(1336.75); return false;" class="ts">[22:16]</a> Thank you for those guys.</div>
-<div class="seg"><a href="#" onclick="seekTo(1337.75); return false;" class="ts">[22:17]</a> Thank you for starting our community.</div>
-<div class="seg"><a href="#" onclick="seekTo(1364.67); return false;" class="ts">[22:44]</a> We appreciate you guys.</div>
-<div class="seg"><a href="#" onclick="seekTo(1365.67); return false;" class="ts">[22:45]</a> And again, I know you don&#x27;t do this for this, but Tom wanted the opportunity to thank</div>
-<div class="seg"><a href="#" onclick="seekTo(1372.62); return false;" class="ts">[22:52]</a> you and I felt like it was something we needed to do.</div>
-<div class="seg"><a href="#" onclick="seekTo(1375.98); return false;" class="ts">[22:55]</a> So thank you guys for sort of mind.</div>
-<div class="seg"><a href="#" onclick="seekTo(1377.82); return false;" class="ts">[22:57]</a> We appreciate you.</div>
-<div class="seg"><a href="#" onclick="seekTo(1381.6); return false;" class="ts">[23:01]</a> 17.</div>
-<div class="seg"><a href="#" onclick="seekTo(1382.6); return false;" class="ts">[23:02]</a> City of Mayors for Communications.</div>
-<div class="seg"><a href="#" onclick="seekTo(1384.6); return false;" class="ts">[23:04]</a> Nonsense.</div>
-<div class="seg"><a href="#" onclick="seekTo(1385.66); return false;" class="ts">[23:05]</a> All right.</div>
-<div class="seg"><a href="#" onclick="seekTo(1386.66); return false;" class="ts">[23:06]</a> 18.</div>
-<div class="seg"><a href="#" onclick="seekTo(1387.66); return false;" class="ts">[23:07]</a> This means I&#x27;ll be continued from the Kelp Tigers to the right.</div>
-<div class="seg"><a href="#" onclick="seekTo(1389.66); return false;" class="ts">[23:09]</a> We&#x27;re in the staff room for the purpose of the executive session.</div>
-</div></section>
+</div>
+</div>
+</div>
 
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag(&#x27;js&#x27;, new Date()); gtag(&#x27;config&#x27;, &#x27;G-X9VGCCGG49&#x27;, { &#x27;request_origin&#x27;:&#x27;external&#x27; }); City Council Regular Meeting body{ margin-top: .5in; margin-bottom: .5in; margin-right: .5in ; margin-left: .5in; text-align: justify; font-family: Calibri, Candara, Segoe, &#x27;Segoe UI&#x27;, Optima, Arial, sans-serif; font-size: 14px; } table{ text-align: justify; border-spacing: 5px; padding: 0; font-size: 11pt; } td { text-align: justify; vertical-align:top; } .numberspace { width: 30px; vertical-align: top; text-align: left; } .ul {text-decoration: underline;} /* Prevents logo resizing on print */ img { max-width: 100%; height: auto; } NOTICE OF REGULAR MEETING AND AGENDA OF THE MIAMI CITY COUNCIL Tuesday, April 15, 2025 5:30 p.m. OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY MIAMI CIVIC CENTER 129 5th Avenue Northwest, Miami, Oklahoma Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on www.miamiokla.net. THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA: blockquote { margin-left: 40px; margin-right: 0px; margin-top: 0px; margin-bottom: 0px; }@media print { a { color: black; } } 1. Call to Order&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 2. Public Input and Unscheduled Personal Appearances Each person will be limited to 3 minutes on agenda items only. The purpose of this agenda item is to provide an opportunity for citizens&#x27; comments on agenda items. Council members do not engage in discussion under this agenda item, and staff members are directed not to. If you seek discussion or inquiry, please contact your Councilmember, the Mayor or the office of the City Manager. Responses to citizen comments, if any, will occur under the applicable agenda item or may be reserved for further response by phone call, personal meeting, or a posting on the website: www.miamiokla.net 3. *Action Item* Claims&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Claims List Credit Cards 4. *Action Item* Claims for Vance Auto Group&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Claims List 5. *Action Item* Minutes:&amp;nbsp; April 01, 2025 (Regular)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Minutes 6. *Action Item* Contract With Lakeland Financial Services for Lease of New Printers in the Monthly Amount of $4,034.00&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Keith Osborn BA Contract 7. *Action Item* Subscription and Services Agreement With Granicus for Peak Agenda Management to Streamline the Agenda and Packet Creation Process&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Melissa Moore/Keith Osborn BA Agreement Supplemental Information 8. *Action Item* Letter of Support From the City of Miami for a Department of Commerce Emergency Solutions Grant for the Community Crisis Center&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Stephanie Cromwell/Mayor Parker BA Letter of Support 9. *Action Item* Resolution CC2025-04 Codification of the Miami, OK Code of Ordinances to Include Supplement 19&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Misty Barnes BA Resolution 10. *Discussion and Possible Action Item* Regarding Proposed Oklahoma Natural Gas Easement Along the Street to the East of the Airport&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Misty Barnes BA 11. The Meeting Will be Continued From the Council Chambers and Reconvened in the Civic Center Gym for a Tour and Discussion of the Newly Renovated Gym&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker&amp;nbsp; 12. Council Will Take a Tour and Discuss the Newly Renovated Civic Center Gym&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Chuck McKibben BA 13. The Meeting Will be Continued From the Civic Center Gym and Reconvened in the Council Chambers&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 14. *Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9)) City Council/Tyler Cline 15. Staff Reports (Written report included in packet, if available staff is present for questions)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council PCAX Collections and Miami Nation Credit Balance as of 03312025 Pelivan - MIAMI QUARTERLY - 3rd Fiscal Qrtr 16. Mayor and Council Community Announcements&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 17. City Manager&amp;rsquo;s Communications&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline 18. The Meeting Will be Continued From the Council Chambers and Reconvened in the Staff Room for Purposes of the Executive Session&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 19. Executive Session in the Staff Room to Review Previous Executive Session Minutes&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 20. Executive Session in the Staff Room Pursuant to 25 O.S. §307(B)(4) for Purposes of Confidential Communications Between the Trust and its Attorney Concerning a Pending Investigation, Claim, or Action, to wit:&amp;nbsp; City of Miami, et al., v. GRDA CJ-08-619 and F.E.R.C. Project No. 1494&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 21. Executive Session in the Staff Room Pursuant to 25 O.S. 307(B)(3) and (4) for Discussing Potential Economic Development Through Purchase of Real Property or Enhancement of Real Property to be Provided by the City and/or one of its Trust Authorities as Part of an Economic Development Project&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 22. The Meeting Will be Reconvened in the Staff Room After the Executive Session&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 23. *Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 20&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 24. *Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 21&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 25. *Action Item* Adjournment&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office. We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Motion to approve. Michael. John. I. Parker. I. Ten. The session possible. I. Regarding proposed Oklahoma National Gas. Along the street to the east of the airport. I have been in contact with Dustin Frederick of O.N.G. And he has gotten the approval of the power that the two offer a $20,000. The. An exchange for a grant of the easement. And they will come in and help us. A tip to institute a franchise where in our percentage would be increased from. Two percent to either three or four percent. We have it. Obviously that would all be negotiated at the time that the franchise is passed. Is it for that new pipeline that&#x27;s going on by their report? Yes, sir. Sir, sir again. Are you, sir? So O.N.G. Will pay the city $20,000 for the easement. And then after that is done. They will assist us with. The franchise. We would have to. I can&#x27;t say they will help us get a franchise because that has to get to the. But they will come in and work with us. Help us do it and pay for the vote that we have to have. And they are. Mr. Frederick has acknowledged that 2 percent is below the state average. So we would increase our percentage of collections from O.N.G. Gatsails. But at least 1 percent and. Probably 2 percent. Which would amount to about. 100. And extra $100,000 revenue here. Just from looking at what other cities charge the. And a couple of their cities. I&#x27;ve been had were like after so many years. The city could buy out the utility. If they wanted. To take it over. Do you know what? Prior has their own gas. We don&#x27;t have to move the fence or anything. We&#x27;re at it. Just a little side of the fence. Correct. And so that&#x27;s from. Where to where. Just along that fence. 5,000 something. Yeah. But it comes over from behind sector. And into the front. Done that one row. do a cross or how&#x27;s it come, how&#x27;s it how they you know currently runs down the river tracks of what they said and so they&#x27;re gonna cross and over etc. I don&#x27;t know what that&#x27;s crossing. It would actually be Hopkins. Hopkins? Yeah. Okay, the side to graveyard cemetery? No, they&#x27;re going by Hopkins and then they&#x27;re gonna turn and go down. You know I&#x27;m saying no, I&#x27;m going to be going down the road the concrete plan is on. Oh, by the concrete plan? That part. Yeah, but they&#x27;re gonna you know they&#x27;re they&#x27;re bought they&#x27;ve purchased the easement from Hopkins right there so they know they&#x27;re gonna have like their station or whatever they said and then they would turn and I&#x27;m going down the road. On down by Westcoe, correct? That&#x27;s where it is currently. Yeah, it&#x27;s gonna be at Hopkins. It&#x27;s gonna be at Hopkins and Hopkins has settled according to you know, and if the board has a different number I mean we&#x27;re happy to go back to them. What&#x27;s a lot better and what they gave us before? What&#x27;d you say? Yeah. Yeah. Yeah, that was my biggest concern, you know, being good neighbors is we don&#x27;t want to agree to anything. Yeah, we&#x27;re talking about the summer period. We too. The other side is the franchise. So we&#x27;re doing it on my two things. So the franchise agreement is when we&#x27;ve just like pulled some cities, Travis up, pull some cities and they were getting in my from what 3.25, the 4.25 person, you know. Yeah, so then you know, the only way to go higher is by friends or the 20,000 is just for the easement so that&#x27;s a separate. So they&#x27;re I&#x27;m here. No land management here. The land management actually, the two representatives who are here were not authorized to be here that night. Really? I don&#x27;t know. Imagine that. I make a motion to approve. 11. This may have been being changed from counter chambers and reclaim the six-center gym for a tour and discussion that is really a bit of a gym. It is beautiful if you haven&#x27;t seen it. First, me and me have that rapply metallic out there more now. I don&#x27;t know. I don&#x27;t know. 14. If any, which is a residence is opposing this agenda, 15 staff reports, 16 mayor, council community, announcements. Okay. So, we&#x27;re going to be somewhat different tonight for me. A lot of times, our firefighters, our police officers, our same police, and nothing but negative. And I know that&#x27;s got to be disheartening at some times because a lot of good things have them from our police. And one was brought to my attention. And we&#x27;re going to celebrate tonight. And deserve to be celebrated. And it&#x27;s a really cool thing. I got a text message. They brought me a private message from a gentleman. And he told me that he died in our firefighters&#x27; life. And he had been transferred to Mercy Hospital. And he&#x27;s the name of the Mercy Mirror. The Mercy City should not survive in our firefighters and I know they don&#x27;t do what they do to be celebrated They do what they do because they love it and I want to help our community But so often These guys see bad stuff They see somebody&#x27;s house burning the ground They see somebody that was a car wreck that didn&#x27;t make it in this case When they dropped this gentleman off the hospital they didn&#x27;t know if he was going to make it</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag(&#x27;js&#x27;, new Date()); gtag(&#x27;config&#x27;, &#x27;G-X9VGCCGG49&#x27;, { &#x27;request_origin&#x27;:&#x27;external&#x27; }); City Council Regular Meeting body{ margin-top: .5in; margin-bottom: .5in; margin-right: .5in ; margin-left: .5in; text-align: justify; font-family: Calibri, Candara, Segoe, &#x27;Segoe UI&#x27;, Optima, Arial, sans-serif; font-size: 14px; } table{ text-align: justify; border-spacing: 5px; padding: 0; font-size: 11pt; } td { text-align: justify; vertical-align:top; } .numberspace { width: 30px; vertical-align: top; text-align: left; } .ul {text-decoration: underline;} /* Prevents logo resizing on print */ img { max-width: 100%; height: auto; } NOTICE OF REGULAR MEETING AND AGENDA OF THE MIAMI CITY COUNCIL Tuesday, April 15, 2025 5:30 p.m. OR IMMEDIATELY FOLLOWING THE COMPLETION OF THE MEETING OF THE MIAMI SPECIAL UTILITY AUTHORITY MIAMI CIVIC CENTER 129 5th Avenue Northwest, Miami, Oklahoma Filed in the Office of the City Clerk and displayed in the main lobby of the Miami Civic Center and by posting on www.miamiokla.net. THE COUNCIL MAY DISCUSS, CONSIDER, AND VOTE ON ANY ITEM LISTED IN THIS AGENDA: blockquote { margin-left: 40px; margin-right: 0px; margin-top: 0px; margin-bottom: 0px; }@media print { a { color: black; } } 1. Call to Order&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 2. Public Input and Unscheduled Personal Appearances Each person will be limited to 3 minutes on agenda items only. The purpose of this agenda item is to provide an opportunity for citizens&#x27; comments on agenda items. Council members do not engage in discussion under this agenda item, and staff members are directed not to. If you seek discussion or inquiry, please contact your Councilmember, the Mayor or the office of the City Manager. Responses to citizen comments, if any, will occur under the applicable agenda item or may be reserved for further response by phone call, personal meeting, or a posting on the website: www.miamiokla.net 3. *Action Item* Claims&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Claims List Credit Cards 4. *Action Item* Claims for Vance Auto Group&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Claims List 5. *Action Item* Minutes:&amp;nbsp; April 01, 2025 (Regular)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council Minutes 6. *Action Item* Contract With Lakeland Financial Services for Lease of New Printers in the Monthly Amount of $4,034.00&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Keith Osborn BA Contract 7. *Action Item* Subscription and Services Agreement With Granicus for Peak Agenda Management to Streamline the Agenda and Packet Creation Process&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Melissa Moore/Keith Osborn BA Agreement Supplemental Information 8. *Action Item* Letter of Support From the City of Miami for a Department of Commerce Emergency Solutions Grant for the Community Crisis Center&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Stephanie Cromwell/Mayor Parker BA Letter of Support 9. *Action Item* Resolution CC2025-04 Codification of the Miami, OK Code of Ordinances to Include Supplement 19&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Misty Barnes BA Resolution 10. *Discussion and Possible Action Item* Regarding Proposed Oklahoma Natural Gas Easement Along the Street to the East of the Airport&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Misty Barnes BA 11. The Meeting Will be Continued From the Council Chambers and Reconvened in the Civic Center Gym for a Tour and Discussion of the Newly Renovated Gym&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker&amp;nbsp; 12. Council Will Take a Tour and Discuss the Newly Renovated Civic Center Gym&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Chuck McKibben BA 13. The Meeting Will be Continued From the Civic Center Gym and Reconvened in the Council Chambers&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 14. *Potential Action Item* Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have Been Anticipated Prior to the Time of Posting (25 O.S. § 311(9)) City Council/Tyler Cline 15. Staff Reports (Written report included in packet, if available staff is present for questions)&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council PCAX Collections and Miami Nation Credit Balance as of 03312025 Pelivan - MIAMI QUARTERLY - 3rd Fiscal Qrtr 16. Mayor and Council Community Announcements&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 17. City Manager&amp;rsquo;s Communications&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Tyler Cline 18. The Meeting Will be Continued From the Council Chambers and Reconvened in the Staff Room for Purposes of the Executive Session&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; Mayor Parker 19. Executive Session in the Staff Room to Review Previous Executive Session Minutes&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 20. Executive Session in the Staff Room Pursuant to 25 O.S. §307(B)(4) for Purposes of Confidential Communications Between the Trust and its Attorney Concerning a Pending Investigation, Claim, or Action, to wit:&amp;nbsp; City of Miami, et al., v. GRDA CJ-08-619 and F.E.R.C. Project No. 1494&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 21. Executive Session in the Staff Room Pursuant to 25 O.S. 307(B)(3) and (4) for Discussing Potential Economic Development Through Purchase of Real Property or Enhancement of Real Property to be Provided by the City and/or one of its Trust Authorities as Part of an Economic Development Project&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 22. The Meeting Will be Reconvened in the Staff Room After the Executive Session&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 23. *Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 20&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 24. *Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 21&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council 25. *Action Item* Adjournment&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; City Council The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office. We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div></div></div></div></div>
+</div>
 
-
-
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>

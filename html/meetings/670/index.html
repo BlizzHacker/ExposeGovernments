@@ -1,162 +1,573 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Miami Special Utility Authority (MSUA) - May  5, 2026 | ExposeMiamiOK</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
-header { background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
-header .meta { opacity: 0.8; font-size: 0.9em; }
-.back { display: inline-block; margin-bottom: 15px; color: #667; text-decoration: none; }
-.back:hover { color: #333; }
-.status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-top: 8px; }
-.status-critical { background: #ff4444; color: white; }
-.status-warning { background: #ff8800; color: white; }
-.status-complete { background: #44aa44; color: white; }
-.status-transcribed { background: #4488cc; color: white; }
-.status-pending { background: #888; color: white; }
-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-section h2 { margin-bottom: 15px; color: #1a1a2e; }
-.discrepancies { border-left: 4px solid #ff8800; }
-.issue { padding: 12px; margin: 10px 0; border-radius: 6px; }
-.issue-critical { background: #fff0f0; border-left: 3px solid #ff4444; }
-.issue-high { background: #fff8f0; border-left: 3px solid #ff8800; }
-.issue-medium { background: #fffff0; border-left: 3px solid #ffcc00; }
-.issue-warning { background: #f0f8ff; border-left: 3px solid #4488cc; }
-.issue-header { font-weight: bold; margin-bottom: 5px; }
-.issue-desc { font-size: 0.9em; color: #555; }
-.issue-timestamp { margin-top: 5px; }
-.issue-timestamp a { color: #4488cc; text-decoration: none; font-family: monospace; }
-.issue-quote { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.03); border-radius: 4px; font-style: italic; font-size: 0.85em; }
-.doc-preview { background: #fafafa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; }
-.doc-note { margin-top: 10px; font-size: 0.85em; color: #666; }
-.transcript-segments { }
-.seg { padding: 6px 0; border-bottom: 1px solid #eee; }
-.seg .ts { color: #4488cc; text-decoration: none; font-family: monospace; font-size: 0.85em; margin-right: 8px; }
-.more { color: #666; font-style: italic; padding: 10px 0; }
-footer { text-align: center; padding: 20px; color: #666; font-size: 0.85em; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0a0a0f !important; color: #e4e4e7 !important; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+a { color: inherit; }
+.main { max-width: 1400px; margin: 0 auto; padding: 1.5rem 1rem; }
+.meeting-header { margin-bottom: 1.5rem; }
+.meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
+.meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
+@media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+.video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
+.video-wrap iframe { width: 100%; height: 100%; border: none; }
+.video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
+.audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
+.audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
+@media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
+.transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
+.sync-badge { font-size: 0.7rem; color: #4ade80; background: rgba(34,197,94,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+.transcript-body { padding: 0.5rem; overflow-y: auto; flex: 1; }
+.seg { padding: 0.4rem 0.75rem; border-radius: 6px; margin-bottom: 1px; cursor: pointer; transition: background 0.15s; display: flex; gap: 0.75rem; align-items: flex-start; }
+.seg:hover { background: rgba(255,255,255,0.03); }
+.seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
+.seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
+.seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.tabs-section { margin-top: 2rem; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn:hover { color: #e4e4e7; }
+.tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
+.tab-panel { display: none; background: #1a1a2e; border: 1px solid #27272a; border-top: none; border-radius: 0 0 12px 12px; padding: 1.5rem; max-height: 600px; overflow-y: auto; }
+.tab-panel.active { display: block; }
+.tab-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.9rem; line-height: 1.7; color: #a1a1aa; }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+.compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
+.doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<a href="/meetings/" class="back">← Back to All Meetings</a>
-<header>
-<h1>Miami Special Utility Authority (MSUA)</h1>
-<div class="meta">📅 May  5, 2026 | Clip #670</div>
-<div class="status-badge status-critical">🔴 CRITICAL ISSUES</div>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
+      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
+      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
+    </a>
+    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
+  </div>
 </header>
-
-<section class="discrepancies"><h2>⚠️ Discrepancies & Missing Documents (2)</h2>
-<div class="issue issue-medium">
-  <div class="issue-header">🟡 City Has Not Published Minutes</div>
-  <div class="issue-desc">Our transcript is complete but the city has not published official minutes on AgendaCenter. This may indicate a delay or failure to comply with open records requirements.</div>
+<div class="main">
+<div class="meeting-header">
+<h1>Miami Special Utility Authority (MSUA)</h1>
+<div class="meeting-meta">
+<span>📅 May  5, 2026</span>
+<span>⏱️ 00h 06m</span>
+<span>🔖 Clip #670</span>
 </div>
-<div class="issue issue-critical">
-  <div class="issue-header">🔴 Public Testimony Occurred But Minutes Record &quot;None&quot;</div>
-  <div class="issue-desc">The transcript at [00:09] shows public testimony took place, but the official minutes record &quot;None&quot; for public input. This is a potential violation of the Oklahoma Open Meeting Act.</div>
-  <div class="issue-timestamp">📍 <a href="#" onclick="seekTo('00:09'); return false;">00:09</a></div>
-  <div class="issue-quote">"Public input unscheduled personal appearances. We have none"</div>
 </div>
-</section>
 
-<section class="video">
-<h2>📹 Meeting Video</h2>
-<iframe src="https://miamiok.granicus.com/player/clip/670" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-</section>
-<section class="transcript"><h2>📝 AI Transcript</h2>
-<div class="transcript-segments">
-<div class="seg"><a href="#" onclick="seekTo(3.38); return false;" class="ts">[00:03]</a> All right, we&#x27;ll call to order the MSU a meeting for Tuesday, May 5th, 2026</div>
-<div class="seg"><a href="#" onclick="seekTo(9.14); return false;" class="ts">[00:09]</a> Public input unscheduled personal appearances. We have none</div>
-<div class="seg"><a href="#" onclick="seekTo(11.9); return false;" class="ts">[00:11]</a> Three discussion possible action on 3a claims list</div>
-<div class="seg"><a href="#" onclick="seekTo(25.09); return false;" class="ts">[00:25]</a> 3b Tetra tech claim for Pensacola GRDA relicensing in the amount of</div>
-<div class="seg"><a href="#" onclick="seekTo(28.83); return false;" class="ts">[00:28]</a> $13,786 and 25 cents. Yes, sir</div>
-<div class="seg"><a href="#" onclick="seekTo(32.25); return false;" class="ts">[00:32]</a> So this is for some work that Tetra Tech has done in our relicensing. They&#x27;ve also done some work for us for</div>
-<div class="seg"><a href="#" onclick="seekTo(40.26); return false;" class="ts">[00:40]</a> the highway 125</div>
-<div class="seg"><a href="#" onclick="seekTo(42.62); return false;" class="ts">[00:42]</a> Road race information. Oh, so this is just that invoice for that</div>
-<div class="seg"><a href="#" onclick="seekTo(63.0); return false;" class="ts">[01:03]</a> Three see minutes from the April 21st 2026 regular meeting</div>
-<div class="seg"><a href="#" onclick="seekTo(72.46); return false;" class="ts">[01:12]</a> I</div>
-<div class="seg"><a href="#" onclick="seekTo(76.22); return false;" class="ts">[01:16]</a> 3d worker authorization to dash zero to six</div>
-<div class="seg"><a href="#" onclick="seekTo(79.58); return false;" class="ts">[01:19]</a> With own engineering for water treatment plant piping motor and pump rehab construction administration and inspection</div>
-<div class="seg"><a href="#" onclick="seekTo(86.82); return false;" class="ts">[01:26]</a> Not to exceed forty five thousand dollars there. Yes, sir</div>
-<div class="seg"><a href="#" onclick="seekTo(91.82); return false;" class="ts">[01:31]</a> This is for just what it says for the water treatment plant where we approved for the construction down there this is for the</div>
-<div class="seg"><a href="#" onclick="seekTo(99.6); return false;" class="ts">[01:39]</a> For them to for the construction services for them to oversee and inspect</div>
-<div class="seg"><a href="#" onclick="seekTo(105.62); return false;" class="ts">[01:45]</a> It is an hourly it&#x27;s by the hour so it&#x27;s not to exceed 45,000 on this</div>
-<div class="seg"><a href="#" onclick="seekTo(113.9); return false;" class="ts">[01:53]</a> This is budgeted</div>
-<div class="seg"><a href="#" onclick="seekTo(124.22); return false;" class="ts">[02:04]</a> Make a motion we approve</div>
-<div class="seg"><a href="#" onclick="seekTo(134.78); return false;" class="ts">[02:14]</a> Three e work authorization three dash</div>
-<div class="seg"><a href="#" onclick="seekTo(137.72); return false;" class="ts">[02:17]</a> two zero to six with own engineering for highway 44 waterline crossing and</div>
-<div class="seg"><a href="#" onclick="seekTo(144.6); return false;" class="ts">[02:24]</a> treaty road construction administration and inspection not to exceed</div>
-<div class="seg"><a href="#" onclick="seekTo(148.36); return false;" class="ts">[02:28]</a> $25,000</div>
-<div class="seg"><a href="#" onclick="seekTo(150.6); return false;" class="ts">[02:30]</a> Same type of work that they&#x27;re doing they&#x27;re inspecting that</div>
-<div class="seg"><a href="#" onclick="seekTo(154.18); return false;" class="ts">[02:34]</a> materials the piping the boring the safety all that it has to do with those construction services and the billing portion that it&#x27;s for</div>
-<div class="seg"><a href="#" onclick="seekTo(161.76); return false;" class="ts">[02:41]</a> the</div>
-<div class="seg"><a href="#" onclick="seekTo(162.86); return false;" class="ts">[02:42]</a> south of the water tower the new water tower on 69 a we&#x27;re boring across and</div>
-<div class="seg"><a href="#" onclick="seekTo(169.18); return false;" class="ts">[02:49]</a> That project that we awarded to accuracy underground to bore across the turnpike there. It&#x27;ll feed if you guys remember</div>
-<div class="seg"><a href="#" onclick="seekTo(176.54); return false;" class="ts">[02:56]</a> That&#x27;s what feeds that&#x27;s that second feed. We&#x27;re gonna have to the east side of</div>
-<div class="seg"><a href="#" onclick="seekTo(183.5); return false;" class="ts">[03:03]</a> Same deal it&#x27;s an hourly</div>
-<div class="seg"><a href="#" onclick="seekTo(189.69); return false;" class="ts">[03:09]</a> Make a motion we approve</div>
-<div class="seg"><a href="#" onclick="seekTo(199.14); return false;" class="ts">[03:19]</a> Three F discuss the possible vote on</div>
-<div class="seg"><a href="#" onclick="seekTo(202.02); return false;" class="ts">[03:22]</a> perpetual utility easement agreement with the Shawnee tribe for the installation and maintenance of a water line</div>
-<div class="seg"><a href="#" onclick="seekTo(208.24); return false;" class="ts">[03:28]</a> Located near the new 69 a water tower including an all including</div>
-<div class="seg"><a href="#" onclick="seekTo(212.2); return false;" class="ts">[03:32]</a> authorization of one time payment in the amount of</div>
-<div class="seg"><a href="#" onclick="seekTo(215.42); return false;" class="ts">[03:35]</a> $5,000 and to authorize the trust manager to execute all necessary documents</div>
-<div class="seg"><a href="#" onclick="seekTo(221.0); return false;" class="ts">[03:41]</a> Yeah, this is for that</div>
-<div class="seg"><a href="#" onclick="seekTo(224.4); return false;" class="ts">[03:44]</a> More that we just talked about this is across the Shawnee tribe piece of property just out there</div>
-<div class="seg"><a href="#" onclick="seekTo(229.26); return false;" class="ts">[03:49]</a> 20-foot utilities</div>
-<div class="seg"><a href="#" onclick="seekTo(231.8); return false;" class="ts">[03:51]</a> Water line across there for that. They they had their first read yesterday on that week suspect</div>
-<div class="seg"><a href="#" onclick="seekTo(239.38); return false;" class="ts">[03:59]</a> They&#x27;ll take it to their next</div>
-<div class="seg"><a href="#" onclick="seekTo(244.46); return false;" class="ts">[04:04]</a> They have not approved they have not approved this shit either so what if you guys approve this tonight</div>
-<div class="seg"><a href="#" onclick="seekTo(251.85); return false;" class="ts">[04:11]</a> We&#x27;ll be able to take it to them if they approve it</div>
-<div class="seg"><a href="#" onclick="seekTo(254.15); return false;" class="ts">[04:14]</a> We&#x27;ll be able to get this easement that we need to get across the turnpike</div>
-<div class="seg"><a href="#" onclick="seekTo(259.3); return false;" class="ts">[04:19]</a> I&#x27;ll make motion approved</div>
-<div class="seg"><a href="#" onclick="seekTo(261.04); return false;" class="ts">[04:21]</a> Second</div>
-<div class="seg"><a href="#" onclick="seekTo(268.79); return false;" class="ts">[04:28]</a> 3g 3g agreement with SEL engineering services incorporated for substation to upgrade for the protection</div>
-<div class="seg"><a href="#" onclick="seekTo(276.75); return false;" class="ts">[04:36]</a> of the buses and transformers including design installation equipment and commissioning not to exceed</div>
-<div class="seg"><a href="#" onclick="seekTo(282.95); return false;" class="ts">[04:42]</a> 103,000</div>
-<div class="seg"><a href="#" onclick="seekTo(284.21); return false;" class="ts">[04:44]</a> 595 dollars</div>
-<div class="seg"><a href="#" onclick="seekTo(286.9); return false;" class="ts">[04:46]</a> so we you guys approved here wall back a</div>
-<div class="seg"><a href="#" onclick="seekTo(291.14); return false;" class="ts">[04:51]</a> to read to</div>
-<div class="seg"><a href="#" onclick="seekTo(293.34); return false;" class="ts">[04:53]</a> Study on those relay settings at sub to there&#x27;s two substation transformers there and in that when we did that they found that we</div>
-<div class="seg"><a href="#" onclick="seekTo(300.88); return false;" class="ts">[05:00]</a> Did not have redundant</div>
-<div class="seg"><a href="#" onclick="seekTo(303.16); return false;" class="ts">[05:03]</a> protection on those substation transformers in that bus and so subsequently they</div>
-<div class="seg"><a href="#" onclick="seekTo(309.56); return false;" class="ts">[05:09]</a> Suggested that this is what we do</div>
-<div class="seg"><a href="#" onclick="seekTo(310.74); return false;" class="ts">[05:10]</a> This is the work we do we will save some money if we do execute it now because they&#x27;ll already be mobilized</div>
-<div class="seg"><a href="#" onclick="seekTo(315.82); return false;" class="ts">[05:15]</a> They will do all that work at the same time when they&#x27;re already here</div>
-<div class="seg"><a href="#" onclick="seekTo(318.9); return false;" class="ts">[05:18]</a> Updating the settings that they have on those other relays plus they&#x27;ll coordinate those two sets of</div>
-<div class="seg"><a href="#" onclick="seekTo(325.22); return false;" class="ts">[05:25]</a> Settings together so we there&#x27;s some cost savings by doing it at the same time</div>
-<div class="seg"><a href="#" onclick="seekTo(329.38); return false;" class="ts">[05:29]</a> This also will come out of our electric budget</div>
-<div class="seg"><a href="#" onclick="seekTo(346.28); return false;" class="ts">[05:46]</a> For other new business if any which has risen since the posting of this agenda</div>
-<div class="seg"><a href="#" onclick="seekTo(353.11); return false;" class="ts">[05:53]</a> five staff reports</div>
-<div class="seg"><a href="#" onclick="seekTo(358.56); return false;" class="ts">[05:58]</a> six trustee community announcements</div>
-<div class="seg"><a href="#" onclick="seekTo(364.76); return false;" class="ts">[06:04]</a> Seven trust manager communications. Yes, sir</div>
-</div></section>
+<div class="layout">
+<div class="media-col">
+<div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/670" allowfullscreen></iframe></div>
+<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (2.9 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+</div>
+<div class="transcript-col">
+<div class="transcript-header">
+<span>📝 Transcript</span>
+<span class="sync-badge">● Synced</span>
+</div>
+<div class="transcript-body" id="transcript-scroll">
+<div class="seg" data-time="3.58"><span class="seg-time">00:03</span><span class="seg-text">All right, we&#x27;ll call it the MSUA meeting for Tuesday May 5th 2026.</span></div>
+<div class="seg" data-time="9.18"><span class="seg-time">00:09</span><span class="seg-text">The game put on scheduled personal appearances with a none three discussion possible action</span></div>
+<div class="seg" data-time="13.96"><span class="seg-time">00:13</span><span class="seg-text">On 3A claims list?</span></div>
+<div class="seg" data-time="16.12"><span class="seg-time">00:16</span><span class="seg-text">Most true proof</span></div>
+<div class="seg" data-time="17.59"><span class="seg-time">00:17</span><span class="seg-text">I&#x27;m all five. James Hards</span></div>
+<div class="seg" data-time="24.15"><span class="seg-time">00:24</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="25.27"><span class="seg-time">00:25</span><span class="seg-text">Three B Tetra Tech Cline for Penscola Giordea, we&#x27;re licensing in amount of 13 thousand</span></div>
+<div class="seg" data-time="29.67"><span class="seg-time">00:29</span><span class="seg-text">786 dollars and 25 cents</span></div>
+<div class="seg" data-time="31.91"><span class="seg-time">00:31</span><span class="seg-text">Yes sir so this is four some are that tetrotech has done</span></div>
+<div class="seg" data-time="35.11"><span class="seg-time">00:35</span><span class="seg-text">our re-licensing they have also done some work for us</span></div>
+<div class="seg" data-time="39.67"><span class="seg-time">00:39</span><span class="seg-text">For the how we 125</span></div>
+<div class="seg" data-time="42.82"><span class="seg-time">00:42</span><span class="seg-text">Road Race permission to vote on so this is just that invoice</span></div>
+<div class="seg" data-time="48.49"><span class="seg-time">00:48</span><span class="seg-text">I&#x27;m going make a motion. We approve</span></div>
+<div class="seg" data-time="57.54"><span class="seg-time">00:57</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="59.9"><span class="seg-time">00:59</span><span class="seg-text">Jones, Doc Gold Park</span></div>
+<div class="seg" data-time="62.22"><span class="seg-time">01:02</span><span class="seg-text">All right three C minutes from April 21st 2026 regular meeting</span></div>
+<div class="seg" data-time="68.06"><span class="seg-time">01:08</span><span class="seg-text">So, Joe?</span></div>
+<div class="seg" data-time="71.1"><span class="seg-time">01:11</span><span class="seg-text">Jones</span></div>
+<div class="seg" data-time="72.78"><span class="seg-time">01:12</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="75.5"><span class="seg-time">01:15</span><span class="seg-text">All right three D work authorization two dash zero to six with own engineering for water treatment plant piping motor and pump rehab construction administration</span></div>
+<div class="seg" data-time="86.1"><span class="seg-time">01:26</span><span class="seg-text">And inspection not took seed forty five thousand dollars there</span></div>
+<div class="seg" data-time="91.3"><span class="seg-time">01:31</span><span class="seg-text">Good evening board this is four just what it says</span></div>
+<div class="seg" data-time="94.02"><span class="seg-time">01:34</span><span class="seg-text">For the one treatment plan where we approve</span></div>
+<div class="seg" data-time="96.34"><span class="seg-time">01:36</span><span class="seg-text">For the construction down there this before for them to put a construction services</span></div>
+<div class="seg" data-time="101.78"><span class="seg-time">01:41</span><span class="seg-text">with him too</span></div>
+<div class="seg" data-time="102.98"><span class="seg-time">01:42</span><span class="seg-text">overseen inspect</span></div>
+<div class="seg" data-time="104.82"><span class="seg-time">01:44</span><span class="seg-text">Work that&#x27;s being done under it is an hourly</span></div>
+<div class="seg" data-time="108.02"><span class="seg-time">01:48</span><span class="seg-text">It was body hour so its not took seat 45 thousand on</span></div>
+<div class="seg" data-time="114.3"><span class="seg-time">01:54</span><span class="seg-text">This budget</span></div>
+<div class="seg" data-time="117.21"><span class="seg-time">01:57</span><span class="seg-text">Its, come out of our budget</span></div>
+<div class="seg" data-time="119.29"><span class="seg-time">01:59</span><span class="seg-text">Out-of-our Budget and</span></div>
+<div class="seg" data-time="120.25"><span class="seg-time">02:00</span><span class="seg-text">Contropecial Services thank you</span></div>
+<div class="seg" data-time="124.57"><span class="seg-time">02:04</span><span class="seg-text">I&#x27;ll make a motion we approve</span></div>
+<div class="seg" data-time="127.21"><span class="seg-time">02:07</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="128.57"><span class="seg-time">02:08</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="130.44"><span class="seg-time">02:10</span><span class="seg-text">I</span></div>
+<div class="seg" data-time="135.0"><span class="seg-time">02:15</span><span class="seg-text">Three E work authorization three dash</span></div>
+<div class="seg" data-time="137.64"><span class="seg-time">02:17</span><span class="seg-text">Two zero two six with own engineering for highway 44</span></div>
+<div class="seg" data-time="141.8"><span class="seg-time">02:21</span><span class="seg-text">Water line crossing and treaty road construction</span></div>
+<div class="seg" data-time="145.82"><span class="seg-time">02:25</span><span class="seg-text">Administration</span></div>
+<div class="seg" data-time="146.94"><span class="seg-time">02:26</span><span class="seg-text">And inspection not to exceed</span></div>
+<div class="seg" data-time="149.18"><span class="seg-time">02:29</span><span class="seg-text">$25,000</span></div>
+<div class="seg" data-time="150.84"><span class="seg-time">02:30</span><span class="seg-text">same type of work that they&#x27;re doing there</span></div>
+<div class="seg" data-time="152.76"><span class="seg-time">02:32</span><span class="seg-text">Spectrums materials the piping boring the safety all</span></div>
+<div class="seg" data-time="157.08"><span class="seg-time">02:37</span><span class="seg-text">That has been done</span></div>
+<div class="seg" data-time="158.04"><span class="seg-time">02:38</span><span class="seg-text">So those construction services and the billing portion that is for</span></div>
+<div class="seg" data-time="161.88"><span class="seg-time">02:41</span><span class="seg-text">The south of</span></div>
+<div class="seg" data-time="163.48"><span class="seg-time">02:43</span><span class="seg-text">Water tower then water towers on 69 a</span></div>
+<div class="seg" data-time="166.44"><span class="seg-time">02:46</span><span class="seg-text">We&#x27;re boring across in</span></div>
+<div class="seg" data-time="169.16"><span class="seg-time">02:49</span><span class="seg-text">That project we ordered to accuracy underground</span></div>
+<div class="seg" data-time="172.12"><span class="seg-time">02:52</span><span class="seg-text">To bore cross with turnpike there</span></div>
+<div class="seg" data-time="174.68"><span class="seg-time">02:54</span><span class="seg-text">It&#x27;ll feed if you guys remember</span></div>
+<div class="seg" data-time="176.52"><span class="seg-time">02:56</span><span class="seg-text">Thats what feeds</span></div>
+<div class="seg" data-time="177.56"><span class="seg-time">02:57</span><span class="seg-text">Second people are going have</span></div>
+<div class="seg" data-time="178.84"><span class="seg-time">02:58</span><span class="seg-text">Two, two</span></div>
+<div class="seg" data-time="179.4"><span class="seg-time">02:59</span><span class="seg-text">E side up</span></div>
+<div class="seg" data-time="179.88"><span class="seg-time">02:59</span><span class="seg-text">High 44</span></div>
+<div class="seg" data-time="181.16"><span class="seg-time">03:01</span><span class="seg-text">Same deal it&#x27;s an hourly</span></div>
+<div class="seg" data-time="185.82"><span class="seg-time">03:05</span><span class="seg-text">By our</span></div>
+<div class="seg" data-time="189.99"><span class="seg-time">03:09</span><span class="seg-text">Make motion.</span></div>
+<div class="seg" data-time="191.27"><span class="seg-time">03:11</span><span class="seg-text">Sorry</span></div>
+<div class="seg" data-time="192.15"><span class="seg-time">03:12</span><span class="seg-text">Hi</span></div>
+<div class="seg" data-time="194.2"><span class="seg-time">03:14</span><span class="seg-text">No</span></div>
+<div class="seg" data-time="199.5"><span class="seg-time">03:19</span><span class="seg-text">Three F discussion the possible vote on</span></div>
+<div class="seg" data-time="201.9"><span class="seg-time">03:21</span><span class="seg-text">Propetual utility easement agreement with a shoney tribe for</span></div>
+<div class="seg" data-time="205.34"><span class="seg-time">03:25</span><span class="seg-text">The installation and maintenance of</span></div>
+<div class="seg" data-time="207.18"><span class="seg-time">03:27</span><span class="seg-text">Water line located near</span></div>
+<div class="seg" data-time="209.18"><span class="seg-time">03:29</span><span class="seg-text">New 69 A water tower including an all</span></div>
+<div class="seg" data-time="211.58"><span class="seg-time">03:31</span><span class="seg-text">Including authorization</span></div>
+<div class="seg" data-time="213.18"><span class="seg-time">03:33</span><span class="seg-text">One time payment in amount</span></div>
+<div class="seg" data-time="215.1"><span class="seg-time">03:35</span><span class="seg-text">Of $5,000</span></div>
+<div class="seg" data-time="216.54"><span class="seg-time">03:36</span><span class="seg-text">And to authorize</span></div>
+<div class="seg" data-time="217.58"><span class="seg-time">03:37</span><span class="seg-text">These trust manager</span></div>
+<div class="seg" data-time="218.46"><span class="seg-time">03:38</span><span class="seg-text">To execute</span></div>
+<div class="seg" data-time="219.34"><span class="seg-time">03:39</span><span class="seg-text">All necessary documents</span></div>
+<div class="seg" data-time="221.72"><span class="seg-time">03:41</span><span class="seg-text">This is what we just talked about</span></div>
+<div class="seg" data-time="225.7"><span class="seg-time">03:45</span><span class="seg-text">This is a cross-shawny tribe</span></div>
+<div class="seg" data-time="227.62"><span class="seg-time">03:47</span><span class="seg-text">Peace of probably just south there</span></div>
+<div class="seg" data-time="229.3"><span class="seg-time">03:49</span><span class="seg-text">To the 20 quick utility easement</span></div>
+<div class="seg" data-time="231.06"><span class="seg-time">03:51</span><span class="seg-text">We are putting all water line across</span></div>
+<div class="seg" data-time="233.54"><span class="seg-time">03:53</span><span class="seg-text">For that they had their first read yesterday</span></div>
+<div class="seg" data-time="237.62"><span class="seg-time">03:57</span><span class="seg-text">On That week&#x27;s suspect</span></div>
+<div class="seg" data-time="239.38"><span class="seg-time">03:59</span><span class="seg-text">They&#x27;ll take it to</span></div>
+<div class="seg" data-time="240.74"><span class="seg-time">04:00</span><span class="seg-text">Their next move</span></div>
+<div class="seg" data-time="241.62"><span class="seg-time">04:01</span><span class="seg-text">And we don&#x27;t have both on</span></div>
+<div class="seg" data-time="242.9"><span class="seg-time">04:02</span><span class="seg-text">At at time</span></div>
+<div class="seg" data-time="247.22"><span class="seg-time">04:07</span><span class="seg-text">If not approved</span></div>
+<div class="seg" data-time="248.26"><span class="seg-time">04:08</span><span class="seg-text">Have no proof this shone</span></div>
+<div class="seg" data-time="250.02"><span class="seg-time">04:10</span><span class="seg-text">So if you guys approve</span></div>
+<div class="seg" data-time="251.38"><span class="seg-time">04:11</span><span class="seg-text">Tonight, will be able</span></div>
+<div class="seg" data-time="252.42"><span class="seg-time">04:12</span><span class="seg-text">Take It for them</span></div>
+<div class="seg" data-time="253.3"><span class="seg-time">04:13</span><span class="seg-text">Hopefully</span></div>
+<div class="seg" data-time="254.5"><span class="seg-time">04:14</span><span class="seg-text">Will get these easements</span></div>
+<div class="seg" data-time="255.38"><span class="seg-time">04:15</span><span class="seg-text">But then need</span></div>
+<div class="seg" data-time="255.94"><span class="seg-time">04:15</span><span class="seg-text">Get Across The Trump Pike</span></div>
+<div class="seg" data-time="259.29"><span class="seg-time">04:19</span><span class="seg-text">I&#x27;ll make lunch on a first</span></div>
+<div class="seg" data-time="260.65"><span class="seg-time">04:20</span><span class="seg-text">Second</span></div>
+<div class="seg" data-time="261.69"><span class="seg-time">04:21</span><span class="seg-text">Joes</span></div>
+<div class="seg" data-time="263.78"><span class="seg-time">04:23</span><span class="seg-text">Aye</span></div>
+<div class="seg" data-time="264.26"><span class="seg-time">04:24</span><span class="seg-text">E-Sess</span></div>
+<div class="seg" data-time="264.66"><span class="seg-time">04:24</span><span class="seg-text">Aye</span></div>
+<div class="seg" data-time="265.22"><span class="seg-time">04:25</span><span class="seg-text">So the fourth part</span></div>
+<div class="seg" data-time="266.34"><span class="seg-time">04:26</span><span class="seg-text">Barring</span></div>
+<div class="seg" data-time="267.54"><span class="seg-time">04:27</span><span class="seg-text">Heart</span></div>
+<div class="seg" data-time="267.78"><span class="seg-time">04:27</span><span class="seg-text">Aye</span></div>
+<div class="seg" data-time="268.86"><span class="seg-time">04:28</span><span class="seg-text">Three G</span></div>
+<div class="seg" data-time="269.74"><span class="seg-time">04:29</span><span class="seg-text">3G</span></div>
+<div class="seg" data-time="270.46"><span class="seg-time">04:30</span><span class="seg-text">Agreement with SEL</span></div>
+<div class="seg" data-time="271.98"><span class="seg-time">04:31</span><span class="seg-text">Engineering Services and Corporate</span></div>
+<div class="seg" data-time="273.34"><span class="seg-time">04:33</span><span class="seg-text">For Substitution 2</span></div>
+<div class="seg" data-time="274.46"><span class="seg-time">04:34</span><span class="seg-text">Upgrade</span></div>
+<div class="seg" data-time="275.42"><span class="seg-time">04:35</span><span class="seg-text">for The Protection</span></div>
+<div class="seg" data-time="276.86"><span class="seg-time">04:36</span><span class="seg-text">Of Buses</span></div>
+<div class="seg" data-time="278.15"><span class="seg-time">04:38</span><span class="seg-text">Transformers including Design, Installation</span></div>
+<div class="seg" data-time="280.47"><span class="seg-time">04:40</span><span class="seg-text">Equipment</span></div>
+<div class="seg" data-time="281.19"><span class="seg-time">04:41</span><span class="seg-text">And Commissioning</span></div>
+<div class="seg" data-time="282.15"><span class="seg-time">04:42</span><span class="seg-text">Not to exceed</span></div>
+<div class="seg" data-time="282.95"><span class="seg-time">04:42</span><span class="seg-text">103 500</span></div>
+<div class="seg" data-time="284.63"><span class="seg-time">04:44</span><span class="seg-text">95 dollars</span></div>
+<div class="seg" data-time="285.67"><span class="seg-time">04:45</span><span class="seg-text">So we</span></div>
+<div class="seg" data-time="288.52"><span class="seg-time">04:48</span><span class="seg-text">You guys approved your wallback</span></div>
+<div class="seg" data-time="289.96"><span class="seg-time">04:49</span><span class="seg-text">A</span></div>
+<div class="seg" data-time="291.0"><span class="seg-time">04:51</span><span class="seg-text">To read</span></div>
+<div class="seg" data-time="293.32"><span class="seg-time">04:53</span><span class="seg-text">Study on those</span></div>
+<div class="seg" data-time="294.52"><span class="seg-time">04:54</span><span class="seg-text">Relay Settings</span></div>
+<div class="seg" data-time="295.4"><span class="seg-time">04:55</span><span class="seg-text">At Sub 2</span></div>
+<div class="seg" data-time="296.04"><span class="seg-time">04:56</span><span class="seg-text">There&#x27;s two</span></div>
+<div class="seg" data-time="296.52"><span class="seg-time">04:56</span><span class="seg-text">Substitution Transformers</span></div>
+<div class="seg" data-time="298.2"><span class="seg-time">04:58</span><span class="seg-text">And in that</span></div>
+<div class="seg" data-time="299.24"><span class="seg-time">04:59</span><span class="seg-text">When we did That</span></div>
+<div class="seg" data-time="299.88"><span class="seg-time">04:59</span><span class="seg-text">They found</span></div>
+<div class="seg" data-time="300.52"><span class="seg-time">05:00</span><span class="seg-text">We Did Not Have</span></div>
+<div class="seg" data-time="301.4"><span class="seg-time">05:01</span><span class="seg-text">Ritundant</span></div>
+<div class="seg" data-time="303.05"><span class="seg-time">05:03</span><span class="seg-text">Protection</span></div>
+<div class="seg" data-time="303.69"><span class="seg-time">05:03</span><span class="seg-text">On Those</span></div>
+<div class="seg" data-time="304.09"><span class="seg-time">05:04</span><span class="seg-text">Substacion Transformers</span></div>
+<div class="seg" data-time="305.05"><span class="seg-time">05:05</span><span class="seg-text">In The Bus</span></div>
+<div class="seg" data-time="306.36"><span class="seg-time">05:06</span><span class="seg-text">And Sub</span></div>
+<div class="seg" data-time="307.16"><span class="seg-time">05:07</span><span class="seg-text">Subsequently</span></div>
+<div class="seg" data-time="308.2"><span class="seg-time">05:08</span><span class="seg-text">Setties</span></div>
+<div class="seg" data-time="309.34"><span class="seg-time">05:09</span><span class="seg-text">Suggested</span></div>
+<div class="seg" data-time="309.98"><span class="seg-time">05:09</span><span class="seg-text">This is what</span></div>
+<div class="seg" data-time="310.7"><span class="seg-time">05:10</span><span class="seg-text">What</span></div>
+<div class="seg" data-time="311.34"><span class="seg-time">05:11</span><span class="seg-text">Do</span></div>
+<div class="seg" data-time="311.9"><span class="seg-time">05:11</span><span class="seg-text">Will Save Some Money</span></div>
+<div class="seg" data-time="313.34"><span class="seg-time">05:13</span><span class="seg-text">If</span></div>
+<div class="seg" data-time="313.58"><span class="seg-time">05:13</span><span class="seg-text">You do Execute It</span></div>
+<div class="seg" data-time="314.38"><span class="seg-time">05:14</span><span class="seg-text">Now Because</span></div>
+<div class="seg" data-time="314.94"><span class="seg-time">05:14</span><span class="seg-text">I&#x27;ll be mobilized</span></div>
+<div class="seg" data-time="315.82"><span class="seg-time">05:15</span><span class="seg-text">they will</span></div>
+<div class="seg" data-time="316.54"><span class="seg-time">05:16</span><span class="seg-text">All at work</span></div>
+<div class="seg" data-time="317.1"><span class="seg-time">05:17</span><span class="seg-text">At the same time</span></div>
+<div class="seg" data-time="317.82"><span class="seg-time">05:17</span><span class="seg-text">when you&#x27;re</span></div>
+<div class="seg" data-time="318.06"><span class="seg-time">05:18</span><span class="seg-text">Are here</span></div>
+<div class="seg" data-time="318.94"><span class="seg-time">05:18</span><span class="seg-text">Updating</span></div>
+<div class="seg" data-time="319.58"><span class="seg-time">05:19</span><span class="seg-text">The settings</span></div>
+<div class="seg" data-time="320.06"><span class="seg-time">05:20</span><span class="seg-text">But</span></div>
+<div class="seg" data-time="320.54"><span class="seg-time">05:20</span><span class="seg-text">Other</span></div>
+<div class="seg" data-time="321.02"><span class="seg-time">05:21</span><span class="seg-text">Re-Lays</span></div>
+<div class="seg" data-time="321.5"><span class="seg-time">05:21</span><span class="seg-text">Plus</span></div>
+<div class="seg" data-time="322.14"><span class="seg-time">05:22</span><span class="seg-text">They&#x27;ll coordinate those</span></div>
+<div class="seg" data-time="323.18"><span class="seg-time">05:23</span><span class="seg-text">Two-Setties</span></div>
+<div class="seg" data-time="324.94"><span class="seg-time">05:24</span><span class="seg-text">Settings Together</span></div>
+<div class="seg" data-time="325.74"><span class="seg-time">05:25</span><span class="seg-text">So We There&#x27;s some</span></div>
+<div class="seg" data-time="327.1"><span class="seg-time">05:27</span><span class="seg-text">Toss savings</span></div>
+<div class="seg" data-time="327.82"><span class="seg-time">05:27</span><span class="seg-text">By Doing It At The Same Time</span></div>
+<div class="seg" data-time="329.26"><span class="seg-time">05:29</span><span class="seg-text">This also</span></div>
+<div class="seg" data-time="330.82"><span class="seg-time">05:30</span><span class="seg-text">Will</span></div>
+<div class="seg" data-time="331.7"><span class="seg-time">05:31</span><span class="seg-text">Commit Of Our Electric Budget</span></div>
+<div class="seg" data-time="334.33"><span class="seg-time">05:34</span><span class="seg-text">Thank You Motion</span></div>
+<div class="seg" data-time="336.02"><span class="seg-time">05:36</span><span class="seg-text">Where Approved</span></div>
+<div class="seg" data-time="336.9"><span class="seg-time">05:36</span><span class="seg-text">I</span></div>
+<div class="seg" data-time="339.91"><span class="seg-time">05:39</span><span class="seg-text">Thank you</span></div>
+<div class="seg" data-time="340.63"><span class="seg-time">05:40</span><span class="seg-text">So</span></div>
+<div class="seg" data-time="341.91"><span class="seg-time">05:41</span><span class="seg-text">For</span></div>
+<div class="seg" data-time="342.79"><span class="seg-time">05:42</span><span class="seg-text">Marker</span></div>
+<div class="seg" data-time="343.67"><span class="seg-time">05:43</span><span class="seg-text">All</span></div>
+<div class="seg" data-time="344.39"><span class="seg-time">05:44</span><span class="seg-text">Thank</span></div>
+<div class="seg" data-time="345.03"><span class="seg-time">05:45</span><span class="seg-text">Thank</span></div>
+<div class="seg" data-time="345.67"><span class="seg-time">05:45</span><span class="seg-text">Good work</span></div>
+<div class="seg" data-time="346.71"><span class="seg-time">05:46</span><span class="seg-text">Four Other New Business</span></div>
+<div class="seg" data-time="347.67"><span class="seg-time">05:47</span><span class="seg-text">If Any</span></div>
+<div class="seg" data-time="347.99"><span class="seg-time">05:47</span><span class="seg-text">What Has</span></div>
+<div class="seg" data-time="348.79"><span class="seg-time">05:48</span><span class="seg-text">Revresents Is Supposing</span></div>
+<div class="seg" data-time="349.83"><span class="seg-time">05:49</span><span class="seg-text">In this Agenda</span></div>
+<div class="seg" data-time="353.18"><span class="seg-time">05:53</span><span class="seg-text">Five Staff Reports</span></div>
+<div class="seg" data-time="354.62"><span class="seg-time">05:54</span><span class="seg-text">Six Trustee Community</span></div>
+<div class="seg" data-time="359.91"><span class="seg-time">05:59</span><span class="seg-text">Nounsman</span></div>
+<div class="seg" data-time="364.97"><span class="seg-time">06:04</span><span class="seg-text">Seven Trust Manager Communications</span></div>
+<div class="seg" data-time="366.89"><span class="seg-time">06:06</span><span class="seg-text">New Secretary, eight adjournment.</span></div>
 
-<section class="documents">
-<h2>📄 Full Agenda</h2>
-<div class="doc-preview">Miami Special Utility Authority (MSUA) Regular Meeting<br>MEETING DATE:     May 5, 2026<br><br>AGENDA TITLE:     Claims List<br><br>PRESENTER:        Trustees<br><br>BACKGROUND:<br><br>STAFFS RECOMMENDATION:<br><br>ATTACHMENT(S):<br>MSUA 5.5.26.pdf</div>
-</section>
-<section class="documents">
-<h2>📋 Full Minutes</h2>
-<div class="doc-preview">THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA) MET IN REGULAR SESSION ON MAY 05, 2026, IN THE<br>MIAMI CIVIC CENTER COUNCIL CHAMBERS AT 5:30PM WITH THE FOLLOWING MEMBERS PRESENT:<br>Bless Parker, Chairman Tyler Cline, Trust Manager .<br>Brian Estep, Trustee Misty Barnes, City Attorney (Absent)<br>Kevin Dunkel, Trustee Melissa Moore, City Clerk<br>Kyla Jones, Trustee Ken Williams, Outside Counsel (Hall Estill)<br>Haleigh Barnes, Trustee<br>The agenda for the meeting was displayed in the main lobby of the Miami Civic Center’and by posting on<br>www.miamiokla.net starting at 4:05PM on May 04, 2026, pursuant to 25 O.S §311(9) (a) and (b).<br>THE TRUST MAY TAKE ANY OF THE FOLLOWING ACTIONS: DISCUSS, CONSIDER AND VOTE FOR<br>APPROVAL, ACCEPTANCE, REJECTION, AMENDMENT AND/OR POSTPONEMENT OF ANY ITEM LISTED IN<br>THIS AGENDA:<br>1. Call to Order<br>Chairman Parker called the meeting to order at 5:34pm.<br>2. Public Input and Unscheduled Personal Appearances<br>None.<br>3. Discussion and Possible Action Items<br>A. Claims List<br>Trustee Estep made a motion to approve the claims. The motion was seconded by Trustee Dunkel. The<br>Trust was polled with the following results:<br>Estep, Aye Dunkel, Aye Jones, Aye Barnes, Aye Parker, Aye<br>Chairman Parker declared the motion carried.<br>B. Tetra Tech Claim for Pensacola/GRDA Relicensing in the Amount of $13,786.25<br>Tyler Cline explained that this invoice is for relicensing and some information regarding raising HWY 125<br>for Oklahoma Department of Transportation.<br>Trustee Estep made a motion to approve the Tetra Tech Claim for Pensacola/GRDA Relicensing in the<br>Amount of $13,786.25. The motion was seconded by Trustee Barnes. The Trust was polled with the<br>following results:<br>Estep, Aye Barnes, Aye Jones, Aye Dunkel, Aye Parker, Aye<br>Chairman Parker declared the motion carried.<br>C. Minutes: April 21, 2026 (Regular Meeting)<br>Trustee Jones made a motion to approve the minutes of April 21, 2026, regular meeting. The motion was<br>seconded by Trustee Barnes. The Trust was polled with the following results:<br>MSUA Page 1 of 7 May 05, 2026<br><br>Jones, Aye Barnes, Aye Estep, Aye Dunkel, Aye Parker, Aye<br><br>Chairman Parker declared the motion carried.<br>! D. Work Authorization #2-2026 With OWN Engineering for Water Treatment Plant Piping, Motor, &<br>Pump Rehab Construction, Administration, & Inspection, Not to Exceed $45,000.00<br>Derric Lollar explained that this is for the oversight and inspection of the water treatment plant piping,<br>motor & pump rehab construction. This is budgeted and the rate is a per hour basis.<br>Trustee Estep made a motion to approve the work authorization #2-2026 with OWN Engineering for water<br>| treatment plant piping, motor, & pump rehab construction, administration, & inspection, not to exceed<br>$45,000.00. The motion was seconded by Trustee Barnes. The Trust was polled with the following results:<br>| Estep, Aye Barnes, Aye Jones, Aye Dunkel, Aye Parker, Aye<br>| Chairman Parker declared the motion carried.<br>| E. Work Authorization #3-2026 With OWN Engineering for Highway 44 Waterline Crossing & Treaty<br>| Road Construction, Administration, & Inspection, Not to Exceed $25,000.00<br>Derric Lollar explained that this is for the inspection of the boring under the turnpike to Treaty Road. This<br>| is budgeted and the rate is a per hour basis.<br>I .<br>| Trustee Estep made a motion to approve the work authorization #3-2026 with OWN engineering for<br>highway 44 waterline crossing & treaty road construction, administration, & inspection, not to exceed<br>$25,000.00. The motion was seconded by Trustee Dunkel. The Trust was polled with the following results:<br>| Estep, Aye Dunkel, Aye Jones, Aye Barnes, Aye Parker, Aye<br>Chairman Parker declared the motion carried.<br>| F. Discussion and Possible Vote on a Perpetual Utility Easement Agreement With the Shawnee Tribe for<br>| « . .<br>| the Installation and Maintenance of a Water Line Located Near the new 69A Water Tower, Including<br>| Authorization of a One-time Payment in the Amount of $5,000.00, and to Authorize the Trust Manager<br>| to Execute all Necessary Documents<br>Derric Lollar explained that this is the easement for the waterline near the new water tower on 69A. The<br>| Shawnee Tribe will vote on this at their next meeting.<br>| Trustee Jones made a motion to approve the perpetual utility easement agreement with the Shawnee<br>Tribe for the installation and maintenance of a water line located near the new 69A water tower, including<br>authorization of a one-time payment in the amount of $5,000.00, and to authorize the Trust Manager to<br>execute all necessary documents. The motion was seconded by Trustee Estep. The Trust was polled with<br>the following results:<br><br>a Jones,Aye Estep, Aye Dunkel, Aye Barnes, Aye Parker, Aye<br>Chairman Parker-declared the motion carried.<br>_MSUA Page 2 of 7 ; May 05, 2026<br><br>G. Agreement With SEL Engineering Services, Inc. for Substation 2 Upgrade for the Protection of the<br>Busses and Transformers Including Design, Installation, Equipment, and Commissioning, Not to Exceed<br>$103,595.00<br>Derric Lollar explained that this is the recommendation to implement a redundancy.<br>Trustee Estep made a motion to approve the agreement with SEL Engineering Services, Inc. for substation<br>2 upgrade for the protection of the busses and transformers including design, installation, equipment,<br>and commissioning, not to exceed $103,595.00. The motion was seconded by Trustee Dunkel. The Trust<br>was polled with the following results:<br>Estep, Aye Dunkel, Aye Jones, Aye Barnes, Aye Parker, Aye<br>Chairman Parker declared the motion carried.<br>4. Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have<br>Been Anticipated Prior to the Time of Posting (25 O.S. §311(9)). This Agenda Item Could Include Possible<br>None.<br>5. Staff Reports (Written Report Included in Packet, if Available Staff is Present for Questions)<br>A. Miami Tribe Credit History<br>None.<br>6. Trustee Community Announcements<br>None.<br>7. Trust Manager’s Communications<br>None.<br>8. Adjournment<br>Trustee Estep made a motion to adjourn. Trustee Dunkel made the second. The Trust was polled with the<br>following results:<br>Estep, Aye Dunkel, Aye Barnes, Aye Jones, Aye Parker, Aye<br>Chairman Parker declared the meeting adjourned at 5:40PM.<br>/ aa Trustee Jones Trustee Dunkel<br>& ATTEST: Metron ore<br>Trustee p Chairman Bless Parker Melissa Moore, City Clerk<br>MN tee,<br>ON UT ity,<br>oO fq ‘oy<br>3/ ne) |<br>zi SEAL §<br>MSUA Page 3 of 7 “QkL AON May 05, 2026<br>“ny,<br><br>! MSUA - PURCHASE ORDERS PRESENTED</div>
-</section>
+</div>
+</div>
+</div>
 
-<footer>
-<p>ExposeMiamiOK — Holding Power Accountable</p>
-</footer>
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">📄 Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>Miami Special Utility Authority (MSUA) Regular Meeting
+MEETING DATE:     May 5, 2026
+
+AGENDA TITLE:     Claims List
+
+PRESENTER:        Trustees
+
+BACKGROUND:
+
+STAFFS RECOMMENDATION:
+
+ATTACHMENT(S):
+MSUA 5.5.26.pdf</pre></div><div class="tab-panel" id="panel-minutes"><pre>THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA) MET IN REGULAR SESSION ON MAY 05, 2026, IN THE
+MIAMI CIVIC CENTER COUNCIL CHAMBERS AT 5:30PM WITH THE FOLLOWING MEMBERS PRESENT:
+Bless Parker, Chairman Tyler Cline, Trust Manager .
+Brian Estep, Trustee Misty Barnes, City Attorney (Absent)
+Kevin Dunkel, Trustee Melissa Moore, City Clerk
+Kyla Jones, Trustee Ken Williams, Outside Counsel (Hall Estill)
+Haleigh Barnes, Trustee
+The agenda for the meeting was displayed in the main lobby of the Miami Civic Center’and by posting on
+www.miamiokla.net starting at 4:05PM on May 04, 2026, pursuant to 25 O.S §311(9) (a) and (b).
+THE TRUST MAY TAKE ANY OF THE FOLLOWING ACTIONS: DISCUSS, CONSIDER AND VOTE FOR
+APPROVAL, ACCEPTANCE, REJECTION, AMENDMENT AND/OR POSTPONEMENT OF ANY ITEM LISTED IN
+THIS AGENDA:
+1. Call to Order
+Chairman Parker called the meeting to order at 5:34pm.
+2. Public Input and Unscheduled Personal Appearances
+None.
+3. Discussion and Possible Action Items
+A. Claims List
+Trustee Estep made a motion to approve the claims. The motion was seconded by Trustee Dunkel. The
+Trust was polled with the following results:
+Estep, Aye Dunkel, Aye Jones, Aye Barnes, Aye Parker, Aye
+Chairman Parker declared the motion carried.
+B. Tetra Tech Claim for Pensacola/GRDA Relicensing in the Amount of $13,786.25
+Tyler Cline explained that this invoice is for relicensing and some information regarding raising HWY 125
+for Oklahoma Department of Transportation.
+Trustee Estep made a motion to approve the Tetra Tech Claim for Pensacola/GRDA Relicensing in the
+Amount of $13,786.25. The motion was seconded by Trustee Barnes. The Trust was polled with the
+following results:
+Estep, Aye Barnes, Aye Jones, Aye Dunkel, Aye Parker, Aye
+Chairman Parker declared the motion carried.
+C. Minutes: April 21, 2026 (Regular Meeting)
+Trustee Jones made a motion to approve the minutes of April 21, 2026, regular meeting. The motion was
+seconded by Trustee Barnes. The Trust was polled with the following results:
+MSUA Page 1 of 7 May 05, 2026
+
+Jones, Aye Barnes, Aye Estep, Aye Dunkel, Aye Parker, Aye
+
+Chairman Parker declared the motion carried.
+! D. Work Authorization #2-2026 With OWN Engineering for Water Treatment Plant Piping, Motor, &amp;
+Pump Rehab Construction, Administration, &amp; Inspection, Not to Exceed $45,000.00
+Derric Lollar explained that this is for the oversight and inspection of the water treatment plant piping,
+motor &amp; pump rehab construction. This is budgeted and the rate is a per hour basis.
+Trustee Estep made a motion to approve the work authorization #2-2026 with OWN Engineering for water
+| treatment plant piping, motor, &amp; pump rehab construction, administration, &amp; inspection, not to exceed
+$45,000.00. The motion was seconded by Trustee Barnes. The Trust was polled with the following results:
+| Estep, Aye Barnes, Aye Jones, Aye Dunkel, Aye Parker, Aye
+| Chairman Parker declared the motion carried.
+| E. Work Authorization #3-2026 With OWN Engineering for Highway 44 Waterline Crossing &amp; Treaty
+| Road Construction, Administration, &amp; Inspection, Not to Exceed $25,000.00
+Derric Lollar explained that this is for the inspection of the boring under the turnpike to Treaty Road. This
+| is budgeted and the rate is a per hour basis.
+I .
+| Trustee Estep made a motion to approve the work authorization #3-2026 with OWN engineering for
+highway 44 waterline crossing &amp; treaty road construction, administration, &amp; inspection, not to exceed
+$25,000.00. The motion was seconded by Trustee Dunkel. The Trust was polled with the following results:
+| Estep, Aye Dunkel, Aye Jones, Aye Barnes, Aye Parker, Aye
+Chairman Parker declared the motion carried.
+| F. Discussion and Possible Vote on a Perpetual Utility Easement Agreement With the Shawnee Tribe for
+| « . .
+| the Installation and Maintenance of a Water Line Located Near the new 69A Water Tower, Including
+| Authorization of a One-time Payment in the Amount of $5,000.00, and to Authorize the Trust Manager
+| to Execute all Necessary Documents
+Derric Lollar explained that this is the easement for the waterline near the new water tower on 69A. The
+| Shawnee Tribe will vote on this at their next meeting.
+| Trustee Jones made a motion to approve the perpetual utility easement agreement with the Shawnee
+Tribe for the installation and maintenance of a water line located near the new 69A water tower, including
+authorization of a one-time payment in the amount of $5,000.00, and to authorize the Trust Manager to
+execute all necessary documents. The motion was seconded by Trustee Estep. The Trust was polled with
+the following results:
+
+a Jones,Aye Estep, Aye Dunkel, Aye Barnes, Aye Parker, Aye
+Chairman Parker-declared the motion carried.
+_MSUA Page 2 of 7 ; May 05, 2026
+
+G. Agreement With SEL Engineering Services, Inc. for Substation 2 Upgrade for the Protection of the
+Busses and Transformers Including Design, Installation, Equipment, and Commissioning, Not to Exceed
+$103,595.00
+Derric Lollar explained that this is the recommendation to implement a redundancy.
+Trustee Estep made a motion to approve the agreement with SEL Engineering Services, Inc. for substation
+2 upgrade for the protection of the busses and transformers including design, installation, equipment,
+and commissioning, not to exceed $103,595.00. The motion was seconded by Trustee Dunkel. The Trust
+was polled with the following results:
+Estep, Aye Dunkel, Aye Jones, Aye Barnes, Aye Parker, Aye
+Chairman Parker declared the motion carried.
+4. Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have
+Been Anticipated Prior to the Time of Posting (25 O.S. §311(9)). This Agenda Item Could Include Possible
+None.
+5. Staff Reports (Written Report Included in Packet, if Available Staff is Present for Questions)
+A. Miami Tribe Credit History
+None.
+6. Trustee Community Announcements
+None.
+7. Trust Manager’s Communications
+None.
+8. Adjournment
+Trustee Estep made a motion to adjourn. Trustee Dunkel made the second. The Trust was polled with the
+following results:
+Estep, Aye Dunkel, Aye Barnes, Aye Jones, Aye Parker, Aye
+Chairman Parker declared the meeting adjourned at 5:40PM.
+/ aa Trustee Jones Trustee Dunkel
+&amp; ATTEST: Metron ore
+Trustee p Chairman Bless Parker Melissa Moore, City Clerk
+MN tee,
+ON UT ity,
+oO fq ‘oy
+3/ ne) |
+zi SEAL §
+MSUA Page 3 of 7 “QkL AON May 05, 2026
+“ny,
+
+! MSUA - PURCHASE ORDERS PRESENTED</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>All right, we&#x27;ll call it the MSUA meeting for Tuesday May 5th 2026. The game put on scheduled personal appearances with a none three discussion possible action On 3A claims list? Most true proof I&#x27;m all five. James Hards Hi Three B Tetra Tech Cline for Penscola Giordea, we&#x27;re licensing in amount of 13 thousand 786 dollars and 25 cents Yes sir so this is four some are that tetrotech has done our re-licensing they have also done some work for us For the how we 125 Road Race permission to vote on so this is just that invoice I&#x27;m going make a motion. We approve Hi Jones, Doc Gold Park All right three C minutes from April 21st 2026 regular meeting So, Joe? Jones Hi All right three D work authorization two dash zero to six with own engineering for water treatment plant piping motor and pump rehab construction administration And inspection not took seed forty five thousand dollars there Good evening board this is four just what it says For the one treatment plan where we approve For the construction down there this before for them to put a construction services with him too overseen inspect Work that&#x27;s being done under it is an hourly It was body hour so its not took seat 45 thousand on This budget Its, come out of our budget Out-of-our Budget and Contropecial Services thank you I&#x27;ll make a motion we approve Second Hi I Three E work authorization three dash Two zero two six with own engineering for highway 44 Water line crossing and treaty road construction Administration And inspection not to exceed $25,000 same type of work that they&#x27;re doing there Spectrums materials the piping boring the safety all That has been done So those construction services and the billing portion that is for The south of Water tower then water towers on 69 a We&#x27;re boring across in That project we ordered to accuracy underground To bore cross with turnpike there It&#x27;ll feed if you guys remember Thats what feeds Second people are going have Two, two E side up High 44 Same deal it&#x27;s an hourly By our Make motion. Sorry Hi No Three F discussion the possible vote on Propetual utility easement agreement with a shoney tribe for The installation and maintenance of Water line located near New 69 A water tower including an all Including authorization One time payment in amount Of $5,000 And to authorize These trust manager To execute All necessary documents This is what we just talked about This is a cross-shawny tribe Peace of probably just south there To the 20 quick utility easement We are putting all water line across For that they had their first read yesterday On That week&#x27;s suspect They&#x27;ll take it to Their next move And we don&#x27;t have both on At at time If not approved Have no proof this shone So if you guys approve Tonight, will be able Take It for them Hopefully Will get these easements But then need Get Across The Trump Pike I&#x27;ll make lunch on a first Second Joes Aye E-Sess Aye So the fourth part Barring Heart Aye Three G 3G Agreement with SEL Engineering Services and Corporate For Substitution 2 Upgrade for The Protection Of Buses Transformers including Design, Installation Equipment And Commissioning Not to exceed 103 500 95 dollars So we You guys approved your wallback A To read Study on those Relay Settings At Sub 2 There&#x27;s two Substitution Transformers And in that When we did That They found We Did Not Have Ritundant Protection On Those Substacion Transformers In The Bus And Sub Subsequently Setties Suggested This is what What Do Will Save Some Money If You do Execute It Now Because I&#x27;ll be mobilized they will All at work At the same time when you&#x27;re Are here Updating The settings But Other Re-Lays Plus They&#x27;ll coordinate those Two-Setties Settings Together So We There&#x27;s some Toss savings By Doing It At The Same Time This also Will Commit Of Our Electric Budget Thank You Motion Where Approved I Thank you So For Marker All Thank Thank Good work Four Other New Business If Any What Has Revresents Is Supposing In this Agenda Five Staff Reports Six Trustee Community Nounsman Seven Trust Manager Communications New Secretary, eight adjournment.</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>Miami Special Utility Authority (MSUA) Regular Meeting
+MEETING DATE:     May 5, 2026
+
+AGENDA TITLE:     Claims List
+
+PRESENTER:        Trustees
+
+BACKGROUND:
+
+STAFFS RECOMMENDATION:
+
+ATTACHMENT(S):
+MSUA 5.5.26.pdf</pre></div></div><div><h3>Official Minutes</h3><div class="doc-panel"><pre>THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA) MET IN REGULAR SESSION ON MAY 05, 2026, IN THE
+MIAMI CIVIC CENTER COUNCIL CHAMBERS AT 5:30PM WITH THE FOLLOWING MEMBERS PRESENT:
+Bless Parker, Chairman Tyler Cline, Trust Manager .
+Brian Estep, Trustee Misty Barnes, City Attorney (Absent)
+Kevin Dunkel, Trustee Melissa Moore, City Clerk
+Kyla Jones, Trustee Ken Williams, Outside Counsel (Hall Estill)
+Haleigh Barnes, Trustee
+The agenda for the meeting was displayed in the main lobby of the Miami Civic Center’and by posting on
+www.miamiokla.net starting at 4:05PM on May 04, 2026, pursuant to 25 O.S §311(9) (a) and (b).
+THE TRUST MAY TAKE ANY OF THE FOLLOWING ACTIONS: DISCUSS, CONSIDER AND VOTE FOR
+APPROVAL, ACCEPTANCE, REJECTION, AMENDMENT AND/OR POSTPONEMENT OF ANY ITEM LISTED IN
+THIS AGENDA:
+1. Call to Order
+Chairman Parker called the meeting to order at 5:34pm.
+2. Public Input and Unscheduled Personal Appearances
+None.
+3. Discussion and Possible Action Items
+A. Claims List
+Trustee Estep made a motion to approve the claims. The motion was seconded by Trustee Dunkel. The
+Trust was polled with the following results:
+Estep, Aye Dunkel, Aye Jones, Aye Barnes, Aye Parker, Aye
+Chairman Parker declared the motion carried.
+B. Tetra Tech Claim for Pensacola/GRDA Relicensing in the Amount of $13,786.25
+Tyler Cline explained that this invoice is for relicensing and some information regarding raising HWY 125
+for Oklahoma Department of Transportation.
+Trustee Estep made a motion to approve the Tetra Tech Claim for Pensacola/GRDA Relicensing in the
+Amount of $13,786.25. The motion was seconded by Trustee Barnes. The Trust was polled with the
+following results:
+Estep, Aye Barnes, Aye Jones, Aye Dunkel, Aye Parker, Aye
+Chairman Parker declared the motion carried.
+C. Minutes: April 21, 2026 (Regular Meeting)
+Trustee Jones made a motion to approve the minutes of April 21, 2026, regular meeting. The motion was
+seconded by Trustee Barnes. The Trust was polled with the following results:
+MSUA Page 1 of 7 May 05, 2026
+
+Jones, Aye Barnes, Aye Estep, Aye Dunkel, Aye Parker, Aye
+
+Chairman Parker declared the motion carried.
+! D. Work Authorization #2-2026 With OWN Engineering for Water Treatment Plant Piping, Motor, &amp;
+Pump Rehab Construction, Administration, &amp; Inspection, Not to Exceed $45,000.00
+Derric Lollar explained that this is for the oversight and inspection of the water treatment plant piping,
+motor &amp; pump rehab construction. This is budgeted and the rate is a per hour basis.
+Trustee Estep made a motion to approve the work authorization #2-2026 with OWN Engineering for water
+| treatment plant piping, motor, &amp; pump rehab construction, administration, &amp; inspection, not to exceed
+$45,000.00. The motion was seconded by Trustee Barnes. The Trust was polled with the following results:
+| Estep, Aye Barnes, Aye Jones, Aye Dunkel, Aye Parker, Aye
+| Chairman Parker declared the motion carried.
+| E. Work Authorization #3-2026 With OWN Engineering for Highway 44 Waterline Crossing &amp; Treaty
+| Road Construction, Administration, &amp; Inspection, Not to Exceed $25,000.00
+Derric Lollar explained that this is for the inspection of the boring under the turnpike to Treaty Road. This
+| is budgeted and the rate is a per hour basis.
+I .
+| Trustee Estep made a motion to approve the work authorization #3-2026 with OWN engineering for
+highway 44 waterline crossing &amp; treaty road construction, administration, &amp; inspection, not to exceed
+$25,000.00. The motion was seconded by Trustee Dunkel. The Trust was polled with the following results:
+| Estep, Aye Dunkel, Aye Jones, Aye Barnes, Aye Parker, Aye
+Chairman Parker declared the motion carried.
+| F. Discussion and Possible Vote on a Perpetual Utility Easement Agreement With the Shawnee Tribe for
+| « . .
+| the Installation and Maintenance of a Water Line Located Near the new 69A Water Tower, Including
+| Authorization of a One-time Payment in the Amount of $5,000.00, and to Authorize the Trust Manager
+| to Execute all Necessary Documents
+Derric Lollar explained that this is the easement for the waterline near the new water tower on 69A. The
+| Shawnee Tribe will vote on this at their next meeting.
+| Trustee Jones made a motion to approve the perpetual utility easement agreement with the Shawnee
+Tribe for the installation and maintenance of a water line located near the new 69A water tower, including
+authorization of a one-time payment in the amount of $5,000.00, and to authorize the Trust Manager to
+execute all necessary documents. The motion was seconded by Trustee Estep. The Trust was polled with
+the following results:
+
+a Jones,Aye Estep, Aye Dunkel, Aye Barnes, Aye Parker, Aye
+Chairman Parker-declared the motion carried.
+_MSUA Page 2 of 7 ; May 05, 2026
+
+G. Agreement With SEL Engineering Services, Inc. for Substation 2 Upgrade for the Protection of the
+Busses and Transformers Including Design, Installation, Equipment, and Commissioning, Not to Exceed
+$103,595.00
+Derric Lollar explained that this is the recommendation to implement a redundancy.
+Trustee Estep made a motion to approve the agreement with SEL Engineering Services, Inc. for substation
+2 upgrade for the protection of the busses and transformers including design, installation, equipment,
+and commissioning, not to exceed $103,595.00. The motion was seconded by Trustee Dunkel. The Trust
+was polled with the following results:
+Estep, Aye Dunkel, Aye Jones, Aye Barnes, Aye Parker, Aye
+Chairman Parker declared the motion carried.
+4. Other New Business, if any, Which has Arisen Since the Posting of the Agenda and Could not Have
+Been Anticipated Prior to the Time of Posting (25 O.S. §311(9)). This Agenda Item Could Include Possible
+None.
+5. Staff Reports (Written Report Included in Packet, if Available Staff is Present for Questions)
+A. Miami Tribe Credit History
+None.
+6. Trustee Community Announcements
+None.
+7. Trust Manager’s Communications
+None.
+8. Adjournment
+Trustee Estep made a motion to adjourn. Trustee Dunkel made the second. The Trust was polled with the
+following results:
+Estep, Aye Dunkel, Aye Barnes, Aye Jones, Aye Parker, Aye
+Chairman Parker declared the meeting adjourned at 5:40PM.
+/ aa Trustee Jones Trustee Dunkel
+&amp; ATTEST: Metron ore
+Trustee p Chairman Bless Parker Melissa Moore, City Clerk
+MN tee,
+ON UT ity,
+oO fq ‘oy
+3/ ne) |
+zi SEAL §
+MSUA Page 3 of 7 “QkL AON May 05, 2026
+“ny,
+
+! MSUA - PURCHASE ORDERS PRESENTED</pre></div></div></div></div></div>
+</div>
+
+<footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
 
 <script>
-function seekTo(seconds) {
-    var iframe = document.querySelector('iframe');
-    if (iframe && iframe.contentWindow) {
-        // Try to seek the Granicus player
-        try {
-            var url = new URL(iframe.src);
-            url.searchParams.set('t', seconds);
-            iframe.src = url.toString();
-        } catch(e) {}
+var audio = document.getElementById('audio-player');
+var segments = document.querySelectorAll('.seg');
+var activeSeg = null;
+
+function seekTo(time) {
+  if (audio) { audio.currentTime = time; audio.play(); }
+  highlightSeg(time);
+}
+
+function highlightSeg(time) {
+  segments.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.querySelector('.seg[data-time="' + time + '"]');
+  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
+}
+
+segments.forEach(function(seg) {
+  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
+});
+
+if (audio) {
+  audio.addEventListener('timeupdate', function() {
+    var t = audio.currentTime;
+    var best = null, bestTime = -1;
+    segments.forEach(function(s) {
+      var st = parseFloat(s.dataset.time);
+      if (st <= t && st > bestTime) { bestTime = st; best = s; }
+    });
+    if (best && best !== activeSeg) {
+      segments.forEach(function(s) { s.classList.remove('active'); });
+      best.classList.add('active');
+      activeSeg = best;
+      var rect = best.getBoundingClientRect();
+      var container = document.getElementById('transcript-scroll');
+      var cRect = container.getBoundingClientRect();
+      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
+        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
+  });
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>
