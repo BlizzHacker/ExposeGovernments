@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Court Records Search | ExposeMiamiOK</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0a1a;color:#e0e0e0;line-height:1.6}
+header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);padding:30px;text-align:center;border-bottom:3px solid #c41e3a}
+header h1{color:#c41e3a;font-size:1.8em}
+header p{color:#aaa;margin-top:5px;font-size:.95em}
+.nav-bar{background:#111;padding:10px 20px;border-bottom:1px solid #333;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;position:sticky;top:0;z-index:100}
+.nav-bar a{color:#c41e3a;text-decoration:none;font-weight:600;font-size:.9em;padding:4px 8px;border-radius:4px;transition:background .2s}
+.nav-bar a:hover{background:rgba(196,30,58,.15);color:#ff4466}
+.container{max-width:900px;margin:0 auto;padding:20px}
+.search-box{background:#1a1a2e;border:1px solid #333;border-radius:12px;padding:25px;margin:20px 0}
+.search-box h2{color:#c41e3a;margin-bottom:10px}
+.search-box p{color:#999;font-size:.9em;margin-bottom:15px}
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px}
+.form-row label{display:block;color:#aaa;font-size:.85em;margin-bottom:4px}
+.form-row input,.form-row select{width:100%;padding:10px;background:#0a0a1a;border:1px solid #333;border-radius:6px;color:#e0e0e0;font-size:.95em}
+.form-row input:focus,.form-row select:focus{border-color:#c41e3a;outline:none}
+.search-btn{background:#c41e3a;color:white;border:none;padding:12px 30px;border-radius:8px;font-size:1em;font-weight:600;cursor:pointer;width:100%;margin-top:10px}
+.search-btn:hover{background:#e02040}
+.search-btn:disabled{opacity:.5;cursor:wait}
+#court-results{margin-top:20px}
+.result-card{background:#16213e;border:1px solid #333;border-radius:8px;padding:15px;margin-bottom:10px}
+.result-card h4{color:#44aaff;margin-bottom:5px}
+.result-card p{color:#ccc;font-size:.9em}
+.result-card a{color:#c41e3a}
+.oscn-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+.oscn-links a{background:#0f3460;color:#88aacc;padding:6px 14px;border-radius:6px;text-decoration:none;font-size:.85em;font-weight:600}
+.oscn-links a:hover{background:#1a4a80;color:white}
+.source-note{background:rgba(255,255,255,.05);border-radius:8px;padding:15px;margin-top:20px;font-size:.85em;color:#888}
+footer{text-align:center;padding:25px;color:#555;border-top:1px solid #222;margin-top:30px;font-size:.85em}
+</style>
+</head>
+<body>
+<header>
+<h1>⚖️ Court Records Search</h1>
+<p>Search Oklahoma court records — appellate, Supreme Court, and trial court cases</p>
+</header>
+<div class="nav-bar">
+  <a href="/">🏠 Home</a>
+  <a href="/meetings/">📋 Meetings</a>
+  <a href="/resources/">📁 Resources</a>
+  <a href="/blog/">📰 Blog</a>
+  <a href="/court-search/">⚖️ Court Search</a>
+  <a href="/youtube.html">📺 YouTube</a>
+  <a href="https://www.facebook.com/profile.php?id=61590391534875" target="_blank">📘 Facebook</a>
+</div>
+
+<div class="container">
+
+<div class="search-box">
+<h2>🔍 Search Oklahoma Court Cases</h2>
+<p>Search by name or case number across CourtListener (appellate/Supreme Court) and get direct links to OSCN trial courts.</p>
+<form onsubmit="searchCourt(event)" id="court-search-form">
+  <div class="form-row">
+    <div><label>Last Name *</label><input type="text" id="osc-last" placeholder="e.g. Smith" required></div>
+    <div><label>First Name</label><input type="text" id="osc-first" placeholder="e.g. John"></div>
+    <div><label>Case Number</label><input type="text" id="osc-case" placeholder="e.g. CF-2024-123"></div>
+  </div>
+  <div class="form-row">
+    <div><label>County</label>
+      <select id="osc-county">
+        <option value="ottawa">Ottawa County</option>
+        <option value="oklahoma">Oklahoma County</option>
+        <option value="tulsa">Tulsa County</option>
+        <option value="cleveland">Cleveland County</option>
+        <option value="comanche">Comanche County</option>
+        <option value="canadian">Canadian County</option>
+        <option value="payne">Payne County</option>
+        <option value="pottawatomie">Pottawatomie County</option>
+        <option value="creek">Creek County</option>
+        <option value="rogers">Rogers County</option>
+        <option value="wagoner">Wagoner County</option>
+      </select>
+    </div>
+  </div>
+  <button type="submit" class="search-btn" id="court-search-btn">🔍 Search Court Records</button>
+</form>
+<div id="court-results"></div>
+</div>
+
+<h3 style="color:#c41e3a;margin:25px 0 10px">🔗 Direct OSCN Trial Court Links</h3>
+<p style="color:#999;font-size:.9em;margin-bottom:10px">Jump directly to county-level trial court searches:</p>
+<div class="oscn-links">
+  <a href="https://www.oscn.net/dockets/Search.aspx?db=ottawa" target="_blank">Ottawa County</a>
+  <a href="https://www.oscn.net/dockets/Search.aspx?db=oklahoma" target="_blank">Oklahoma County</a>
+  <a href="https://www.oscn.net/dockets/Search.aspx?db=tulsa" target="_blank">Tulsa County</a>
+  <a href="https://www.oscn.net/dockets/Search.aspx?db=cleveland" target="_blank">Cleveland County</a>
+  <a href="https://www.oscn.net/dockets/Search.aspx?db=comanche" target="_blank">Comanche County</a>
+  <a href="https://www.oscn.net/dockets/Search.aspx?db=canadian" target="_blank">Canadian County</a>
+  <a href="https://www.oscn.net/dockets/Search.aspx?db=payne" target="_blank">Payne County</a>
+  <a href="https://www.oscn.net/dockets/Search.aspx?db=creek" target="_blank">Creek County</a>
+  <a href="https://www.oscn.net/dockets/Search.aspx?db=rogers" target="_blank">Rogers County</a>
+  <a href="https://www.oscn.net/dockets/Search.aspx?db=wagoner" target="_blank">Wagoner County</a>
+</div>
+
+<div class="source-note">
+  <strong>Sources:</strong> CourtListener (appellate/Supreme Court cases) | 
+  <a href="https://www.oscn.net/applications/oscn/index.asp?ftdb=STOKCV01&level=1" target="_blank" style="color:#c41e3a">OSCN Direct Search →</a>
+  <br><small>OSCN trial court records may require solving a CAPTCHA. Use the direct links above for county-level trial court cases.</small>
+</div>
+
+</div>
+
+<footer>
+  <p>ExposeMiamiOK.com — Community transparency project</p>
+  <p style="margin-top:5px">Court records sourced from <a href="https://www.courtlistener.com" style="color:#c41e3a" target="_blank">CourtListener</a> and <a href="https://www.oscn.net" style="color:#c41e3a" target="_blank">OSCN</a></p>
+</footer>
+
+<script>
+async function searchCourt(e) {
+  e.preventDefault();
+  const btn = document.getElementById('court-search-btn');
+  const results = document.getElementById('court-results');
+  const last = document.getElementById('osc-last').value.trim();
+  const first = document.getElementById('osc-first').value.trim();
+  const caseNum = document.getElementById('osc-case').value.trim();
+  const county = document.getElementById('osc-county').value;
+  
+  btn.disabled = true;
+  btn.textContent = '⏳ Searching...';
+  results.innerHTML = '';
+  
+  try {
+    let query = '';
+    if (caseNum) query = caseNum;
+    else if (last) query = last + (first ? ' ' + first : '');
+    
+    const resp = await fetch('https://www.exposemiamiok.com:5055/api/search?q=' + encodeURIComponent(query) + '&county=' + county);
+    const data = await resp.json();
+    
+    if (data.error) {
+      results.innerHTML = '<div class="result-card"><p style="color:#ff4466">Error: ' + data.error + '</p></div>';
+    } else if (data.results && data.results.length > 0) {
+      let html = '<h3 style="color:#44aaff;margin-bottom:10px">Found ' + data.results.length + ' results</h3>';
+      data.results.forEach(r => {
+        html += '<div class="result-card">';
+        html += '<h4>' + (r.case_name || r.title || 'Unknown Case') + '</h4>';
+        if (r.case_number) html += '<p><strong>Case #:</strong> ' + r.case_number + '</p>';
+        if (r.court) html += '<p><strong>Court:</strong> ' + r.court + '</p>';
+        if (r.date_filed) html += '<p><strong>Filed:</strong> ' + r.date_filed + '</p>';
+        if (r.url) html += '<p><a href="' + r.url + '" target="_blank">View Case →</a></p>';
+        html += '</div>';
+      });
+      results.innerHTML = html;
+    } else {
+      results.innerHTML = '<div class="result-card"><p>No results found. Try searching directly on <a href="https://www.oscn.net/dockets/Search.aspx?db=' + county + '" target="_blank" style="color:#c41e3a">OSCN ' + county.charAt(0).toUpperCase() + county.slice(1) + ' County →</a></p></div>';
+    }
+  } catch(err) {
+    results.innerHTML = '<div class="result-card"><p style="color:#ff4466">Search failed: ' + err.message + '</p><p>Try <a href="https://www.oscn.net/dockets/Search.aspx?db=' + county + '" target="_blank" style="color:#c41e3a">OSCN Direct Search →</a></p></div>';
+  }
+  
+  btn.disabled = false;
+  btn.textContent = '🔍 Search Court Records';
+}
+</script>
+</body>
+</html>
