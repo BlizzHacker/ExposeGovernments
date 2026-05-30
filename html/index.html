@@ -30,13 +30,28 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .hdr-ctrls select,.hdr-ctrls button{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:.8rem}
 
 /* HAMBURGER */
-@media(min-width:900px){}
+.ham{display:flex;flex-direction:column;gap:5px;cursor:pointer;padding:8px;z-index:1002}
+.ham span{width:22px;height:2.5px;background:var(--text);border-radius:2px;transition:.3s}
+.ham.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.ham.active span:nth-child(2){opacity:0}
+.ham.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+@media(min-width:900px){.ham{display:none}}
 
 /* DRAWER NAV */
+.drawer{position:fixed;top:0;left:0;width:280px;height:100vh;background:var(--bg2);transform:translateX(-100%);transition:transform .3s;z-index:1001;overflow-y:auto;border-right:1px solid var(--border);padding-top:70px}
+.drawer.open{transform:translateX(0)}
+.drawer a{display:block;padding:14px 20px;color:var(--text);font-weight:500;border-bottom:1px solid var(--border);font-size:.95rem}
+.drawer a:hover{background:var(--bg3);color:var(--accent);text-decoration:none}
+.drawer-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:1000;display:none}
+.drawer-overlay.show{display:block}
 
 /* DESKTOP NAV */
+.dnav{display:none;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;white-space:nowrap;scrollbar-width:none;position:sticky;top:64px;z-index:999;box-shadow:var(--shadow)}
 .dnav::-webkit-scrollbar{display:none}
-@media(min-width:900px){}
+.dnav-inner{max-width:1200px;margin:0 auto;display:flex}
+.dnav a{padding:12px 16px;color:var(--text);font-weight:500;font-size:.85rem;border-bottom:3px solid transparent;white-space:nowrap}
+.dnav a:hover{color:var(--accent);border-bottom-color:var(--accent);text-decoration:none}
+@media(min-width:900px){.dnav{display:block}}
 
 /* HERO */
 .hero{background:var(--bg2);padding:2rem 1rem;border-bottom:1px solid var(--border)}
@@ -201,8 +216,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:2rem 1re
         <option value="fr">🇫🇷 FR</option>
       </select>
       <button id="theme-btn" title="Toggle theme">☀️</button>
-      
-
 <div class="nav-bar">
   <a href="/">🏠 Home</a>
   <a href="/meetings/">📋 Meetings</a>
@@ -212,6 +225,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:2rem 1re
   <a href="/youtube.html">📺 YouTube</a>
   <a href="https://www.facebook.com/profile.php?id=61590391534875" target="_blank">📘 Facebook</a>
 </div>
+
+<!-- DESKTOP NAV -->
+</nav>
 
 <!-- HERO VIDEO -->
 <section class="hero">
@@ -377,12 +393,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:2rem 1re
       <p>Under the Oklahoma Open Records Act, you have the right to access public government records.</p>
       <a href="https://www.miamiok.gov/FAQ.aspx?QID=13" target="_blank" class="card-link">How to Request →</a>
     </div>
-  </div>
-
-  <!-- EXPANDED CITY SERVICES (from miamiok.gov) -->
-  <div style="margin-top:2rem">
-  <!-- Additional city services -->
-  <div class="grid" style="margin-top:2rem">
     <div class="card">
       <div class="card-icon">🏗️</div>
       <h3>Building Permits</h3>
@@ -460,18 +470,50 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:2rem 1re
       <a href="/ottawa-county.html" class="card-link">County Guide →</a>
     </div>
   </div>
+</section>
 
 <!-- COURT SEARCH -->
-
-<!-- Court search moved to dedicated page -->
-<section id="court-link" class="section">
-  <div class="sec-hdr"><span class="sec-icon">⚖️</span><h2 class="sec-title">Court Records</h2></div>
-  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center">
-    <p style="color:var(--text2);margin-bottom:1rem">Search Oklahoma court records — appellate, Supreme Court, and trial court cases across all counties.</p>
-    <a href="/court-search/" class="btn btn-red" style="text-decoration:none;padding:10px 24px;border-radius:8px;font-weight:600">🔍 Open Court Search →</a>
-    <p style="color:var(--text2);margin-top:1rem;font-size:.85em">Sources: CourtListener | <a href="https://www.oscn.net" target="_blank" style="color:var(--accent)">OSCN</a></p>
+<section id="court" class="section">
+  <div class="sec-hdr"><span class="sec-icon">⚖️</span><h2 class="sec-title">Court Records Search</h2></div>
+  <div class="search-box">
+    <h3>Search Oklahoma Court Cases</h3>
+    <p style="color:var(--text2);font-size:.85rem;margin-bottom:1rem">Search Oklahoma court records from multiple sources. Results appear below — no redirects.</p>
+    <form onsubmit="searchCourt(event)" id="court-search-form">
+      <div class="form-row">
+        <div><label>Last Name *</label><input type="text" id="osc-last" placeholder="e.g. Smith" required></div>
+        <div><label>First Name</label><input type="text" id="osc-first" placeholder="e.g. John"></div>
+        <div><label>Case Number</label><input type="text" id="osc-case" placeholder="e.g. CF-2024-123"></div>
+      </div>
+      <div class="form-row" style="margin-top:.5rem">
+        <div><label>County</label>
+          <select id="osc-county">
+            <option value="ottawa">Ottawa County</option>
+            <option value="oklahoma">Oklahoma County</option>
+            <option value="tulsa">Tulsa County</option>
+            <option value="cleveland">Cleveland County</option>
+            <option value="comanche">Comanche County</option>
+            <option value="canadian">Canadian County</option>
+            <option value="payne">Payne County</option>
+            <option value="pottawatomie">Pottawatomie County</option>
+            <option value="creek">Creek County</option>
+            <option value="rogers">Rogers County</option>
+            <option value="wagoner">Wagoner County</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="search-btn" id="court-search-btn">🔍 Search Court Records</button>
+    </form>
+    <div id="court-results" style="margin-top:1.5rem"></div>
+    <div style="margin-top:1rem;padding:1rem;background:rgba(255,255,255,0.05);border-radius:8px;font-size:.82rem;color:var(--text2)">
+      <strong>Sources:</strong> CourtListener (appellate/Supreme Court) | 
+      <a href="https://www.oscn.net/applications/oscn/index.asp?ftdb=STOKCV01&level=1" target="_blank" style="color:var(--accent)">OSCN Direct Search →</a>
+      <br><small>OSCN trial court records may require solving a CAPTCHA. Use the direct links above for county-level trial court cases.</small>
+    </div>
   </div>
 </section>
+
+<!-- UTILITIES -->
+<section id="utilities" class="section">
   <div class="sec-hdr"><span class="sec-icon">🔌</span><h2 class="sec-title">Utilities & Services</h2></div>
   <div class="grid-2" style="display:grid;gap:1rem">
     <div class="util-card">
@@ -733,6 +775,8 @@ themeBtn.textContent=savedTheme==='dark'?'☀️':'🌙';
 themeBtn.addEventListener('click',()=>{const t=document.body.getAttribute('data-theme');const n=t==='dark'?'light':'dark';document.body.setAttribute('data-theme',n);localStorage.setItem('theme',n);themeBtn.textContent=n==='dark'?'☀️':'🌙'});
 
 // DRAWER
+function toggleDrawer(){document.getElementById('drawer').classList.toggle('open');document.getElementById('overlay').classList.toggle('show');document.getElementById('ham').classList.toggle('active')}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('show');document.getElementById('ham').classList.remove('active')}
 
 // OSCN SEARCH
 async function searchCourt(e){
