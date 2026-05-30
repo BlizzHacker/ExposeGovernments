@@ -79,6 +79,24 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a1a;color:#e0e0e
 #logged-in span{color:#aaa;font-size:.9em}
 .logout-link{color:#888;font-size:.8em}
 @media(max-width:600px){.share-btn{padding:6px 10px;font-size:.8em}.auth-form input{min-width:120px}}
+
+/* DRAWER NAV (mobile) */
+.drawer{position:fixed;top:0;left:0;width:280px;height:100vh;background:var(--bg2);transform:translateX(-100%);transition:transform .3s;z-index:1001;overflow-y:auto;border-right:1px solid var(--border);padding-top:70px}
+.drawer.open{transform:translateX(0)}
+.drawer a{display:block;padding:14px 20px;color:var(--text);font-weight:500;border-bottom:1px solid var(--border);font-size:.95rem}
+.drawer a:hover{background:var(--bg3);color:var(--accent);text-decoration:none}
+.drawer-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:1000;display:none}
+.drawer-overlay.show{display:block}
+/* DESKTOP NAV */
+.dnav{display:none;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;white-space:nowrap;scrollbar-width:none;position:sticky;top:64px;z-index:999;box-shadow:var(--shadow)}
+.dnav::-webkit-scrollbar{display:none}
+.dnav-inner{max-width:1200px;margin:0 auto;display:flex}
+.dnav a{padding:12px 16px;color:var(--text);font-weight:500;font-size:.85rem;border-bottom:3px solid transparent;white-space:nowrap}
+.dnav a:hover{color:var(--accent);border-bottom-color:var(--accent);text-decoration:none}
+@media(min-width:900px){.dnav{display:block}}
+.ham{display:flex;flex-direction:column;gap:5px;cursor:pointer;padding:8px;z-index:1002}
+.ham span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
+@media(min-width:900px){.ham{display:none}}
 </style>
 </head>
 <body>
@@ -89,16 +107,46 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a1a;color:#e0e0e
       <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:var(--text2)">Community Resources & Transparency</div></div>
     </a>
   </div>
+  <div class="ham" id="ham" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+    </div>
+  </div>
 </header>
-<div style="background:#111;padding:10px 20px;border-bottom:1px solid #333;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;position:sticky;top:64px;z-index:100">
-  <a href="/" style="color:#c41e3a;text-decoration:none;font-weight:600;font-size:.9em;padding:4px 8px;border-radius:4px">🏠 Home</a>
-  <a href="/meetings/" style="color:#c41e3a;text-decoration:none;font-weight:600;font-size:.9em;padding:4px 8px;border-radius:4px">📋 Meetings</a>
-  <a href="/resources/" style="color:#c41e3a;text-decoration:none;font-weight:600;font-size:.9em;padding:4px 8px;border-radius:4px">📁 Resources</a>
-  <a href="/blog/" style="color:#c41e3a;text-decoration:none;font-weight:600;font-size:.9em;padding:4px 8px;border-radius:4px">📰 Blog</a>
-  <a href="/court-search/" style="color:#c41e3a;text-decoration:none;font-weight:600;font-size:.9em;padding:4px 8px;border-radius:4px">⚖️ Court Search</a>
-  <a href="/youtube.html" style="color:#c41e3a;text-decoration:none;font-weight:600;font-size:.9em;padding:4px 8px;border-radius:4px">📺 YouTube</a>
-  <a href="https://www.facebook.com/profile.php?id=61590391534875" target="_blank" style="color:#c41e3a;text-decoration:none;font-weight:600;font-size:.9em;padding:4px 8px;border-radius:4px">📘 Facebook</a>
-</div>
+
+<div class="drawer-overlay" id="overlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawer">
+  <a href="/" onclick="closeDrawer()">🏠 Home</a>
+  <a href="/#resources" onclick="closeDrawer()">🏛️ City Resources</a>
+  <a href="/#court" onclick="closeDrawer()">⚖️ Court Search</a>
+  <a href="/#utilities" onclick="closeDrawer()">🔌 Utilities</a>
+  <a href="/#media" onclick="closeDrawer()">📡 Media & Feed</a>
+  <a href="/#corruption" onclick="closeDrawer()">🔍 Corruption Archive</a>
+  <a href="/#map" onclick="closeDrawer()">🗺️ Area Map</a>
+  <a href="/#about" onclick="closeDrawer()">ℹ️ About</a>
+  <a href="/meetings/" onclick="closeDrawer()">📋 Meeting Transcripts</a>
+  <a href="/blog/" onclick="closeDrawer()">📰 Blog</a>
+  <a href="/ottawa-county.html" onclick="closeDrawer()">🏛️ Ottawa County Guide</a>
+  <a href="/youtube.html" onclick="closeDrawer()">📺 YouTube Channel</a>
+  <a href="https://www.facebook.com/profile.php?id=61590391534875" target="_blank" onclick="closeDrawer()">📘 Facebook Page</a>
+  <a href="/videos.html" onclick="closeDrawer()">📹 All Videos</a>
+</nav>
+
+<nav class="dnav">
+  <div class="dnav-inner">
+    <a href="/">Home</a>
+    <a href="/#resources">City Resources</a>
+    <a href="/#court">Court Search</a>
+    <a href="/#utilities">Utilities</a>
+    <a href="/#media">Media & Feed</a>
+    <a href="/#corruption">Corruption Archive</a>
+    <a href="/#map">Area Map</a>
+    <a href="/meetings/">Transcripts</a>
+    <a href="/blog/">Blog</a>
+    <a href="/ottawa-county.html">Ottawa County</a>
+    <a href="/youtube.html">YouTube</a>
+    <a href="https://www.facebook.com/profile.php?id=61590391534875" target="_blank">Facebook</a>
+    <a href="/#about">About</a>
+  </div>
+</nav>
 
 <div class="header">
   <img src="/images/logo-256.png" alt="ExposeMiamiOK">
@@ -213,6 +261,12 @@ function doLogout(){localStorage.removeItem('emok_token');localStorage.removeIte
 function showLoggedIn(n){document.getElementById('login-form').style.display='none';document.getElementById('register-form').style.display='none';document.getElementById('logged-in').style.display='flex';document.getElementById('current-user').textContent=n}
 async function postComment(){var input=document.getElementById('comment-input'),c=input.value.trim();if(!c)return;try{var r=await fetch('/api/comments/'+PAGE_ID,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+authToken},body:JSON.stringify({content:c})});var d=await r.json();if(!r.ok){alert(d.error||'Error');return}input.value='';loadComments()}catch(e){alert('Network error')}}
 async function loadComments(){try{var r=await fetch('/api/comments/'+PAGE_ID);var cs=await r.json();var list=document.getElementById('comments-list');if(!cs.length){list.innerHTML='<p style="color:#666;font-size:.9em">No comments yet. Be the first!</p>';return}list.innerHTML=cs.map(function(c){var d=new Date(c.created_at);var ds=d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});var t=c.content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');return '<div class="comment-item"><div class="comment-header"><span class="comment-user">'+c.username+'</span><span class="comment-date">'+ds+'</span></div><div class="comment-text">'+t+'</div></div>'}).join('')}catch(e){}}
+</script>
+
+
+<script>
+function toggleDrawer(){document.getElementById('drawer').classList.toggle('open');document.getElementById('overlay').classList.toggle('show')}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('show')}
 </script>
 
 </body>
