@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 Jun 20, 2023</span>
-<span>⏱️ 00h 22m</span>
-<span>🔖 Clip #490</span>
+<span>&#128197; Jun 20, 2023</span>
+<span>&#9201;&#65039; 00h 22m</span>
+<span>&#128278; Clip #490</span>
+<span class="disc-badge">&#9888;&#65039; 2 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/490" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (10.1 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (10.1 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.09"><span class="seg-time">00:00</span><span class="seg-text">Tuesday June 20, 2023. Who have the implications for pastor from various church to the Phil jars?</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.09"><span class="seg-time">00:00</span><span class="seg-text">Tuesday June 20, 2023. Who have the implications for pastor from various church to the Phil jars?</span></div>
 <div class="seg" data-time="8.37"><span class="seg-time">00:08</span><span class="seg-text">Thank you Mayor as I was sitting here and looked at this sign that my first time being in a district part</span></div>
 <div class="seg" data-time="13.37"><span class="seg-time">00:13</span><span class="seg-text">is it&#x27;s Miami talking about your signing up there having spirit opportunity envisioned</span></div>
 <div class="seg" data-time="20.35"><span class="seg-time">00:20</span><span class="seg-text">and I just want to say that, look around up most of you all the parking heads.</span></div>
@@ -436,12 +431,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="1308.68"><span class="seg-time">21:48</span><span class="seg-text">And staff room for the purpose of executive session</span></div>
 <div class="seg" data-time="1311.68"><span class="seg-time">21:51</span><span class="seg-text">Packer agenda on 16 is a regular scheduled meeting</span></div>
 <div class="seg" data-time="1314.95"><span class="seg-time">21:54</span><span class="seg-text">I m sick count</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (2)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">$378.84</span><span class="disc-item">$8010</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Tuesday, June 20, 2023
 6:00
@@ -508,7 +501,7 @@ The Meeting Will be Reconvened in the Staff Room After the Executive Session of 
 *Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 16                         Trustees
 19.
 *Action Item* Adjournment                                                        Trustees
-The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Tuesday June 20, 2023. Who have the implications for pastor from various church to the Phil jars? Thank you Mayor as I was sitting here and looked at this sign that my first time being in a district part is it&#x27;s Miami talking about your signing up there having spirit opportunity envisioned and I just want to say that, look around up most of you all the parking heads. And i really feel good about where we are right now as administration this time . We...I&#x27;d like us on a prayer for God gives me the wisdom encourage To lead With The Collective ... .. Wisdom One with another That can bring our community back what it once was in greater So if he would bow with me father we thank you for leadership I understand Lord from your word that good Leadership is a blessing to the lord and bad It&#x27;s definitely brings curse on people So Father, ask God You just annoy each one of these leaders The heads whether it has administrative legal whatever These council members represent their Constituents Lord We need this asked god God, give us wisdom to lead Guide and direct And Lord make my end of the best thing it can be in your hands In Your name ... Amen Thank you ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... So mayer On the claims list This particular meeting on page 3 5 Under The pollution control section there is An invoice therefore needs Comprehend Which was installed pre-engineering Root For 27,788 I would recommend Council pull that one out of Claims and vote for it separately to avoid any conflict Okay They&#x27;ll be all out of Nice Cool Man Looking for Moshin on the rest The claim So, just to approve The sign Aye Okay Then we&#x27;d like motion 局 To improve Distraction Claim For pen On My Commercial And I&#x27;m going Comprehend six minutes from June 5th 2020 to regular meeting. Second, hi Hi 40 December Parker five seven DL Stacken Edmunds and Palmer Colleen for GERDI relaxing seeing the amount of $810 May I remember your counsel? Uh this claim is four services rendered From April 20 2003 To may 12 2023 Um With This claim, if approved it would leave a balance in that budgeted and the budget of $378.84 so obviously there&#x27;s money enough to be available for this I&#x27;d ask you approval from your $8010 which was primarily services responding emails as well staff Thank you. Okay, except it&#x27;s a power line relocation on 520th road utility easemips from Auto County rural water district Ricky at least he apes James Franklin and Catherine Louise Williams Herium, herum. E in standard of price and Steven Earl Hodge My name is Jason Halle I&#x27;m from Wilson we were here a couple months ago to kick off this project We&#x27;ve obtained these easemips for you at no cost And trying get signature on those as well As got the utility room before The County We also need some signatures and I&#x27;ll still get no rise so we ask the two On that one is our last county Could you just approve this one or The next one Any question for anyone? Is there a right way at No cost, does it have any norm You are very good yards to accommodate their want of fishes in desires Second Aye E set Aye No, a power line relocation 520th road utility relocation agreement with Oklahoma Department of Transportation Oedock and Auto County Commissioner But this together on the estimate we need to assign it in the county so you can get your project That&#x27;s for me. Second Hi Thank You Those fees all that they give reimbursement All of you Everything right And want all that all the public Your eyes out and teach Yeah, some big deal We did emergency and a lot for emergency purchases according to section 2-33 bit process Emergency purchases at these solid waste transfer station Brian Brassfield The emergency purchases according to section 2-33 bit process Emergency purchases 1 a solid waste transfer station Give you little background we are requesting To get your approval on the emergency status Just be able We have more flexibility in completing fire and remediation While within today&#x27;s time of wastewater The solid waste department separately since in losses on June 7 Due to the fire Facility will not be able To take personal advice from citizens until after June 22 We were thinking about pushing back another week Continue picking up trash during all this time Sending loads out of the more land full side Fire radiation The fire was in the building Was wiring, lights Dorm motors to control doors Insulation Possible roof issues Some burnt places In one of those I saw the loader And possible spripped or system issues As far as equipment goes The loader was completely towed And that solid waste best loader It is in the fire They are currently using a backup loader Another one who&#x27;s previously ordered and we actually just got it at But, another back up loaded would be essential to operations So solving ways needs flexibility To expedite purchases It may be possible in the same instances If they do not impede a safe working environment Excellent service lines and standard flow of revenue So </pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>Tuesday June 20, 2023. Who have the implications for pastor from various church to the Phil jars? Thank you Mayor as I was sitting here and looked at this sign that my first time being in a district part is it&#x27;s Miami talking about your signing up there having spirit opportunity envisioned and I just want to say that, look around up most of you all the parking heads. And i really feel good about where we are right now as administration this time . We...I&#x27;d like us on a prayer for God gives me the wisdom encourage To lead With The Collective ... .. Wisdom One with another That can bring our community back what it once was in greater So if he would bow with me father we thank you for leadership I understand Lord from your word that good Leadership is a blessing to the lord and bad It&#x27;s definitely brings curse on people So Father, ask God You just annoy each one of these leaders The heads whether it has administrative legal whatever These council members represent their Constituents Lord We need this asked god God, give us wisdom to lead Guide and direct And Lord make my end of the best thing it can be in your hands In Your name ... Amen Thank you ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... So mayer On the claims list This particular meeting on page 3 5 Under The pollution control section there is An invoice therefore needs Comprehend Which was installed pre-engineering Root For 27,788 I would recommend Council pull that one out of Claims and vote for it separately to avoid any conflict Okay They&#x27;ll be all out of Nice Cool Man Looking for Moshin on the rest The claim So, just to approve The sign Aye Okay Then we&#x27;d like motion 局 To improve Distraction Claim For pen On My Commercial And I&#x27;m going Comprehend six minutes from June 5th 2020 to regular meeting. Second, hi Hi 40 December Parker five seven DL Stacken Edmunds and Palmer Colleen for GERDI relaxing seeing the amount of $810 May I remember your counsel? Uh this claim is four services rendered From April 20 2003 To may 12 2023 Um With This claim, if approved it would leave a balance in that budgeted and the budget of <mark>$378.84</mark> so obviously there&#x27;s money enough to be available for this I&#x27;d ask you approval from your <mark>$8010</mark> which was primarily services responding emails as well staff Thank you. Okay, except it&#x27;s a power line relocation on 520th road utility easemips from Auto County rural water district Ricky at least he apes James Franklin and Catherine Louise Williams Herium, herum. E in standard of price and Steven Earl Hodge My name is Jason Halle I&#x27;m from Wilson we were here a couple months ago to kick off this project We&#x27;ve obtained these easemips for you at no cost And trying get signature on those as well As got the utility room before The County We also need some signatures and I&#x27;ll still get no rise so we ask the two On that one is our last county Could you just approve this one or The next one Any question for anyone? Is there a right way at No cost, does it have any norm You are very good yards to accommodate their want of fishes in desires Second Aye E set Aye No, a power line relocation 520th road utility relocation agreement with Oklahoma Department of Transportation Oedock and Auto County Commissioner But this together on the estimate we need to assign it in the county so you can get your project That&#x27;s for me. Second Hi Thank You Those fees all that they give reimbursement All of you Everything right And want all that all the public Your eyes out and teach Yeah, some big deal We did emergency and a lot for emergency purchases according to section 2-33 bit process Emergency purchases at these solid waste transfer station Brian Brassfield The emergency purchases according to section 2-33 bit process Emergency purchases 1 a solid waste transfer station Give you little background we are requesting To get your approval on the emergency status Just be able We have more flexibility in completing fire and remediation While within today&#x27;s time of wastewater The solid waste department separately since in losses on June 7 Due to the fire Facility will not be able To take personal advice from citizens until after June 22 We were thinking about pushing back another week Continue picking up trash during all this time Sending loads out of the more land full side Fire radiation The fire was in the building Was wiring, lights Dorm motors to control doors Insulation Possible roof issues Some burnt places In one of those I saw the loader And possible spripped or system issues As far as equipment goes The loader was completely towed And that solid waste best loader It is in the fire They are currently using a backup loader Another one who&#x27;s previously ordered and we actually just got it at But, another back up loaded would be essential to operations So solving ways needs flexibility To expedite purchases It may be possible in the same instances If they do not impede a safe working environment Excellent service lines and standard flow of revenue So </pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Tuesday, June 20, 2023
 6:00
@@ -577,57 +570,8 @@ The Meeting Will be Reconvened in the Staff Room After the Executive Session of 
 *Action Item* Adjournment                                                        Trustees
 The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

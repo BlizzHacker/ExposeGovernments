@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami City Council</h1>
 <div class="meeting-meta">
-<span>📅 Apr 21, 2026</span>
-<span>⏱️ 00h 17m</span>
-<span>🔖 Clip #669</span>
+<span>&#128197; Apr 21, 2026</span>
+<span>&#9201;&#65039; 00h 17m</span>
+<span>&#128278; Clip #669</span>
+<span class="disc-badge">&#9888;&#65039; 1 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/669" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (8.0 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (8.0 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="2.33"><span class="seg-time">00:02</span><span class="seg-text">We&#x27;ve got the record scheduled to meet in my city council for Tuesday April 21, 2020.</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="2.33"><span class="seg-time">00:02</span><span class="seg-text">We&#x27;ve got the record scheduled to meet in my city council for Tuesday April 21, 2020.</span></div>
 <div class="seg" data-time="7.33"><span class="seg-time">00:07</span><span class="seg-text">We&#x27;ve got, we&#x27;re just going to skip the three where I move.</span></div>
 <div class="seg" data-time="11.66"><span class="seg-time">00:11</span><span class="seg-text">Do you?</span></div>
 <div class="seg" data-time="13.96"><span class="seg-time">00:13</span><span class="seg-text">Public input at your hand</span></div>
@@ -384,12 +379,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="1030.74"><span class="seg-time">17:10</span><span class="seg-text">Thank you</span></div>
 <div class="seg" data-time="1033.85"><span class="seg-time">17:13</span><span class="seg-text">Thank You for the for our third day motion</span></div>
 <div class="seg" data-time="1039.13"><span class="seg-time">17:19</span><span class="seg-text">Motion</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">📄 Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>ye ae; me
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (1)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">&#128196; Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">$10,000</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>ye ae; me
 &amp; NE Pees a. e
 NGS
 Qian coy
@@ -1160,7 +1153,7 @@ April 21, 2026
 TOTAL GOVERNMENTAL FUNDS $ 453,543.79
 
 Council Page 9 of 9 April 21, 2026
-</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>We&#x27;ve got the record scheduled to meet in my city council for Tuesday April 21, 2020. We&#x27;ve got, we&#x27;re just going to skip the three where I move. Do you? Public input at your hand Three A claims list Most two proofs High 3B minutes from April 7th 2020-26 regular meeting Second Jones Barron High High 3C does an eight-todd Barnes to be the authorized agent for The O.K M F M R F retirement plan Cindy? Hi, Mr. So as you know at this point I&#x27;m going on a retire here in just about weeks and I am currently the authorized agent for our city employee plan and so So, why need to pass that To Todd Barnes To be our designated authorised agents. What That person does is make sure all of them in real much forms get Cindy-in everything gets processed And nothing changes As you are a gravity body For retirement plans We authorize it and marry only to sign the document. Congratulations on your time over our next year though Thank you I should be approve Second Item 4, other new business if in which is a Business that&#x27;s supposed me as agenda five staff reports six Merit Council community announcements seven city manager communications eight This meeting will now begin from council chambers read To me in the staff room for purpose of executive session. Sorry, I moved public comment to then so we&#x27;re going back up before After exactly So what is it about with common after Make a motion You just gonna declare a set Just declare a set You can set it at 7.09 I&#x27;d like to make a motion We table the item discussing executive session tonight What meeting we pay for Do you want to choose Excuse me Item 5 No All right, and welcome That&#x27;s not in that way moved which is public input With the bottom two Public input We have Mr. Rick Aldridge Please give the podium to your name Thanks Rick, I&#x27;m concerned Citizen Reason on here this evening Think we all know what understand that issues That it&#x27;s been going in Here is been sitting around our mayor We&#x27;re in the mayor&#x27;s 17 years And most of that has been under The 2-2 age of mayor Bless Parker we met quite a few Years ago precove it Worked together He is going to be strong supporter Which Taking care people on St. The access to be able the use facilities We need that To make sure we can help people He is an absolute super star when it comes As a person in this city Like any City you&#x27;re going Have people disagree But so much success I&#x27;ll debate with anybody on that Roads are an issue I&#x27;m going to discuss this We have a few years I am frustrated that we Have To do it because of things But everybody knows Everybody does know It&#x27;s in the room There is nothing but prestige This city We are talking about We&#x27;re talking About other states They see what we do Bless does And that man loves this city There is not a person around That he&#x27;s in the position for I can&#x27;t stand The stuff being dragged It needs to be ashamed of themselves And I doubt Seriously that most of the people in this city Can go without any a plum Blum-blumish mark On their background There is morality or anything like That It&#x27;s our mayor doesn&#x27;t mean He has his family man Any leader Just disgusting Find something out I&#x27;m going to talk about What&#x27;s in the closet We&#x27;ll be talking About what is inside I will tell you The damage of family If they are doing it It isn&#x27;t just for blessing They say It&#x27;s absolutely disgusting again Give me a break Honestly I&#x27;m going to talk about The right side of what we&#x27;ve done in this city Look at the people that they have We&#x27;re sitting here looking Putting them through a microscope Everybody put me Through my school And you&#x27;ll find stuff Who cares? With bottom line This is not It&#x27;s called journalism So I could applaud that man For what he did today That is journalism Not just punk Frap, it&#x27;s going on People want to get clicks and give paid for It all about My page so i can do the money in a world Thanks for your time I&#x27;m going To make sure I&#x27;ve been here for 56 years and 27 days My I&#x27;m a town that until February of 1986 Had to term into employer we all knew it was BF good rich Bless happens To be two days older than i am Those were dark days There&#x27;s been 25-30 years work The Dark Days following Bus Parker spent more time Effort, thankless hours Promoting the causes Than any mayor The house was in 2019 and got to work with Ruti Until bless Respected Bless loves my Emma He shows it as actions every time he has an opportunity For people the take-blast on that is corrupt or underhanded Proves they don&#x27;t know Bless hasn t opinion And mum has a date of share With you This is citizens youth Home builders he&#x27;s done hundreds No one in my lifetime has worked harder to promote the city of My Emma It sickened me To have people with little-to no goal except Create doubt this content and be able To potentially stir up People against The one warrior bless that had been a face And such a good place is we are right now Dismissing this Crap show but i don&#x27;t want to take anything There&#x27;s no long time There s the developers cal</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>ye ae; me
+</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>We&#x27;ve got the record scheduled to meet in my city council for Tuesday April 21, 2020. We&#x27;ve got, we&#x27;re just going to skip the three where I move. Do you? Public input at your hand Three A claims list Most two proofs High 3B minutes from April 7th 2020-26 regular meeting Second Jones Barron High High 3C does an eight-todd Barnes to be the authorized agent for The O.K M F M R F retirement plan Cindy? Hi, Mr. So as you know at this point I&#x27;m going on a retire here in just about weeks and I am currently the authorized agent for our city employee plan and so So, why need to pass that To Todd Barnes To be our designated authorised agents. What That person does is make sure all of them in real much forms get Cindy-in everything gets processed And nothing changes As you are a gravity body For retirement plans We authorize it and marry only to sign the document. Congratulations on your time over our next year though Thank you I should be approve Second Item 4, other new business if in which is a Business that&#x27;s supposed me as agenda five staff reports six Merit Council community announcements seven city manager communications eight This meeting will now begin from council chambers read To me in the staff room for purpose of executive session. Sorry, I moved public comment to then so we&#x27;re going back up before After exactly So what is it about with common after Make a motion You just gonna declare a set Just declare a set You can set it at 7.09 I&#x27;d like to make a motion We table the item discussing executive session tonight What meeting we pay for Do you want to choose Excuse me Item 5 No All right, and welcome That&#x27;s not in that way moved which is public input With the bottom two Public input We have Mr. Rick Aldridge Please give the podium to your name Thanks Rick, I&#x27;m concerned Citizen Reason on here this evening Think we all know what understand that issues That it&#x27;s been going in Here is been sitting around our mayor We&#x27;re in the mayor&#x27;s 17 years And most of that has been under The 2-2 age of mayor Bless Parker we met quite a few Years ago precove it Worked together He is going to be strong supporter Which Taking care people on St. The access to be able the use facilities We need that To make sure we can help people He is an absolute super star when it comes As a person in this city Like any City you&#x27;re going Have people disagree But so much success I&#x27;ll debate with anybody on that Roads are an issue I&#x27;m going to discuss this We have a few years I am frustrated that we Have To do it because of things But everybody knows Everybody does know It&#x27;s in the room There is nothing but prestige This city We are talking about We&#x27;re talking About other states They see what we do Bless does And that man loves this city There is not a person around That he&#x27;s in the position for I can&#x27;t stand The stuff being dragged It needs to be ashamed of themselves And I doubt Seriously that most of the people in this city Can go without any a plum Blum-blumish mark On their background There is morality or anything like That It&#x27;s our mayor doesn&#x27;t mean He has his family man Any leader Just disgusting Find something out I&#x27;m going to talk about What&#x27;s in the closet We&#x27;ll be talking About what is inside I will tell you The damage of family If they are doing it It isn&#x27;t just for blessing They say It&#x27;s absolutely disgusting again Give me a break Honestly I&#x27;m going to talk about The right side of what we&#x27;ve done in this city Look at the people that they have We&#x27;re sitting here looking Putting them through a microscope Everybody put me Through my school And you&#x27;ll find stuff Who cares? With bottom line This is not It&#x27;s called journalism So I could applaud that man For what he did today That is journalism Not just punk Frap, it&#x27;s going on People want to get clicks and give paid for It all about My page so i can do the money in a world Thanks for your time I&#x27;m going To make sure I&#x27;ve been here for 56 years and 27 days My I&#x27;m a town that until February of 1986 Had to term into employer we all knew it was BF good rich Bless happens To be two days older than i am Those were dark days There&#x27;s been 25-30 years work The Dark Days following Bus Parker spent more time Effort, thankless hours Promoting the causes Than any mayor The house was in 2019 and got to work with Ruti Until bless Respected Bless loves my Emma He shows it as actions every time he has an opportunity For people the take-blast on that is corrupt or underhanded Proves they don&#x27;t know Bless hasn t opinion And mum has a date of share With you This is citizens youth Home builders he&#x27;s done hundreds No one in my lifetime has worked harder to promote the city of My Emma It sickened me To have people with little-to no goal except Create doubt this content and be able To potentially stir up People against The one warrior bless that had been a face And such a good place is we are right now Dismissing this Crap show but i don&#x27;t want to take anything There&#x27;s no long time There s the developers cal</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>ye ae; me
 &amp; NE Pees a. e
 NGS
 Qian coy
@@ -1221,7 +1214,7 @@ Session
 The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens
 and if special assistance or accommodations are required, please submit your request to the City Manager&#x27;s
 office. We also ask that those in attendance place all electronic devices on silent. Thank you.
-</pre></div></div><div><h3>Official Minutes</h3><div class="doc-panel"><pre>THE MIAMI CITY COUNCIL MET IN REGULAR SESSION ON APRIL 21, 2026, IN THE MIAMI CIVIC CENTER
+</pre></div></div><div><h3>&#128196; Official Minutes</h3><div class="doc-panel"><pre>THE MIAMI CITY COUNCIL MET IN REGULAR SESSION ON APRIL 21, 2026, IN THE MIAMI CIVIC CENTER
 COUNCIL CHAMBERS AT 5:30PM WITH THE FOLLOWING MEMBERS PRESENT:
 
 Bless Parker, Mayor Tyler Cline, City Manager
@@ -1933,57 +1926,8 @@ TOTAL GOVERNMENTAL FUNDS $ 453,543.79
 Council Page 9 of 9 April 21, 2026
 </pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

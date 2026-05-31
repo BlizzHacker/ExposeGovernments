@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 Apr  7, 2026</span>
-<span>⏱️ 00h 19m</span>
-<span>🔖 Clip #666</span>
+<span>&#128197; Apr  7, 2026</span>
+<span>&#9201;&#65039; 00h 19m</span>
+<span>&#128278; Clip #666</span>
+<span class="disc-badge">&#9888;&#65039; 2 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/666" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (9.0 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (9.0 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.02"><span class="seg-time">00:00</span><span class="seg-text">Church Mr. Herb Young, let&#x27;s pray Father God we thank you for this day and got us your blessings in</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.02"><span class="seg-time">00:00</span><span class="seg-text">Church Mr. Herb Young, let&#x27;s pray Father God we thank you for this day and got us your blessings in</span></div>
 <div class="seg" data-time="85.72"><span class="seg-time">01:25</span><span class="seg-text">the next week for their third and final extension. Mr Ron Brassville?</span></div>
 <div class="seg" data-time="90.24"><span class="seg-time">01:30</span><span class="seg-text">Yes, we&#x27;ve been doing business with these guys now this will be</span></div>
 <div class="seg" data-time="94.24"><span class="seg-time">01:34</span><span class="seg-text">there last extention</span></div>
@@ -477,12 +472,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="1170.12"><span class="seg-time">19:30</span><span class="seg-text">The regular meeting</span></div>
 <div class="seg" data-time="1171.1"><span class="seg-time">19:31</span><span class="seg-text">At the moment</span></div>
 <div class="seg" data-time="1172.12"><span class="seg-time">19:32</span><span class="seg-text">MIP at A</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">📄 Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>Miami Special Utility Authority (MSUA) Regular Meeting
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (2)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">&#128196; Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">8.5%</span><span class="disc-item">4.4%</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>Miami Special Utility Authority (MSUA) Regular Meeting
 MEETING DATE:        April 7, 2026
 
 AGENDA TITLE:        Claims List
@@ -2764,7 +2757,7 @@ $0.00
 $474.51
 
 April 07, 2026
-</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Church Mr. Herb Young, let&#x27;s pray Father God we thank you for this day and got us your blessings in the next week for their third and final extension. Mr Ron Brassville? Yes, we&#x27;ve been doing business with these guys now this will be there last extention And it seems like its just another day when We got started by a bit of Tyler brought up everything But both The BFI &amp; One that does transportation which is Stella They go 1% to 3%, again they did last year Consumer Price is at 4, it&#x27;s a little higher than that So thats within the range and fact there are lower Than That but we would like your approval so We can keep on working with those guys Also theres chance if something got out of hand We could basically in the contract By giving days that can do The same thing With what prices and big no one on everything I think a 3% increase is It&#x27;s Its final extension Yes Because we gave 31 year extensions available So, first of all they go And then they get 3 extensions or available Extensions and we&#x27;ve done the first 2 This is of course, last one How much might it be? 8.5% On BFI It was at 2450 Another thing There&#x27;s a bond that passed there That They put up for People to vote on Increased To go到 To go to the dollar 50 So when you take The 2450 It all With 3% increase it brings Upto 29.11 For example, $5 209-10 Because thats something we have built in DeGover We&#x27;ve got other options And if If 4 for next year And if we thought that the prices We&#x27;re going to be dropping in things If You could put it out for a bit I don&#x27;t see Prices drop any time soon But you know, Don´t have a crystal ball We&#x27;ll say We&#x27;ve all It&#x27;s like 90 I mean he gets 19 into 2200 So when looking at $100 We get We could have that option Well the Concentration I send X is 4 plus They&#x27;re just given a 3% increase There&#x27;s The hauling Which this one Is for This For Just land fill fees Next we&#x27;ll be To To look at Fort August Increased per time And just Or the tipping Bees Looking at It&#x27;s adding an additional $50 per time for the fees And this brings The fee to 320 To 4601 So it is For 61 on top But that´s what New taxes They&#x27;re paying That they voted Increasing and The three% increase On Which was 2 24 50 We have Three percent We&#x27;re going to go Shave With the CPI What they were Offering And we just said It&#x27;s what Last year To It was higher than 3% This is The land fill I&#x27;m in Because it has a cost Can&#x27;t Just increase To That should help cover So that Yeah for this to happen. We knew that was going happened because of what the contract will be so you&#x27;ve already got a disability it&#x27;s been there, we&#x27;re not asking but I mean if just had time and year did come back up next week or go out before where they&#x27;ll get contracts trying with those extensions are building don&#x27;t have solicit bids If but it also makes a good because we can get this off. But what you could budget for, is that when would go after bed and depends on whats going in the world? It might be higher or maybe lower at time so... 5E of contract C-2390B saw waste transportation fee with Stella &amp; Bartnell services to third final extension With still on transportation the CPI came in at 4.4% they wanted to 3 percent increase if If They delivered To Prairie View It&#x27;s 2782 and Goat O&#x27;Row 2597 it is a three-percent increased And its very similar Its exactly like We approved last year A3 % Increase We started getting this for the first 7 years How much money is that? It&#x27;s like I&#x27;d liked to know Obviously we can all do math but there are nothing weird To math Yeah, no matter how expensive it gets in yeah That sounds good So i think you&#x27;re all going have a same question as if You could last Yes How many more of these costs and thats really what were concerned about obviously Can be allowed or better If 5-percent 5% 5.5 5,425 That&#x27;s 84 or five Equipment Project 2 power and tail For components 1 to And 5 Which is included in their Bid packet In TheirBid Pack Not To exceed 97830 Ten cents Authorities Trust Manager The SQT Contract Intention Upon Legal View So Go ahead On this one We&#x27;re only awarding Components 1,2 and 5 Which is mostly Fiber Wire Different types The Bits Parts That will hook everything up And all that&#x27;s mainly What in One 2 &amp;5 3 Bitters Come In Heal it in Pack Or TheirBidios on the paperwork But they&#x27;re actually in partnership with Power and Tail So Power &amp; Tail came In With 97832 Ten for this The next Bid Or Techline did not bid the right bed They put I think Equipment Is what So they&#x27;re not even a viable candidate And then K-Licks Had it It had a late bed We couldn&#x27;t accept If 10 seconds off Being able to receive You can Cannt take In Under State Statutes Um so Anyway To go with Power &amp; Tail For the 9783210 There&#x27;s 3 other components of this That were that Powered to have did not bid on One of them is a virtual machine where And we already They didn&#x27;t bid On the component These other components Didnnt commit On it We are used Some In getting pricing for The components How Playing on satisfy</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>Miami Special Utility Authority (MSUA) Regular Meeting
+</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>Church Mr. Herb Young, let&#x27;s pray Father God we thank you for this day and got us your blessings in the next week for their third and final extension. Mr Ron Brassville? Yes, we&#x27;ve been doing business with these guys now this will be there last extention And it seems like its just another day when We got started by a bit of Tyler brought up everything But both The BFI &amp; One that does transportation which is Stella They go 1% to 3%, again they did last year Consumer Price is at 4, it&#x27;s a little higher than that So thats within the range and fact there are lower Than That but we would like your approval so We can keep on working with those guys Also theres chance if something got out of hand We could basically in the contract By giving days that can do The same thing With what prices and big no one on everything I think a 3% increase is It&#x27;s Its final extension Yes Because we gave 31 year extensions available So, first of all they go And then they get 3 extensions or available Extensions and we&#x27;ve done the first 2 This is of course, last one How much might it be? <mark>8.5%</mark> On BFI It was at 2450 Another thing There&#x27;s a bond that passed there That They put up for People to vote on Increased To go到 To go to the dollar 50 So when you take The 2450 It all With 3% increase it brings Upto 29.11 For example, $5 209-10 Because thats something we have built in DeGover We&#x27;ve got other options And if If 4 for next year And if we thought that the prices We&#x27;re going to be dropping in things If You could put it out for a bit I don&#x27;t see Prices drop any time soon But you know, Don´t have a crystal ball We&#x27;ll say We&#x27;ve all It&#x27;s like 90 I mean he gets 19 into 2200 So when looking at $100 We get We could have that option Well the Concentration I send X is 4 plus They&#x27;re just given a 3% increase There&#x27;s The hauling Which this one Is for This For Just land fill fees Next we&#x27;ll be To To look at Fort August Increased per time And just Or the tipping Bees Looking at It&#x27;s adding an additional $50 per time for the fees And this brings The fee to 320 To 4601 So it is For 61 on top But that´s what New taxes They&#x27;re paying That they voted Increasing and The three% increase On Which was 2 24 50 We have Three percent We&#x27;re going to go Shave With the CPI What they were Offering And we just said It&#x27;s what Last year To It was higher than 3% This is The land fill I&#x27;m in Because it has a cost Can&#x27;t Just increase To That should help cover So that Yeah for this to happen. We knew that was going happened because of what the contract will be so you&#x27;ve already got a disability it&#x27;s been there, we&#x27;re not asking but I mean if just had time and year did come back up next week or go out before where they&#x27;ll get contracts trying with those extensions are building don&#x27;t have solicit bids If but it also makes a good because we can get this off. But what you could budget for, is that when would go after bed and depends on whats going in the world? It might be higher or maybe lower at time so... 5E of contract C-2390B saw waste transportation fee with Stella &amp; Bartnell services to third final extension With still on transportation the CPI came in at <mark>4.4%</mark> they wanted to 3 percent increase if If They delivered To Prairie View It&#x27;s 2782 and Goat O&#x27;Row 2597 it is a three-percent increased And its very similar Its exactly like We approved last year A3 % Increase We started getting this for the first 7 years How much money is that? It&#x27;s like I&#x27;d liked to know Obviously we can all do math but there are nothing weird To math Yeah, no matter how expensive it gets in yeah That sounds good So i think you&#x27;re all going have a same question as if You could last Yes How many more of these costs and thats really what were concerned about obviously Can be allowed or better If 5-percent 5% 5.5 5,425 That&#x27;s 84 or five Equipment Project 2 power and tail For components 1 to And 5 Which is included in their Bid packet In TheirBid Pack Not To exceed 97830 Ten cents Authorities Trust Manager The SQT Contract Intention Upon Legal View So Go ahead On this one We&#x27;re only awarding Components 1,2 and 5 Which is mostly Fiber Wire Different types The Bits Parts That will hook everything up And all that&#x27;s mainly What in One 2 &amp;5 3 Bitters Come In Heal it in Pack Or TheirBidios on the paperwork But they&#x27;re actually in partnership with Power and Tail So Power &amp; Tail came In With 97832 Ten for this The next Bid Or Techline did not bid the right bed They put I think Equipment Is what So they&#x27;re not even a viable candidate And then K-Licks Had it It had a late bed We couldn&#x27;t accept If 10 seconds off Being able to receive You can Cannt take In Under State Statutes Um so Anyway To go with Power &amp; Tail For the 9783210 There&#x27;s 3 other components of this That were that Powered to have did not bid on One of them is a virtual machine where And we already They didn&#x27;t bid On the component These other components Didnnt commit On it We are used Some In getting pricing for The components How Playing on satisfy</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>Miami Special Utility Authority (MSUA) Regular Meeting
 MEETING DATE:        April 7, 2026
 
 AGENDA TITLE:        Claims List
@@ -2778,7 +2771,7 @@ STAFFS RECOMMENDATION:
 ATTACHMENT(S):
 4.7.26 MSUA.pdf
 MSUA CC 2.16.26 - 3.1.26.pdf
-MSUA CC 3.2.26 -3.15.26.pdf</pre></div></div><div><h3>Official Minutes</h3><div class="doc-panel"><pre>THE MIAMI CITY COUNCIL MET IN REGULAR SESSION ON APRIL 07, 2026, IN THE MIAMI CIVIC CENTER
+MSUA CC 3.2.26 -3.15.26.pdf</pre></div></div><div><h3>&#128196; Official Minutes</h3><div class="doc-panel"><pre>THE MIAMI CITY COUNCIL MET IN REGULAR SESSION ON APRIL 07, 2026, IN THE MIAMI CIVIC CENTER
 COUNCIL CHAMBERS AT 5:30PM WITH THE FOLLOWING MEMBERS PRESENT:
 
 Bless Parker, Mayor Tyler Cline, City Manager
@@ -5048,57 +5041,8 @@ $474.51
 April 07, 2026
 </pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

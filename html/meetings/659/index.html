@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami City Council</h1>
 <div class="meeting-meta">
-<span>📅 Feb 17, 2026</span>
-<span>⏱️ 00h 20m</span>
-<span>🔖 Clip #659</span>
+<span>&#128197; Feb 17, 2026</span>
+<span>&#9201;&#65039; 00h 20m</span>
+<span>&#128278; Clip #659</span>
+<span class="disc-badge">&#9888;&#65039; 2 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/659" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (9.2 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (9.2 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="2.87"><span class="seg-time">00:02</span><span class="seg-text">I&#x27;ll now call to order the regular scheduled meeting of my city council. Number two, public input and unscheduled personal parents is we have none number three a claims</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="2.87"><span class="seg-time">00:02</span><span class="seg-text">I&#x27;ll now call to order the regular scheduled meeting of my city council. Number two, public input and unscheduled personal parents is we have none number three a claims</span></div>
 <div class="seg" data-time="14.57"><span class="seg-time">00:14</span><span class="seg-text">3b minutes from February 23rd 2026 for regular meetings</span></div>
 <div class="seg" data-time="24.66"><span class="seg-time">00:24</span><span class="seg-text">3c ordered 26-06 for the resigning of certain properties located at 1700b northwest. This is Jones, this</span></div>
 <div class="seg" data-time="54.47"><span class="seg-time">00:54</span><span class="seg-text">is the next one. 17-17? So, I&#x27;m going to show them over here</span></div>
@@ -419,12 +414,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="1182.62"><span class="seg-time">19:42</span><span class="seg-text">For A Good News</span></div>
 <div class="seg" data-time="1184.81"><span class="seg-time">19:44</span><span class="seg-text">Number 7 City Manager Communications</span></div>
 <div class="seg" data-time="1189.13"><span class="seg-time">19:49</span><span class="seg-text">And Number 8</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">📄 Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>Miami City Council Regular Meeting
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (2)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">&#128196; Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">31 hundred</span><span class="disc-item">$900</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>Miami City Council Regular Meeting
 MEETING DATE:          February 17, 2026
 
 AGENDA TITLE:          Claims List
@@ -1627,7 +1620,7 @@ $0.00
 $1,003.76
 
 February 17, 2026
-</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>I&#x27;ll now call to order the regular scheduled meeting of my city council. Number two, public input and unscheduled personal parents is we have none number three a claims 3b minutes from February 23rd 2026 for regular meetings 3c ordered 26-06 for the resigning of certain properties located at 1700b northwest. This is Jones, this is the next one. 17-17? So, I&#x27;m going to show them over here so starting with 1700b northwest paraged investments they&#x27;ve seen around town there&#x27;s some dumpster trailers that say we buy ugly houses yeah we buy ugly houses and I will give them that they do you but he definitely puts time in effort into it And what needs to go enter these properties He is recently purchased 1700b northwest This already has two property on It&#x27;s a main residence And they like the garage, mother and all suite He&#x27;s wanting to make it two properties so there&#x27;ll have 2 different addresses Two different meters water meters So we&#x27;ve got in its own residential single family We will happen with that resigning at multi-family Due until already having existing residences on their take a lot of them Most are going ask for rezoning out to RM1 resident from most families I don&#x27;t see others gonna be any issues Like I said there&#x27;s we&#x27;re gonna have two separate meters for each of the utilities We&#x27;ve got a garage to do apartment too Yeah, sorry Wow that was awake nothing you guys see what are You were looking at yeah So so it is The one with an out and then they grow up It will be right now Probably when i built this It was probably like said it concluded the main property well he&#x27;s wanted to put two different residences in there Rock, rock So we don&#x27;t so We&#x27;ve got to reason at multi-family if its going have 2 separate If you&#x27;re not basically related To primary residence So we&#x27;ll actually have separate meters selected new Leaders on that is electrical water. Does it already had those set of Separate meters are they tied into Existing Yeah, okay Yep Yeah, so single family just because the apartment went with house when They built them sure That&#x27;s how not saying there&#x27;s people ever rented out to other People I&#x27;m surely half but well yeah So now it&#x27;s going to be legal because we&#x27;ll be multi-family motion good food How thick? 3D orders 26 dash 07 206 0 7 for the rezoning a certain property located at 823 h Northwest case of this one Was on our demo list. We had property hearings last summer This was on schedule bd mode Zach actually bought the house and get mode to House himself Which took the burden off of this city And he&#x27;s wanting To build a tribe-plex on The property is course its own residence or single family because it was single Family home We have two Rm2 It going be I don&#x27;t know if you guys drove by but It burned probably two years ago maybe We finally got on the demo list property owner didn&#x27;t show up they defaulted and it was our list to be torn down He has turned around. There&#x27;s lots really not cleaned-up yet, but its Its getting there I think this is one of ones that he definitely bought an ugly house because I mean, i exact great work with he&#x27;s been going you know buying a lot of properties around town doing right keep this in the loop So that makes our job easy Okay three e contract for them my original airport QT pod In 4000 self-serving fuel internal It&#x27;s even four thousand we couldn&#x27;t go to for the m5 I So this is the feeling station and on self-serving fuel out of their port From what i understand The fuel master&#x27;s about 10 years old maybe a little more when you say It becomes obsolete so either way we got to update pod pedestal We&#x27;ve kind have gone back or forth About going back with fuel master or QT we learned about qt Some other area of airports have the Q-te they seem to think it&#x27;s more user friendly We&#x27;ve kind a quiz some pilots as i come in It was an anonymous vote To recommend the cutie at that airport board meeting so I had Brian Loman here who is Oneof The reasons.I will say, That We kind of lean towards this because he&#x27;s local. He is out Of bottles a bill With fuel master, you know You can get put on hold talk to people i mean I could call Brian any time He has been great work with As far as what it does I&#x27;m really not privy on that. That&#x27;s why i have Brian here So if you guys, If You Guys Have Any Questions On The Installation Process How Long It&#x27;ll Take Im just Excited to Because One We Had it Its been a boring Our Side for A couple of Years Now Do? Yeah All kind Of What Is Best This will be Internet Basics It&#x27;s a lot more responsive You can&#x27;t even work to troll on it If you&#x27;ve been able To feel low coming out So its just gonna manage Just Locally WTRA Yeah, that Is That The Airport What is the cost? Its so fuel master Um It has 20kms of 1.24 for Q-te Fuel Master Came In About 4gm And again Even if they were here i think myself, the board felt that customer service was a big thing being having somebody here face. So And he could be in any time I mean all we have to do is pick up the phone and</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>Miami City Council Regular Meeting
+</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>I&#x27;ll now call to order the regular scheduled meeting of my city council. Number two, public input and unscheduled personal parents is we have none number three a claims 3b minutes from February 23rd 2026 for regular meetings 3c ordered 26-06 for the resigning of certain properties located at 1700b northwest. This is Jones, this is the next one. 17-17? So, I&#x27;m going to show them over here so starting with 1700b northwest paraged investments they&#x27;ve seen around town there&#x27;s some dumpster trailers that say we buy ugly houses yeah we buy ugly houses and I will give them that they do you but he definitely puts time in effort into it And what needs to go enter these properties He is recently purchased 1700b northwest This already has two property on It&#x27;s a main residence And they like the garage, mother and all suite He&#x27;s wanting to make it two properties so there&#x27;ll have 2 different addresses Two different meters water meters So we&#x27;ve got in its own residential single family We will happen with that resigning at multi-family Due until already having existing residences on their take a lot of them Most are going ask for rezoning out to RM1 resident from most families I don&#x27;t see others gonna be any issues Like I said there&#x27;s we&#x27;re gonna have two separate meters for each of the utilities We&#x27;ve got a garage to do apartment too Yeah, sorry Wow that was awake nothing you guys see what are You were looking at yeah So so it is The one with an out and then they grow up It will be right now Probably when i built this It was probably like said it concluded the main property well he&#x27;s wanted to put two different residences in there Rock, rock So we don&#x27;t so We&#x27;ve got to reason at multi-family if its going have 2 separate If you&#x27;re not basically related To primary residence So we&#x27;ll actually have separate meters selected new Leaders on that is electrical water. Does it already had those set of Separate meters are they tied into Existing Yeah, okay Yep Yeah, so single family just because the apartment went with house when They built them sure That&#x27;s how not saying there&#x27;s people ever rented out to other People I&#x27;m surely half but well yeah So now it&#x27;s going to be legal because we&#x27;ll be multi-family motion good food How thick? 3D orders 26 dash 07 206 0 7 for the rezoning a certain property located at 823 h Northwest case of this one Was on our demo list. We had property hearings last summer This was on schedule bd mode Zach actually bought the house and get mode to House himself Which took the burden off of this city And he&#x27;s wanting To build a tribe-plex on The property is course its own residence or single family because it was single Family home We have two Rm2 It going be I don&#x27;t know if you guys drove by but It burned probably two years ago maybe We finally got on the demo list property owner didn&#x27;t show up they defaulted and it was our list to be torn down He has turned around. There&#x27;s lots really not cleaned-up yet, but its Its getting there I think this is one of ones that he definitely bought an ugly house because I mean, i exact great work with he&#x27;s been going you know buying a lot of properties around town doing right keep this in the loop So that makes our job easy Okay three e contract for them my original airport QT pod In 4000 self-serving fuel internal It&#x27;s even four thousand we couldn&#x27;t go to for the m5 I So this is the feeling station and on self-serving fuel out of their port From what i understand The fuel master&#x27;s about 10 years old maybe a little more when you say It becomes obsolete so either way we got to update pod pedestal We&#x27;ve kind have gone back or forth About going back with fuel master or QT we learned about qt Some other area of airports have the Q-te they seem to think it&#x27;s more user friendly We&#x27;ve kind a quiz some pilots as i come in It was an anonymous vote To recommend the cutie at that airport board meeting so I had Brian Loman here who is Oneof The reasons.I will say, That We kind of lean towards this because he&#x27;s local. He is out Of bottles a bill With fuel master, you know You can get put on hold talk to people i mean I could call Brian any time He has been great work with As far as what it does I&#x27;m really not privy on that. That&#x27;s why i have Brian here So if you guys, If You Guys Have Any Questions On The Installation Process How Long It&#x27;ll Take Im just Excited to Because One We Had it Its been a boring Our Side for A couple of Years Now Do? Yeah All kind Of What Is Best This will be Internet Basics It&#x27;s a lot more responsive You can&#x27;t even work to troll on it If you&#x27;ve been able To feel low coming out So its just gonna manage Just Locally WTRA Yeah, that Is That The Airport What is the cost? Its so fuel master Um It has 20kms of 1.24 for Q-te Fuel Master Came In About 4gm And again Even if they were here i think myself, the board felt that customer service was a big thing being having somebody here face. So And he could be in any time I mean all we have to do is pick up the phone and</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>Miami City Council Regular Meeting
 MEETING DATE:          February 17, 2026
 
 AGENDA TITLE:          Claims List
@@ -1640,7 +1633,7 @@ STAFFS RECOMMENDATION:
 
 ATTACHMENT(S):
 2.17.26 City Claims List.pdf
-2.17.26 City CC CL.pdf</pre></div></div><div><h3>Official Minutes</h3><div class="doc-panel"><pre>THE MAYOR AND THE CITY COUNCIL MET IN REGULAR SESSION ON FEBRUARY 17, 2026, IN THE MIAMI
+2.17.26 City CC CL.pdf</pre></div></div><div><h3>&#128196; Official Minutes</h3><div class="doc-panel"><pre>THE MAYOR AND THE CITY COUNCIL MET IN REGULAR SESSION ON FEBRUARY 17, 2026, IN THE MIAMI
 CIVIC CENTER COUNCIL CHAMBERS AT 5:30PM WITH THE FOLLOWING MEMBERS PRESENT:
 
 Bless Parker, Mayor (Absent) Tyler Cline, City Manager (Absent)
@@ -2832,57 +2825,8 @@ $1,003.76
 February 17, 2026
 </pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

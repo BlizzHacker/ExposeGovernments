@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 Feb 20, 2024</span>
-<span>⏱️ 00h 07m</span>
-<span>🔖 Clip #529</span>
+<span>&#128197; Feb 20, 2024</span>
+<span>&#9201;&#65039; 00h 07m</span>
+<span>&#128278; Clip #529</span>
+<span class="disc-badge">&#9888;&#65039; 7 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/529" allowfullscreen></iframe></div>
 
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">Well, the invocation says bye, hope you are fine chief, Mr. Christian.</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">Well, the invocation says bye, hope you are fine chief, Mr. Christian.</span></div>
 <div class="seg" data-time="7.96"><span class="seg-time">00:07</span><span class="seg-text">Heavenly Father, we are thankful for you, we are thankful for the leaders you provide for us to miss us.</span></div>
 <div class="seg" data-time="19.78"><span class="seg-time">00:19</span><span class="seg-text">You will be with them as they discuss and make decisions for them. You will be meeting them tonight.</span></div>
 <div class="seg" data-time="24.78"><span class="seg-time">00:24</span><span class="seg-text">And your name will be great.</span></div>
@@ -252,12 +247,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="450.72"><span class="seg-time">07:30</span><span class="seg-text">Hi.</span></div>
 <div class="seg" data-time="451.72"><span class="seg-time">07:31</span><span class="seg-text">William.</span></div>
 <div class="seg" data-time="452.72"><span class="seg-time">07:32</span><span class="seg-text">Parker.</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (7)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">$1,590,</span><span class="disc-item">16,975 dollars</span><span class="disc-item">525,933 dollars</span><span class="disc-item">1,590 dollars</span><span class="disc-item">$50</span><span class="disc-item">$524,343,755</span><span class="disc-item">$750,000</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Tuesday, February 20, 2024
 6:00
@@ -319,7 +312,7 @@ Solid Waste
 Trustee Community Announcements                                                                               Trustees
 15.
 *Action Item* Adjournment                                                               Trustees
-The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Well, the invocation says bye, hope you are fine chief, Mr. Christian. Heavenly Father, we are thankful for you, we are thankful for the leaders you provide for us to miss us. You will be with them as they discuss and make decisions for them. You will be meeting them tonight. And your name will be great. Amen. I&#x27;m pleased to lead us to our voice guides. I&#x27;d like to lead you just to come back from United States of America. You will be with them as they discuss and understand one nation and under God. And if it is, whatever you need, that&#x27;s just for all. Thank you, Jimmy. Four of us get the personal appearances. Five claims list. Make a motion. We approve. Second. He said five. Don&#x27;t go. All right. All right. Five. Six. May that&#x27;s when the February 5th, 2024, regular meeting. Motion. Second. All right. Thank you. All right. All right. Seven. They&#x27;ve described to remain claim for Pensacola, GRDA, Re licensing and associated complaint proceedings in the amount of 16,975, 20 cents. So may I remember the counsel you have an invoice in your packet. For David&#x27;s right to remain. For professional services and disbursements incurred December 4th, 2023 through December 28. On behalf of the city focused on remaining pleadings, filings and other documentation, preparing responses there to communicating. With the mime team related to the following. These are damn safety issues. Relicents. Extudity plan. Contaminated. Settlement transport study. Enhuff amendment. And the Circuit Court of Appeals. Follow-up. If the 16,975 dollars in 20 cents is approved. In that budget of originally 750,000. If that is approved, we would have remaining balance of 525,933 dollars or 75 cents for this fiscal year. Motion to approve. Sorry. All right. All right. All right. All right. All right. All right. Hey. Good ill-stratten Edmunds and Palmer Klein for GRDA. Relaxing seeing in the amount of 1,590 dollars. All right. I can&#x27;t say you have an invoice for good ill-stratten. For professional services and disbursements incurred from December 21, 2023 through January 19th of 2024. These issues related to the day of licensing issues. Realistic study plan. Contaminated. Settlement transport study. Enhuff amendment. And the Circuit Court of Appeals. Follow-up. If you approve this $1,590, an expended from the $750,000 budget, that would leave us $524,343,755 since this fiscal year. Much to approve. Second. Williams. Hi. Doctor. Hi. Now, master service agreement with Anderson Engineering owned for the Engineering Service, for Engineering Services. Public office. Yes, sir. So this is renewing Anderson Engineering, or they changed their name to, um, so this is for engineering there, um, contract to do engineering services. It&#x27;s also on the city side, too. So, same people? Yes, sir. This changed me. That&#x27;s actually been on their trucks for a while. Yeah. So you have some of those guys with you that I want to say. I think good. Happy to. I&#x27;d like to appreciate the opportunity to have a few years experience for individuals that, um, appreciate the opportunity for these projects, and we can get that with you. I&#x27;d like to add, they do a great job. I don&#x27;t think, uh, Tyler could do without them. Sorry. I appreciate it, man. I&#x27;m sorry. You&#x27;re right here. Much to approve. Second. Williams. Hi. He&#x27;s dead. So cool. Hi. Parker. Hi. 10. Workborder authorization number two with Anderson Engineering owned for the solid waste management. Alternatives evaluation, not to exceed 37,000 and $50. So we had previously talked about this at our session in our construction set committee. So this is a recorder for them to do a high level study with burns in my mouth to determine, you know, if we build a new transfer station or we will be doing a city of length of revenue status expenses, I did what I think right for the best when we said, I think we don&#x27;t know what we don&#x27;t know about the length of the, uh, for experts to do this. Yeah, I&#x27;m trying to see what they&#x27;re going to work with. Yeah, I think this is a study that has to be done and that we really have a choice at this point with the, with the rights that continue to go out for us transferring to somewhere else. I mean, we definitely need an alternative. Yeah. As part of their study, and we talk about even outside that they are going to I&#x27;ll make a motion to approve. Okay. Parker. Hi. William. Hi. He&#x27;s set. Hi. You&#x27;re staying up there, aren&#x27;t you? We&#x27;ll have an acknowledge of Oklahoma Department of Armoured on Fawlety. Permit. Number WL00505-823-0861 for the construction of 995 Linear Feet. The 6-inch ADPE. Waterline plus. Waterline plus. All the accessories. The serve. The Q Street. Southwest. Waterline. Extension. So we have no load on this. Just as far the DQ program. We have to acknowledge. Technology. Good. 12 of the new business of any of which is represents the posting of this agenda. 13 staff reports. 14. We can be an announcement. 15 adjournment. Motion. Second. You can&#x27;t talk. So. Hi. William. Parker.</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>Well, the invocation says bye, hope you are fine chief, Mr. Christian. Heavenly Father, we are thankful for you, we are thankful for the leaders you provide for us to miss us. You will be with them as they discuss and make decisions for them. You will be meeting them tonight. And your name will be great. Amen. I&#x27;m pleased to lead us to our voice guides. I&#x27;d like to lead you just to come back from United States of America. You will be with them as they discuss and understand one nation and under God. And if it is, whatever you need, that&#x27;s just for all. Thank you, Jimmy. Four of us get the personal appearances. Five claims list. Make a motion. We approve. Second. He said five. Don&#x27;t go. All right. All right. Five. Six. May that&#x27;s when the February 5th, 2024, regular meeting. Motion. Second. All right. Thank you. All right. All right. Seven. They&#x27;ve described to remain claim for Pensacola, GRDA, Re licensing and associated complaint proceedings in the amount of 16,975, 20 cents. So may I remember the counsel you have an invoice in your packet. For David&#x27;s right to remain. For professional services and disbursements incurred December 4th, 2023 through December 28. On behalf of the city focused on remaining pleadings, filings and other documentation, preparing responses there to communicating. With the mime team related to the following. These are damn safety issues. Relicents. Extudity plan. Contaminated. Settlement transport study. Enhuff amendment. And the Circuit Court of Appeals. Follow-up. If the <mark>16,975 dollars</mark> in 20 cents is approved. In that budget of originally 750,000. If that is approved, we would have remaining balance of <mark>525,933 dollars</mark> or 75 cents for this fiscal year. Motion to approve. Sorry. All right. All right. All right. All right. All right. All right. Hey. Good ill-stratten Edmunds and Palmer Klein for GRDA. Relaxing seeing in the amount of <mark>1,590 dollars</mark>. All right. I can&#x27;t say you have an invoice for good ill-stratten. For professional services and disbursements incurred from December 21, 2023 through January 19th of 2024. These issues related to the day of licensing issues. Realistic study plan. Contaminated. Settlement transport study. Enhuff amendment. And the Circuit Court of Appeals. Follow-up. If you approve this <mark>$1,590,</mark> an expended from the <mark>$750,000</mark> budget, that would leave us <mark>$524,343,755</mark> since this fiscal year. Much to approve. Second. Williams. Hi. Doctor. Hi. Now, master service agreement with Anderson Engineering owned for the Engineering Service, for Engineering Services. Public office. Yes, sir. So this is renewing Anderson Engineering, or they changed their name to, um, so this is for engineering there, um, contract to do engineering services. It&#x27;s also on the city side, too. So, same people? Yes, sir. This changed me. That&#x27;s actually been on their trucks for a while. Yeah. So you have some of those guys with you that I want to say. I think good. Happy to. I&#x27;d like to appreciate the opportunity to have a few years experience for individuals that, um, appreciate the opportunity for these projects, and we can get that with you. I&#x27;d like to add, they do a great job. I don&#x27;t think, uh, Tyler could do without them. Sorry. I appreciate it, man. I&#x27;m sorry. You&#x27;re right here. Much to approve. Second. Williams. Hi. He&#x27;s dead. So cool. Hi. Parker. Hi. 10. Workborder authorization number two with Anderson Engineering owned for the solid waste management. Alternatives evaluation, not to exceed 37,000 and <mark>$50</mark>. So we had previously talked about this at our session in our construction set committee. So this is a recorder for them to do a high level study with burns in my mouth to determine, you know, if we build a new transfer station or we will be doing a city of length of revenue status expenses, I did what I think right for the best when we said, I think we don&#x27;t know what we don&#x27;t know about the length of the, uh, for experts to do this. Yeah, I&#x27;m trying to see what they&#x27;re going to work with. Yeah, I think this is a study that has to be done and that we really have a choice at this point with the, with the rights that continue to go out for us transferring to somewhere else. I mean, we definitely need an alternative. Yeah. As part of their study, and we talk about even outside that they are going to I&#x27;ll make a motion to approve. Okay. Parker. Hi. William. Hi. He&#x27;s set. Hi. You&#x27;re staying up there, aren&#x27;t you? We&#x27;ll have an acknowledge of Oklahoma Department of Armoured on Fawlety. Permit. Number WL00505-823-0861 for the construction of 995 Linear Feet. The 6-inch ADPE. Waterline plus. Waterline plus. All the accessories. The serve. The Q Street. Southwest. Waterline. Extension. So we have no load on this. Just as far the DQ program. We have to acknowledge. Technology. Good. 12 of the new business of any of which is represents the posting of this agenda. 13 staff reports. 14. We can be an announcement. 15 adjournment. Motion. Second. You can&#x27;t talk. So. Hi. William. Parker.</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Tuesday, February 20, 2024
 6:00
@@ -383,57 +376,8 @@ Trustee Community Announcements                                �
 *Action Item* Adjournment                                                               Trustees
 The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

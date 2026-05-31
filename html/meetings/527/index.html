@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 Feb  5, 2024</span>
-<span>⏱️ 00h 06m</span>
-<span>🔖 Clip #527</span>
+<span>&#128197; Feb  5, 2024</span>
+<span>&#9201;&#65039; 00h 06m</span>
+<span>&#128278; Clip #527</span>
+<span class="disc-badge">&#9888;&#65039; 6 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/527" allowfullscreen></iframe></div>
 
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">Well, the implications by Parti, there&#x27;s gentle.</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">Well, the implications by Parti, there&#x27;s gentle.</span></div>
 <div class="seg" data-time="7.6"><span class="seg-time">00:07</span><span class="seg-text">Heavenly Father, we&#x27;re thankful for you in this community that we live in, we</span></div>
 <div class="seg" data-time="10.92"><span class="seg-time">00:10</span><span class="seg-text">have to ask that you guide the discussion tonight and be with our council members as they</span></div>
 <div class="seg" data-time="15.92"><span class="seg-time">00:15</span><span class="seg-text">make important decisions in your name would break, they may be.</span></div>
@@ -244,12 +239,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="412.74"><span class="seg-time">06:52</span><span class="seg-text">Hi.</span></div>
 <div class="seg" data-time="413.74"><span class="seg-time">06:53</span><span class="seg-text">Hi.</span></div>
 <div class="seg" data-time="414.74"><span class="seg-time">06:54</span><span class="seg-text">Parker.</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (6)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">998 dollars</span><span class="disc-item">832 dollars</span><span class="disc-item">53,823 dollars</span><span class="disc-item">923 dollars</span><span class="disc-item">39,899 dollars</span><span class="disc-item">$7,000,000</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Monday, February 5, 2024
 6:00
@@ -290,7 +283,7 @@ Staff Reports (Written report included in packet, if available staff is present 
 Trustee Community Announcements         Trustees
 11.
 *Action Item* Adjournment         Trustees
-The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Well, the implications by Parti, there&#x27;s gentle. Heavenly Father, we&#x27;re thankful for you in this community that we live in, we have to ask that you guide the discussion tonight and be with our council members as they make important decisions in your name would break, they may be. But, to lead you, just to be the flag of the United States of America, and to the root of the root of which is saying this, one nation and a god, and it is one liberty and justice, and so on. Thank you. Four people to get them, but let&#x27;s give them personal answers. Five. Claims List. Motion. Second. Five. Five. Five. Five. Five. Six. Minutes from the January 16th, 2024, regular meeting. Mr. Cooper. Say. He&#x27;s dead. Seven. Five. Millions. Five. Five. Five. Seven. Tetra Tech. Claim for the OSHO River to be modeling and for civil litigation in amount of 13,000, 923 dollars and 9 cents. Mayor, members of the council, the invoice you have in your packet is for Tetra Tech, for November 25th, 2023 through December 31st, through 2023, so that&#x27;s through the end of last calendar year. This was for the OSHO River to be modeling that they continue to be working on in the primary engineering effort for this period. As well as communications with the cities flooding and relaxing team, based right to Maine in Goodell, Stratton. Of the 750,000 budget for gerity claims, the current balance is 556,000. 832 dollars and 4 cents. If the current invoice for 13,923 and 9 cents is approved and paid, it will leave remaining balance of 542,000. 998 dollars and 95 cents for fiscal year 23,24. There is also a sub-component that we monitor of the 300,000 that was approved by the council back in 08, not to exceed 300,000 for civil litigation costs, involved with gerity, the current balance of that 300,000 is 53,823 dollars, if the current invoice totaling 13,923 and 9 cents is approved, that would leave us only 39,899 dollars and 91 cents in that sub-component. Those numbers added together, but the 300 is within this event. What happens if we go over that 300? We would either have to evaluate, extending or modifying that through the demo, or we have to tell them they know how to use those funds towards the civil litigation costs. I would just read a little bit. You could just read that. That&#x27;s all we told them we&#x27;d guarantee we would pay. We can pay more than that. There&#x27;s nothing that prohibits us. What do you mean? Yes. Here&#x27;s your decision. That&#x27;s what I said. He said it. He said it. He said it more legal when he said it. We don&#x27;t even want to pay that. So this goes to the, this comes out of the $7,000,000 budget. Either way, but this doesn&#x27;t go for the civil litigation. This is what you say. This is what you say. This is what you say. This is what you say. That&#x27;s why you haven&#x27;t seen this because there hasn&#x27;t been any expenses in that year. I mean, we actually burned one. And that&#x27;s it on. Right. That&#x27;s on me. You&#x27;re just now seeing these come back up. But we haven&#x27;t seen one for years. But now that they&#x27;re just putting the civil litigation. We&#x27;re starting to see that activity. With what they call a referee. It&#x27;s just confusing. It looks like it&#x27;s coming out. The 750,000 is the budget. We have it. No. Fiscal budget. The 300,000 was just a threshold that was set back by the council of 2008. So we&#x27;d like to track that. We&#x27;d like to make sure we could exceed that. And just to add a little more to it. 2000 plus was to the city. That&#x27;s that 300,000 correct. So is that. And that&#x27;s more to do. We&#x27;re in the first half. We&#x27;ll check from. We&#x27;ll see. We&#x27;ll see. We&#x27;ll see. We&#x27;ll see. We&#x27;ll see. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. We&#x27;ll make a motion we approve. Hi. Don&#x27;t pull. Hi. Williams. I&#x27;m staying. Hi. Hi. Thank you. The new business of any of which is written. Posting this agenda. Nine staff reports. Ten trustee. We need you. I love the German. Thank you. Don&#x27;t pull. All right. Williams. Hi. Hi. Parker.</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>Well, the implications by Parti, there&#x27;s gentle. Heavenly Father, we&#x27;re thankful for you in this community that we live in, we have to ask that you guide the discussion tonight and be with our council members as they make important decisions in your name would break, they may be. But, to lead you, just to be the flag of the United States of America, and to the root of the root of which is saying this, one nation and a god, and it is one liberty and justice, and so on. Thank you. Four people to get them, but let&#x27;s give them personal answers. Five. Claims List. Motion. Second. Five. Five. Five. Five. Five. Six. Minutes from the January 16th, 2024, regular meeting. Mr. Cooper. Say. He&#x27;s dead. Seven. Five. Millions. Five. Five. Five. Seven. Tetra Tech. Claim for the OSHO River to be modeling and for civil litigation in amount of 13,000, <mark>923 dollars</mark> and 9 cents. Mayor, members of the council, the invoice you have in your packet is for Tetra Tech, for November 25th, 2023 through December 31st, through 2023, so that&#x27;s through the end of last calendar year. This was for the OSHO River to be modeling that they continue to be working on in the primary engineering effort for this period. As well as communications with the cities flooding and relaxing team, based right to Maine in Goodell, Stratton. Of the 750,000 budget for gerity claims, the current balance is 556,000. <mark>832 dollars</mark> and 4 cents. If the current invoice for 13,923 and 9 cents is approved and paid, it will leave remaining balance of 542,000. <mark>998 dollars</mark> and 95 cents for fiscal year 23,24. There is also a sub-component that we monitor of the 300,000 that was approved by the council back in 08, not to exceed 300,000 for civil litigation costs, involved with gerity, the current balance of that 300,000 is <mark>53,823 dollars</mark>, if the current invoice totaling 13,923 and 9 cents is approved, that would leave us only <mark>39,899 dollars</mark> and 91 cents in that sub-component. Those numbers added together, but the 300 is within this event. What happens if we go over that 300? We would either have to evaluate, extending or modifying that through the demo, or we have to tell them they know how to use those funds towards the civil litigation costs. I would just read a little bit. You could just read that. That&#x27;s all we told them we&#x27;d guarantee we would pay. We can pay more than that. There&#x27;s nothing that prohibits us. What do you mean? Yes. Here&#x27;s your decision. That&#x27;s what I said. He said it. He said it. He said it more legal when he said it. We don&#x27;t even want to pay that. So this goes to the, this comes out of the <mark>$7,000,000</mark> budget. Either way, but this doesn&#x27;t go for the civil litigation. This is what you say. This is what you say. This is what you say. This is what you say. That&#x27;s why you haven&#x27;t seen this because there hasn&#x27;t been any expenses in that year. I mean, we actually burned one. And that&#x27;s it on. Right. That&#x27;s on me. You&#x27;re just now seeing these come back up. But we haven&#x27;t seen one for years. But now that they&#x27;re just putting the civil litigation. We&#x27;re starting to see that activity. With what they call a referee. It&#x27;s just confusing. It looks like it&#x27;s coming out. The 750,000 is the budget. We have it. No. Fiscal budget. The 300,000 was just a threshold that was set back by the council of 2008. So we&#x27;d like to track that. We&#x27;d like to make sure we could exceed that. And just to add a little more to it. 2000 plus was to the city. That&#x27;s that 300,000 correct. So is that. And that&#x27;s more to do. We&#x27;re in the first half. We&#x27;ll check from. We&#x27;ll see. We&#x27;ll see. We&#x27;ll see. We&#x27;ll see. We&#x27;ll see. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. See. We&#x27;ll make a motion we approve. Hi. Don&#x27;t pull. Hi. Williams. I&#x27;m staying. Hi. Hi. Thank you. The new business of any of which is written. Posting this agenda. Nine staff reports. Ten trustee. We need you. I love the German. Thank you. Don&#x27;t pull. All right. Williams. Hi. Hi. Parker.</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Monday, February 5, 2024
 6:00
@@ -333,57 +326,8 @@ Trustee Community Announcements         Trustees
 *Action Item* Adjournment         Trustees
 The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

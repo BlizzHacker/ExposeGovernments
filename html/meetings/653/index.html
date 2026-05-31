@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami City Council</h1>
 <div class="meeting-meta">
-<span>📅 Jan  6, 2026</span>
-<span>⏱️ 00h 10m</span>
-<span>🔖 Clip #653</span>
-</div>
-</div>
+<span>&#128197; Jan  6, 2026</span>
+<span>&#9201;&#65039; 00h 10m</span>
+<span>&#128278; Clip #653</span>
 
+</div>
+</div>
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/653" allowfullscreen></iframe></div>
 
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">All right, we&#x27;ll call to order about regular meeting of the City Council for Tuesday, January 6th, 2026.</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">All right, we&#x27;ll call to order about regular meeting of the City Council for Tuesday, January 6th, 2026.</span></div>
 <div class="seg" data-time="8.0"><span class="seg-time">00:08</span><span class="seg-text">Let&#x27;s get into personal appearances. We have none.</span></div>
 <div class="seg" data-time="11.0"><span class="seg-time">00:11</span><span class="seg-text">3A, Proclamation declaring January 2026 as Human Trafficking Prevention Month.</span></div>
 <div class="seg" data-time="24.0"><span class="seg-time">00:24</span><span class="seg-text">Motion to approve.</span></div>
@@ -333,12 +328,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="622.4"><span class="seg-time">10:22</span><span class="seg-text">We stand.</span></div>
 <div class="seg" data-time="623.24"><span class="seg-time">10:23</span><span class="seg-text">Roger.</span></div>
 <div class="seg" data-time="624.08"><span class="seg-time">10:24</span><span class="seg-text">Aye.</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">📄 Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>                                       Miami City Council Regular Meeting
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">&#128196; Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>                                       Miami City Council Regular Meeting
 MEETING DATE:        January 6, 2026
 
 AGENDA TITLE:        Proclamation Declaring January 2026 as Human Trafficking Prevention Month
@@ -3979,7 +3972,7 @@ MCFA $0.00
 MDRA $74.76
 
 January 06, 2026
-</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>All right, we&#x27;ll call to order about regular meeting of the City Council for Tuesday, January 6th, 2026. Let&#x27;s get into personal appearances. We have none. 3A, Proclamation declaring January 2026 as Human Trafficking Prevention Month. Motion to approve. Second. Local. E-Step. Bards. Parker. Bye. Is anyone here for that? I am. Okay. I&#x27;m sure I&#x27;m glad we put prevention in there. Yeah. I&#x27;m glad we put prevention in there. Yeah. Just a minute. Dude, what are you doing? I don&#x27;t know. Help. Yeah. Oh, I&#x27;m sorry. Please. I don&#x27;t know. Yeah. Once they do. Okay, don&#x27;t run off because I&#x27;m in a picture on her phone and mic. I read. I read. I read. Good. Thank you. I&#x27;m sorry. Is there anything? People on the letter here. I have a weird team here. I have a weird team here. All right, 4A claims list. What&#x27;s to approve? E-Step. Hi. Local. Hi. 4B minutes from the December 16th, 2025. two and a half. All right. 4 c, election resolution, CC. Twenty. Six. That&#x27;s the only one calling for proclaiming an ordering a non-partisan general election in the city of Mayama county of Ottawa, state of Oklahoma on Tuesday. April 7, 2026, for the purpose of electing the mayor. And this would be the opportunity for all those folks They think they can do better in a sign-up Most shepherds The 4d And we&#x27;ve got 4d FG and H Ordnance 2026 That&#x27;s our 0-1 repelling section 12-156 This is another one of the will-dan recommendations to do away with antiquated Ordnances, so these this is yet another video game Arcade type Ordnance that probably needs to be done away with, so I have prepared the ordinances to do away with each section of it This may not be able to go play Donkey Kong anymore I was about to say this guy said That is You have to do that at home now Dang it Short work That&#x27;s a better idea Motion to approve Second I Parker 4e ordnance 2026 That&#x27;s 0-2 repelling section 12-157 Let&#x27;s do a proof Second I Parker 4a ordnance 2026-03 Repelling section 12-158 Motion to approve Second I Parker 4g ordnance 2026-04 Repelling section 12-159 Motion to approve Hi I Parker 4a ordnance 2026-05 Repelling section 12-160 Motion to approve Second I Parker 5a ordnance 2026-05 Repelling section 12-159 Motion to approve I Parker 5a ordnance 2026-05 Repelling section 12-157 Repelling section 12-159 Motion to approve I Parker 5a ordnance 2026-05 Separate progressive commit brother 5a ordnance 2026-0 Right-wing sexual sexual sexual sexual sexual sexual sexual sexual sexual sexual sexual © sexual sexual sexual community supporting it, right? So our folks did a great job putting it together, but then we didn&#x27;t know what was gonna happen, and I really, I was blown away. I said it at the thing. I&#x27;m blown away by how many people came out, supported it, and it just motivates me to want to do it bigger and better next year. So. So I&#x27;m gonna follow into what they said. The ball drop, I appreciate the same way so much because we come up with some wild ideas sometimes, and you guys pull them off, you know, we come up with the idea and decide we&#x27;re gonna do something and whether it&#x27;s gonna work or not, we don&#x27;t know sometimes, but you guys always make it work. And I greatly appreciate that. You guys put the effort in, the work in, and you&#x27;re the reason that happens. But I think, Trenta sent me a message earlier today that with the place where it showed 848 people in attendance, not counting kids, of course, that didn&#x27;t have cell phones. So, you know, we may have been close to 1,000 people there. So I&#x27;m gonna tell a little story, too, that I heard from that event, and I&#x27;ve come from our city judge, Chuck Chestnut, had lunch with him Friday. He said, let me tell you a funny story. He said, I got home. He said, I told my wife, look at this, they&#x27;re having a ball drop downtown, we should go to this. She said, yeah, let&#x27;s go, let&#x27;s do that. And he went off, we&#x27;re away, we&#x27;ll go. He said, so next morning, he woke up, and he fell asleep before midnight, and he woke up next morning and pulled up his phone and saw all the pictures and videos that everybody had taken. And he was like, wow, that was amazing. There&#x27;s a lot of people there, so he went to his wife and said, look at this. They had a great turnout down there. And she said, yeah, we did. I guess he went in, and he was asleep, and he went without him, okay? But I heard a lot from families that it was great to have a family in the event, because nobody around here has anything like what we did. And of course, we couldn&#x27;t have pulled it off without the city employees, Colby Allen, now in size studios, Justin with Pyro Brothers, simplicity truck, smash burger, or smash and dash, Clark smash and dash was there, but really it was a great event. We&#x27;ve got a lot of publicity from the job and news out of it. And I even saw people from the job with most of the, they&#x27;re coming next year, because there&#x27;s nothing like what we did anywhere else around here. So from minor standing, this was the only ball drop in the whole state of Oklahoma.</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>                                       Miami City Council Regular Meeting
+</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>All right, we&#x27;ll call to order about regular meeting of the City Council for Tuesday, January 6th, 2026. Let&#x27;s get into personal appearances. We have none. 3A, Proclamation declaring January 2026 as Human Trafficking Prevention Month. Motion to approve. Second. Local. E-Step. Bards. Parker. Bye. Is anyone here for that? I am. Okay. I&#x27;m sure I&#x27;m glad we put prevention in there. Yeah. I&#x27;m glad we put prevention in there. Yeah. Just a minute. Dude, what are you doing? I don&#x27;t know. Help. Yeah. Oh, I&#x27;m sorry. Please. I don&#x27;t know. Yeah. Once they do. Okay, don&#x27;t run off because I&#x27;m in a picture on her phone and mic. I read. I read. I read. Good. Thank you. I&#x27;m sorry. Is there anything? People on the letter here. I have a weird team here. I have a weird team here. All right, 4A claims list. What&#x27;s to approve? E-Step. Hi. Local. Hi. 4B minutes from the December 16th, 2025. two and a half. All right. 4 c, election resolution, CC. Twenty. Six. That&#x27;s the only one calling for proclaiming an ordering a non-partisan general election in the city of Mayama county of Ottawa, state of Oklahoma on Tuesday. April 7, 2026, for the purpose of electing the mayor. And this would be the opportunity for all those folks They think they can do better in a sign-up Most shepherds The 4d And we&#x27;ve got 4d FG and H Ordnance 2026 That&#x27;s our 0-1 repelling section 12-156 This is another one of the will-dan recommendations to do away with antiquated Ordnances, so these this is yet another video game Arcade type Ordnance that probably needs to be done away with, so I have prepared the ordinances to do away with each section of it This may not be able to go play Donkey Kong anymore I was about to say this guy said That is You have to do that at home now Dang it Short work That&#x27;s a better idea Motion to approve Second I Parker 4e ordnance 2026 That&#x27;s 0-2 repelling section 12-157 Let&#x27;s do a proof Second I Parker 4a ordnance 2026-03 Repelling section 12-158 Motion to approve Second I Parker 4g ordnance 2026-04 Repelling section 12-159 Motion to approve Hi I Parker 4a ordnance 2026-05 Repelling section 12-160 Motion to approve Second I Parker 5a ordnance 2026-05 Repelling section 12-159 Motion to approve I Parker 5a ordnance 2026-05 Repelling section 12-157 Repelling section 12-159 Motion to approve I Parker 5a ordnance 2026-05 Separate progressive commit brother 5a ordnance 2026-0 Right-wing sexual sexual sexual sexual sexual sexual sexual sexual sexual sexual sexual © sexual sexual sexual community supporting it, right? So our folks did a great job putting it together, but then we didn&#x27;t know what was gonna happen, and I really, I was blown away. I said it at the thing. I&#x27;m blown away by how many people came out, supported it, and it just motivates me to want to do it bigger and better next year. So. So I&#x27;m gonna follow into what they said. The ball drop, I appreciate the same way so much because we come up with some wild ideas sometimes, and you guys pull them off, you know, we come up with the idea and decide we&#x27;re gonna do something and whether it&#x27;s gonna work or not, we don&#x27;t know sometimes, but you guys always make it work. And I greatly appreciate that. You guys put the effort in, the work in, and you&#x27;re the reason that happens. But I think, Trenta sent me a message earlier today that with the place where it showed 848 people in attendance, not counting kids, of course, that didn&#x27;t have cell phones. So, you know, we may have been close to 1,000 people there. So I&#x27;m gonna tell a little story, too, that I heard from that event, and I&#x27;ve come from our city judge, Chuck Chestnut, had lunch with him Friday. He said, let me tell you a funny story. He said, I got home. He said, I told my wife, look at this, they&#x27;re having a ball drop downtown, we should go to this. She said, yeah, let&#x27;s go, let&#x27;s do that. And he went off, we&#x27;re away, we&#x27;ll go. He said, so next morning, he woke up, and he fell asleep before midnight, and he woke up next morning and pulled up his phone and saw all the pictures and videos that everybody had taken. And he was like, wow, that was amazing. There&#x27;s a lot of people there, so he went to his wife and said, look at this. They had a great turnout down there. And she said, yeah, we did. I guess he went in, and he was asleep, and he went without him, okay? But I heard a lot from families that it was great to have a family in the event, because nobody around here has anything like what we did. And of course, we couldn&#x27;t have pulled it off without the city employees, Colby Allen, now in size studios, Justin with Pyro Brothers, simplicity truck, smash burger, or smash and dash, Clark smash and dash was there, but really it was a great event. We&#x27;ve got a lot of publicity from the job and news out of it. And I even saw people from the job with most of the, they&#x27;re coming next year, because there&#x27;s nothing like what we did anywhere else around here. So from minor standing, this was the only ball drop in the whole state of Oklahoma.</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>                                       Miami City Council Regular Meeting
 MEETING DATE:        January 6, 2026
 
 AGENDA TITLE:        Proclamation Declaring January 2026 as Human Trafficking Prevention Month
@@ -6327,7 +6320,7 @@ Fee Waiver_Chuck-Stotts-Big-Santa-Program_11132025 thru 11172025 11282025 thru 1
 61
 62
 63
-</pre></div></div><div><h3>Official Minutes</h3><div class="doc-panel"><pre>THE MAYOR AND THE CITY COUNCIL MET IN REGULAR SESSION ON JANUARY 06, 2026, IN THE MIAMI
+</pre></div></div><div><h3>&#128196; Official Minutes</h3><div class="doc-panel"><pre>THE MAYOR AND THE CITY COUNCIL MET IN REGULAR SESSION ON JANUARY 06, 2026, IN THE MIAMI
 CIVIC CENTER COUNCIL CHAMBERS AT 5:30PM WITH THE FOLLOWING MEMBERS PRESENT:
 
 Bless Parker, Mayor Tyler Cline, City Manager
@@ -7622,57 +7615,8 @@ MDRA $74.76
 January 06, 2026
 </pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

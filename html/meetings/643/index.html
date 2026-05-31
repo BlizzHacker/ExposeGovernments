@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>City Council</h1>
 <div class="meeting-meta">
-<span>📅 Oct 21, 2025</span>
-<span>⏱️ 00h 26m</span>
-<span>🔖 Clip #643</span>
+<span>&#128197; Oct 21, 2025</span>
+<span>&#9201;&#65039; 00h 26m</span>
+<span>&#128278; Clip #643</span>
+<span class="disc-badge">&#9888;&#65039; 2 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/643" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (12.1 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (12.1 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="2.78"><span class="seg-time">00:02</span><span class="seg-text">The trigger schedule, City Council meeting for Tuesday October 21st 2020.</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="2.78"><span class="seg-time">00:02</span><span class="seg-text">The trigger schedule, City Council meeting for Tuesday October 21st 2020.</span></div>
 <div class="seg" data-time="10.02"><span class="seg-time">00:10</span><span class="seg-text">Public in place scheduled personal chances we have none</span></div>
 <div class="seg" data-time="14.69"><span class="seg-time">00:14</span><span class="seg-text">Item 3 A claims list</span></div>
 <div class="seg" data-time="19.18"><span class="seg-time">00:19</span><span class="seg-text">Who&#x27;s two proof?</span></div>
@@ -639,12 +634,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="1575.65"><span class="seg-time">26:15</span><span class="seg-text">I&#x27;ll sign your paper</span></div>
 <div class="seg" data-time="1579.47"><span class="seg-time">26:19</span><span class="seg-text">He said he did</span></div>
 <div class="seg" data-time="1581.47"><span class="seg-time">26:21</span><span class="seg-text">He did it, he&#x27;s done</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>                                City Council Regular Meeting
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (2)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">$10,000</span><span class="disc-item">$4,000</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>                                City Council Regular Meeting
 MEETING DATE:     October 21, 2025
 
 AGENDA TITLE:     Claims List
@@ -657,7 +650,7 @@ COUNCIL APPROVAL
 ATTACHMENT(S):
 10.21.25 CITY.pdf
 CITY CC CLAIMS 9.2.25-9.15.25.pdf
-CITY CC CLAIMS 9.16.25-10.1.25.pdf</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>The trigger schedule, City Council meeting for Tuesday October 21st 2020. Public in place scheduled personal chances we have none Item 3 A claims list Who&#x27;s two proof? Be set up double. Item B minutes from the October 7th 2021 regular meeting. of our arms and see council maves adding chapter article in section. This is just an amendment to what you passed last week, I forgot the chapter article in Section Man that seems to get me a poll? Oh yes some cities don&#x27;t do that right now not know how maybe if they dont dude we did it and then say motion no proof so hi east west south north south east north north so to see if some background for call you it&#x27;s up there the current bylaws that we have city council member on board So If We don&#x27;t want City Councilmember On The Board Then I hope To update the byloss Do any of us money in So what? I think the board, their Board. The 501C3Bord has to amend them so at they know meeting that would have been a vote change by laws and then They can voted on candidates And it&#x27;s my secret ballot If for some reason if 501C 3 says don&#x27;t want update of all those Then we&#x27;d had back up person from council I mean, i don&#x27;t know why they wouldn&#x27; But just If if need to do it Then Okay Thank you Don´t be there So when then we have To point the board members so Cali can put together lists of some people that are interested in serving on The Board There&#x27;s a big news That feel Yes It did Put A list Of People They We&#x27;re Interested On Their Two-half Sarkurly Serving And said We want more If we need to go ahead And make the Approval for this You have To Have it Published In The Paper No Less than one week before The meeting Which is Second Wednesday Of A Month So I&#x27;m so Well They Hive To approve By-law Changes But We can Improve This list With Either Heaven Or Brian Depending on If they approve that change or not It&#x27;s your time to do you guys We have a more Exession Scaler for next week So we can do it Next Week 2 You Guys Want Think about More Members Just Find Yeah A I mean Do Can&#x27;t Be there Approval Or I Out Make So In the By-laws Hold on My hat This Is Confusing And this Also is just The 501C3 I am not sure if we are going to dismiss the advisory board because it&#x27;s a same set of people, but this was just for 501C3 Board. And so does say city council shall nominate directors at least one which she&#x27;ll be from Council Zone members regardless that age and remainder will remember have an organization then says they have to vote it in at the annual meeting by secret ballot. I&#x27;ve just been confused as well So 501C3 Board same people is a city advisory board Yeah Okay Why are we approving for The 51C 3 of We&#x27;re located way that the file has written and read nominates so But they all be Same People It&#x27;s technically the advisory board never meets, because it is in not to the Bible and say, Greenboard right? I was in both. The Advisory Board of the Five O&#x27;Wance A3Born are the same Who knew Obviously we have To keep that advisory board just because Yeah This is why it&#x27;s created That said i think We&#x27;ve been nominated For approved this list And then at That meeting Have you by Requested If a by So Change What Two Do You Say City Manager city manager Or his deputy His or her Does he may Yeah, that would make it the easiest. I mean we&#x27;re on this one making a new panel? The point is someone else&#x27;s spot or if he He isn&#x27;t up to say Mandarin more than New City Mac Maybe not be there yet They could have quite some under their spots Still think you don t probably because our auto-curs came down on us for having the same thing as the city funds to manage probably So, 5.133 is more of a friends group kind Of like Coleman they don t actually do anything at The center it s all run by City staff In majority If you are in the budget It&#x27;s a city funded Five o&#x27;clock and five o clock and five o One c three organizations So, We can speak to that Legal speaking Not for the friends of library The friend&#x27;s in a library has Statement says they raise funds To give two For operations and things But the auditor say there s lot It is not the best Do we create a friend in this center? I think you just get them to vote To change it and then they have Somebody else managing their own funds And a statement that says They are there purpose is Help raise money Keep the operations of this senior center going That way we could request like We do at library You guys having meeting coming up This program, They write a check and they help pay for it That would be with this idea But when I come to staff Stuff like that role guy or Staff working out there You know, To have the feedback on The five o&#x27;clock So you just get money from United Way You don t expect We re 5400 We re 5400 So we have to go on the same way Is it separated? I think its a process This is not good Because at only two, That&#x27;s why you are sitting in an oven The call of the main street But also how do they make sure Those were issues that need To be taken up Something like a</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>                                City Council Regular Meeting
+CITY CC CLAIMS 9.16.25-10.1.25.pdf</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>The trigger schedule, City Council meeting for Tuesday October 21st 2020. Public in place scheduled personal chances we have none Item 3 A claims list Who&#x27;s two proof? Be set up double. Item B minutes from the October 7th 2021 regular meeting. of our arms and see council maves adding chapter article in section. This is just an amendment to what you passed last week, I forgot the chapter article in Section Man that seems to get me a poll? Oh yes some cities don&#x27;t do that right now not know how maybe if they dont dude we did it and then say motion no proof so hi east west south north south east north north so to see if some background for call you it&#x27;s up there the current bylaws that we have city council member on board So If We don&#x27;t want City Councilmember On The Board Then I hope To update the byloss Do any of us money in So what? I think the board, their Board. The 501C3Bord has to amend them so at they know meeting that would have been a vote change by laws and then They can voted on candidates And it&#x27;s my secret ballot If for some reason if 501C 3 says don&#x27;t want update of all those Then we&#x27;d had back up person from council I mean, i don&#x27;t know why they wouldn&#x27; But just If if need to do it Then Okay Thank you Don´t be there So when then we have To point the board members so Cali can put together lists of some people that are interested in serving on The Board There&#x27;s a big news That feel Yes It did Put A list Of People They We&#x27;re Interested On Their Two-half Sarkurly Serving And said We want more If we need to go ahead And make the Approval for this You have To Have it Published In The Paper No Less than one week before The meeting Which is Second Wednesday Of A Month So I&#x27;m so Well They Hive To approve By-law Changes But We can Improve This list With Either Heaven Or Brian Depending on If they approve that change or not It&#x27;s your time to do you guys We have a more Exession Scaler for next week So we can do it Next Week 2 You Guys Want Think about More Members Just Find Yeah A I mean Do Can&#x27;t Be there Approval Or I Out Make So In the By-laws Hold on My hat This Is Confusing And this Also is just The 501C3 I am not sure if we are going to dismiss the advisory board because it&#x27;s a same set of people, but this was just for 501C3 Board. And so does say city council shall nominate directors at least one which she&#x27;ll be from Council Zone members regardless that age and remainder will remember have an organization then says they have to vote it in at the annual meeting by secret ballot. I&#x27;ve just been confused as well So 501C3 Board same people is a city advisory board Yeah Okay Why are we approving for The 51C 3 of We&#x27;re located way that the file has written and read nominates so But they all be Same People It&#x27;s technically the advisory board never meets, because it is in not to the Bible and say, Greenboard right? I was in both. The Advisory Board of the Five O&#x27;Wance A3Born are the same Who knew Obviously we have To keep that advisory board just because Yeah This is why it&#x27;s created That said i think We&#x27;ve been nominated For approved this list And then at That meeting Have you by Requested If a by So Change What Two Do You Say City Manager city manager Or his deputy His or her Does he may Yeah, that would make it the easiest. I mean we&#x27;re on this one making a new panel? The point is someone else&#x27;s spot or if he He isn&#x27;t up to say Mandarin more than New City Mac Maybe not be there yet They could have quite some under their spots Still think you don t probably because our auto-curs came down on us for having the same thing as the city funds to manage probably So, 5.133 is more of a friends group kind Of like Coleman they don t actually do anything at The center it s all run by City staff In majority If you are in the budget It&#x27;s a city funded Five o&#x27;clock and five o clock and five o One c three organizations So, We can speak to that Legal speaking Not for the friends of library The friend&#x27;s in a library has Statement says they raise funds To give two For operations and things But the auditor say there s lot It is not the best Do we create a friend in this center? I think you just get them to vote To change it and then they have Somebody else managing their own funds And a statement that says They are there purpose is Help raise money Keep the operations of this senior center going That way we could request like We do at library You guys having meeting coming up This program, They write a check and they help pay for it That would be with this idea But when I come to staff Stuff like that role guy or Staff working out there You know, To have the feedback on The five o&#x27;clock So you just get money from United Way You don t expect We re 5400 We re 5400 So we have to go on the same way Is it separated? I think its a process This is not good Because at only two, That&#x27;s why you are sitting in an oven The call of the main street But also how do they make sure Those were issues that need To be taken up Something like a</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>                                City Council Regular Meeting
 MEETING DATE:     October 21, 2025
 
 AGENDA TITLE:     Claims List
@@ -672,57 +665,8 @@ ATTACHMENT(S):
 CITY CC CLAIMS 9.2.25-9.15.25.pdf
 CITY CC CLAIMS 9.16.25-10.1.25.pdf</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami City Council</h1>
 <div class="meeting-meta">
-<span>📅 Nov  4, 2025</span>
-<span>⏱️ 00h 27m</span>
-<span>🔖 Clip #645</span>
+<span>&#128197; Nov  4, 2025</span>
+<span>&#9201;&#65039; 00h 27m</span>
+<span>&#128278; Clip #645</span>
+<span class="disc-badge">&#9888;&#65039; 2 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/645" allowfullscreen></iframe></div>
 
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="3.12"><span class="seg-time">00:03</span><span class="seg-text">The court order the rigorous given me mom City Guest 2 days. November 4th, 2020 5th,</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="3.12"><span class="seg-time">00:03</span><span class="seg-text">The court order the rigorous given me mom City Guest 2 days. November 4th, 2020 5th,</span></div>
 <div class="seg" data-time="8.2"><span class="seg-time">00:08</span><span class="seg-text">but again, but on the given personal appearances, have 9, 3, 3, A, Klein&#x27;s List.</span></div>
 <div class="seg" data-time="15.54"><span class="seg-time">00:15</span><span class="seg-text">Most two proof.</span></div>
 <div class="seg" data-time="16.5"><span class="seg-time">00:16</span><span class="seg-text">Section E, step 5.</span></div>
@@ -496,12 +491,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="1618.52"><span class="seg-time">26:58</span><span class="seg-text">Okay.</span></div>
 <div class="seg" data-time="1619.52"><span class="seg-time">26:59</span><span class="seg-text">Okay.</span></div>
 <div class="seg" data-time="1622.77"><span class="seg-time">27:02</span><span class="seg-text">or D.</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>                                  Miami City Council Regular Meeting
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (2)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">$5,000,000,</span><span class="disc-item">$3,000</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>                                  Miami City Council Regular Meeting
 MEETING DATE:      November 4, 2025
 
 AGENDA TITLE:      Claims List
@@ -514,7 +507,7 @@ STAFFS RECOMMENDATION:
 COUNCIL APPROVAL
 
 ATTACHMENT(S):
-11.4.25 CITY.pdf</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>The court order the rigorous given me mom City Guest 2 days. November 4th, 2020 5th, but again, but on the given personal appearances, have 9, 3, 3, A, Klein&#x27;s List. Most two proof. Section E, step 5. 4, 5, Jews. High, double. High, per person. 5, 3, B, F, and the over 21st, regular meeting. Most two proof. Second, E, step 5. 5, Jews. High, double. High, per person. 3, C, minutes. On cover 28, 20, 20, 5, ready to be. Motion to approve. Second. 5, double. High, Jews. 10, E, step 5. High, per person. 5, D, 23, D, 246. All days get over. Motion to approve. Second. E, step 5. 5, Jews. High, double. High, per person. High, per person. 3, E, 20, 26, meetings. Good. Second. Double. High. Farms. High, Jews. E, step 5. High, per person. 3, F. Dominic Gordon is 20, 25, that&#x27;s 0, 8, charter. 2. Articles. 6. Section 2. 1, 41. 3, 2, 1, 46. This is just a, there was a scrubbinger&#x27;s error in that four nominations that the publisher caught. And we probably could have just had the mayor sign off on it, but from an abundance of caution, I&#x27;d rather have the council approve. It&#x27;s a change in its five to six. Can I make left one approve? Second. 5. 5. Double. High. High. 6. Or it&#x27;s 2025, that&#x27;s 11. A mini chapter 16. Section 16. That&#x27;s six. To encoder that new fees, get over the sports and write department for writing, for conflicting provisions, for building all conflicting ordinances, and establishing an effective date. So we were last week in the more session we brought to you guys, we had a piece of visual. We wanted to update this as well. We&#x27;ve got lots of other questions. Some areas in the course side, there&#x27;s butter on it. So we&#x27;ve got an investment with the ability to do rent. I&#x27;ll stop for a video. I&#x27;ll also have a piece scheduled. I&#x27;m burning up this, the flexibility, yeah, so we&#x27;ve been kind of handcuffed and looking at what kind of business I&#x27;ve got a lot to do with this. Part two, we have three of them out there, so we&#x27;re going to use the place of the product and offer. We&#x27;ve got one over at Brian&#x27;s. Do you have something to say? I don&#x27;t know, there&#x27;s a part that I don&#x27;t see in the club, man. Can you please move in? Yeah, look through it today. I think it&#x27;s a good idea. I think we&#x27;ve got to recoup some of the bodies that we&#x27;re spending for. Staffing them out. At the bottom of the piece, we&#x27;ve got four of the sports companies. We&#x27;ve used the leaves that these are facilities. They&#x27;re basically used for free. And they&#x27;re not getting a little bit of a change. We&#x27;ve got this. With this and the five dollars per year to play. We&#x27;re just playing. As of right now, in 2020, six. The start of the session. Do you see in the near future of us taking over the soccer? They&#x27;re both for strong right now. I&#x27;ve got it. I&#x27;ll make a motion to approve. Second. So, please. For the time, Joe&#x27;s time, E-CIP, Parker. Hi. Thank you. 3, 8, or it&#x27;s 25, that&#x27;s 12, and many chapter 16, 16, that&#x27;s five, that&#x27;s the part of the recreation piece. Get it off. So, yeah, I&#x27;m just going to be back off with, you know, trying to talk about, we had a lot of these fees that we had to complete. Okay. And that&#x27;s, you know, we&#x27;re just kind of locked in on certain prices. The students beability to enjoy their life. And you have to be aware of everything. And you have to say, we got in a criteria. We&#x27;ll just do a little bit of a case, okay? Places. Yeah. I think it will be a bit different. You can motion the broom. Second. Parker. Aye. Aye. For the time. Aye. I&#x27;m hiring Andrew Donnie, as an alternate municipal court judge. This came up. Judge, I want to call him Chuck, it&#x27;s not just Chuck. If he brought it up that there was a, the case didn&#x27;t make, but there was almost a case where his wife would have been a witness, and he would not have been able to adjudicate that. So we discussed the need for an alternate judge, which would occur probably three to four times a year. Her, our organist, Andrew Downey, if he is hired, has agreed that he would accept a hundred and fifty dollars per appearance to do that, just to stand in for Chuck when needed, and that would come out of Legels budget. Motion to approve. Hi. Hi. Dennis, have you said? Hi. Hi. 3J. This is the same memorandum to understand with the adult Honey Art. We&#x27;re in the library. Library. Library. I blanked out what made you go so much for a minute. Yeah, it&#x27;s for the library, and if you look on the, in your packet it shows you what areas they&#x27;re going to paint there, and that&#x27;s painting over those crying. That&#x27;s one that&#x27;s going to have the buffalo that you saw on the packet. That pretty much is going to look just like the island. I make a motion to approach the brain over. A second. Two words. Five. Two. One. Hi. Is that part of the? Hi. Three case, mission. That way, we&#x27;re pulled of loop to host the summer mirrors. Council of Oklahoma in 16th to 19th, 206. So that&#x27;s me, but we want some of it in the boat. I was asked by Mayor Parker to get together in the facts and figures for a proposed mayor&#x27;s conferenc</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>                                  Miami City Council Regular Meeting
+11.4.25 CITY.pdf</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>The court order the rigorous given me mom City Guest 2 days. November 4th, 2020 5th, but again, but on the given personal appearances, have 9, 3, 3, A, Klein&#x27;s List. Most two proof. Section E, step 5. 4, 5, Jews. High, double. High, per person. 5, 3, B, F, and the over 21st, regular meeting. Most two proof. Second, E, step 5. 5, Jews. High, double. High, per person. 3, C, minutes. On cover 28, 20, 20, 5, ready to be. Motion to approve. Second. 5, double. High, Jews. 10, E, step 5. High, per person. 5, D, 23, D, 246. All days get over. Motion to approve. Second. E, step 5. 5, Jews. High, double. High, per person. High, per person. 3, E, 20, 26, meetings. Good. Second. Double. High. Farms. High, Jews. E, step 5. High, per person. 3, F. Dominic Gordon is 20, 25, that&#x27;s 0, 8, charter. 2. Articles. 6. Section 2. 1, 41. 3, 2, 1, 46. This is just a, there was a scrubbinger&#x27;s error in that four nominations that the publisher caught. And we probably could have just had the mayor sign off on it, but from an abundance of caution, I&#x27;d rather have the council approve. It&#x27;s a change in its five to six. Can I make left one approve? Second. 5. 5. Double. High. High. 6. Or it&#x27;s 2025, that&#x27;s 11. A mini chapter 16. Section 16. That&#x27;s six. To encoder that new fees, get over the sports and write department for writing, for conflicting provisions, for building all conflicting ordinances, and establishing an effective date. So we were last week in the more session we brought to you guys, we had a piece of visual. We wanted to update this as well. We&#x27;ve got lots of other questions. Some areas in the course side, there&#x27;s butter on it. So we&#x27;ve got an investment with the ability to do rent. I&#x27;ll stop for a video. I&#x27;ll also have a piece scheduled. I&#x27;m burning up this, the flexibility, yeah, so we&#x27;ve been kind of handcuffed and looking at what kind of business I&#x27;ve got a lot to do with this. Part two, we have three of them out there, so we&#x27;re going to use the place of the product and offer. We&#x27;ve got one over at Brian&#x27;s. Do you have something to say? I don&#x27;t know, there&#x27;s a part that I don&#x27;t see in the club, man. Can you please move in? Yeah, look through it today. I think it&#x27;s a good idea. I think we&#x27;ve got to recoup some of the bodies that we&#x27;re spending for. Staffing them out. At the bottom of the piece, we&#x27;ve got four of the sports companies. We&#x27;ve used the leaves that these are facilities. They&#x27;re basically used for free. And they&#x27;re not getting a little bit of a change. We&#x27;ve got this. With this and the five dollars per year to play. We&#x27;re just playing. As of right now, in 2020, six. The start of the session. Do you see in the near future of us taking over the soccer? They&#x27;re both for strong right now. I&#x27;ve got it. I&#x27;ll make a motion to approve. Second. So, please. For the time, Joe&#x27;s time, E-CIP, Parker. Hi. Thank you. 3, 8, or it&#x27;s 25, that&#x27;s 12, and many chapter 16, 16, that&#x27;s five, that&#x27;s the part of the recreation piece. Get it off. So, yeah, I&#x27;m just going to be back off with, you know, trying to talk about, we had a lot of these fees that we had to complete. Okay. And that&#x27;s, you know, we&#x27;re just kind of locked in on certain prices. The students beability to enjoy their life. And you have to be aware of everything. And you have to say, we got in a criteria. We&#x27;ll just do a little bit of a case, okay? Places. Yeah. I think it will be a bit different. You can motion the broom. Second. Parker. Aye. Aye. For the time. Aye. I&#x27;m hiring Andrew Donnie, as an alternate municipal court judge. This came up. Judge, I want to call him Chuck, it&#x27;s not just Chuck. If he brought it up that there was a, the case didn&#x27;t make, but there was almost a case where his wife would have been a witness, and he would not have been able to adjudicate that. So we discussed the need for an alternate judge, which would occur probably three to four times a year. Her, our organist, Andrew Downey, if he is hired, has agreed that he would accept a hundred and fifty dollars per appearance to do that, just to stand in for Chuck when needed, and that would come out of Legels budget. Motion to approve. Hi. Hi. Dennis, have you said? Hi. Hi. 3J. This is the same memorandum to understand with the adult Honey Art. We&#x27;re in the library. Library. Library. I blanked out what made you go so much for a minute. Yeah, it&#x27;s for the library, and if you look on the, in your packet it shows you what areas they&#x27;re going to paint there, and that&#x27;s painting over those crying. That&#x27;s one that&#x27;s going to have the buffalo that you saw on the packet. That pretty much is going to look just like the island. I make a motion to approach the brain over. A second. Two words. Five. Two. One. Hi. Is that part of the? Hi. Three case, mission. That way, we&#x27;re pulled of loop to host the summer mirrors. Council of Oklahoma in 16th to 19th, 206. So that&#x27;s me, but we want some of it in the boat. I was asked by Mayor Parker to get together in the facts and figures for a proposed mayor&#x27;s conferenc</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>                                  Miami City Council Regular Meeting
 MEETING DATE:      November 4, 2025
 
 AGENDA TITLE:      Claims List
@@ -529,57 +522,8 @@ COUNCIL APPROVAL
 ATTACHMENT(S):
 11.4.25 CITY.pdf</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

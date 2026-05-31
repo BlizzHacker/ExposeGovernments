@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 Jan 21, 2025</span>
-<span>⏱️ 00h 29m</span>
-<span>🔖 Clip #589</span>
+<span>&#128197; Jan 21, 2025</span>
+<span>&#9201;&#65039; 00h 29m</span>
+<span>&#128278; Clip #589</span>
+<span class="disc-badge">&#9888;&#65039; 14 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/589" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (13.6 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (13.6 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.38"><span class="seg-time">00:00</span><span class="seg-text">We&#x27;ll have the invocation on. Part T, the Chris General would definitely follow a thankful for you and we&#x27;re</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.38"><span class="seg-time">00:00</span><span class="seg-text">We&#x27;ll have the invocation on. Part T, the Chris General would definitely follow a thankful for you and we&#x27;re</span></div>
 <div class="seg" data-time="7.97"><span class="seg-time">00:07</span><span class="seg-text">grateful to this community in The Blessing It is For so many ways as that</span></div>
 <div class="seg" data-time="12.25"><span class="seg-time">00:12</span><span class="seg-text">You leave them meeting tonight That discussion with Matt has honest interspecial or productive</span></div>
 <div class="seg" data-time="17.39"><span class="seg-time">00:17</span><span class="seg-text">And give our council members list when they make decisions where their</span></div>
@@ -674,12 +669,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="1726.92"><span class="seg-time">28:46</span><span class="seg-text">Hello</span></div>
 <div class="seg" data-time="1769.5"><span class="seg-time">29:29</span><span class="seg-text">In general, I&#x27;m 17 of the regular week</span></div>
 <div class="seg" data-time="1772.5"><span class="seg-time">29:32</span><span class="seg-text">The month is again</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (14)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">7 million</span><span class="disc-item">9 million</span><span class="disc-item">$4000</span><span class="disc-item">20%</span><span class="disc-item">49 dollars</span><span class="disc-item">$140860</span><span class="disc-item">100%</span><span class="disc-item">$48,740</span><span class="disc-item">$2,000</span><span class="disc-item">$1.9</span><span class="disc-item">$1.4</span><span class="disc-item">3.5%</span><span class="disc-item">93 dollars</span><span class="disc-item">4 million</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Tuesday, January 21, 2025
 5:30
@@ -751,7 +744,7 @@ The Meeting Will be Reconvened in the Staff Room After the Executive Session  �
 *Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 18                                         Trustees
 23.
 *Action Item* Adjournment                                                                     Trustees
-The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>We&#x27;ll have the invocation on. Part T, the Chris General would definitely follow a thankful for you and we&#x27;re grateful to this community in The Blessing It is For so many ways as that You leave them meeting tonight That discussion with Matt has honest interspecial or productive And give our council members list when they make decisions where their community that affects us all in your name we pray. We met them, and pledge allegiance to the flag of The United States of America And it&#x27;s just a republic for which is saying one nation under God Invisible with liberty and justice for our For Public Info and I&#x27;m getting personal parents Five Plains List Most true proof Second Second Second 17 Second Second Second of $945. I guess we&#x27;re giving this a big set, 9 or $4000 that&#x27;s always been if This is approved in the In our $140860 as you all are cheap for We can do something. Thanks. Thanks. Hi. No discussion on solid waste management Alternatives evaluation Percentive by Burns and McDonald Julie Davis. Hi. I&#x27;m happy to be here, Okay? All right so more of us are the ones in Act oral 15 years and you&#x27;re Biominal engineering team So we focus on solid waste form or Environmental system First Molyer with this region We&#x27;re going to focus on the public and On the public. On the public, But we recently wrapped up a study To follow results from this looking at Opportunities for future facility Employment whether it&#x27;s Persuasion or landfill. Maybe turn off Sorry. I think you have a good three party So do a quick overview of the Participant in your project or You&#x27;re going to have a new Transversation Serial Analysis New landfills. We did two different versions of that And then I present our key findings and recommendations for Access so your current transportation You take it at about 20,000 tons per year From the city The City&#x27;s residential and commercial Customers Additional resident through The facilities are used for 30 years And you need significant improvement to continue operations So the facility also was on a former Incentorator site so it wasn&#x27;t Originally designed To be a Transversation Facility This contracts with only in fill 70 miles away from The actual disposal so that&#x27;s Public and Lamar We saved the combined of Transportation That is contractive with a private Haller for Transportation And the city&#x27;s in Increases and cost Significantly through those transportation costs As well as disposal costs So that very common As we see capacity and landfills going down In an region The Cost per time had to get With increased and the Transversation costs We&#x27;ve worked for a number of local governments across And on hundreds the cities So we created that plan Facility and Alicies To look at what could be options to make Infurзance to your existing facility In New Transportation For development of landfills One would Minimum tonnage scenario As this city More than a year We&#x27;ve worked for the city And we have to work To make sure that the City Plus what could be expected from some of The other Transversations within their region Then it maximums tonnage scenario So if you were If your really market That material or The conditions again for the new transportation It was based on this community We&#x27;ll work with that And then landfills scenarios Both of their region Taking in consideration some Regional facilities that are existing So within the area But there&#x27;s not a lot Projective population Or has it been recently Like you have seen increases in your tonnage still And so to be conservative we wanted To maintain that estimated increase year over a Year That You&#x27;ve occurred In the last few years for Your Tonnage So, We use it as a Your gate fees So how much It costs for folks For The region New Transversation that rate could go up And Could push waste other places to cheaper facilities So just To note, That It should be something Can&#x27;t guarantee the tonnage until you look at what it costs on within The region In transportation and disposal cost would still With a third party And potentially will increase over time And focus capacity decreases with in Norwegian So looking at transportation design and cost assumptions Looked a capacity of 25,700 Ten years so a slight increase over time Point 4 7% I didn&#x27;t interest rate Of 3.5 percent Amortized Over 20 Years A Putments on a lower five year Immortalization Looking At 5A for Properties To use Property that the city party has a Transversation On That site, 10.000 square foot building And Put a contingency on that Which is consistency for our cost Consistent For Our Cost Estimates We didn&#x27;t include revenues So Didn&#x27;n Include the you are Bringing in Charging your Residents or people bringing it outside waste as part of this assessment You&#x27;re looking Around 7 million dollars in capital costs Developing a new transportation facility We&#x27;re looking at the purchase A Putment for Transversation This is a new equipment Because we are not familiar with how old and open you have on site current</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>We&#x27;ll have the invocation on. Part T, the Chris General would definitely follow a thankful for you and we&#x27;re grateful to this community in The Blessing It is For so many ways as that You leave them meeting tonight That discussion with Matt has honest interspecial or productive And give our council members list when they make decisions where their community that affects us all in your name we pray. We met them, and pledge allegiance to the flag of The United States of America And it&#x27;s just a republic for which is saying one nation under God Invisible with liberty and justice for our For Public Info and I&#x27;m getting personal parents Five Plains List Most true proof Second Second Second 17 Second Second Second of $945. I guess we&#x27;re giving this a big set, 9 or <mark>$4000</mark> that&#x27;s always been if This is approved in the In our <mark>$140860</mark> as you all are cheap for We can do something. Thanks. Thanks. Hi. No discussion on solid waste management Alternatives evaluation Percentive by Burns and McDonald Julie Davis. Hi. I&#x27;m happy to be here, Okay? All right so more of us are the ones in Act oral 15 years and you&#x27;re Biominal engineering team So we focus on solid waste form or Environmental system First Molyer with this region We&#x27;re going to focus on the public and On the public. On the public, But we recently wrapped up a study To follow results from this looking at Opportunities for future facility Employment whether it&#x27;s Persuasion or landfill. Maybe turn off Sorry. I think you have a good three party So do a quick overview of the Participant in your project or You&#x27;re going to have a new Transversation Serial Analysis New landfills. We did two different versions of that And then I present our key findings and recommendations for Access so your current transportation You take it at about 20,000 tons per year From the city The City&#x27;s residential and commercial Customers Additional resident through The facilities are used for 30 years And you need significant improvement to continue operations So the facility also was on a former Incentorator site so it wasn&#x27;t Originally designed To be a Transversation Facility This contracts with only in fill 70 miles away from The actual disposal so that&#x27;s Public and Lamar We saved the combined of Transportation That is contractive with a private Haller for Transportation And the city&#x27;s in Increases and cost Significantly through those transportation costs As well as disposal costs So that very common As we see capacity and landfills going down In an region The Cost per time had to get With increased and the Transversation costs We&#x27;ve worked for a number of local governments across And on hundreds the cities So we created that plan Facility and Alicies To look at what could be options to make Infurзance to your existing facility In New Transportation For development of landfills One would Minimum tonnage scenario As this city More than a year We&#x27;ve worked for the city And we have to work To make sure that the City Plus what could be expected from some of The other Transversations within their region Then it maximums tonnage scenario So if you were If your really market That material or The conditions again for the new transportation It was based on this community We&#x27;ll work with that And then landfills scenarios Both of their region Taking in consideration some Regional facilities that are existing So within the area But there&#x27;s not a lot Projective population Or has it been recently Like you have seen increases in your tonnage still And so to be conservative we wanted To maintain that estimated increase year over a Year That You&#x27;ve occurred In the last few years for Your Tonnage So, We use it as a Your gate fees So how much It costs for folks For The region New Transversation that rate could go up And Could push waste other places to cheaper facilities So just To note, That It should be something Can&#x27;t guarantee the tonnage until you look at what it costs on within The region In transportation and disposal cost would still With a third party And potentially will increase over time And focus capacity decreases with in Norwegian So looking at transportation design and cost assumptions Looked a capacity of 25,700 Ten years so a slight increase over time Point 4 7% I didn&#x27;t interest rate Of 3.5 percent Amortized Over 20 Years A Putments on a lower five year Immortalization Looking At 5A for Properties To use Property that the city party has a Transversation On That site, 10.000 square foot building And Put a contingency on that Which is consistency for our cost Consistent For Our Cost Estimates We didn&#x27;t include revenues So Didn&#x27;n Include the you are Bringing in Charging your Residents or people bringing it outside waste as part of this assessment You&#x27;re looking Around <mark>7 million</mark> dollars in capital costs Developing a new transportation facility We&#x27;re looking at the purchase A Putment for Transversation This is a new equipment Because we are not familiar with how old and open you have on site current</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Tuesday, January 21, 2025
 5:30
@@ -825,57 +818,8 @@ The Meeting Will be Reconvened in the Staff Room After the Executive Session  �
 *Action Item* Adjournment                                                                     Trustees
 The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

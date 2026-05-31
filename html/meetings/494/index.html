@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 Jul 17, 2023</span>
-<span>⏱️ 00h 15m</span>
-<span>🔖 Clip #494</span>
+<span>&#128197; Jul 17, 2023</span>
+<span>&#9201;&#65039; 00h 15m</span>
+<span>&#128278; Clip #494</span>
+<span class="disc-badge">&#9888;&#65039; 7 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/494" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (7.2 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (7.2 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">May 23, the invocation by The Reverend of All-Sate&#x27;s Pismar Church.</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">May 23, the invocation by The Reverend of All-Sate&#x27;s Pismar Church.</span></div>
 <div class="seg" data-time="36.58"><span class="seg-time">00:36</span><span class="seg-text">of your authority, guide them to be the leaders for people need.</span></div>
 <div class="seg" data-time="42.06"><span class="seg-time">00:42</span><span class="seg-text">Help them see humanity and dignity</span></div>
 <div class="seg" data-time="44.34"><span class="seg-time">00:44</span><span class="seg-text">in those who disagree with Him</span></div>
@@ -339,12 +334,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="928.66"><span class="seg-time">15:28</span><span class="seg-text">Trustee community announcements and adjournment</span></div>
 <div class="seg" data-time="936.94"><span class="seg-time">15:36</span><span class="seg-text">That&#x27;s the point</span></div>
 <div class="seg" data-time="938.94"><span class="seg-time">15:38</span><span class="seg-text">Hi</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (7)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">750 thousand</span><span class="disc-item">3700 dollars</span><span class="disc-item">94 million</span><span class="disc-item">305 thousand</span><span class="disc-item">57 million</span><span class="disc-item">10%</span><span class="disc-item">6.9%</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Monday, July 17, 2023
 6:00
@@ -407,7 +400,7 @@ Solid Waste
 Trustee Community Announcements                                                                       Trustees
 14.
 *Action Item* Adjournment                                                                    Trustees
-The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>May 23, the invocation by The Reverend of All-Sate&#x27;s Pismar Church. of your authority, guide them to be the leaders for people need. Help them see humanity and dignity in those who disagree with Him into treat all persons no matter how weak or poor but reverence Your creation deserves And finally Father renewed him With a strength Of You&#x27;re Presence In The Joyof Helping To Build A Community Or Thief But Be Human Person We asked this through Jesus Christ our Lord Confident in Your Ignis and Love What do you think is just to the flag of the United States of America? And due The Republic for which your stands One Nation Under God In the Visible With a little liberty Just as far off Before public input I&#x27;m just good with personal appearances That&#x27;s where they come at Five Plain Bliss Make a motionary proof Some birth Hi So old High Parker Right Six minutes from the July 3rd 2023 regular meeting. Motion to approve? Second, second 7 7 7 It&#x27;s mayor members of Council These professionals services were incurred for June 20th I&#x27;ll be half of the city focusing on ongoing legal processes including review and recent GRDA in FERC filings, improper response. This is again this for last year&#x27;s fiscal budget because it was occurred June which has lasts a few years so that 750 thousand budgets we have 3700 dollars an eight dollar million dollars. If the 1,700-10 dollar invoice is approved that would leave a remaining balance of 305 thousand two hundred ninety eight billion dollars in this course and like involves it got to be used up for the right thank you sorry I was late giving You can&#x27;t get any middle out when there&#x27;s questions on number seven I read it earlier today. Motion to approve second, Mark? Eight Ward-Leasport&#x27;s agreement To bank the grant lake for Q23 dash 40 on that escuator You&#x27;ve related signing and payment authority The city manager or his days in need Mr Brown breasted Good The first day of the course And You know, you have a bank I came in at 6.9% Then we had 5.57 million more best 4.94 million per national Okay, four point eight five and thank your friends, way to pay me In 2.7 years per cent So he&#x27;s on top Of that which actually looks A little different there So I was looking at this one There were 94 Between bank and grant lake in first national 32 How can we stay local with it? Oh, so that only within being That close Well when i go out for a bit of a day And then you have to pay me And the next day How can we stay local with it? Oh, so that only within being That close Well when i go out for a bit of a day The blinds We&#x27;re going to launch the At here at this city bay So you know I&#x27;m in your six months now To Georgia do Do e have Within a certain range and this is within the monetary There&#x27;s authorization To pick If it That that&#x27;s What? It&#x27;s a percentage I don&#x27;t have an on me at But its considerable Its something On The Order of 10% It&#x27;s a significant We&#x27;re talking about it in this instance So for me i appreciate Back the grant lake and their bid But For my our other Spinnable 94 And stay with local bank With first national Since its ninety four dollars and thirty two cents I feel like Our previous one is I think i&#x27;ll hear a bit of my opinion That was not going to go with first national Since its on ninety four dollars So And Okay But What about the same way you have been doing We were just heard here About the time You know To that Things So We make a motion we can Make the second lowest or First national I&#x27;ll Make Motion The week From first National Bank Has anybody been notified of Of You Okay I think they&#x27;ll appreciate our Motor Zill It&#x27;s nothing personal But you know we preach Local This is one of the yellow So from now on We&#x27;re not going to give this Thank You keep going Going away your go and last be the decision Because if it was like two thousand dollars Different That would bring me to the five hundred That&#x27;s why for me it was worth keeping the local For than I have four dollars But like Brian said there is two thousand and probably different story The other one that came in What we can talk about Yeah And what&#x27;s the 10% of Value at Okay, yeah so So It&#x27;s a It&#x27;s a I think yeah, and Yeah And then We know this Well No So do we All off on This We don&#x27;t That&#x27;s a Not all of us For you What So what do you guys Let me I&#x27;ll go ahead and second your motion Bye Hi Debt protect contract See 18-47 Extension for fiscal year 2324 The amount of 78,448 So may or members This is our annual Contract that just happens to be up For renewal This contract, however with Tetrotech Is more than it has been in previous years It does not mean that we have to modify the budget In any way this amount of still taking into consideration When We set a bunch for next year But all activities That&#x27;s coming up It is important In this contract for them to complete The services required Which are all related To the principal day of re-licensing And somewhat To To I can go through any Of those activities but as you You could see o</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>May 23, the invocation by The Reverend of All-Sate&#x27;s Pismar Church. of your authority, guide them to be the leaders for people need. Help them see humanity and dignity in those who disagree with Him into treat all persons no matter how weak or poor but reverence Your creation deserves And finally Father renewed him With a strength Of You&#x27;re Presence In The Joyof Helping To Build A Community Or Thief But Be Human Person We asked this through Jesus Christ our Lord Confident in Your Ignis and Love What do you think is just to the flag of the United States of America? And due The Republic for which your stands One Nation Under God In the Visible With a little liberty Just as far off Before public input I&#x27;m just good with personal appearances That&#x27;s where they come at Five Plain Bliss Make a motionary proof Some birth Hi So old High Parker Right Six minutes from the July 3rd 2023 regular meeting. Motion to approve? Second, second 7 7 7 It&#x27;s mayor members of Council These professionals services were incurred for June 20th I&#x27;ll be half of the city focusing on ongoing legal processes including review and recent GRDA in FERC filings, improper response. This is again this for last year&#x27;s fiscal budget because it was occurred June which has lasts a few years so that <mark>750 thousand</mark> budgets we have <mark>3700 dollars</mark> an eight dollar million dollars. If the 1,700-10 dollar invoice is approved that would leave a remaining balance of <mark>305 thousand</mark> two hundred ninety eight billion dollars in this course and like involves it got to be used up for the right thank you sorry I was late giving You can&#x27;t get any middle out when there&#x27;s questions on number seven I read it earlier today. Motion to approve second, Mark? Eight Ward-Leasport&#x27;s agreement To bank the grant lake for Q23 dash 40 on that escuator You&#x27;ve related signing and payment authority The city manager or his days in need Mr Brown breasted Good The first day of the course And You know, you have a bank I came in at <mark>6.9%</mark> Then we had 5.<mark>57 million</mark> more best 4.<mark>94 million</mark> per national Okay, four point eight five and thank your friends, way to pay me In 2.7 years per cent So he&#x27;s on top Of that which actually looks A little different there So I was looking at this one There were 94 Between bank and grant lake in first national 32 How can we stay local with it? Oh, so that only within being That close Well when i go out for a bit of a day And then you have to pay me And the next day How can we stay local with it? Oh, so that only within being That close Well when i go out for a bit of a day The blinds We&#x27;re going to launch the At here at this city bay So you know I&#x27;m in your six months now To Georgia do Do e have Within a certain range and this is within the monetary There&#x27;s authorization To pick If it That that&#x27;s What? It&#x27;s a percentage I don&#x27;t have an on me at But its considerable Its something On The Order of <mark>10%</mark> It&#x27;s a significant We&#x27;re talking about it in this instance So for me i appreciate Back the grant lake and their bid But For my our other Spinnable 94 And stay with local bank With first national Since its ninety four dollars and thirty two cents I feel like Our previous one is I think i&#x27;ll hear a bit of my opinion That was not going to go with first national Since its on ninety four dollars So And Okay But What about the same way you have been doing We were just heard here About the time You know To that Things So We make a motion we can Make the second lowest or First national I&#x27;ll Make Motion The week From first National Bank Has anybody been notified of Of You Okay I think they&#x27;ll appreciate our Motor Zill It&#x27;s nothing personal But you know we preach Local This is one of the yellow So from now on We&#x27;re not going to give this Thank You keep going Going away your go and last be the decision Because if it was like two thousand dollars Different That would bring me to the five hundred That&#x27;s why for me it was worth keeping the local For than I have four dollars But like Brian said there is two thousand and probably different story The other one that came in What we can talk about Yeah And what&#x27;s the <mark>10%</mark> of Value at Okay, yeah so So It&#x27;s a It&#x27;s a I think yeah, and Yeah And then We know this Well No So do we All off on This We don&#x27;t That&#x27;s a Not all of us For you What So what do you guys Let me I&#x27;ll go ahead and second your motion Bye Hi Debt protect contract See 18-47 Extension for fiscal year 2324 The amount of 78,448 So may or members This is our annual Contract that just happens to be up For renewal This contract, however with Tetrotech Is more than it has been in previous years It does not mean that we have to modify the budget In any way this amount of still taking into consideration When We set a bunch for next year But all activities That&#x27;s coming up It is important In this contract for them to complete The services required Which are all related To the principal day of re-licensing And somewhat To To I can go through any Of those activities but as you You could see o</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Monday, July 17, 2023
 6:00
@@ -472,57 +465,8 @@ Trustee Community Announcements                                �
 *Action Item* Adjournment                                                                    Trustees
 The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

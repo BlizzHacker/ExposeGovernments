@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami City Council</h1>
 <div class="meeting-meta">
-<span>📅 Jan 20, 2026</span>
-<span>⏱️ 00h 25m</span>
-<span>🔖 Clip #655</span>
-</div>
-</div>
+<span>&#128197; Jan 20, 2026</span>
+<span>&#9201;&#65039; 00h 25m</span>
+<span>&#128278; Clip #655</span>
 
+</div>
+</div>
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/655" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (11.6 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (11.6 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="2.78"><span class="seg-time">00:02</span><span class="seg-text">The bill comes for the regular Skittor Mead Law City Council. We&#x27;re Tuesday, January 20th of 2006 on two public input unskitred personal appearances have done three A Proclamation in action</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="2.78"><span class="seg-time">00:02</span><span class="seg-text">The bill comes for the regular Skittor Mead Law City Council. We&#x27;re Tuesday, January 20th of 2006 on two public input unskitred personal appearances have done three A Proclamation in action</span></div>
 <div class="seg" data-time="19.61"><span class="seg-time">00:19</span><span class="seg-text">On a proclamation declaring Jan. 21st 26 as PEO Day</span></div>
 <div class="seg" data-time="25.87"><span class="seg-time">00:25</span><span class="seg-text">That&#x27;s philanthropic educational organization</span></div>
 <div class="seg" data-time="30.72"><span class="seg-time">00:30</span><span class="seg-text">Thank you I don&#x27;t mess that one up</span></div>
@@ -367,12 +362,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="1514.61"><span class="seg-time">25:14</span><span class="seg-text">Yes sir</span></div>
 <div class="seg" data-time="1516.61"><span class="seg-time">25:16</span><span class="seg-text">Motion</span></div>
 <div class="seg" data-time="1519.49"><span class="seg-time">25:19</span><span class="seg-text">All right</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">📄 Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>Searpsie&gt;
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">&#128196; Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>Searpsie&gt;
 Bog
 NABRWS
 ca Coy
@@ -2371,7 +2364,7 @@ $232.80
 $32,692.64
 
 January 20, 2026
-</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>The bill comes for the regular Skittor Mead Law City Council. We&#x27;re Tuesday, January 20th of 2006 on two public input unskitred personal appearances have done three A Proclamation in action On a proclamation declaring Jan. 21st 26 as PEO Day That&#x27;s philanthropic educational organization Thank you I don&#x27;t mess that one up That&#x27;s what I said the O Day. Motion to approve, second? Hi! Hi! And three B proclamation declaring January 31st 2026 as knots grow today in line motion no proof Second Hi! Hi! That&#x27;s a sad day. So we&#x27;re going to do the B E O Day, We&#x27;ll come back and take pictures in them one I don&#x27;t care this is probably fun I don&#x27;t know what you&#x27;re saying. What do people think about this? They are going to go in the area Okay, so all of them have tried and take This because that&#x27;s a quarantine right here is she there How long they&#x27;ve gone for us Somebody has taken pictures Oh my god! I&#x27;m gonna see that one on the left. I got it. Yes ma&#x27;am I can hear you. You can hear me One on the other Oh no, I don&#x27;t know if we did that one. One on the other This is what you do That&#x27;s my friend. Hi there&#x27;s some cards Yeah Come on, you can see me Then this is mine. Do it homey for our own Oh yeah We appreciate all of ya. So, Susan you&#x27;re having cake right? You are having cakes. What about sandwiches I can&#x27;t help it Make a video Give me a video Do you want to see me? Yeah How do ya know our little son music right now I&#x27;m a fan of that video She told me the make-to videos When in this next day she said Don&#x27;t know what&#x27;s going on. We got slammed after that And we have people coming from everywhere Partle is an adult We&#x27;ve had people who came and have been wonderful We appreciate all of our kind That way we need to help And it&#x27;s really good work I was telling somebody that today How special mys grows Been the community over years There is probably maybe chief But as kids, When they are how old you&#x27;re in this room As a kid You went and knocked So adults were taking out grandkids We also want you to enjoy your time What are we going for here? We&#x27;re playing five kids You don&#x27;t kill it If Do ya know our address, drink sweet birthday Thank y&#x27;all Say some For a Mr. Bruth Hi James Barns Four B Generate 6 Most of the Second St. Parker Budget number 26 So this budget amendment is just General How to be in We&#x27;re seeing in the library Thank you Chris Parker For me, both on recommended airport logo I don&#x27;t think it&#x27;s a great idea So we are going to go there for one of those Let us start a main set and Lori To our desk, we do Two months Three month We&#x27;re going to be in the nine tribes To see Some rice Good playing From this we have back in the board And then our business is pretty up there for heritage and flying united So, if I take a listen And drop accounts Show them they like it How can i let Lori explain She does Actually The yellow two also was She&#x27;s a little bit So I&#x27;m going to call I would do it in my way up here And so, this is one of the flight school That&#x27;s right at share We&#x27;re trying To incorporate that set Because there are six of those One other was not home But, obviously The number once school Is internal text The other thing is This one I love Fushing Kick dullies That&#x27;s very hard to read So, when it is simple On this page It fits in a different area But we&#x27;re all And the other way To be able So, whatever I do love is The first thing that goes on That&#x27;s someone who has to be an art point And they have a version They will go up there and it gets got Where can black light? This is the Black Light version Literally at where i start It looks looking great in white light Because now we are talking about She just say Somebody still inducted her Are we just approving all of these? This is the same one First, I thought this was a couple We figured what&#x27;s changed in city It would do What happened to all over Senior center it has that right What did you say? Brought okay Don&#x27;t tell Chuck T6 text on there That´s my red When i was at the leadership My name is at the airport I actually dox effort A lot to He worked a LOT with you Think about it I think about it Hi Absolutely Thank y&#x27;all For me There&#x27;s no action From XSLT This is the orderly adoption of The ordinances we have to do Push two brews Hi Chosen I heard 4G Join the resolution Conquered to the better standards The state-level home of writing for accessibility Conflementation Providing for disability and effective date This is a policy that we really should have had Long time ago in order To start grants But our program brought it For me I said I already had my notes We needed it So it&#x27;s just basically adopting Ethics role 4 State ethics role4 and saying that you cannot Financial again for your position on the count Or other I mean following That rule Most of them are proof A second Alright Hi Hi I&#x27;m a new business As opposed to the residents in the agenda Six staff of work Seven mayor council committee So we have been Not found out last week The last weeks that my law was awa</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>Searpsie&gt;
+</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>The bill comes for the regular Skittor Mead Law City Council. We&#x27;re Tuesday, January 20th of 2006 on two public input unskitred personal appearances have done three A Proclamation in action On a proclamation declaring Jan. 21st 26 as PEO Day That&#x27;s philanthropic educational organization Thank you I don&#x27;t mess that one up That&#x27;s what I said the O Day. Motion to approve, second? Hi! Hi! And three B proclamation declaring January 31st 2026 as knots grow today in line motion no proof Second Hi! Hi! That&#x27;s a sad day. So we&#x27;re going to do the B E O Day, We&#x27;ll come back and take pictures in them one I don&#x27;t care this is probably fun I don&#x27;t know what you&#x27;re saying. What do people think about this? They are going to go in the area Okay, so all of them have tried and take This because that&#x27;s a quarantine right here is she there How long they&#x27;ve gone for us Somebody has taken pictures Oh my god! I&#x27;m gonna see that one on the left. I got it. Yes ma&#x27;am I can hear you. You can hear me One on the other Oh no, I don&#x27;t know if we did that one. One on the other This is what you do That&#x27;s my friend. Hi there&#x27;s some cards Yeah Come on, you can see me Then this is mine. Do it homey for our own Oh yeah We appreciate all of ya. So, Susan you&#x27;re having cake right? You are having cakes. What about sandwiches I can&#x27;t help it Make a video Give me a video Do you want to see me? Yeah How do ya know our little son music right now I&#x27;m a fan of that video She told me the make-to videos When in this next day she said Don&#x27;t know what&#x27;s going on. We got slammed after that And we have people coming from everywhere Partle is an adult We&#x27;ve had people who came and have been wonderful We appreciate all of our kind That way we need to help And it&#x27;s really good work I was telling somebody that today How special mys grows Been the community over years There is probably maybe chief But as kids, When they are how old you&#x27;re in this room As a kid You went and knocked So adults were taking out grandkids We also want you to enjoy your time What are we going for here? We&#x27;re playing five kids You don&#x27;t kill it If Do ya know our address, drink sweet birthday Thank y&#x27;all Say some For a Mr. Bruth Hi James Barns Four B Generate 6 Most of the Second St. Parker Budget number 26 So this budget amendment is just General How to be in We&#x27;re seeing in the library Thank you Chris Parker For me, both on recommended airport logo I don&#x27;t think it&#x27;s a great idea So we are going to go there for one of those Let us start a main set and Lori To our desk, we do Two months Three month We&#x27;re going to be in the nine tribes To see Some rice Good playing From this we have back in the board And then our business is pretty up there for heritage and flying united So, if I take a listen And drop accounts Show them they like it How can i let Lori explain She does Actually The yellow two also was She&#x27;s a little bit So I&#x27;m going to call I would do it in my way up here And so, this is one of the flight school That&#x27;s right at share We&#x27;re trying To incorporate that set Because there are six of those One other was not home But, obviously The number once school Is internal text The other thing is This one I love Fushing Kick dullies That&#x27;s very hard to read So, when it is simple On this page It fits in a different area But we&#x27;re all And the other way To be able So, whatever I do love is The first thing that goes on That&#x27;s someone who has to be an art point And they have a version They will go up there and it gets got Where can black light? This is the Black Light version Literally at where i start It looks looking great in white light Because now we are talking about She just say Somebody still inducted her Are we just approving all of these? This is the same one First, I thought this was a couple We figured what&#x27;s changed in city It would do What happened to all over Senior center it has that right What did you say? Brought okay Don&#x27;t tell Chuck T6 text on there That´s my red When i was at the leadership My name is at the airport I actually dox effort A lot to He worked a LOT with you Think about it I think about it Hi Absolutely Thank y&#x27;all For me There&#x27;s no action From XSLT This is the orderly adoption of The ordinances we have to do Push two brews Hi Chosen I heard 4G Join the resolution Conquered to the better standards The state-level home of writing for accessibility Conflementation Providing for disability and effective date This is a policy that we really should have had Long time ago in order To start grants But our program brought it For me I said I already had my notes We needed it So it&#x27;s just basically adopting Ethics role 4 State ethics role4 and saying that you cannot Financial again for your position on the count Or other I mean following That rule Most of them are proof A second Alright Hi Hi I&#x27;m a new business As opposed to the residents in the agenda Six staff of work Seven mayor council committee So we have been Not found out last week The last weeks that my law was awa</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>Searpsie&gt;
 Bog
 NABRWS
 ca Coy
@@ -2439,7 +2432,7 @@ A. — Pelivan - Miami Oct-Dec 2025 Report City Council
 The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens
 and if special assistance or accommodations are required, please submit your request to the City Manager&#x27;s
 office. We also ask that those in attendance place all electronic devices on silent. Thank you.
-</pre></div></div><div><h3>Official Minutes</h3><div class="doc-panel"><pre>THE MAYOR AND THE CITY COUNCIL MET IN REGULAR SESSION ON JANUARY 20, 2026, IN THE MIAMI
+</pre></div></div><div><h3>&#128196; Official Minutes</h3><div class="doc-panel"><pre>THE MAYOR AND THE CITY COUNCIL MET IN REGULAR SESSION ON JANUARY 20, 2026, IN THE MIAMI
 CIVIC CENTER COUNCIL CHAMBERS AT 5:30PM WITH THE FOLLOWING MEMBERS PRESENT:
 
 Bless Parker, Mayor Tyler Cline, City Manager
@@ -4372,57 +4365,8 @@ $32,692.64
 January 20, 2026
 </pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

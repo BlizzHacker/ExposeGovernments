@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 May 20, 2025</span>
-<span>⏱️ 00h 15m</span>
-<span>🔖 Clip #609</span>
-</div>
-</div>
+<span>&#128197; May 20, 2025</span>
+<span>&#9201;&#65039; 00h 15m</span>
+<span>&#128278; Clip #609</span>
 
+</div>
+</div>
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/609" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (7.3 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (7.3 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">Audit thank you that your listening and we can talk to</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">Audit thank you that your listening and we can talk to</span></div>
 <div class="seg" data-time="11.26"><span class="seg-time">00:11</span><span class="seg-text">you and we do in our home, but also care about what happens here</span></div>
 <div class="seg" data-time="16.28"><span class="seg-time">00:16</span><span class="seg-text">this room. I ask these are blessed that many workers</span></div>
 <div class="seg" data-time="20.92"><span class="seg-time">00:20</span><span class="seg-text">have gathered to help them with their tired frustrated</span></div>
@@ -357,12 +352,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="939.15"><span class="seg-time">15:39</span><span class="seg-text">Statue</span></div>
 <div class="seg" data-time="942.15"><span class="seg-time">15:42</span><span class="seg-text">18</span></div>
 <div class="seg" data-time="944.15"><span class="seg-time">15:44</span><span class="seg-text">Statue</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>+ MI4
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>+ MI4
 a “a A eS
 Ree
 NGS WS
@@ -396,7 +389,7 @@ Miami Industrial &amp; Public Facilities Authority Miami Fair Housing Board
 Mayor’s Flood Advisory Board Miami Industrial Development Authority
 Miami Housing Authority Board of Adjustments
 Miami Special Utility Authority Miami Main Street Board
-Miami Seniors’ Center Advisory Board The Miami Seniors’ Center Inc.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Audit thank you that your listening and we can talk to you and we do in our home, but also care about what happens here this room. I ask these are blessed that many workers have gathered to help them with their tired frustrated give the peace health of ones who were seated at front of us that have this responsibility. Give them wisdom, give the courage when they need to make tough decisions Father overall we ask you continue in bless our town and blessed ones who gave him given gifts so he might not do Bless his meeting Lord Jesus any my prayer amen Amen To the five United States of America and to do it for which is safe One nation under God individual would be in this as a role For, I&#x27;m both Public input for unscheduled personal parents Five claims list Must you approve? Second Hi Joe hi Hi All right Six minutes on April 15th 25th to recover over the overall accounts from good form. So, The Budget Resolution requires that any money moves can be approved by Council so That&#x27;s what we&#x27;re doing Merit Money was budgeted in fund-510 which is This has a stormwater of Fund Which is 511 as personnel and this Is for the merit race for the big motion approach Hi I&#x27;m going to ask you about 20.5-02 Can increase the electric rate there Yes, so in front of everybody is The resolution and also For their race We&#x27;ve had we have been talking About this for a year You know GRDA was increased in our rates What&#x27;s they are gonna do it next 3 years And then we did the town hall So this is on your bill You know, so we have a PPA charge This has what GRDA passes onto us We pass it into the customers It&#x27;s actually gonna make that easier to calculate I mean Derek can talk about more Yeah In just takes their rate At times 1.1 The two sets which are built in So the hope is it kind of keeps our PPA That we charge customers a little flatter It doesn&#x27;t change as much And there&#x27;s actually an enhanced presentation But you guys are out on that About to PCA extra reward Just fell off Yeah, just rolled off I was going To do my city manager&#x27;s communication We&#x27;ll be there Oh, I&#x27;m almost true Second Hi Can To the slide list of the administrative fleet Equipment, including the package and surplus Operized, you have to see Offer it for sale in production So the strap or destroy Give away its signatory Good evening You&#x27;ll seen your packets There is a list Of MSUA equipment I think it&#x27;s some clean up It gets some of this over equipment Move my understanding is that The equipment has gone to our shop And we&#x27;d like for you To be used in different departments Also discussions with other department Before, decided to move here So its been looked at Seeing if there are any more useful life in it For the MSUA This was where we would want to do a live auction And you&#x27;ll see that similar except different items From the city side So once we have a approval to move forward With an auction then I know my staffs been working with getting some Oxeners looking What other stuff, i believe On Getting, so what do public auction Another community always liked it When they did their public auction There was lots of people in our communities What came here and buy all kinds What ever Pollution to approve Hi Okay The MSUA electronic equipment including the fact included in In our bus and all of us I&#x27;ve got some facility Fosgrapper, strolling To select sign authority Yes these items They had called me They were talking about moving them out Get some more space It&#x27;s a lot of electronic equipment There is the list on back here, and things work Some don&#x27;t This can use any more Its possible that local communities might be able to do But conditions we have We have some things that work there&#x27;s a few Things we don&#x27;t know of But what we&#x27;re requesting is to Be able To either sell it, scrap it or destroy And We need your approval Motion 2 approved Hi I&#x27;m Joe Hi The award beards for iGrid Rocksfly We received annual pricing from the three Rocksflyers you just mentioned Through competitive bidding The annual rates are for specified rock categories Rock purchases will go to low as better first What this does is I think it&#x27;s a good idea It has a lot of different types But we have some things that work there The Rock purchases will go to the lowest better first What this does is it helps a save time Not put an out for every times something comes up When we need aggregate But they&#x27;ll get at low as Better First, cascades If that company didn&#x27;t have Time-to do what would cascade To next one in Pricing And We think The process will help to stay as cost effective And efficient in getting the work To this city, we can do So what you need is your approval Also there&#x27;s going Three one year extensions This would be first extension for an aggregate I think that it&#x27;ll pay Extensions We&#x27;re on all of these Make a motion. All right. 13 awarding on call concrete Repair C25 That&#x27;s 10 Conest Instruction Go in and Enterprise and Portrait for stage instruction Services LSE, Scott construction and Torres </pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>+ MI4
+Miami Seniors’ Center Advisory Board The Miami Seniors’ Center Inc.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>Audit thank you that your listening and we can talk to you and we do in our home, but also care about what happens here this room. I ask these are blessed that many workers have gathered to help them with their tired frustrated give the peace health of ones who were seated at front of us that have this responsibility. Give them wisdom, give the courage when they need to make tough decisions Father overall we ask you continue in bless our town and blessed ones who gave him given gifts so he might not do Bless his meeting Lord Jesus any my prayer amen Amen To the five United States of America and to do it for which is safe One nation under God individual would be in this as a role For, I&#x27;m both Public input for unscheduled personal parents Five claims list Must you approve? Second Hi Joe hi Hi All right Six minutes on April 15th 25th to recover over the overall accounts from good form. So, The Budget Resolution requires that any money moves can be approved by Council so That&#x27;s what we&#x27;re doing Merit Money was budgeted in fund-510 which is This has a stormwater of Fund Which is 511 as personnel and this Is for the merit race for the big motion approach Hi I&#x27;m going to ask you about 20.5-02 Can increase the electric rate there Yes, so in front of everybody is The resolution and also For their race We&#x27;ve had we have been talking About this for a year You know GRDA was increased in our rates What&#x27;s they are gonna do it next 3 years And then we did the town hall So this is on your bill You know, so we have a PPA charge This has what GRDA passes onto us We pass it into the customers It&#x27;s actually gonna make that easier to calculate I mean Derek can talk about more Yeah In just takes their rate At times 1.1 The two sets which are built in So the hope is it kind of keeps our PPA That we charge customers a little flatter It doesn&#x27;t change as much And there&#x27;s actually an enhanced presentation But you guys are out on that About to PCA extra reward Just fell off Yeah, just rolled off I was going To do my city manager&#x27;s communication We&#x27;ll be there Oh, I&#x27;m almost true Second Hi Can To the slide list of the administrative fleet Equipment, including the package and surplus Operized, you have to see Offer it for sale in production So the strap or destroy Give away its signatory Good evening You&#x27;ll seen your packets There is a list Of MSUA equipment I think it&#x27;s some clean up It gets some of this over equipment Move my understanding is that The equipment has gone to our shop And we&#x27;d like for you To be used in different departments Also discussions with other department Before, decided to move here So its been looked at Seeing if there are any more useful life in it For the MSUA This was where we would want to do a live auction And you&#x27;ll see that similar except different items From the city side So once we have a approval to move forward With an auction then I know my staffs been working with getting some Oxeners looking What other stuff, i believe On Getting, so what do public auction Another community always liked it When they did their public auction There was lots of people in our communities What came here and buy all kinds What ever Pollution to approve Hi Okay The MSUA electronic equipment including the fact included in In our bus and all of us I&#x27;ve got some facility Fosgrapper, strolling To select sign authority Yes these items They had called me They were talking about moving them out Get some more space It&#x27;s a lot of electronic equipment There is the list on back here, and things work Some don&#x27;t This can use any more Its possible that local communities might be able to do But conditions we have We have some things that work there&#x27;s a few Things we don&#x27;t know of But what we&#x27;re requesting is to Be able To either sell it, scrap it or destroy And We need your approval Motion 2 approved Hi I&#x27;m Joe Hi The award beards for iGrid Rocksfly We received annual pricing from the three Rocksflyers you just mentioned Through competitive bidding The annual rates are for specified rock categories Rock purchases will go to low as better first What this does is I think it&#x27;s a good idea It has a lot of different types But we have some things that work there The Rock purchases will go to the lowest better first What this does is it helps a save time Not put an out for every times something comes up When we need aggregate But they&#x27;ll get at low as Better First, cascades If that company didn&#x27;t have Time-to do what would cascade To next one in Pricing And We think The process will help to stay as cost effective And efficient in getting the work To this city, we can do So what you need is your approval Also there&#x27;s going Three one year extensions This would be first extension for an aggregate I think that it&#x27;ll pay Extensions We&#x27;re on all of these Make a motion. All right. 13 awarding on call concrete Repair C25 That&#x27;s 10 Conest Instruction Go in and Enterprise and Portrait for stage instruction Services LSE, Scott construction and Torres </pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>+ MI4
 a “a A eS
 Ree
 NGS WS
@@ -432,57 +425,8 @@ Miami Housing Authority Board of Adjustments
 Miami Special Utility Authority Miami Main Street Board
 Miami Seniors’ Center Advisory Board The Miami Seniors’ Center Inc.</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

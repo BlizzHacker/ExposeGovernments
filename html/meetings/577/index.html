@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 Oct 21, 2024</span>
-<span>⏱️ 00h 21m</span>
-<span>🔖 Clip #577</span>
-</div>
-</div>
+<span>&#128197; Oct 21, 2024</span>
+<span>&#9201;&#65039; 00h 21m</span>
+<span>&#128278; Clip #577</span>
 
+</div>
+</div>
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/577" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (9.7 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (9.7 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">First, we&#x27;ll have the implication by a remin of all things because we&#x27;re terrorists and Mary Susan Wayley.</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">First, we&#x27;ll have the implication by a remin of all things because we&#x27;re terrorists and Mary Susan Wayley.</span></div>
 <div class="seg" data-time="38.0"><span class="seg-time">00:38</span><span class="seg-text">We&#x27;re seeing your hands and feet here on earth for singing opportunities in many circumstances, both big</span></div>
 <div class="seg" data-time="45.43"><span class="seg-time">00:45</span><span class="seg-text">And small. So please reveal to us through our discussion</span></div>
 <div class="seg" data-time="49.9"><span class="seg-time">00:49</span><span class="seg-text">In decisions what you would have as do if we had differences help</span></div>
@@ -422,12 +417,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="1250.03"><span class="seg-time">20:50</span><span class="seg-text">12</span></div>
 <div class="seg" data-time="1252.03"><span class="seg-time">20:52</span><span class="seg-text">12</span></div>
 <div class="seg" data-time="1254.03"><span class="seg-time">20:54</span><span class="seg-text">12</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Monday, October 21, 2024
 6:00
@@ -488,7 +481,7 @@ The Meeting Will be Reconvened in the Staff Room After the Executive Session  �
 *Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 15                            Trustees
 18.
 *Action Item* Adjournment                                                    Trustees
-The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>First, we&#x27;ll have the implication by a remin of all things because we&#x27;re terrorists and Mary Susan Wayley. We&#x27;re seeing your hands and feet here on earth for singing opportunities in many circumstances, both big And small. So please reveal to us through our discussion In decisions what you would have as do if we had differences help To resolve those in a manner that leaves everyone&#x27;s dignity In place and with a solution that brings light into our community help us to have the strength To carry out your mission, Your mission of love justice peace And gratitude. In the interest of our community and in our homes, we ask this The name is your son. Our savior Jesus Christ To approve second. Parker? Thank you, thank you Thanks Budget amendment number 25-08 Over time money is worked on the mom of housing authority On a non tribe style project and we&#x27;re sitting in the insurance funds to prepare 2020 Chevy pickup damage direct from turnpike Yes it&#x27;s Jennifer not here I will take this for me I&#x27;ll take this for you. This is the first time we&#x27;ve worked in our housing authority and ask us to do after hours of Reinvesting over a month The second one was insurance check that he got We had an accident on turnpike You know, get money because it doesn&#x27;t have revenues And then we&#x27;re just starting back up. Most proof. Parker? I&#x27;m sorry. I have a lot of money to do with the authority MSUA logo, Kaylee and Derek Good evening. Legal is urged us To make it distinction between city And utility side We went out two different local vendors They came up With LLGo They came up with a lot of money I don&#x27;t want to say it&#x27;s been the amount Of course. We got streets and everything else So, we have I don&#x27;t know. You have to fix the Just use chat, you can teach That&#x27;s my opinion Because not like first look at rebranding totally But of course on others experience that And then we want it keep as low as possible The new miles having thoughts Um Feel Like he intended this design here is just a visible right When If You want to share that&#x27;s the intent right? Yeah, I think it was a bit of very big The operation on this city and That is what i see in here And with you its kind It has been figured about Oh my god. We&#x27;re trying To be branded totally for wild but Besides blessing I&#x27;m not sure if there are two years I did not tell What? No, no. It&#x27;s how they do it That was the design Spread cool Slow down Is that one you guys like this is One We look at Do Do you like it? But sure the young one here do You liked that That&#x27;s why i&#x27;m being lucky Just feel Like I&#x27;ll have What are they going around back there Oh my sauce and stuff See, see Yeah Are ya trying to eat tea How much is this? It looks pretty good Well chat GPT Ah its a song mental goback Yeah you can tell because there&#x27;s words that are mental Oh yeah That looks way out Do they like it? What do i mean, what is the song Right Did u see that one Shower You just have They&#x27;re separate They&#x27;re separate Right Oh, how are you? And this one of these aren&#x27;t just pretty much the babies here I go back to a state and why i got like that Something up in corner That was cool too No more What&#x27;s the pattern Just if we apply it costy For each color And they&#x27;re just thinking about that Yeah, we&#x27;ve displayed what&#x27;s the basic white I mean because it is tall so Just raved and you all back its freaks Same black but i&#x27;m in there They are separate still Oh if like this Like, i don&#x27;t know But If u guys liked It sure We can always put blank around But Thankyou But then we got a bunch of guys down there wearing that stuff Yeah, they don&#x27;t want them You know what? They didn´t really have the odies I mean if you go to look at everything and And u like me this This can be yours That way your still re-branded it If i wanted two It may not been an experience We&#x27;re going on too right now for this Okay parker Hi And Bart&#x27;s Rave i saw it waste Charger agreement Template authorize the trust manager or does there is any design They agree So, if a period was in that we had an effective system of people charging Their dubbing materials off at this all way In finance Was wanting to Rain into their process We don&#x27;t believe that people would pay for all they&#x27;ve dumped out there Yet worse than paying to haul it on So, the gist of what this agreement Would be its more businesses It&#x27;s not residential But if a want you Whether wanting To charge when making into deposit They can set up A charging countergreement Basically This provides two ways It is that it&#x27;s they give us a list of specific people They are authorized to dump in there Only those will be able To do at math design The receipt I&#x27;d like other option If i don&#x27;t know who else going Taking materials out their names Open account But basically, the responsibility for everybody That makes deposit out there in their name It would be an easier thing for them to do They have a greater potential liability If somebody goes with the approved list account Instead of employing, going up There</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>First, we&#x27;ll have the implication by a remin of all things because we&#x27;re terrorists and Mary Susan Wayley. We&#x27;re seeing your hands and feet here on earth for singing opportunities in many circumstances, both big And small. So please reveal to us through our discussion In decisions what you would have as do if we had differences help To resolve those in a manner that leaves everyone&#x27;s dignity In place and with a solution that brings light into our community help us to have the strength To carry out your mission, Your mission of love justice peace And gratitude. In the interest of our community and in our homes, we ask this The name is your son. Our savior Jesus Christ To approve second. Parker? Thank you, thank you Thanks Budget amendment number 25-08 Over time money is worked on the mom of housing authority On a non tribe style project and we&#x27;re sitting in the insurance funds to prepare 2020 Chevy pickup damage direct from turnpike Yes it&#x27;s Jennifer not here I will take this for me I&#x27;ll take this for you. This is the first time we&#x27;ve worked in our housing authority and ask us to do after hours of Reinvesting over a month The second one was insurance check that he got We had an accident on turnpike You know, get money because it doesn&#x27;t have revenues And then we&#x27;re just starting back up. Most proof. Parker? I&#x27;m sorry. I have a lot of money to do with the authority MSUA logo, Kaylee and Derek Good evening. Legal is urged us To make it distinction between city And utility side We went out two different local vendors They came up With LLGo They came up with a lot of money I don&#x27;t want to say it&#x27;s been the amount Of course. We got streets and everything else So, we have I don&#x27;t know. You have to fix the Just use chat, you can teach That&#x27;s my opinion Because not like first look at rebranding totally But of course on others experience that And then we want it keep as low as possible The new miles having thoughts Um Feel Like he intended this design here is just a visible right When If You want to share that&#x27;s the intent right? Yeah, I think it was a bit of very big The operation on this city and That is what i see in here And with you its kind It has been figured about Oh my god. We&#x27;re trying To be branded totally for wild but Besides blessing I&#x27;m not sure if there are two years I did not tell What? No, no. It&#x27;s how they do it That was the design Spread cool Slow down Is that one you guys like this is One We look at Do Do you like it? But sure the young one here do You liked that That&#x27;s why i&#x27;m being lucky Just feel Like I&#x27;ll have What are they going around back there Oh my sauce and stuff See, see Yeah Are ya trying to eat tea How much is this? It looks pretty good Well chat GPT Ah its a song mental goback Yeah you can tell because there&#x27;s words that are mental Oh yeah That looks way out Do they like it? What do i mean, what is the song Right Did u see that one Shower You just have They&#x27;re separate They&#x27;re separate Right Oh, how are you? And this one of these aren&#x27;t just pretty much the babies here I go back to a state and why i got like that Something up in corner That was cool too No more What&#x27;s the pattern Just if we apply it costy For each color And they&#x27;re just thinking about that Yeah, we&#x27;ve displayed what&#x27;s the basic white I mean because it is tall so Just raved and you all back its freaks Same black but i&#x27;m in there They are separate still Oh if like this Like, i don&#x27;t know But If u guys liked It sure We can always put blank around But Thankyou But then we got a bunch of guys down there wearing that stuff Yeah, they don&#x27;t want them You know what? They didn´t really have the odies I mean if you go to look at everything and And u like me this This can be yours That way your still re-branded it If i wanted two It may not been an experience We&#x27;re going on too right now for this Okay parker Hi And Bart&#x27;s Rave i saw it waste Charger agreement Template authorize the trust manager or does there is any design They agree So, if a period was in that we had an effective system of people charging Their dubbing materials off at this all way In finance Was wanting to Rain into their process We don&#x27;t believe that people would pay for all they&#x27;ve dumped out there Yet worse than paying to haul it on So, the gist of what this agreement Would be its more businesses It&#x27;s not residential But if a want you Whether wanting To charge when making into deposit They can set up A charging countergreement Basically This provides two ways It is that it&#x27;s they give us a list of specific people They are authorized to dump in there Only those will be able To do at math design The receipt I&#x27;d like other option If i don&#x27;t know who else going Taking materials out their names Open account But basically, the responsibility for everybody That makes deposit out there in their name It would be an easier thing for them to do They have a greater potential liability If somebody goes with the approved list account Instead of employing, going up There</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Monday, October 21, 2024
 6:00
@@ -551,57 +544,8 @@ The Meeting Will be Reconvened in the Staff Room After the Executive Session  �
 *Action Item* Adjournment                                                    Trustees
 The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

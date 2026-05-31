@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 Nov  6, 2023</span>
-<span>⏱️ 00h 09m</span>
-<span>🔖 Clip #513</span>
+<span>&#128197; Nov  6, 2023</span>
+<span>&#9201;&#65039; 00h 09m</span>
+<span>&#128278; Clip #513</span>
+<span class="disc-badge">&#9888;&#65039; 3 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/513" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (4.5 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (4.5 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.28"><span class="seg-time">00:00</span><span class="seg-text">Let us pray. Thank you for the city of Miami, thank</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.28"><span class="seg-time">00:00</span><span class="seg-text">Let us pray. Thank you for the city of Miami, thank</span></div>
 <div class="seg" data-time="35.27"><span class="seg-time">00:35</span><span class="seg-text">to celebrate on the items before them.</span></div>
 <div class="seg" data-time="38.25"><span class="seg-time">00:38</span><span class="seg-text">May every decision be righteous in your sight for our benefit and</span></div>
 <div class="seg" data-time="42.65"><span class="seg-time">00:42</span><span class="seg-text">For Your glory, we ask this</span></div>
@@ -435,12 +430,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="582.13"><span class="seg-time">09:42</span><span class="seg-text">Williams</span></div>
 <div class="seg" data-time="583.33"><span class="seg-time">09:43</span><span class="seg-text">Don&#x27;t go</span></div>
 <div class="seg" data-time="584.13"><span class="seg-time">09:44</span><span class="seg-text">He&#x27;s dead</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (3)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">637,491 dollars</span><span class="disc-item">572 dollars</span><span class="disc-item">$19,572.30</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Monday, November 6, 2023
 6:00
@@ -495,7 +488,7 @@ Staff Reports (Written report included in packet, if available staff is present 
 Trustee Community Announcements                                                       Trustees
 14.
 *Action Item* Adjournment                                                                 Trustees
-The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Let us pray. Thank you for the city of Miami, thank to celebrate on the items before them. May every decision be righteous in your sight for our benefit and For Your glory, we ask this In The Name of Father And Of THE Sun End Up A Holy Spirit Amen Amen Amen Congratulations To the flag On the United States of America And Two Republic For which it stands One Nation Under God In the Visal When Liberty In Justice or All Reform of the Campooters Get to Personal Prayer By Clean Bliss Motion To Approve Second Hi Williams Aye Don&#x27;t go High He&#x27;s there Six Minutes from The October 16th 2023 regular meeting MotionTo Approved Thank Parker Five Williams Hey Don&#x27;t Go High He&#x27;s There I&#x27;m staying Seven They was right for May and Climbing For Pinscoology Or Day Realizing And associated Complaint proceedings and amount of $19,572.30 cents? So may your members have the council each view would be a meeting with additional details on this claim these are for professional services in disbursements encouraged from September 3rd 2023 through December 26th 23mph City at Miami focusing on review pleading filings another documentation preparing responses communicating with the Miami team related to following which were in a dam safety issues, the release of the study plan and contaminated sediment transport study Indian Hoffman meant In The Circuit Court Of Appeals follow-up So as you can tell it was very active reproductive September However this 19 572 dollars would go against our current budget if This claim we&#x27;re approved It would have a remaining balance of 637,491 dollars and 95 cents for fiscal year 2324 in so it is well within our budget amount Thank you motion We approve Second Circuit Bye Williams Hi The Uncle I East Aye A Renew Annual Contract C21 That Fits 4 With Lendom April Davis For Asme Thb And Our Services For Fits 4 Your 2324 3-year contract With Well I say Three years up to three Years that we can renew The Contract This will be the third year So next Spring We Would Go Out for Bids To his Services Something Just History is How far That Been Into this Will Be Third Year This Is All For Thb Um It&#x27;s Yeah Thank You H Think Much of my Proof Take Perfect Bye Williams Correct Deco Hi East Nine Award Contract The Grainment To Clean Uniform For Our FQ 23-53 For General Uniform Services Continue to Bond the submission of all required Contract Documents And Approved The City Manager Or he Design Me Two Signed A Contract And Notice Two Proceed Yet Synthes Out C Airborne In Plain Plains Was Only Convey That It Give us a bid and They We&#x27;re Actually Are Correct I Co. I Co Business With Um Is there&#x27;s the price of this one. See, There is a charge that they do for insurance on if the shirts get destroyed or lost and so On That They cut Price in half And went onto items I just Just about all The rest Of everything else So Only We&#x27;ll contract For A year Could give them to Do 6 month Contract Rest And To the same thing There&#x27;s just one page right I Just got to them You reckon it is a volume issue? The other companies wouldn&#x27;t bid It was like We have In slow You know, Ask him later Have you That see your good day But How did they decide Im sorry One guy last time All after The answer He said Take and Still been Can I have to think Everybody A pretty tight right now On And So that&#x27;s There was a little bit of cost He made this Yeah Make motion Approved That is what you were Pardon You are Manacas Yeh We can always go Out and re-bid But in This situation Think They&#x27;ve been Good provider on everything so far And yeah, I would recommend One I&#x27;ll say Are you OK? Hi Williams Don&#x27;t go Right He said 10 2024 Mead and schedule So that&#x27;s in our packet On At one time We used to have these on Tuesdays In Think How was the reason we changed it Mondays Then when kept at the monday For Brian situation No his situations change too Today So do we Want to try go back To Tuesdays You can&#x27;t OK I think We had two Sinterials with Brian and Kevin both That And i Had a conversation this With staff When Were viewed Basically going Leave it up at the council But Staff Had no reason Compiling Everything&#x27;s been working fine The In The past we had an extra day I think with Monday to get things prepared and ready Instead of just having that over the weekend But And i Think We&#x27;ve gotten pretty used To That now Seeing it seems Workout Just fine So Good Will do any Well, Mike emotion Two Second Williams Don&#x27;t go He&#x27;s dead 11 On New Business Of Andy which is Reson Supposing Us agenda 12 staff reports 13 Trustee Community Inassments 14 Second Williams Don&#x27;t go He&#x27;s dead</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>Let us pray. Thank you for the city of Miami, thank to celebrate on the items before them. May every decision be righteous in your sight for our benefit and For Your glory, we ask this In The Name of Father And Of THE Sun End Up A Holy Spirit Amen Amen Amen Congratulations To the flag On the United States of America And Two Republic For which it stands One Nation Under God In the Visal When Liberty In Justice or All Reform of the Campooters Get to Personal Prayer By Clean Bliss Motion To Approve Second Hi Williams Aye Don&#x27;t go High He&#x27;s there Six Minutes from The October 16th 2023 regular meeting MotionTo Approved Thank Parker Five Williams Hey Don&#x27;t Go High He&#x27;s There I&#x27;m staying Seven They was right for May and Climbing For Pinscoology Or Day Realizing And associated Complaint proceedings and amount of <mark>$19,572.30</mark> cents? So may your members have the council each view would be a meeting with additional details on this claim these are for professional services in disbursements encouraged from September 3rd 2023 through December 26th 23mph City at Miami focusing on review pleading filings another documentation preparing responses communicating with the Miami team related to following which were in a dam safety issues, the release of the study plan and contaminated sediment transport study Indian Hoffman meant In The Circuit Court Of Appeals follow-up So as you can tell it was very active reproductive September However this 19 <mark>572 dollars</mark> would go against our current budget if This claim we&#x27;re approved It would have a remaining balance of <mark>637,491 dollars</mark> and 95 cents for fiscal year 2324 in so it is well within our budget amount Thank you motion We approve Second Circuit Bye Williams Hi The Uncle I East Aye A Renew Annual Contract C21 That Fits 4 With Lendom April Davis For Asme Thb And Our Services For Fits 4 Your 2324 3-year contract With Well I say Three years up to three Years that we can renew The Contract This will be the third year So next Spring We Would Go Out for Bids To his Services Something Just History is How far That Been Into this Will Be Third Year This Is All For Thb Um It&#x27;s Yeah Thank You H Think Much of my Proof Take Perfect Bye Williams Correct Deco Hi East Nine Award Contract The Grainment To Clean Uniform For Our FQ 23-53 For General Uniform Services Continue to Bond the submission of all required Contract Documents And Approved The City Manager Or he Design Me Two Signed A Contract And Notice Two Proceed Yet Synthes Out C Airborne In Plain Plains Was Only Convey That It Give us a bid and They We&#x27;re Actually Are Correct I Co. I Co Business With Um Is there&#x27;s the price of this one. See, There is a charge that they do for insurance on if the shirts get destroyed or lost and so On That They cut Price in half And went onto items I just Just about all The rest Of everything else So Only We&#x27;ll contract For A year Could give them to Do 6 month Contract Rest And To the same thing There&#x27;s just one page right I Just got to them You reckon it is a volume issue? The other companies wouldn&#x27;t bid It was like We have In slow You know, Ask him later Have you That see your good day But How did they decide Im sorry One guy last time All after The answer He said Take and Still been Can I have to think Everybody A pretty tight right now On And So that&#x27;s There was a little bit of cost He made this Yeah Make motion Approved That is what you were Pardon You are Manacas Yeh We can always go Out and re-bid But in This situation Think They&#x27;ve been Good provider on everything so far And yeah, I would recommend One I&#x27;ll say Are you OK? Hi Williams Don&#x27;t go Right He said 10 2024 Mead and schedule So that&#x27;s in our packet On At one time We used to have these on Tuesdays In Think How was the reason we changed it Mondays Then when kept at the monday For Brian situation No his situations change too Today So do we Want to try go back To Tuesdays You can&#x27;t OK I think We had two Sinterials with Brian and Kevin both That And i Had a conversation this With staff When Were viewed Basically going Leave it up at the council But Staff Had no reason Compiling Everything&#x27;s been working fine The In The past we had an extra day I think with Monday to get things prepared and ready Instead of just having that over the weekend But And i Think We&#x27;ve gotten pretty used To That now Seeing it seems Workout Just fine So Good Will do any Well, Mike emotion Two Second Williams Don&#x27;t go He&#x27;s dead 11 On New Business Of Andy which is Reson Supposing Us agenda 12 staff reports 13 Trustee Community Inassments 14 Second Williams Don&#x27;t go He&#x27;s dead</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Monday, November 6, 2023
 6:00
@@ -552,57 +545,8 @@ Trustee Community Announcements                                �
 *Action Item* Adjournment                                                                 Trustees
 The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

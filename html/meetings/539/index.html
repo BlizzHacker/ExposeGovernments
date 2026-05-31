@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 Mar 18, 2024</span>
-<span>⏱️ 00h 20m</span>
-<span>🔖 Clip #539</span>
+<span>&#128197; Mar 18, 2024</span>
+<span>&#9201;&#65039; 00h 20m</span>
+<span>&#128278; Clip #539</span>
+<span class="disc-badge">&#9888;&#65039; 10 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/539" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (9.4 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (9.4 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.06"><span class="seg-time">00:00</span><span class="seg-text">24, that indication of Pastor First Christmas Mr. Bradn Butler? Please pardon me I&#x27;m probably God we love you got it weird so grateful</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.06"><span class="seg-time">00:00</span><span class="seg-text">24, that indication of Pastor First Christmas Mr. Bradn Butler? Please pardon me I&#x27;m probably God we love you got it weird so grateful</span></div>
 <div class="seg" data-time="12.46"><span class="seg-time">00:12</span><span class="seg-text">That some many good people in leadership here on our city and the last week were prayed for unity</span></div>
 <div class="seg" data-time="18.62"><span class="seg-time">00:18</span><span class="seg-text">And peace You gave us this to where great full from what</span></div>
 <div class="seg" data-time="21.58"><span class="seg-time">00:21</span><span class="seg-text">We&#x27;ve done force</span></div>
@@ -462,12 +457,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="1221.33"><span class="seg-time">20:21</span><span class="seg-text">Second</span></div>
 <div class="seg" data-time="1226.77"><span class="seg-time">20:26</span><span class="seg-text">Third</span></div>
 <div class="seg" data-time="1229.2"><span class="seg-time">20:29</span><span class="seg-text">Second</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (10)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">21007 dollars</span><span class="disc-item">$12</span><span class="disc-item">1,395 dollars</span><span class="disc-item">100 thousand</span><span class="disc-item">$391,171</span><span class="disc-item">$35,893</span><span class="disc-item">499,525 dollars</span><span class="disc-item">$498.130</span><span class="disc-item">$90</span><span class="disc-item">$1.95</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Monday, March 18, 2024
 6:00
@@ -534,7 +527,7 @@ Solid Waste
 Trustee Community Announcements                                                                    Trustees
 16.
 *Action Item* Adjournment                                                                         Trustees
-The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>24, that indication of Pastor First Christmas Mr. Bradn Butler? Please pardon me I&#x27;m probably God we love you got it weird so grateful That some many good people in leadership here on our city and the last week were prayed for unity And peace You gave us this to where great full from what We&#x27;ve done force And we pray that you would continue to give us those things as well the digital, whatever it is. Four vote in buttons got to personal purchase five budget amendment number 24-10 receiving spending donations collected today for Christmas decorations decoration as donation 21007 dollars and moving amounts needed 3580 $90 to complete the 57,46 dollar purchase at downtown Monocrist-Miston who continued collecting donations and to repay their machine pay fund for $35,893. So I put an amended amendment that you&#x27;re desk on those described in our air so a amount should be expensed out as The 57460 For total amount of decorations And from what i understand there is a discount that goes away on March 31st which is why this amendment I just give you were moving some funds from actually the GNA budget The City Manager&#x27;s Budget to there with an expectation of donations still come in and we&#x27;ll replace That. Make motion, We approve based On Corrected Number I&#x27;ll sign it Is sent up No vote Hi Williams hi Parker Alright Thank You Six Got your list I&#x27;m sure I should have approved Sorry Hey Hi Don&#x27;t pull Hi. Okay, sorry? Seven minutes from the Mark 4th of 2024 with a read. All right Take it You step on the way Alright Hey good L Straton Edmund and Palmer Claim for your licensing amount 1,395 dollars So may I remember some counsel you have an Indonesian packet For what else strattin&#x27; This is four dispersed per January 22nd 24th of February 16, 2024 On behalf the city and my I&#x27;m a focused on reviewing Pleading&#x27;s filings in other documentation Up to an including Dam safety issues The relaxing state plan Contaminated sediment transport study In-half amendment And circuit court of appeals follow up Of 750000 budget For GREA claims 499,525 dollars of it If current invoice totally 1,395 Proved and leave you a balance Of $498.130 And 55 cents for this fiscal year Most two per second Hi Now in touch tech client For the OSHO River 2D modeling For the first time in the year So you have an invoice for current services From November 25th 2023 through December 31st 2023 of behalf This is where The OSHO River 2D modeling Which was primary engineering effort During this period As well as communications between The city, flooding and relaxing The main event threatened Of the 750000 budget For GREA claims Current balance is now 498,335 Give in If you approve this 10656 dollar Invoice that will give Meaning balanced This fiscal year The second question This 2D modeling we keep talking about it Is there going to be data available at some point? Absolutely We could give a dive To present We have modelling that That the legal teams They presented in Some of their reports But if you are wanted If you have a discussion If it had to do with strategy Around how this is being used To the presentation of The data Do a presentation I would like You know what What&#x27;s reality and We&#x27;ve been told Absolutely What we are paying for is this work And I know they present a lot of They use it For Davis Wright to make In their filings But the information Is something We want To be great I think I would like to Yeah I think it would be excellent for us to all the educated on that So they are never about things We can speak Intelligently when we approach by not just our citizens but other Interested parties who may Will Interested in cutting into our sort of town Start businesses Completely agree To make new to them They&#x27;re based on that To the board Accurate fire equipment And a contract to serve as fired I think it&#x27;s our sprinkler system of goods A pretty contracted upon The submission Of all required contract documents and authorized It should be a trust manager or has that need To sign Those to proceed Service includes testing, maintaining If needed preparing or placing. The first thing To be a firm and accurate fire equipment Accurate is help us on some things in the past And also my mobile protection First to companies My mobile fire In APS did not quote An accurate Fire Equipment came It cost 50 To do fire extinguishers One-on-one Two sprinkler systems We felt that going with one company To stay on top of everything Might be a more efficient way to not get things out A day and have the question approval We&#x27;re under we&#x27;ve passed Dollar figures To compare these numbers What will pay for dollar hour For example, per hours It was a little bit lower That&#x27;s fair And I agree with your statement One company deal Is the best way to do it Because they&#x27;re keeping documentation It is right thing To compare what we were doing before If you are going Well, this was by hour They did fire extinguishers They will give us two options And we&#x27;ll choose whichever one is going to </pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>24, that indication of Pastor First Christmas Mr. Bradn Butler? Please pardon me I&#x27;m probably God we love you got it weird so grateful That some many good people in leadership here on our city and the last week were prayed for unity And peace You gave us this to where great full from what We&#x27;ve done force And we pray that you would continue to give us those things as well the digital, whatever it is. Four vote in buttons got to personal purchase five budget amendment number 24-10 receiving spending donations collected today for Christmas decorations decoration as donation <mark>21007 dollars</mark> and moving amounts needed 3580 <mark>$90</mark> to complete the 57,46 dollar purchase at downtown Monocrist-Miston who continued collecting donations and to repay their machine pay fund for <mark>$35,893</mark>. So I put an amended amendment that you&#x27;re desk on those described in our air so a amount should be expensed out as The 57460 For total amount of decorations And from what i understand there is a discount that goes away on March 31st which is why this amendment I just give you were moving some funds from actually the GNA budget The City Manager&#x27;s Budget to there with an expectation of donations still come in and we&#x27;ll replace That. Make motion, We approve based On Corrected Number I&#x27;ll sign it Is sent up No vote Hi Williams hi Parker Alright Thank You Six Got your list I&#x27;m sure I should have approved Sorry Hey Hi Don&#x27;t pull Hi. Okay, sorry? Seven minutes from the Mark 4th of 2024 with a read. All right Take it You step on the way Alright Hey good L Straton Edmund and Palmer Claim for your licensing amount <mark>1,395 dollars</mark> So may I remember some counsel you have an Indonesian packet For what else strattin&#x27; This is four dispersed per January 22nd 24th of February 16, 2024 On behalf the city and my I&#x27;m a focused on reviewing Pleading&#x27;s filings in other documentation Up to an including Dam safety issues The relaxing state plan Contaminated sediment transport study In-half amendment And circuit court of appeals follow up Of 750000 budget For GREA claims <mark>499,525 dollars</mark> of it If current invoice totally 1,395 Proved and leave you a balance Of <mark>$498.130</mark> And 55 cents for this fiscal year Most two per second Hi Now in touch tech client For the OSHO River 2D modeling For the first time in the year So you have an invoice for current services From November 25th 2023 through December 31st 2023 of behalf This is where The OSHO River 2D modeling Which was primary engineering effort During this period As well as communications between The city, flooding and relaxing The main event threatened Of the 750000 budget For GREA claims Current balance is now 498,335 Give in If you approve this 10656 dollar Invoice that will give Meaning balanced This fiscal year The second question This 2D modeling we keep talking about it Is there going to be data available at some point? Absolutely We could give a dive To present We have modelling that That the legal teams They presented in Some of their reports But if you are wanted If you have a discussion If it had to do with strategy Around how this is being used To the presentation of The data Do a presentation I would like You know what What&#x27;s reality and We&#x27;ve been told Absolutely What we are paying for is this work And I know they present a lot of They use it For Davis Wright to make In their filings But the information Is something We want To be great I think I would like to Yeah I think it would be excellent for us to all the educated on that So they are never about things We can speak Intelligently when we approach by not just our citizens but other Interested parties who may Will Interested in cutting into our sort of town Start businesses Completely agree To make new to them They&#x27;re based on that To the board Accurate fire equipment And a contract to serve as fired I think it&#x27;s our sprinkler system of goods A pretty contracted upon The submission Of all required contract documents and authorized It should be a trust manager or has that need To sign Those to proceed Service includes testing, maintaining If needed preparing or placing. The first thing To be a firm and accurate fire equipment Accurate is help us on some things in the past And also my mobile protection First to companies My mobile fire In APS did not quote An accurate Fire Equipment came It cost 50 To do fire extinguishers One-on-one Two sprinkler systems We felt that going with one company To stay on top of everything Might be a more efficient way to not get things out A day and have the question approval We&#x27;re under we&#x27;ve passed Dollar figures To compare these numbers What will pay for dollar hour For example, per hours It was a little bit lower That&#x27;s fair And I agree with your statement One company deal Is the best way to do it Because they&#x27;re keeping documentation It is right thing To compare what we were doing before If you are going Well, this was by hour They did fire extinguishers They will give us two options And we&#x27;ll choose whichever one is going to </pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Monday, March 18, 2024
 6:00
@@ -603,57 +596,8 @@ Trustee Community Announcements                                �
 *Action Item* Adjournment                                                                         Trustees
 The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

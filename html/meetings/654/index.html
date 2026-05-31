@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 Jan 20, 2026</span>
-<span>⏱️ 00h 07m</span>
-<span>🔖 Clip #654</span>
-</div>
-</div>
+<span>&#128197; Jan 20, 2026</span>
+<span>&#9201;&#65039; 00h 07m</span>
+<span>&#128278; Clip #654</span>
 
+</div>
+</div>
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/654" allowfullscreen></iframe></div>
 
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">Thank you for this day. I thank you for this place that we call home. Thank you for these councilmembers that serve our city so well.</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">Thank you for this day. I thank you for this place that we call home. Thank you for these councilmembers that serve our city so well.</span></div>
 <div class="seg" data-time="16.36"><span class="seg-time">00:16</span><span class="seg-text">Father, I pray that you would continue to give them wisdom and discernment. Father, I pray over our first responders as well.</span></div>
 <div class="seg" data-time="23.16"><span class="seg-time">00:23</span><span class="seg-text">I ask that you keep them safe. Lord, may we see your hand of blessing on this city. In the name of Jesus, I pray in the name of Jesus.</span></div>
 <div class="seg" data-time="30.16"><span class="seg-time">00:30</span><span class="seg-text">Amen.</span></div>
@@ -175,12 +170,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="466.16"><span class="seg-time">07:46</span><span class="seg-text">All right.</span></div>
 <div class="seg" data-time="467.16"><span class="seg-time">07:47</span><span class="seg-text">10, this meeting will now be continued from the car.</span></div>
 <div class="seg" data-time="470.16"><span class="seg-time">07:50</span><span class="seg-text">This meeting will be continued with council chambers and reconvenes.</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">📄 Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre># sean)!
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">&#128196; Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre># sean)!
 Euh fQe
 NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
@@ -2179,7 +2172,7 @@ $232.80
 $32,692.64
 
 January 20, 2026
-</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Thank you for this day. I thank you for this place that we call home. Thank you for these councilmembers that serve our city so well. Father, I pray that you would continue to give them wisdom and discernment. Father, I pray over our first responders as well. I ask that you keep them safe. Lord, may we see your hand of blessing on this city. In the name of Jesus, I pray in the name of Jesus. Amen. Let&#x27;s go to the line of the United States of America and to the Republic for which it stands, one nation under God, indivisible, with liberty and justice for all. I have more public input. I&#x27;ve got the personal appearances. Five, five, eight claims list. Motion to approve. Second. Five, five, eight, minutes from the January 6th, 2026 regular meeting. Second. Easton, Jones, abstain, Barnes, High, Parker. Five, C, Joint Resolution, MSUA, 2026, Dazirah1, CC, 2026, Dazirah3, Authorizing Community, Financial Support, and VWVW, VWVRG, Eli Chinoweth, the Imperial Dermalation and Clean Up Commercial Structure located at 120 South Main. So, I got Eli for a year, they bought a one-twenty-south name down there, I&#x27;ve been here on my life, and just the other day I was working on it every day, and that was the old, original J.E.L. fire station, recalls. They&#x27;ve gone in, or you&#x27;ve gotten it, or you&#x27;ve made that purchase, you have to deal with it, and basically what this is right now. If you want to do for a demolition, they&#x27;re willing to basically be our standard T-liver, and stuff like that. Roll-offs and J.E.P.s, which you can&#x27;t see, you can get it out of your house. I&#x27;ll let Eli kind of give a background on it, and kind of what his future plans are for the building. Thank you for having me, guys. Before we and I, we encounter definitely a mess. It was full of traction-free, we&#x27;re also finding cool, historical things too. We&#x27;re uncovering a lot of history in Miami, that&#x27;s very different than that building in touch. Our neighbor Gary Reynolds and Glenn Edwards, two prominent figures in Miami, worked in that building. We&#x27;ve worked in that building, and those are all people that are so wise, and we want to get those people back in and tell their stories of the building. We also wanted to serve the community, so we&#x27;re thanking Living Space&#x27;s up top in a commercial space these days. At the 12,000 square-closed building in total, so there&#x27;s a lot of room for opportunity, but there&#x27;s also a lot of traction there. Because as you can imagine, the room has been full over the years of abandonment, so when you help people get it, it would be traction-free. And there will be some extensive work, because there are the pop-top floor, floor ceiling, where you look out for a second, second, and there&#x27;s some structural issues that will be taking on that. Do you need two by two terracotta tiles in there? Four by four, four by four. That&#x27;s four by four. I&#x27;ve been in it, but it was years ago, and it was a cool building then, so I like to go in it again. I&#x27;ll make a motion to approve. Second. Hi. Hi. Hi. Hi. Hi. I&#x27;ll go apologize in advance, I&#x27;m like, we&#x27;ll be there Thursday, for whether I&#x27;ll be on Oklahoma City, so we&#x27;ll be doing it. We&#x27;ll be welcome. But I&#x27;ll come by after I get back. six, seven new business, if any, which the business is both this agenda, seven staff reports. Hey, trustee community, that&#x27;s what&#x27;s nine trust management communications. Oh yes, board tonight. I have like four things this is going to update you on three or four. For one thing, I&#x27;m super excited to announce we have our fiber project that is out for bid. So once we have bids back, then we&#x27;ll have a better idea of what it&#x27;s going to cost. So I mean, based on, you know, the sides are study that&#x27;s been done. So once it&#x27;s done, we will come back to the board. Obviously talk about borrowing money. Look at the different options. You know, I know we have an option to borrow local. We can also go on the open market, just different things like that. We&#x27;ll bring back to the board once we get that. The second thing is we are down to the finalists on the AMI meters. So we&#x27;ve sent out some questions to the vendors. The remaining vendors is to get those answers. Once we get those answers, they won&#x27;t bring to the board. Those bids and let the board, you know, the authorize the contract. The third one is I get a lot of questions on this. If you go down the turnpiking, you look to your left. If you&#x27;re traveling to Joplin, that&#x27;s our new water tower there. So everybody&#x27;s like, what&#x27;s going on there? There&#x27;s a huge crane there. You audio, audio, audio. So if you&#x27;ve noticed there, starting to build the block walls for the chlorine is getting as almost done. And then you notice the spear, the bottom of the spear, they&#x27;re welding it together right now. So they&#x27;re bringing in a piece and they weld it together. And then they&#x27;ll lift it up. So it&#x27;s really cool. And that&#x27;s a grant that we got. So I mean, it&#x27;s like a, you know, two million plus dollar grant. So I mean, it&#x27;s like staff&#x27;s working</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre># sean)!
+</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>Thank you for this day. I thank you for this place that we call home. Thank you for these councilmembers that serve our city so well. Father, I pray that you would continue to give them wisdom and discernment. Father, I pray over our first responders as well. I ask that you keep them safe. Lord, may we see your hand of blessing on this city. In the name of Jesus, I pray in the name of Jesus. Amen. Let&#x27;s go to the line of the United States of America and to the Republic for which it stands, one nation under God, indivisible, with liberty and justice for all. I have more public input. I&#x27;ve got the personal appearances. Five, five, eight claims list. Motion to approve. Second. Five, five, eight, minutes from the January 6th, 2026 regular meeting. Second. Easton, Jones, abstain, Barnes, High, Parker. Five, C, Joint Resolution, MSUA, 2026, Dazirah1, CC, 2026, Dazirah3, Authorizing Community, Financial Support, and VWVW, VWVRG, Eli Chinoweth, the Imperial Dermalation and Clean Up Commercial Structure located at 120 South Main. So, I got Eli for a year, they bought a one-twenty-south name down there, I&#x27;ve been here on my life, and just the other day I was working on it every day, and that was the old, original J.E.L. fire station, recalls. They&#x27;ve gone in, or you&#x27;ve gotten it, or you&#x27;ve made that purchase, you have to deal with it, and basically what this is right now. If you want to do for a demolition, they&#x27;re willing to basically be our standard T-liver, and stuff like that. Roll-offs and J.E.P.s, which you can&#x27;t see, you can get it out of your house. I&#x27;ll let Eli kind of give a background on it, and kind of what his future plans are for the building. Thank you for having me, guys. Before we and I, we encounter definitely a mess. It was full of traction-free, we&#x27;re also finding cool, historical things too. We&#x27;re uncovering a lot of history in Miami, that&#x27;s very different than that building in touch. Our neighbor Gary Reynolds and Glenn Edwards, two prominent figures in Miami, worked in that building. We&#x27;ve worked in that building, and those are all people that are so wise, and we want to get those people back in and tell their stories of the building. We also wanted to serve the community, so we&#x27;re thanking Living Space&#x27;s up top in a commercial space these days. At the 12,000 square-closed building in total, so there&#x27;s a lot of room for opportunity, but there&#x27;s also a lot of traction there. Because as you can imagine, the room has been full over the years of abandonment, so when you help people get it, it would be traction-free. And there will be some extensive work, because there are the pop-top floor, floor ceiling, where you look out for a second, second, and there&#x27;s some structural issues that will be taking on that. Do you need two by two terracotta tiles in there? Four by four, four by four. That&#x27;s four by four. I&#x27;ve been in it, but it was years ago, and it was a cool building then, so I like to go in it again. I&#x27;ll make a motion to approve. Second. Hi. Hi. Hi. Hi. Hi. I&#x27;ll go apologize in advance, I&#x27;m like, we&#x27;ll be there Thursday, for whether I&#x27;ll be on Oklahoma City, so we&#x27;ll be doing it. We&#x27;ll be welcome. But I&#x27;ll come by after I get back. six, seven new business, if any, which the business is both this agenda, seven staff reports. Hey, trustee community, that&#x27;s what&#x27;s nine trust management communications. Oh yes, board tonight. I have like four things this is going to update you on three or four. For one thing, I&#x27;m super excited to announce we have our fiber project that is out for bid. So once we have bids back, then we&#x27;ll have a better idea of what it&#x27;s going to cost. So I mean, based on, you know, the sides are study that&#x27;s been done. So once it&#x27;s done, we will come back to the board. Obviously talk about borrowing money. Look at the different options. You know, I know we have an option to borrow local. We can also go on the open market, just different things like that. We&#x27;ll bring back to the board once we get that. The second thing is we are down to the finalists on the AMI meters. So we&#x27;ve sent out some questions to the vendors. The remaining vendors is to get those answers. Once we get those answers, they won&#x27;t bring to the board. Those bids and let the board, you know, the authorize the contract. The third one is I get a lot of questions on this. If you go down the turnpiking, you look to your left. If you&#x27;re traveling to Joplin, that&#x27;s our new water tower there. So everybody&#x27;s like, what&#x27;s going on there? There&#x27;s a huge crane there. You audio, audio, audio. So if you&#x27;ve noticed there, starting to build the block walls for the chlorine is getting as almost done. And then you notice the spear, the bottom of the spear, they&#x27;re welding it together right now. So they&#x27;re bringing in a piece and they weld it together. And then they&#x27;ll lift it up. So it&#x27;s really cool. And that&#x27;s a grant that we got. So I mean, it&#x27;s like a, you know, two million plus dollar grant. So I mean, it&#x27;s like staff&#x27;s working</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre># sean)!
 Euh fQe
 NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
@@ -2247,7 +2240,7 @@ Number 13
 The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If
 special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We
 also ask that those in attendance place all electronic devices on silent. Thank you.
-</pre></div></div><div><h3>Official Minutes</h3><div class="doc-panel"><pre>THE MAYOR AND THE CITY COUNCIL MET IN REGULAR SESSION ON JANUARY 20, 2026, IN THE MIAMI
+</pre></div></div><div><h3>&#128196; Official Minutes</h3><div class="doc-panel"><pre>THE MAYOR AND THE CITY COUNCIL MET IN REGULAR SESSION ON JANUARY 20, 2026, IN THE MIAMI
 CIVIC CENTER COUNCIL CHAMBERS AT 5:30PM WITH THE FOLLOWING MEMBERS PRESENT:
 
 Bless Parker, Mayor Tyler Cline, City Manager
@@ -4180,57 +4173,8 @@ $32,692.64
 January 20, 2026
 </pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

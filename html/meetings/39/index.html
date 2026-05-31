@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 Feb  2, 2016</span>
-<span>⏱️ 00h 06m</span>
-<span>🔖 Clip #39</span>
-</div>
-</div>
+<span>&#128197; Feb  2, 2016</span>
+<span>&#9201;&#65039; 00h 06m</span>
+<span>&#128278; Clip #39</span>
 
+</div>
+</div>
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/39" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (2.9 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (2.9 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">Charlie, at the 44th of May this date on number 2 is invocation by Pastor Fortisonville God Church Rayne Fiseau.</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">Charlie, at the 44th of May this date on number 2 is invocation by Pastor Fortisonville God Church Rayne Fiseau.</span></div>
 <div class="seg" data-time="8.34"><span class="seg-time">00:08</span><span class="seg-text">I&#x27;m a thanks for being here!</span></div>
 <div class="seg" data-time="10.02"><span class="seg-time">00:10</span><span class="seg-text">We&#x27;re honored to be here right now...</span></div>
 <div class="seg" data-time="11.54"><span class="seg-time">00:11</span><span class="seg-text">Let&#x27;s go back with her</span></div>
@@ -239,12 +234,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="370.06"><span class="seg-time">06:10</span><span class="seg-text">Johnson, Kristen</span></div>
 <div class="seg" data-time="372.06"><span class="seg-time">06:12</span><span class="seg-text">Aye</span></div>
 <div class="seg" data-time="374.36"><span class="seg-time">06:14</span><span class="seg-text">We might do it in a pause for a minute</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Tuesday, February 2, 2016
 5:30
@@ -299,7 +292,7 @@ Staff Report - Water Waste Water January 2016
 Trustee Community Announcements                                                                                                                   Trustees
 15.
 Adjournment                                                                                                                                                                         Trustees
-The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Charlie, at the 44th of May this date on number 2 is invocation by Pastor Fortisonville God Church Rayne Fiseau. I&#x27;m a thanks for being here! We&#x27;re honored to be here right now... Let&#x27;s go back with her Heavenly Father we thank you very much for your incredible applause through Jesus Christ It should have been stated upon our country up in This City Replayed by our city council and I think that it gives us wisdom every decision To keep ahead from their families or jesus we pay for our businesses, you would practice with them Lord. You&#x27;d be causing more to be blessed and thank your Lord for our military that protects us here in around the world We pray they keep Your hand up protection upon Him And Be With Their Famous Sword where They Are Thank For Your Grace That He Give To You So freely May I Should Bless This Even? Thanks Of The Poverished of In American and To Serve You With All Our Hearts In Jesus Name Amen Amen You Would You Leave The Poverished of In American? I pledge allegiance to the flag Of United States and America And To Serve You With All That For Wich It Sands One Nation, Unified Invisible with Their Teas Justice for All Our Thank you Neil But I&#x27;m gonna throw His Son of Gender Stop He&#x27;s Recommending Islands 6-210 Father Consenna Genda If there are no questions We have a motion to approve please. Motion by 13 and the second Okay, the 6-210 Second pull call please Johnson Oh, If you item number 11 is if Reem will try saying engineering for professional Design services to relocate state highway 1235 water main On an EOSHOW River Chuck, thank you man As most of You know, ODOT is has plans to re-ability the bridge over in The OSHOW River as part We have a existing water main on there we talked about putting it back On the bridge and Design fee for doing that And staff looked at That option versus The board underneath the river It&#x27;s our recommendation that we go with Option of Born beneath And then We have an engineering firm to help us To do design To get permits To helps With a construction Observation and bidding Also, We also had new rail in In this south west part there Chuck, I believe that you brought this recommendation before the council Several months ago Recommending The boring and it&#x27;s just kind of saying here is To actually form a contract in For those services Correct This for design engineering firms to do Yes Okay questions of Chuck We would like to add something Since Chuck has done this work We have found out Especially during the last flood that we had around Christmas time That&#x27;s in pictures of The sewer main It comes over Over there, over here Over from south part To our sewer plant And again Over a number A lot We have heard who was doing high water levels during this last flood So he provided us the photos Were taking a look at it because It&#x27;s very isolated area I&#x27;ve asked Chuck to take a look This as well And while Well, if we think that going To be economically feasible If you may Take an example of a change order Something That might add Especially since we have a company in here They would be already operational to To take care of that We might even economy and scale it doing so If not, you&#x27;ll still need As the separate item It&#x27;s something For this city for 40-50 years Many times as high water events I think there is something That will start boring Making sure So i just wanted To put that into the record That we are working on And it will be bringing you back options in the Not too distant future So do We currently have a lift station out there Or this required The addition of an lift station There is an existing lift station This was part of town That pumps sewage across A train bridge In two to waste our treatment plant Looking at Water line goes over the Niel show river Putting that underneath and aboring At a different location of water main But as Dean mentioned, you know Hopefully we can get the timing to these together So some economies scale out there If they are boring, under any therever I didn&#x27;t want You To be surprised We bring it back because later agenda Add them so i wanted That up for your information This point in times to happen We are connecting for asking For approval of the design services Contractor agreement Correct, that&#x27;s correct, Mary. Do we have a motion Let me give you a second place Question Johnson Thanks Chuck Anything on your business team? No not all this agenda Anyone else staff reports or in Your packet If You Have Questions to Ask the Vatable And I would entertain Most To Jones to the ShUA Vatable No doubt that&#x27;s right For approval? Johnson, Kristen Aye We might do it in a pause for a minute</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>Charlie, at the 44th of May this date on number 2 is invocation by Pastor Fortisonville God Church Rayne Fiseau. I&#x27;m a thanks for being here! We&#x27;re honored to be here right now... Let&#x27;s go back with her Heavenly Father we thank you very much for your incredible applause through Jesus Christ It should have been stated upon our country up in This City Replayed by our city council and I think that it gives us wisdom every decision To keep ahead from their families or jesus we pay for our businesses, you would practice with them Lord. You&#x27;d be causing more to be blessed and thank your Lord for our military that protects us here in around the world We pray they keep Your hand up protection upon Him And Be With Their Famous Sword where They Are Thank For Your Grace That He Give To You So freely May I Should Bless This Even? Thanks Of The Poverished of In American and To Serve You With All Our Hearts In Jesus Name Amen Amen You Would You Leave The Poverished of In American? I pledge allegiance to the flag Of United States and America And To Serve You With All That For Wich It Sands One Nation, Unified Invisible with Their Teas Justice for All Our Thank you Neil But I&#x27;m gonna throw His Son of Gender Stop He&#x27;s Recommending Islands 6-210 Father Consenna Genda If there are no questions We have a motion to approve please. Motion by 13 and the second Okay, the 6-210 Second pull call please Johnson Oh, If you item number 11 is if Reem will try saying engineering for professional Design services to relocate state highway 1235 water main On an EOSHOW River Chuck, thank you man As most of You know, ODOT is has plans to re-ability the bridge over in The OSHOW River as part We have a existing water main on there we talked about putting it back On the bridge and Design fee for doing that And staff looked at That option versus The board underneath the river It&#x27;s our recommendation that we go with Option of Born beneath And then We have an engineering firm to help us To do design To get permits To helps With a construction Observation and bidding Also, We also had new rail in In this south west part there Chuck, I believe that you brought this recommendation before the council Several months ago Recommending The boring and it&#x27;s just kind of saying here is To actually form a contract in For those services Correct This for design engineering firms to do Yes Okay questions of Chuck We would like to add something Since Chuck has done this work We have found out Especially during the last flood that we had around Christmas time That&#x27;s in pictures of The sewer main It comes over Over there, over here Over from south part To our sewer plant And again Over a number A lot We have heard who was doing high water levels during this last flood So he provided us the photos Were taking a look at it because It&#x27;s very isolated area I&#x27;ve asked Chuck to take a look This as well And while Well, if we think that going To be economically feasible If you may Take an example of a change order Something That might add Especially since we have a company in here They would be already operational to To take care of that We might even economy and scale it doing so If not, you&#x27;ll still need As the separate item It&#x27;s something For this city for 40-50 years Many times as high water events I think there is something That will start boring Making sure So i just wanted To put that into the record That we are working on And it will be bringing you back options in the Not too distant future So do We currently have a lift station out there Or this required The addition of an lift station There is an existing lift station This was part of town That pumps sewage across A train bridge In two to waste our treatment plant Looking at Water line goes over the Niel show river Putting that underneath and aboring At a different location of water main But as Dean mentioned, you know Hopefully we can get the timing to these together So some economies scale out there If they are boring, under any therever I didn&#x27;t want You To be surprised We bring it back because later agenda Add them so i wanted That up for your information This point in times to happen We are connecting for asking For approval of the design services Contractor agreement Correct, that&#x27;s correct, Mary. Do we have a motion Let me give you a second place Question Johnson Thanks Chuck Anything on your business team? No not all this agenda Anyone else staff reports or in Your packet If You Have Questions to Ask the Vatable And I would entertain Most To Jones to the ShUA Vatable No doubt that&#x27;s right For approval? Johnson, Kristen Aye We might do it in a pause for a minute</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Tuesday, February 2, 2016
 5:30
@@ -356,57 +349,8 @@ Trustee Community Announcements                                �
 Adjournment                                                                                                                                                                         Trustees
 The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

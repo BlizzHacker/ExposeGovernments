@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 May 15, 2023</span>
-<span>⏱️ 00h 21m</span>
-<span>🔖 Clip #486</span>
+<span>&#128197; May 15, 2023</span>
+<span>&#9201;&#65039; 00h 21m</span>
+<span>&#128278; Clip #486</span>
+<span class="disc-badge">&#9888;&#65039; 5 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/486" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (9.7 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (9.7 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">May 15, 2023. We have the invocation from Pastor and we got to say pastor this time for our business first Christian Church</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">May 15, 2023. We have the invocation from Pastor and we got to say pastor this time for our business first Christian Church</span></div>
 <div class="seg" data-time="10.72"><span class="seg-time">00:10</span><span class="seg-text">Please bow! Father God will love you</span></div>
 <div class="seg" data-time="13.68"><span class="seg-time">00:13</span><span class="seg-text">Thankful To be in such a great community</span></div>
 <div class="seg" data-time="17.12"><span class="seg-time">00:17</span><span class="seg-text">I thank Your Word tells us pray For The Prosperity of Our Community</span></div>
@@ -403,12 +398,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="1259.16"><span class="seg-time">20:59</span><span class="seg-text">Reconvening the staff room for purpose executive session</span></div>
 <div class="seg" data-time="1262.16"><span class="seg-time">21:02</span><span class="seg-text">At completion i donít 15</span></div>
 <div class="seg" data-time="1264.16"><span class="seg-time">21:04</span><span class="seg-text">To The Regger city council</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (5)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">60 dollars</span><span class="disc-item">3 dollars</span><span class="disc-item">$50000</span><span class="disc-item">$23090</span><span class="disc-item">5,000 dollars</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Monday, May 15, 2023
 6:00
@@ -463,7 +456,7 @@ The Meeting Will be Reconvened in the Staff Room After the Executive Session of 
 *Possible Action Item* on Matters Addressed in Executive Session Agenda Item Number 14                                               Trustees
 17.
 *Action Item* Adjournment                                       Trustees
-The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>May 15, 2023. We have the invocation from Pastor and we got to say pastor this time for our business first Christian Church Please bow! Father God will love you Thankful To be in such a great community I thank Your Word tells us pray For The Prosperity of Our Community for our neighbors and For Our Businesses. And God, we do that right now We pray For the moment that you&#x27;ve given us and we ask That, God your Word also says to pray for our leaders. And so We do it! Our local elected officials who are making decisions in continuing this great momentum So guys Prayed You Would Bless Everything Happens Tonight Give Wisdom &amp; discernment And allow us to keep growing and Keep Doing Good Things Overall Father, we pray that We Would Be More Like Jesus It Says Name With Pray Amen And Connecting Studies as well As Working With Tetic Tech to Discuss Seminamic Whistings of JREA SEMOTATION studies Again, it was obviously a very active month relating in the 68k $23090 and voice However that&#x27;s Well Within Our Budget I&#x27;m this particular fiscal year And if You approve that item, we Will Still Have Remaining 340k and 737 We&#x27;re just your expectations of the remainder Of The fiscal Year as far As What WE GOT Should Be Very Light I Know Had That This conversation a couple A times Because Last When We Had To Actually Included Our Town Hall It was a great deal of activity Obviously immediately, leading up to That And then Right After The A couple Of Embois Just Coming In This Being the One For Me You Have Achieved in Large Wind Which Was All The Filings that Came Through March Really Now With Into THE Year we Don&#x27;t have lot Backtivity and Fire Again I Think Until September So this Money with Im Budget Roll Over If There Let&#x27;s Say What Happens What Those Dollars So My Expectation When That Ines Up in the Carry Over We Did Is Rebutiated so Yeah, we Pick It up and Re-budget it Next Year And Then What Are WE BUDGING For what arewebudging next year? I&#x27;m Sorry. This is Available To Me But i Can&#x27;t Remember $50000 Same as The Sure Thats How As Asked him He&#x27;s Going to Be this Thing You Know Last Year Didn&#x27;T Know From A Much Of Us So There&#x27;e Expectations that Were going SeeThe same amount of Cost Next Year as well. I mean, there&#x27;s no real way to know but likely we have a game that is really the only what filing they&#x27;re going made so it depends on how long first cracks this out through GRE or in FIRG make some determinations and asking GERDI into whole team finally had from DCC start court then could be more activity I&#x27;m going to say odds are pretty good, but still be within that budget. So is there any precedent this suggests if you&#x27;re in the end of it or can&#x27;t go on forever? Not really! The determination would have been about 25-25 and less Jürgen came out and did not want to use your license 25 but that&#x27;s for the extension, which I can imagine they would. If you&#x27;re in a fair court making determination? They had though extended out of pass-out right! So if we didn&#x27;t do it before, then some other performing all studies will require them should have those wrapped up while having their way back through and their final application to do March or May 31st. At this time, yeah it&#x27;s still there! So what kind of activity have we already for seen? Or are you ready seeing in our April I mean because were improving from March right Yeah i think the direct feedback will look Think We had a potential invoice at 1k400 Yeah we&#x27;d be dead with you. He tried to send those F4s from Tyler and I can&#x27;t keep an eye on them so if they have a Park Stinson, We know what the ARM is saying coming in there It&#x27;s still not some outstanding stuff Nothing this, it seems like he said Oh my commotion improved Second Second Okay, now discussion of options for solid waste tipping fees For the transfer situation Tyler and Kevin So we have Will Dan coming in next Monday We&#x27;re excited to talk about this speed plus Well, Dan Jackson is a gentleman That did last so i don&#x27;t know how many different fees Because of not great fee Could typically be answering other questions Packet as always that report In our tonage if you brought it The lost two years It&#x27;s just like saying right now Oh, okay We looked for any land Another conversation today Looking and talking Really expressing that desire Just about every one in the area I don&#x27;t really get a conversation with DQ They said you can expect two to three years Which is good That we were actually concerned The Q did was basically gave us some encouragement Has new contract put it down And expenses We just started this month so Do you anticipate put a dinner? I think it&#x27;ll decrease, but still Have any of them ever given anything on what i talked about Ripping materials Can we reach out to DQ or something outside of the facility Let&#x27;s back and submit some improvement here Maybe a transfer situation don&#x27;t accept Singles anymore One of the things we talked about last time When you talk to me We discussed in our last meeting And when I was talk</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>May 15, 2023. We have the invocation from Pastor and we got to say pastor this time for our business first Christian Church Please bow! Father God will love you Thankful To be in such a great community I thank Your Word tells us pray For The Prosperity of Our Community for our neighbors and For Our Businesses. And God, we do that right now We pray For the moment that you&#x27;ve given us and we ask That, God your Word also says to pray for our leaders. And so We do it! Our local elected officials who are making decisions in continuing this great momentum So guys Prayed You Would Bless Everything Happens Tonight Give Wisdom &amp; discernment And allow us to keep growing and Keep Doing Good Things Overall Father, we pray that We Would Be More Like Jesus It Says Name With Pray Amen And Connecting Studies as well As Working With Tetic Tech to Discuss Seminamic Whistings of JREA SEMOTATION studies Again, it was obviously a very active month relating in the 68k <mark>$23090</mark> and voice However that&#x27;s Well Within Our Budget I&#x27;m this particular fiscal year And if You approve that item, we Will Still Have Remaining 340k and 737 We&#x27;re just your expectations of the remainder Of The fiscal Year as far As What WE GOT Should Be Very Light I Know Had That This conversation a couple A times Because Last When We Had To Actually Included Our Town Hall It was a great deal of activity Obviously immediately, leading up to That And then Right After The A couple Of Embois Just Coming In This Being the One For Me You Have Achieved in Large Wind Which Was All The Filings that Came Through March Really Now With Into THE Year we Don&#x27;t have lot Backtivity and Fire Again I Think Until September So this Money with Im Budget Roll Over If There Let&#x27;s Say What Happens What Those Dollars So My Expectation When That Ines Up in the Carry Over We Did Is Rebutiated so Yeah, we Pick It up and Re-budget it Next Year And Then What Are WE BUDGING For what arewebudging next year? I&#x27;m Sorry. This is Available To Me But i Can&#x27;t Remember <mark>$50000</mark> Same as The Sure Thats How As Asked him He&#x27;s Going to Be this Thing You Know Last Year Didn&#x27;T Know From A Much Of Us So There&#x27;e Expectations that Were going SeeThe same amount of Cost Next Year as well. I mean, there&#x27;s no real way to know but likely we have a game that is really the only what filing they&#x27;re going made so it depends on how long first cracks this out through GRE or in FIRG make some determinations and asking GERDI into whole team finally had from DCC start court then could be more activity I&#x27;m going to say odds are pretty good, but still be within that budget. So is there any precedent this suggests if you&#x27;re in the end of it or can&#x27;t go on forever? Not really! The determination would have been about 25-25 and less Jürgen came out and did not want to use your license 25 but that&#x27;s for the extension, which I can imagine they would. If you&#x27;re in a fair court making determination? They had though extended out of pass-out right! So if we didn&#x27;t do it before, then some other performing all studies will require them should have those wrapped up while having their way back through and their final application to do March or May 31st. At this time, yeah it&#x27;s still there! So what kind of activity have we already for seen? Or are you ready seeing in our April I mean because were improving from March right Yeah i think the direct feedback will look Think We had a potential invoice at 1k400 Yeah we&#x27;d be dead with you. He tried to send those F4s from Tyler and I can&#x27;t keep an eye on them so if they have a Park Stinson, We know what the ARM is saying coming in there It&#x27;s still not some outstanding stuff Nothing this, it seems like he said Oh my commotion improved Second Second Okay, now discussion of options for solid waste tipping fees For the transfer situation Tyler and Kevin So we have Will Dan coming in next Monday We&#x27;re excited to talk about this speed plus Well, Dan Jackson is a gentleman That did last so i don&#x27;t know how many different fees Because of not great fee Could typically be answering other questions Packet as always that report In our tonage if you brought it The lost two years It&#x27;s just like saying right now Oh, okay We looked for any land Another conversation today Looking and talking Really expressing that desire Just about every one in the area I don&#x27;t really get a conversation with DQ They said you can expect two to three years Which is good That we were actually concerned The Q did was basically gave us some encouragement Has new contract put it down And expenses We just started this month so Do you anticipate put a dinner? I think it&#x27;ll decrease, but still Have any of them ever given anything on what i talked about Ripping materials Can we reach out to DQ or something outside of the facility Let&#x27;s back and submit some improvement here Maybe a transfer situation don&#x27;t accept Singles anymore One of the things we talked about last time When you talk to me We discussed in our last meeting And when I was talk</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 Monday, May 15, 2023
 6:00
@@ -520,57 +513,8 @@ The Meeting Will be Reconvened in the Staff Room After the Executive Session of 
 *Action Item* Adjournment                                       Trustees
 The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We also ask that those in attendance place all electronic devices on silent. Thank you.</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

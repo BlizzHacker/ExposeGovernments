@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 Oct 21, 2025</span>
-<span>⏱️ 00h 21m</span>
-<span>🔖 Clip #642</span>
+<span>&#128197; Oct 21, 2025</span>
+<span>&#9201;&#65039; 00h 21m</span>
+<span>&#128278; Clip #642</span>
+<span class="disc-badge">&#9888;&#65039; 3 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/642" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (9.6 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (9.6 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">Superb. Chief, you walked down to kind of model this voice?</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.0"><span class="seg-time">00:00</span><span class="seg-text">Superb. Chief, you walked down to kind of model this voice?</span></div>
 <div class="seg" data-time="5.24"><span class="seg-time">00:05</span><span class="seg-text">So chief New Year&#x27;s Warms...</span></div>
 <div class="seg" data-time="15.78"><span class="seg-time">00:15</span><span class="seg-text">This is actually what your first UAS art class be in a form</span></div>
 <div class="seg" data-time="19.78"><span class="seg-time">00:19</span><span class="seg-text">This isn&#x27;t the old traditional uniform so I&#x27;m looking at it</span></div>
@@ -535,12 +530,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="1250.57"><span class="seg-time">20:50</span><span class="seg-text">This meeting will be continued from Cal State Regiment</span></div>
 <div class="seg" data-time="1252.57"><span class="seg-time">20:52</span><span class="seg-text">The staff room is a purpose</span></div>
 <div class="seg" data-time="1254.57"><span class="seg-time">20:54</span><span class="seg-text">Executive session</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>                         Miami Special Utility Authority (MSUA) Regular Meeting
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (3)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">$40</span><span class="disc-item">100%</span><span class="disc-item">$250</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>                         Miami Special Utility Authority (MSUA) Regular Meeting
 MEETING DATE:          October 21, 2025
 
 AGENDA TITLE:          Presentation From IdeaTek Regarding Fiber Optic Internet Service
@@ -550,7 +543,7 @@ IdeaTek, headquartered in Buhler, Kansas, provides fiber optic internet service.
 1999 as a computer repair business before diving into the world of fiber service in 2007. IdeaTek is looking to
 expand its service outside of Kansas.
 
-STAFFS RECOMMENDATION:</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Superb. Chief, you walked down to kind of model this voice? So chief New Year&#x27;s Warms... This is actually what your first UAS art class be in a form This isn&#x27;t the old traditional uniform so I&#x27;m looking at it Looks good! You like the blue Well yes i have to say that because How do we get my initiative from probably three years Oh no Yeah about 20 Actually, this is the shirt we&#x27;ve got in that dressing uniform for it So I&#x27;ll make a couple of things you know from policy And they play jiffy up also going to presentations Or think like after this will look better than then Well done sir i&#x27;m still not wearing pants though But he&#x27;s wear shorts Yeah Now have some parts out of living We gotta... Yeah You got the shirt on too? The location bar... Part Chief, Mr. Christianl Heavenly Father we&#x27;re thankful for you and who are And were just grateful For a word of word of word We can be part Of our community in this aspect that he give our leaders Wisdom &amp; guidance and decisions they make tonight To your name And you can just say one nation under high Invisible Whatever the protest is for For public input, I&#x27;m scared of personal parisus For five presentation discussion With presentations from my data Regarding fiber optic internet service, John Terry Thank You sir I brought James Kristallic with me I told ya guys At last meeting that she see my mug again this week So here i am, a phone through on that promise Last time i&#x27;ll do it again my name is John Terry with IdeaTech I&#x27;m out of Gillesburg, Kansas About an hour up the road here in New York, County And being hearing means a lot to me My wife and actual were married In Miami, Oklahoma 12 years ago June 26th 2013 It might be 28 sure But Men are not allowed To find that idea tech was interested For those reason many others Being someone who lives In the four states, I&#x27;m excited to see this region grow My M is a perfect opportunity for us This looks like alot of other communities we invest in So were very exciting To bring it ten million dollar private investment here And brings some quality good pay and jobs with benefits We&#x27;ve got affordable eight gig Some magical fiber that are looking forward Bring into every home business Not cherry picking Everybody who wants it And we don&#x27;t have residential contracts So that&#x27;s a good thing Obviously people dont like getting tied up by pieces of paper on residential service We donít cap data, I&#x27;m not going to give them Just delivered in service month and months That you pay for as long As long your happy with it Did turn an apartment On Wednesday at last week As soon as we get with the city and have a conversation about how to move forward James drove three hours down from Wichdon also I know he&#x27;s got some things that seem like to say Yeah, no thank you The game is crystalic of ideas Been really looking at my MF for quite time We had some meetings in couple And it was an exciting idea When were did come From small town of Bielercans We were really interested in what it means to be left behind Rule kind of citizens So we&#x27;ve done this throughout the state of Kansas Built out about 130 communities All who did have a great option And so now, moving into across In some areas that may do Have an options but they don&#x27;t need two options And we&#x27;ve kind of looked at this area quite some time We&#x27;re kinda looking to the quapal commerce Even in my MF and now Here, here it is say hey Hey I want you able for a private internet before It was an idea that started as a senior high school project Back 1999 For four High School students Daniel Frieson had a view There&#x27;s been RFP for Bielerhigh School And they did it out from a witch at all They convinced the staff that said hey Can we put in RFP for this as well So, so you guys are high school seniors Sure do have any backing Starting with company With $250 each To be able to start idea tech In their application and For 1999 In 2007 They started buying up some failing DSL companies Because they realized that was kind of going out But Bieler Kansas, the first city in The state accounts have actual full residential fiber connection So when you look at Bieler very midnight community And it had access better access Some cities like Wichita Bigger seasick to peak That are in a State of Kansas It&#x27;s really been our passion To serve these areas We look at the state and say okay, what is out there? What&#x27;s their opportunity for idea tech to be able To come in help these residents And so when we coming into our pricing package You know they start $40 a month That sets us different from that competition When you&#x27;re going So There are some jobs They will see local people working here Here We get involved in the community, we invest And then we will be investing in the chambers That really make this city a better place to live So I encourage you guys To reach out ideas that You might build their own infrastructure Okay We still want work together Things like we can do Like i said Your got your on down here Just wanted</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>                         Miami Special Utility Authority (MSUA) Regular Meeting
+STAFFS RECOMMENDATION:</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>Superb. Chief, you walked down to kind of model this voice? So chief New Year&#x27;s Warms... This is actually what your first UAS art class be in a form This isn&#x27;t the old traditional uniform so I&#x27;m looking at it Looks good! You like the blue Well yes i have to say that because How do we get my initiative from probably three years Oh no Yeah about 20 Actually, this is the shirt we&#x27;ve got in that dressing uniform for it So I&#x27;ll make a couple of things you know from policy And they play jiffy up also going to presentations Or think like after this will look better than then Well done sir i&#x27;m still not wearing pants though But he&#x27;s wear shorts Yeah Now have some parts out of living We gotta... Yeah You got the shirt on too? The location bar... Part Chief, Mr. Christianl Heavenly Father we&#x27;re thankful for you and who are And were just grateful For a word of word of word We can be part Of our community in this aspect that he give our leaders Wisdom &amp; guidance and decisions they make tonight To your name And you can just say one nation under high Invisible Whatever the protest is for For public input, I&#x27;m scared of personal parisus For five presentation discussion With presentations from my data Regarding fiber optic internet service, John Terry Thank You sir I brought James Kristallic with me I told ya guys At last meeting that she see my mug again this week So here i am, a phone through on that promise Last time i&#x27;ll do it again my name is John Terry with IdeaTech I&#x27;m out of Gillesburg, Kansas About an hour up the road here in New York, County And being hearing means a lot to me My wife and actual were married In Miami, Oklahoma 12 years ago June 26th 2013 It might be 28 sure But Men are not allowed To find that idea tech was interested For those reason many others Being someone who lives In the four states, I&#x27;m excited to see this region grow My M is a perfect opportunity for us This looks like alot of other communities we invest in So were very exciting To bring it ten million dollar private investment here And brings some quality good pay and jobs with benefits We&#x27;ve got affordable eight gig Some magical fiber that are looking forward Bring into every home business Not cherry picking Everybody who wants it And we don&#x27;t have residential contracts So that&#x27;s a good thing Obviously people dont like getting tied up by pieces of paper on residential service We donít cap data, I&#x27;m not going to give them Just delivered in service month and months That you pay for as long As long your happy with it Did turn an apartment On Wednesday at last week As soon as we get with the city and have a conversation about how to move forward James drove three hours down from Wichdon also I know he&#x27;s got some things that seem like to say Yeah, no thank you The game is crystalic of ideas Been really looking at my MF for quite time We had some meetings in couple And it was an exciting idea When were did come From small town of Bielercans We were really interested in what it means to be left behind Rule kind of citizens So we&#x27;ve done this throughout the state of Kansas Built out about 130 communities All who did have a great option And so now, moving into across In some areas that may do Have an options but they don&#x27;t need two options And we&#x27;ve kind of looked at this area quite some time We&#x27;re kinda looking to the quapal commerce Even in my MF and now Here, here it is say hey Hey I want you able for a private internet before It was an idea that started as a senior high school project Back 1999 For four High School students Daniel Frieson had a view There&#x27;s been RFP for Bielerhigh School And they did it out from a witch at all They convinced the staff that said hey Can we put in RFP for this as well So, so you guys are high school seniors Sure do have any backing Starting with company With <mark>$250</mark> each To be able to start idea tech In their application and For 1999 In 2007 They started buying up some failing DSL companies Because they realized that was kind of going out But Bieler Kansas, the first city in The state accounts have actual full residential fiber connection So when you look at Bieler very midnight community And it had access better access Some cities like Wichita Bigger seasick to peak That are in a State of Kansas It&#x27;s really been our passion To serve these areas We look at the state and say okay, what is out there? What&#x27;s their opportunity for idea tech to be able To come in help these residents And so when we coming into our pricing package You know they start <mark>$40</mark> a month That sets us different from that competition When you&#x27;re going So There are some jobs They will see local people working here Here We get involved in the community, we invest And then we will be investing in the chambers That really make this city a better place to live So I encourage you guys To reach out ideas that You might build their own infrastructure Okay We still want work together Things like we can do Like i said Your got your on down here Just wanted</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>                         Miami Special Utility Authority (MSUA) Regular Meeting
 MEETING DATE:          October 21, 2025
 
 AGENDA TITLE:          Presentation From IdeaTek Regarding Fiber Optic Internet Service
@@ -562,57 +555,8 @@ expand its service outside of Kansas.
 
 STAFFS RECOMMENDATION:</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

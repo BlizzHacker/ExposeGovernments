@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>City Council and Miami Special Utility Authority (MSUA) Joint Special Meeting</h1>
 <div class="meeting-meta">
-<span>📅 May  1, 2025</span>
-<span>⏱️ 00h 40m</span>
-<span>🔖 Clip #605</span>
+<span>&#128197; May  1, 2025</span>
+<span>&#9201;&#65039; 00h 40m</span>
+<span>&#128278; Clip #605</span>
+<span class="disc-badge">&#9888;&#65039; 20 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/605" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (18.5 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (18.5 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.02"><span class="seg-time">00:00</span><span class="seg-text">The Board of Justice, the Board for the National Assembly.</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.02"><span class="seg-time">00:00</span><span class="seg-text">The Board of Justice, the Board for the National Assembly.</span></div>
 <div class="seg" data-time="4.02"><span class="seg-time">00:04</span><span class="seg-text">City Council meeting is third and may first come to mind about how it&#x27;s been going out?</span></div>
 <div class="seg" data-time="21.85"><span class="seg-time">00:21</span><span class="seg-text">Time has asked that as we&#x27;ve done this evening with Mr. Pupinand who bought a ticket if you had any discussion</span></div>
 <div class="seg" data-time="30.6"><span class="seg-time">00:30</span><span class="seg-text">because earlier today at city clerk meetings in your name here...</span></div>
@@ -831,12 +826,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="2423.98"><span class="seg-time">40:23</span><span class="seg-text">I&#x27;m sorry</span></div>
 <div class="seg" data-time="2425.98"><span class="seg-time">40:25</span><span class="seg-text">I am a father</span></div>
 <div class="seg" data-time="2427.98"><span class="seg-time">40:27</span><span class="seg-text">Thanks for your help</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (20)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">28 million</span><span class="disc-item">32 dollars</span><span class="disc-item">$67</span><span class="disc-item">12%</span><span class="disc-item">20 million</span><span class="disc-item">$28</span><span class="disc-item">85%</span><span class="disc-item">20 dollars</span><span class="disc-item">$13</span><span class="disc-item">1.3%</span><span class="disc-item">511 dollars</span><span class="disc-item">$1461</span><span class="disc-item">40%</span><span class="disc-item">$20</span><span class="disc-item">2,000 dollars</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI CITY COUNCIL
 Thursday, May 1, 2025
 5:30
@@ -885,7 +878,7 @@ Each person will be limited to three minutes.
 *Action Item* Adjournment of Miami Special Utility Authority                                                                    Trustees
 13.
 *Action Item* Adjournment of City Council                                                                                                 City Council
-The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office.  We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>The Board of Justice, the Board for the National Assembly. City Council meeting is third and may first come to mind about how it&#x27;s been going out? Time has asked that as we&#x27;ve done this evening with Mr. Pupinand who bought a ticket if you had any discussion because earlier today at city clerk meetings in your name here... that I was supported by the Constitution of United States. The Court obeyed and became a constitution in United States And their constitutions are the state of Oklahoma In the cross-vitational state of Oklahoma Then, i will not notice if you receive directly or indirectly Relaxing about nothing Which is your act here in the right way Any many further valuable things For the performance or not, for performance of any after duty To obtain some purpose Really? Or on a moment to set up Any actor due to the commitment in my office Other than compensation allowed by law Rather then compensation allowable I further swear her return That i have faithfully discharged And why will pay fully discharge Accordingly to the best of liability The duty to the best of liability To do this is what I have The duty for my office During such time as i am a member During such times, i am a member And in the minority council In order to address these Of the minority&#x27;s, especially so we are afforded Of the minority&#x27;s special, particularly important Of the city that brings us from the public To the city and my normal Thank you We are in the board there I am really looking forward to seeing council On behalf of the state and the council On behalf of the state, the state and the council To represent tonight&#x27;s presentation You can come here Yeah The purpose Of my hopefully great presentation To go over once again The results of the electric race that we have prepared for We had a critical to being in cities Of breaking soltings from last 20 years And this is about 4th or 5rd, and I would like For a lot information In presentation But i did include several slides And to further provide these support And means necessary for the rate plan We will recommend it for you tonight Obviously, it is never easy Talk about racing rates Whether they are electric water or wastewater Or any utility This has something people like You don&#x27;t know if we must pay more For anything at anytime Or if you want to use the cities, take into consideration First we try to learn your utility like a business You will not be ready for all costs of providing that service Electric services is an economic Electricity has a product Just as I can McDonald&#x27;s and for group or anything else And so they cost us sitting at my own Of certain amounting To produce this product And you are cost of losing less than one who is paying to produce it That&#x27;s not good business for anybody Second rule, this a process that costs us Can we think about anything in the past and what today If I am 10 years ago Utility rates Are now immune To be able All those people will have to pay for all these costs It has an effect Go of any city To try to minimize or keep their rates as low As they possibly can But the popular and running utility has two balance The desire that keeps rates low With a need for investing your system And you continue to provide high level of service So, this is at A lowest rate is not always in best rates I work with many many utilities Over 200 utilities across the United States And I work for some utilities to have incredibly low rates But they had a low rate because They don&#x27;t invest in their system So the quality of service and quality is deteriorating significantly That&#x27;s not necessarily good way one money utility All these factors are going into The need To propose a new long-term electric break time But I would say that it really comes down to four factors There are more factors More than anything else So the driving need for underweight prices and inflation But cost of everything goes up 34% here Just do an inflation It&#x27;s a reasonable perspective over time You&#x27;re constantly going in high For those who have been living in low Second level, you buy your purchase power from GRDA In fact majority The cost of providing electric service Is due to the costs that you pay GRDA for their purchase power Guess what? There&#x27;s a lot in the same rate increase this year And there are implementing 4% credit increases in 2026 and 2027 So, they&#x27;re going raise no rates here Whether your grades or not If we have no choice To pass these costs over any customers And these higher rates Third reason is that you, the city plan Is on issue 28 million dollars a day To fund electric system capital infrastructure improvements Now good news That&#x27;s not going to be better and more reliable All new service But What benefits of running utility boat The money in US can break their security To rent the back in city In terms of 28 million dollars So that&#x27;s a third reason And fourth reason is You have got to grant for your A&amp;I program The, unfortunately The grant doesn&#x27;t cover all costs A</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office.  We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>The Board of Justice, the Board for the National Assembly. City Council meeting is third and may first come to mind about how it&#x27;s been going out? Time has asked that as we&#x27;ve done this evening with Mr. Pupinand who bought a ticket if you had any discussion because earlier today at city clerk meetings in your name here... that I was supported by the Constitution of United States. The Court obeyed and became a constitution in United States And their constitutions are the state of Oklahoma In the cross-vitational state of Oklahoma Then, i will not notice if you receive directly or indirectly Relaxing about nothing Which is your act here in the right way Any many further valuable things For the performance or not, for performance of any after duty To obtain some purpose Really? Or on a moment to set up Any actor due to the commitment in my office Other than compensation allowed by law Rather then compensation allowable I further swear her return That i have faithfully discharged And why will pay fully discharge Accordingly to the best of liability The duty to the best of liability To do this is what I have The duty for my office During such time as i am a member During such times, i am a member And in the minority council In order to address these Of the minority&#x27;s, especially so we are afforded Of the minority&#x27;s special, particularly important Of the city that brings us from the public To the city and my normal Thank you We are in the board there I am really looking forward to seeing council On behalf of the state and the council On behalf of the state, the state and the council To represent tonight&#x27;s presentation You can come here Yeah The purpose Of my hopefully great presentation To go over once again The results of the electric race that we have prepared for We had a critical to being in cities Of breaking soltings from last 20 years And this is about 4th or 5rd, and I would like For a lot information In presentation But i did include several slides And to further provide these support And means necessary for the rate plan We will recommend it for you tonight Obviously, it is never easy Talk about racing rates Whether they are electric water or wastewater Or any utility This has something people like You don&#x27;t know if we must pay more For anything at anytime Or if you want to use the cities, take into consideration First we try to learn your utility like a business You will not be ready for all costs of providing that service Electric services is an economic Electricity has a product Just as I can McDonald&#x27;s and for group or anything else And so they cost us sitting at my own Of certain amounting To produce this product And you are cost of losing less than one who is paying to produce it That&#x27;s not good business for anybody Second rule, this a process that costs us Can we think about anything in the past and what today If I am 10 years ago Utility rates Are now immune To be able All those people will have to pay for all these costs It has an effect Go of any city To try to minimize or keep their rates as low As they possibly can But the popular and running utility has two balance The desire that keeps rates low With a need for investing your system And you continue to provide high level of service So, this is at A lowest rate is not always in best rates I work with many many utilities Over 200 utilities across the United States And I work for some utilities to have incredibly low rates But they had a low rate because They don&#x27;t invest in their system So the quality of service and quality is deteriorating significantly That&#x27;s not necessarily good way one money utility All these factors are going into The need To propose a new long-term electric break time But I would say that it really comes down to four factors There are more factors More than anything else So the driving need for underweight prices and inflation But cost of everything goes up 34% here Just do an inflation It&#x27;s a reasonable perspective over time You&#x27;re constantly going in high For those who have been living in low Second level, you buy your purchase power from GRDA In fact majority The cost of providing electric service Is due to the costs that you pay GRDA for their purchase power Guess what? There&#x27;s a lot in the same rate increase this year And there are implementing 4% credit increases in 2026 and 2027 So, they&#x27;re going raise no rates here Whether your grades or not If we have no choice To pass these costs over any customers And these higher rates Third reason is that you, the city plan Is on issue <mark>28 million</mark> dollars a day To fund electric system capital infrastructure improvements Now good news That&#x27;s not going to be better and more reliable All new service But What benefits of running utility boat The money in US can break their security To rent the back in city In terms of <mark>28 million</mark> dollars So that&#x27;s a third reason And fourth reason is You have got to grant for your A&amp;I program The, unfortunately The grant doesn&#x27;t cover all costs A</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI CITY COUNCIL
 Thursday, May 1, 2025
 5:30
@@ -936,57 +929,8 @@ Each person will be limited to three minutes.
 *Action Item* Adjournment of City Council                                                                                                 City Council
 The Mayor and City Council of the City of Miami are committed to making this meeting accessible to all citizens and if special assistance or accommodations are required, please submit your request to the city managerâ€™s office.  We also ask that those in attendance turn off or place on silent all cell phones or pagers.</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

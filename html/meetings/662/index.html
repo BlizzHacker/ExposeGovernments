@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami Special Utility Authority (MSUA)</h1>
 <div class="meeting-meta">
-<span>📅 Mar 17, 2026</span>
-<span>⏱️ 00h 20m</span>
-<span>🔖 Clip #662</span>
+<span>&#128197; Mar 17, 2026</span>
+<span>&#9201;&#65039; 00h 20m</span>
+<span>&#128278; Clip #662</span>
+<span class="disc-badge">&#9888;&#65039; 4 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/662" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (9.4 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (9.4 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="0.02"><span class="seg-time">00:00</span><span class="seg-text">Today, March 17th 2026. We&#x27;re at the invocation from Deakin with all seats of the church and the very suit away</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="0.02"><span class="seg-time">00:00</span><span class="seg-text">Today, March 17th 2026. We&#x27;re at the invocation from Deakin with all seats of the church and the very suit away</span></div>
 <div class="seg" data-time="12.3"><span class="seg-time">00:12</span><span class="seg-text">That&#x27;s okay well</span></div>
 <div class="seg" data-time="14.3"><span class="seg-time">00:14</span><span class="seg-text">Okay was supposed to be</span></div>
 <div class="seg" data-time="18.23"><span class="seg-time">00:18</span><span class="seg-text">Let us pray</span></div>
@@ -492,12 +487,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="1220.11"><span class="seg-time">20:20</span><span class="seg-text">For purposes of executive section at a completion</span></div>
 <div class="seg" data-time="1223.11"><span class="seg-time">20:23</span><span class="seg-text">But yet I donít know about ten</span></div>
 <div class="seg" data-time="1225.11"><span class="seg-time">20:25</span><span class="seg-text">The regular city is counting me</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">📄 Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (4)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('minutes',this)">&#128196; Minutes</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">578 thousand</span><span class="disc-item">$640</span><span class="disc-item">40%</span><span class="disc-item">150 dollars</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 TUESDAY, MARCH 17, 2026
 5:30 PM
@@ -2584,7 +2577,7 @@ $0.00
 $342.10
 
 March 17, 2026
-</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Today, March 17th 2026. We&#x27;re at the invocation from Deakin with all seats of the church and the very suit away That&#x27;s okay well Okay was supposed to be Let us pray Almighty God you give a new life New hope And new opportunities for each day Help those blessings Abilities in doing the work before us Devoting ourselves to your service and putting our own interests aside To seek The welfare of Our community Direct us a Lord In All Are Doings with Your Most Gracious Favor And further Us With You&#x27;re Continual Help That An All-Our Work Begun, Continued &amp; Ended In you We May glorify YOUR Name In Jesus&#x27; name we pray Amen We pray In Jesus&#x27; name Amen With Your Peace and Justice Before Public Input, Unskilled Personal Parentheses Have None Five A claims list Superfood So full of Jones, Fathards High, High, High 5 B claims List for Vance, Autoberg I&#x27;m staying. Five C, good L strat and Edmunds The Palmer Plane for the Pinsicola DRA relaxing thing in amount of $315 This is like you said this claim was For three hundred fifteen dollars. If it&#x27;s approved we will have a remaining dollar That 578 thousand four sixty So this will be our last claim from Gdl strat I think that might like one more but And we&#x27;ll see the board&#x27;s feeling for me Okay, on On This civil litigation is all tax-bending distributed yet We know where thats at But then target date when all of checks will be distributed By The Indibabra That sounds good. Jim, Barry and my E step Uncle, Harper By the Tetra Tech claim for The Pinsicola DRA Re-listened seeing them out 13 150 dollars This is for tetrachion other engineer process They&#x27;ve been doing a lot of modeling and different things like that If this was approved, it would only be around about 560 $640. Jim&#x27;s step I Five Minutes from the March 3rd, 2026 Regular meeting Jim&#x27;s step John, Barry The same Five minutes of juggling 5F Vote towards a I-44 And tree road project To act or see Underground Not to exceed three hundred thirty eight thousand one hundred eighty dollars All legal review And open a water resources board A group and there Good evening. This will be Water line that we&#x27;ll go from our new Water tower, just south of That in Go across the interstate Feed The east side Turnpike it would really It&#x27;s good to do because We only have one feed We&#x27;ll be good for any kind of expansion That we have to do so Is this the one hundred thirty eight thousand One or night part Of a grant fund If you haven&#x27;t yet left it, Or I&#x27;m going use some of that money towards it So if got away with every people And if If You didn&#x27; t having your laptop To visit something obligated To visit a For the MSUA 25-85 Five or material project And authorize it, trust manager To negotiate contract Consistent with The bid documents can be attended upon legal review In confirmation of funding availability Both better and MSUA Recognized that many units to provide an agreement between bitter And MSUA recognises the actual number of units To be provided by bitter Or currently only an estimate As a result The agreement between MSUA and better will contain Specific language to confirm That total scope Of that project, it&#x27;s To provide it with a bigger, or a unit Pricing basis may increase or decrease in This whole discretion And the hand is in there So this start of our fiber We recently improved to get The design, we put it up for bid This isn&#x27;t obviously all over It&#x27;s like that But I mean That means everything is in its original material In fact Every widget We&#x27;re going To be talking about funding So here at the next meeting We are going to bring before you Like our loan for the actual fiber construction in the AMI Something we&#x27;re faltering I don&#x27;t see that being a problem That&#x27;s what people reach out Assystem questions They like To say It would be hard work A lot of meetings To get us this point It&#x27;s been a long time getting here I&#x27;m excited And that we&#x27;ve probably been working on Getting fiber in my AMA for at least three years We&#x27;re finally to the point That year from now Everybody will have fiber Its really cool thing To be able To be a good revenue generator For this city, it needs longer But The work is not going But I don&#x27;t know It&#x27;s been a lot Thank you for getting this point We&#x27;re working with the mayor And we&#x27;ve got to work on it Everybody that had help along The way, municipal cities like Fonka, Salas Helping out To co-op local culture On here Today They would do a call center Like we&#x27;re at the end of this Get off that ground like an issue If you can do a call center But in the beginning, keep your appetite So Yeah We have to hire much people Because they said You know so many things As I turn around or back on Just for 30 Salasol&#x27;s partner was amazing I saw the Ponka City city manager Like a three months ago and he said They gentleman That&#x27;s going to be next The next city manager He was like it is big headache But even if its breaks Even It makes you We try Get true fiber here True high speed We try to get someone else Come in And</pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
+</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>Today, March 17th 2026. We&#x27;re at the invocation from Deakin with all seats of the church and the very suit away That&#x27;s okay well Okay was supposed to be Let us pray Almighty God you give a new life New hope And new opportunities for each day Help those blessings Abilities in doing the work before us Devoting ourselves to your service and putting our own interests aside To seek The welfare of Our community Direct us a Lord In All Are Doings with Your Most Gracious Favor And further Us With You&#x27;re Continual Help That An All-Our Work Begun, Continued &amp; Ended In you We May glorify YOUR Name In Jesus&#x27; name we pray Amen We pray In Jesus&#x27; name Amen With Your Peace and Justice Before Public Input, Unskilled Personal Parentheses Have None Five A claims list Superfood So full of Jones, Fathards High, High, High 5 B claims List for Vance, Autoberg I&#x27;m staying. Five C, good L strat and Edmunds The Palmer Plane for the Pinsicola DRA relaxing thing in amount of $315 This is like you said this claim was For three hundred fifteen dollars. If it&#x27;s approved we will have a remaining dollar That <mark>578 thousand</mark> four sixty So this will be our last claim from Gdl strat I think that might like one more but And we&#x27;ll see the board&#x27;s feeling for me Okay, on On This civil litigation is all tax-bending distributed yet We know where thats at But then target date when all of checks will be distributed By The Indibabra That sounds good. Jim, Barry and my E step Uncle, Harper By the Tetra Tech claim for The Pinsicola DRA Re-listened seeing them out 13 <mark>150 dollars</mark> This is for tetrachion other engineer process They&#x27;ve been doing a lot of modeling and different things like that If this was approved, it would only be around about 560 <mark>$640</mark>. Jim&#x27;s step I Five Minutes from the March 3rd, 2026 Regular meeting Jim&#x27;s step John, Barry The same Five minutes of juggling 5F Vote towards a I-44 And tree road project To act or see Underground Not to exceed three hundred thirty eight thousand one hundred eighty dollars All legal review And open a water resources board A group and there Good evening. This will be Water line that we&#x27;ll go from our new Water tower, just south of That in Go across the interstate Feed The east side Turnpike it would really It&#x27;s good to do because We only have one feed We&#x27;ll be good for any kind of expansion That we have to do so Is this the one hundred thirty eight thousand One or night part Of a grant fund If you haven&#x27;t yet left it, Or I&#x27;m going use some of that money towards it So if got away with every people And if If You didn&#x27; t having your laptop To visit something obligated To visit a For the MSUA 25-85 Five or material project And authorize it, trust manager To negotiate contract Consistent with The bid documents can be attended upon legal review In confirmation of funding availability Both better and MSUA Recognized that many units to provide an agreement between bitter And MSUA recognises the actual number of units To be provided by bitter Or currently only an estimate As a result The agreement between MSUA and better will contain Specific language to confirm That total scope Of that project, it&#x27;s To provide it with a bigger, or a unit Pricing basis may increase or decrease in This whole discretion And the hand is in there So this start of our fiber We recently improved to get The design, we put it up for bid This isn&#x27;t obviously all over It&#x27;s like that But I mean That means everything is in its original material In fact Every widget We&#x27;re going To be talking about funding So here at the next meeting We are going to bring before you Like our loan for the actual fiber construction in the AMI Something we&#x27;re faltering I don&#x27;t see that being a problem That&#x27;s what people reach out Assystem questions They like To say It would be hard work A lot of meetings To get us this point It&#x27;s been a long time getting here I&#x27;m excited And that we&#x27;ve probably been working on Getting fiber in my AMA for at least three years We&#x27;re finally to the point That year from now Everybody will have fiber Its really cool thing To be able To be a good revenue generator For this city, it needs longer But The work is not going But I don&#x27;t know It&#x27;s been a lot Thank you for getting this point We&#x27;re working with the mayor And we&#x27;ve got to work on it Everybody that had help along The way, municipal cities like Fonka, Salas Helping out To co-op local culture On here Today They would do a call center Like we&#x27;re at the end of this Get off that ground like an issue If you can do a call center But in the beginning, keep your appetite So Yeah We have to hire much people Because they said You know so many things As I turn around or back on Just for 30 Salasol&#x27;s partner was amazing I saw the Ponka City city manager Like a three months ago and he said They gentleman That&#x27;s going to be next The next city manager He was like it is big headache But even if its breaks Even It makes you We try Get true fiber here True high speed We try to get someone else Come in And</pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>NOTICE OF REGULAR MEETING AND AGENDA
 OF THE MIAMI SPECIAL UTILITY AUTHORITY (MSUA)
 TUESDAY, MARCH 17, 2026
 5:30 PM
@@ -2707,7 +2700,7 @@ Number 12
 The MSUA Board of Trustees for the City of Miami is committed to making this meeting accessible to all citizens. If
 special assistance or accommodations are required, please submit your request to the City Manager&#x27;s office. We
 also ask that those in attendance place all electronic devices on silent. Thank you.
-</pre></div></div><div><h3>Official Minutes</h3><div class="doc-panel"><pre>THE MIAMI CITY COUNCIL MET IN REGULAR SESSION ON MARCH 17, 2026, IN THE MIAMI CIVIC CENTER
+</pre></div></div><div><h3>&#128196; Official Minutes</h3><div class="doc-panel"><pre>THE MIAMI CITY COUNCIL MET IN REGULAR SESSION ON MARCH 17, 2026, IN THE MIAMI CIVIC CENTER
 COUNCIL CHAMBERS AT 5:30PM WITH THE FOLLOWING MEMBERS PRESENT:
 
 Bless Parker, Mayor Tyler Cline, City Manager
@@ -4673,57 +4666,8 @@ $342.10
 March 17, 2026
 </pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>

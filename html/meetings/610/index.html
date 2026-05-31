@@ -12,6 +12,7 @@ a { color: inherit; }
 .meeting-header { margin-bottom: 1.5rem; }
 .meeting-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; color: #fff; }
 .meeting-meta { color: #a1a1aa; font-size: 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.disc-badge { color: #f87171; font-weight: 600; }
 .layout { display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem; }
 @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
 .video-wrap { background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; }
@@ -19,7 +20,7 @@ a { color: inherit; }
 .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #0a0a0f); color: #a1a1aa; }
 .audio-bar { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; }
 .audio-bar audio { width: 100%; height: 40px; border-radius: 8px; }
-.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+.audio-label { font-size: 0.8rem; color: #a1a1aa; margin-bottom: 0.5rem; }
 .transcript-col { background: #1a1a2e; border: 1px solid #27272a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; max-height: 600px; }
 @media (max-width: 1024px) { .transcript-col { max-height: 400px; } }
 .transcript-header { padding: 1rem 1.25rem; border-bottom: 1px solid #27272a; font-weight: 600; display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 0.95rem; }
@@ -30,8 +31,13 @@ a { color: inherit; }
 .seg.active { background: rgba(239,68,68,0.12); border-left: 3px solid #ef4444; }
 .seg-time { color: #60a5fa; font-family: 'SF Mono', Monaco, monospace; font-size: 0.75rem; white-space: nowrap; padding-top: 2px; min-width: 40px; }
 .seg-text { font-size: 0.85rem; color: #e4e4e7; }
+.disc-alert { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(249,115,22,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.disc-alert h3 { color: #f87171; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.disc-alert p { font-size: 0.8rem; color: #fca5a5; margin-bottom: 0.5rem; }
+.disc-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.disc-item { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 .tabs-section { margin-top: 2rem; }
-.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; }
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid #27272a; flex-wrap: wrap; }
 .tab-btn { padding: 0.75rem 1.5rem; background: none; border: none; color: #a1a1aa; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
 .tab-btn:hover { color: #e4e4e7; }
 .tab-btn.active { color: #ef4444; border-bottom-color: #ef4444; }
@@ -43,41 +49,30 @@ a { color: inherit; }
 .compare-grid h3 { font-size: 0.85rem; color: #ef4444; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .doc-panel { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; max-height: 500px; overflow-y: auto; }
 .doc-panel pre { white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; line-height: 1.6; color: #a1a1aa; }
+.doc-panel mark { background: rgba(239,68,68,0.3); color: #fca5a5; padding: 0 2px; border-radius: 2px; }
 footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; border-top: 1px solid #27272a; margin-top: 3rem; }
 </style>
 </head>
 <body>
-<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)">
-  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7">
-      <img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px">
-      <div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div>
-    </a>
-    <a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">← All Meetings</a>
-  </div>
-</header>
+<header style="background:#12121a;border-bottom:1px solid #27272a;padding:12px 16px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.3)"><div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#e4e4e7"><img src="/images/logo-120.png" alt="ExposeMiamiOK" style="width:40px;height:40px;border-radius:8px"><div><div style="font-weight:800;font-size:1.1rem">ExposeMiamiOK</div><div style="font-size:.75rem;color:#a1a1aa">Community Resources & Transparency</div></div></a><a href="/meetings/" style="color:#ef4444;text-decoration:none;font-size:.9rem;font-weight:600">&larr; All Meetings</a></div></header>
 <div class="main">
 <div class="meeting-header">
 <h1>Miami City Council</h1>
 <div class="meeting-meta">
-<span>📅 May 20, 2025</span>
-<span>⏱️ 01h 01m</span>
-<span>🔖 Clip #610</span>
+<span>&#128197; May 20, 2025</span>
+<span>&#9201;&#65039; 01h 01m</span>
+<span>&#128278; Clip #610</span>
+<span class="disc-badge">&#9888;&#65039; 16 discrepancies</span>
 </div>
 </div>
-
 <div class="layout">
 <div class="media-col">
 <div class="video-wrap"><iframe id="video-frame" src="https://miamiok.granicus.com/player/clip/610" allowfullscreen></iframe></div>
-<div class="audio-bar"><div class="audio-label">🎧 Audio Recording (28.0 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
+<div class="audio-bar"><div class="audio-label">&#127911; Audio Recording (28.0 MB)</div><audio id="audio-player" controls preload="none"><source src="audio.mp3" type="audio/mpeg"></audio></div>
 </div>
 <div class="transcript-col">
-<div class="transcript-header">
-<span>📝 Transcript</span>
-<span class="sync-badge">● Synced</span>
-</div>
-<div class="transcript-body" id="transcript-scroll">
-<div class="seg" data-time="3.22"><span class="seg-time">00:03</span><span class="seg-text">Dr. Scott McLean, City Council for Tuesday May 20th on B-25 up in the personal premises we have none three going to list?</span></div>
+<div class="transcript-header"><span>&#128221; Transcript</span><span class="sync-badge">&#9679; Synced</span></div>
+<div class="transcript-body" id="transcript-scroll"><div class="seg" data-time="3.22"><span class="seg-time">00:03</span><span class="seg-text">Dr. Scott McLean, City Council for Tuesday May 20th on B-25 up in the personal premises we have none three going to list?</span></div>
 <div class="seg" data-time="38.46"><span class="seg-time">00:38</span><span class="seg-text">minutes from the April 15th, 205 regular meeting in a May 1st</span></div>
 <div class="seg" data-time="42.46"><span class="seg-time">00:42</span><span class="seg-text">point of 25 special meetings.</span></div>
 <div class="seg" data-time="43.96"><span class="seg-time">00:43</span><span class="seg-text">Motion to approve?</span></div>
@@ -1219,12 +1214,10 @@ footer { text-align: center; padding: 2rem; color: #a1a1aa; font-size: 0.8rem; b
 <div class="seg" data-time="3647.62"><span class="seg-time">60:47</span><span class="seg-text">Hi</span></div>
 <div class="seg" data-time="3656.91"><span class="seg-time">60:56</span><span class="seg-text">For the executive session</span></div>
 <div class="seg" data-time="3659.91"><span class="seg-time">60:59</span><span class="seg-text">Have a nice day</span></div>
-
 </div>
 </div>
 </div>
-
-<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('agenda',this)">📋 Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">🔍 Compare</button></div><div class="tab-panel active" id="panel-agenda"><pre>+ MI4
+<div class="tabs-section"><div class="tab-bar"><button class="tab-btn active" onclick="showTab('discrepancies',this)">&#9888;&#65039; Discrepancies (16)</button><button class="tab-btn" onclick="showTab('agenda',this)">&#128203; Agenda</button><button class="tab-btn" onclick="showTab('compare',this)">&#128269; Compare</button></div><div class="tab-panel active" id="panel-discrepancies"><div class="disc-alert"><h3>&#9888;&#65039; Discrepancies Detected</h3><p>These amounts/terms were mentioned in the transcript but NOT found in the official agenda or minutes:</p><div class="disc-items"><span class="disc-item">10 dollars</span><span class="disc-item">$200</span><span class="disc-item">25%</span><span class="disc-item">31 million</span><span class="disc-item">2 thousand</span><span class="disc-item">20 thousand</span><span class="disc-item">20 dollars</span><span class="disc-item">$15,000</span><span class="disc-item">50 thousand</span><span class="disc-item">$700</span><span class="disc-item">11 thousand</span><span class="disc-item">$10</span><span class="disc-item">$1,400</span><span class="disc-item">$613</span><span class="disc-item">$0.000</span></div></div><div style="margin-top:1rem;font-size:0.85rem;color:#a1a1aa;">Switch to the Compare tab to see the full side-by-side view with highlighted terms.</div></div><div class="tab-panel" id="panel-agenda"><pre>+ MI4
 a “a A eS
 Ree
 NGS WS
@@ -1258,7 +1251,7 @@ Miami Industrial &amp; Public Facilities Authority Miami Fair Housing Board
 Mayor’s Flood Advisory Board Miami Industrial Development Authority
 Miami Housing Authority Board of Adjustments
 Miami Special Utility Authority Miami Main Street Board
-Miami Seniors’ Center Advisory Board The Miami Seniors’ Center Inc.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>AI Transcript</h3><div class="doc-panel"><pre>Dr. Scott McLean, City Council for Tuesday May 20th on B-25 up in the personal premises we have none three going to list? minutes from the April 15th, 205 regular meeting in a May 1st point of 25 special meetings. Motion to approve? Second 10 five five five two five bar I perfect Five six budget members number twenty five that&#x27;s 22 for the MCB reversing 2 thousand seven nine and two fifth ten and transfer into our A Main Street amendment Number twenty five national eleven because no longer needed sport using one $1,400 to 61 cents of the number 120 part and recreation carryover because it&#x27;s a 50 thousand argument that you blow your girls gun. Semitary receiving spending with seven hundred dollars at home in Barbarne, Transportation Keepup on the one for people grant? Exactly what I&#x27;m doing! So we&#x27;re student three things And again if money is moving from fun That&#x27;s accounts will job or If budget changes any way growing So we got more revenues of the now they have a bigger expenditure that&#x27;s accounts will function and That is what doing all these things. We&#x27;re transferring money The CDB had some personnel changes They&#x27;ve done an amendment back in November It has no longer needed so I&#x27;m reversing it Sports are using up Some carryover to complete payment To put into boys&#x27; rules club Run This summer record program And then this cemetery Got Grant Their receiving An expending for $700 Thank you Hi Hi Hi Seven The Board of the Opposition And Monopolitan Homeless Rick Aldrich Good evening I appreciate Yeah, but it&#x27;s an opportunity to Come in and talk about our Our streets citizen population Bear with me Like To term homeless Because they do have a home It happens be on A street That is why I call them Street citizens So if you bear With Me If You don&#x27;t use The Term Homeless Please I do have a couple guests that Going to want them Come up and speak here in just a minute But Most people are Here In the room No way And Know what i Do If you don&#x27;t Who Guess That&#x27;s possible We Have been working very hard With our streets It is population now for A few years As You know any time we get Called Whether Or Stream Out Weather Im Line The Phone Bug In The Mer For A Building To Set Up A Shelter To Get People Off the Streets Either because it is too cold or Too hot And we have been blessed Didn&#x27;t mean that That way But We Have Been Blessed Um Then I Were able to get a building here In there Not The Last One Was Probably Uh not Best Facility Use Because of Location But It actually turned out Be Best facility Used Because At A location Ah It brought To light An awful lot Of things being on Main Street Um And With That Before I Going For The Like Then To Do Chris Real quick Um Chris If You Want to Come Up and Say We Just Say If Be Appreciate it Chris Neem New Huser Uh Got a Little Street Manage Drag Around And Pretty Top with the Streets This Is up Down Yeah He&#x27;s in streets In Into Horse Things uh Been Doing It for Ten Of Draw Use Take Out To Hold Man And How Apart Years Go Never My While A Stream I imagine, it&#x27;d be the next week of the line on homeless list. But here are you? And but i don&#x27;t think The city really puts an up into to We Really need some place for people To go there&#x27;s Six six People out There That needs a Place Go we You Need Some kind Of Shelter It Every day Im seeing more and More In More People coming in At I&#x27;m Seeing 16-18 20 years And I have several people in here that are out seeing you&#x27;ve stopped and passed it a lot of things. It seems like when i need something for somebody at home to treat, or break the whole frame... ...and what do we appreciate if anybody has helped us? There is an aid facility as mayor knows As other people on this room know We&#x27;re working very hard To find right location In their own kind of facility We don&#x27;t want, I guess i&#x27;ll change the terminology a little bit ...we dont wanna shelter so to speak And we&#x27;re not going be giving handouts and just gonna talk about the last shelter that was at Main Street Because each of us have one done Some amazing stories come out Frank &amp; Eye Please know what he turned him in nice He&#x27;s legit We probably go over and above to take care of our folks on the street we worked 24-36, 48 hours at a clip in that shelter And all those people who are going out there In let them know if they&#x27;re allowed their car There&#x27;s a stigma with people living on the street You&#x27;ll agree and you will disagree But alot of times, if they see people in their streets They&#x27;re drug addict Oh there are still mental health problems And those were first things that pop into People&#x27;s heads The old dad or scrim-dad Very degraded And i would challenge anybody in here Take a week and step into their shoes See what it&#x27;s like The shelter that we set up on Main Street As I said probably not the most ideal location but was an idea A lot of people got noticed alot-of People stopped wanting to know What were doing, how are you&#x27;re doin&#x27; Lotta people? I didn&#x27;t realize that there&#x27;s so many people on </pre></div></div><div><h3>Official Agenda</h3><div class="doc-panel"><pre>+ MI4
+Miami Seniors’ Center Advisory Board The Miami Seniors’ Center Inc.</pre></div><div class="tab-panel" id="panel-compare"><div class="compare-grid"><div><h3>&#128221; AI Transcript</h3><div class="doc-panel"><pre>Dr. Scott McLean, City Council for Tuesday May 20th on B-25 up in the personal premises we have none three going to list? minutes from the April 15th, 205 regular meeting in a May 1st point of 25 special meetings. Motion to approve? Second 10 five five five two five bar I perfect Five six budget members number twenty five that&#x27;s 22 for the MCB reversing <mark>2 thousand</mark> seven nine and two fifth ten and transfer into our A Main Street amendment Number twenty five national eleven because no longer needed sport using one <mark>$1,400</mark> to 61 cents of the number 120 part and recreation carryover because it&#x27;s a <mark>50 thousand</mark> argument that you blow your girls gun. Semitary receiving spending with seven hundred dollars at home in Barbarne, Transportation Keepup on the one for people grant? Exactly what I&#x27;m doing! So we&#x27;re student three things And again if money is moving from fun That&#x27;s accounts will job or If budget changes any way growing So we got more revenues of the now they have a bigger expenditure that&#x27;s accounts will function and That is what doing all these things. We&#x27;re transferring money The CDB had some personnel changes They&#x27;ve done an amendment back in November It has no longer needed so I&#x27;m reversing it Sports are using up Some carryover to complete payment To put into boys&#x27; rules club Run This summer record program And then this cemetery Got Grant Their receiving An expending for <mark>$700</mark> Thank you Hi Hi Hi Seven The Board of the Opposition And Monopolitan Homeless Rick Aldrich Good evening I appreciate Yeah, but it&#x27;s an opportunity to Come in and talk about our Our streets citizen population Bear with me Like To term homeless Because they do have a home It happens be on A street That is why I call them Street citizens So if you bear With Me If You don&#x27;t use The Term Homeless Please I do have a couple guests that Going to want them Come up and speak here in just a minute But Most people are Here In the room No way And Know what i Do If you don&#x27;t Who Guess That&#x27;s possible We Have been working very hard With our streets It is population now for A few years As You know any time we get Called Whether Or Stream Out Weather Im Line The Phone Bug In The Mer For A Building To Set Up A Shelter To Get People Off the Streets Either because it is too cold or Too hot And we have been blessed Didn&#x27;t mean that That way But We Have Been Blessed Um Then I Were able to get a building here In there Not The Last One Was Probably Uh not Best Facility Use Because of Location But It actually turned out Be Best facility Used Because At A location Ah It brought To light An awful lot Of things being on Main Street Um And With That Before I Going For The Like Then To Do Chris Real quick Um Chris If You Want to Come Up and Say We Just Say If Be Appreciate it Chris Neem New Huser Uh Got a Little Street Manage Drag Around And Pretty Top with the Streets This Is up Down Yeah He&#x27;s in streets In Into Horse Things uh Been Doing It for Ten Of Draw Use Take Out To Hold Man And How Apart Years Go Never My While A Stream I imagine, it&#x27;d be the next week of the line on homeless list. But here are you? And but i don&#x27;t think The city really puts an up into to We Really need some place for people To go there&#x27;s Six six People out There That needs a Place Go we You Need Some kind Of Shelter It Every day Im seeing more and More In More People coming in At I&#x27;m Seeing 16-18 20 years And I have several people in here that are out seeing you&#x27;ve stopped and passed it a lot of things. It seems like when i need something for somebody at home to treat, or break the whole frame... ...and what do we appreciate if anybody has helped us? There is an aid facility as mayor knows As other people on this room know We&#x27;re working very hard To find right location In their own kind of facility We don&#x27;t want, I guess i&#x27;ll change the terminology a little bit ...we dont wanna shelter so to speak And we&#x27;re not going be giving handouts and just gonna talk about the last shelter that was at Main Street Because each of us have one done Some amazing stories come out Frank &amp; Eye Please know what he turned him in nice He&#x27;s legit We probably go over and above to take care of our folks on the street we worked 24-36, 48 hours at a clip in that shelter And all those people who are going out there In let them know if they&#x27;re allowed their car There&#x27;s a stigma with people living on the street You&#x27;ll agree and you will disagree But alot of times, if they see people in their streets They&#x27;re drug addict Oh there are still mental health problems And those were first things that pop into People&#x27;s heads The old dad or scrim-dad Very degraded And i would challenge anybody in here Take a week and step into their shoes See what it&#x27;s like The shelter that we set up on Main Street As I said probably not the most ideal location but was an idea A lot of people got noticed alot-of People stopped wanting to know What were doing, how are you&#x27;re doin&#x27; Lotta people? I didn&#x27;t realize that there&#x27;s so many people on </pre></div></div><div><h3>&#128203; Official Agenda</h3><div class="doc-panel"><pre>+ MI4
 a “a A eS
 Ree
 NGS WS
@@ -1294,57 +1287,8 @@ Miami Housing Authority Board of Adjustments
 Miami Special Utility Authority Miami Main Street Board
 Miami Seniors’ Center Advisory Board The Miami Seniors’ Center Inc.</pre></div></div></div></div></div>
 </div>
-
 <footer>ExposeMiamiOK &mdash; Holding Power Accountable</footer>
-
 <script>
-var audio = document.getElementById('audio-player');
-var segments = document.querySelectorAll('.seg');
-var activeSeg = null;
-
-function seekTo(time) {
-  if (audio) { audio.currentTime = time; audio.play(); }
-  highlightSeg(time);
-}
-
-function highlightSeg(time) {
-  segments.forEach(function(s) { s.classList.remove('active'); });
-  var target = document.querySelector('.seg[data-time="' + time + '"]');
-  if (target) { target.classList.add('active'); target.scrollIntoView({ behavior: 'smooth', block: 'center' }); activeSeg = target; }
-}
-
-segments.forEach(function(seg) {
-  seg.addEventListener('click', function() { seekTo(parseFloat(seg.dataset.time)); });
-});
-
-if (audio) {
-  audio.addEventListener('timeupdate', function() {
-    var t = audio.currentTime;
-    var best = null, bestTime = -1;
-    segments.forEach(function(s) {
-      var st = parseFloat(s.dataset.time);
-      if (st <= t && st > bestTime) { bestTime = st; best = s; }
-    });
-    if (best && best !== activeSeg) {
-      segments.forEach(function(s) { s.classList.remove('active'); });
-      best.classList.add('active');
-      activeSeg = best;
-      var rect = best.getBoundingClientRect();
-      var container = document.getElementById('transcript-scroll');
-      var cRect = container.getBoundingClientRect();
-      if (rect.top < cRect.top || rect.bottom > cRect.bottom) {
-        best.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  });
-}
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-}
+var audio=document.getElementById("audio-player");var segs=document.querySelectorAll(".seg");var activeSeg=null;function seekTo(t){if(audio){audio.currentTime=t;audio.play();}highlightSeg(t);}function highlightSeg(t){segs.forEach(function(s){s.classList.remove("active");});var el=document.querySelector('.seg[data-time="'+t+'"]');if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"center"});activeSeg=el;}}segs.forEach(function(s){s.addEventListener("click",function(){seekTo(parseFloat(s.dataset.time));});});if(audio){audio.addEventListener("timeupdate",function(){var t=audio.currentTime,best=null,bt=-1;segs.forEach(function(s){var st=parseFloat(s.dataset.time);if(st<=t&&st>bt){bt=st;best=s;}});if(best&&best!==activeSeg){segs.forEach(function(s){s.classList.remove("active");});best.classList.add("active");activeSeg=best;var r=best.getBoundingClientRect(),c=document.getElementById("transcript-scroll"),cr=c.getBoundingClientRect();if(r.top<cr.top||r.bottom>cr.bottom)best.scrollIntoView({behavior:"smooth",block:"center"});}});}function showTab(n,btn){document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});document.getElementById("panel-"+n).classList.add("active");btn.classList.add("active");}
 </script>
-</body>
-</html>
+</body></html>
