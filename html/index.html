@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -193,6 +193,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:2rem 1re
 .transp-box h3{color:#10b981;margin-bottom:.5rem}
 .transp-box p{color:var(--text2);font-size:.88rem;line-height:1.7}
 </style>
+<link rel="stylesheet" href="/assets/exposemiami-theme-20260531d.css?v=1">
 </head>
 <body data-theme="dark">
 
@@ -215,9 +216,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:2rem 1re
       <button id="theme-btn" title="Toggle theme">☀️</button>
     </div>
   </div>
-  <div class="ham" id="ham" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
-    </div>
-  </div>
+  <button class="ham" id="ham" onclick="toggleDrawer()" aria-label="Open navigation" type="button"><span></span><span></span><span></span></button>
 </header>
 
 <div class="drawer-overlay" id="overlay" onclick="toggleDrawer()"></div>
@@ -802,6 +801,8 @@ themeBtn.addEventListener('click',()=>{const t=document.body.getAttribute('data-
 // DRAWER
 function toggleDrawer(){document.getElementById('drawer').classList.toggle('open');document.getElementById('overlay').classList.toggle('show');document.getElementById('ham').classList.toggle('active')}
 function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('show');document.getElementById('ham').classList.remove('active')}
+function escapeHtml(value){return String(value ?? '').replace(/[&<>"']/g,function(ch){return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[ch]})}
+function safeUrl(value){try{var url=new URL(String(value || '#'), window.location.origin);return ['http:','https:'].includes(url.protocol)?url.href:'#'}catch(_){return '#'}}
 
 // OSCN SEARCH
 async function searchCourt(e){
@@ -828,17 +829,17 @@ async function searchCourt(e){
     var resp=await fetch('/api/court/search?'+params.toString());
     var data=await resp.json();
     
-    if(!data.success){resultsDiv.innerHTML='<p style="color:#ff6b6b">Error: '+(data.error||'Unknown error')+'</p>';btn.disabled=false;btn.textContent='Search Court Records';return}
+    if(!data.success){resultsDiv.innerHTML='<p style="color:#ff6b6b">Error: '+escapeHtml(data.error||'Unknown error')+'</p>';btn.disabled=false;btn.textContent='Search Court Records';return}
     
     var html='';
     html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">';
-    html+='<h4 style="margin:0">Results for &quot;'+data.query+'&quot; <span style="color:var(--text2);font-weight:normal">('+data.courtlistener_total+' cases found)</span></h4>';
+    html+='<h4 style="margin:0">Results for &quot;'+escapeHtml(data.query)+'&quot; <span style="color:var(--text2);font-weight:normal">('+Number(data.courtlistener_total||0)+' cases found)</span></h4>';
     html+='<div style="display:flex;gap:.5rem;flex-wrap:wrap">';
     if(data.oscn_urls && data.oscn_urls.name_search){
-      html+='<a href="'+data.oscn_urls.name_search+'" target="_blank" style="background:var(--accent);color:#fff;padding:.4rem .8rem;border-radius:6px;font-size:.8rem;text-decoration:none">OSCN Trial Court</a>';
+      html+='<a href="'+safeUrl(data.oscn_urls.name_search)+'" target="_blank" rel="noopener" style="background:var(--accent);color:#fff;padding:.4rem .8rem;border-radius:6px;font-size:.8rem;text-decoration:none">OSCN Trial Court</a>';
     }
     if(data.oscn_urls && data.oscn_urls.docket_search){
-      html+='<a href="'+data.oscn_urls.docket_search+'" target="_blank" style="background:rgba(255,255,255,0.1);color:var(--text);padding:.4rem .8rem;border-radius:6px;font-size:.8rem;text-decoration:none;border:1px solid rgba(255,255,255,0.2)">OSCN Docket</a>';
+      html+='<a href="'+safeUrl(data.oscn_urls.docket_search)+'" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.1);color:var(--text);padding:.4rem .8rem;border-radius:6px;font-size:.8rem;text-decoration:none;border:1px solid rgba(255,255,255,0.2)">OSCN Docket</a>';
     }
     html+='</div></div>';
     
@@ -857,12 +858,12 @@ async function searchCourt(e){
         var r=data.results[i];
         var bg = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
         html+='<tr style="background:'+bg+';border-bottom:1px solid rgba(255,255,255,0.08)">';
-        html+='<td style="padding:.6rem;font-weight:500">'+(r.case_name||'N/A')+'</td>';
-        html+='<td style="padding:.6rem;color:var(--text2)">'+(r.citation||'')+'</td>';
-        html+='<td style="padding:.6rem;color:var(--text2)">'+(r.date_filed||'')+'</td>';
-        html+='<td style="padding:.6rem;color:var(--text2);font-family:monospace">'+(r.docket_number||'')+'</td>';
-        html+='<td style="padding:.6rem">'+(r.status?'<span style="background:rgba(0,200,100,0.15);color:#4ade80;padding:2px 8px;border-radius:4px;font-size:.75rem">'+r.status+'</span>':'')+'</td>';
-        html+='<td style="padding:.6rem;text-align:center"><a href="'+(r.url||'#')+'" target="_blank" style="color:var(--accent);text-decoration:none">View</a></td>';
+        html+='<td style="padding:.6rem;font-weight:500">'+escapeHtml(r.case_name||'N/A')+'</td>';
+        html+='<td style="padding:.6rem;color:var(--text2)">'+escapeHtml(r.citation||'')+'</td>';
+        html+='<td style="padding:.6rem;color:var(--text2)">'+escapeHtml(r.date_filed||'')+'</td>';
+        html+='<td style="padding:.6rem;color:var(--text2);font-family:monospace">'+escapeHtml(r.docket_number||'')+'</td>';
+        html+='<td style="padding:.6rem">'+(r.status?'<span style="background:rgba(0,200,100,0.15);color:#4ade80;padding:2px 8px;border-radius:4px;font-size:.75rem">'+escapeHtml(r.status)+'</span>':'')+'</td>';
+        html+='<td style="padding:.6rem;text-align:center"><a href="'+safeUrl(r.url)+'" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">View</a></td>';
         html+='</tr>';
       }
       
@@ -879,7 +880,7 @@ async function searchCourt(e){
       for(var key in data.oscn_urls){
         if(key==='search_page')continue;
         var label=key.replace(/_/g,' ');
-        html+='<a href="'+data.oscn_urls[key]+'" target="_blank" style="background:rgba(255,165,0,0.15);color:#ffa500;padding:.4rem .8rem;border-radius:6px;font-size:.8rem;text-decoration:none">'+label+'</a>';
+        html+='<a href="'+safeUrl(data.oscn_urls[key])+'" target="_blank" rel="noopener" style="background:rgba(255,165,0,0.15);color:#ffa500;padding:.4rem .8rem;border-radius:6px;font-size:.8rem;text-decoration:none">'+escapeHtml(label)+'</a>';
       }
     }
     html+='</div>';
@@ -888,7 +889,7 @@ async function searchCourt(e){
     
     resultsDiv.innerHTML=html;
   }catch(err){
-    resultsDiv.innerHTML='<p style="color:#ff6b6b">Search failed: '+err.message+'</p>';
+    resultsDiv.innerHTML='<p style="color:#ff6b6b">Search failed: '+escapeHtml(err.message)+'</p>';
   }
   btn.disabled=false;btn.textContent='Search Court Records';
 }
@@ -945,5 +946,94 @@ document.getElementById('lang-sel').addEventListener('change',e=>{const lang=e.t
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const id=a.getAttribute('href').slice(1);const el=document.getElementById(id);if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'})}})});
 </script>
 
+<script>
+(function () {
+  const navItems = [
+    ["/", "Home"],
+    ["/resources/", "Directory"],
+    ["/meetings/", "Records & Media"],
+    ["/court-search/", "Court Search"],
+    ["/ottawa-county.html", "Ottawa County"],
+    ["/blog/", "Accountability"],
+  ];
+
+  function isActive(href) {
+    const path = window.location.pathname;
+    if (href === "/") return path === "/";
+    return path === href || path.startsWith(href.replace(/\.html$/, ""));
+  }
+
+  function closeDrawer() {
+    document.getElementById("mw-drawer")?.classList.remove("open");
+    document.getElementById("mw-drawer-overlay")?.classList.remove("show");
+    document.getElementById("mw-ham")?.classList.remove("active");
+  }
+
+  function toggleDrawer() {
+    document.getElementById("mw-drawer")?.classList.toggle("open");
+    document.getElementById("mw-drawer-overlay")?.classList.toggle("show");
+    document.getElementById("mw-ham")?.classList.toggle("active");
+  }
+
+  function buildHeader() {
+    if (document.querySelector(".mw-unified-shell")) return;
+
+    const shell = document.createElement("div");
+    shell.className = "mw-unified-shell";
+    shell.innerHTML = `
+      <header class="hdr mw-unified-header">
+        <div class="hdr-inner">
+          <a class="logo" href="/" aria-label="ExposeMiamiOK home">
+            <img src="/images/logo-120.png" alt="">
+            <div>
+              <h1>ExposeMiamiOK</h1>
+              <p>Community Resources & Transparency</p>
+            </div>
+          </a>
+          <button class="ham" id="mw-ham" type="button" aria-label="Open navigation"><span></span><span></span><span></span></button>
+        </div>
+      </header>
+      <div class="drawer-overlay" id="mw-drawer-overlay"></div>
+      <nav class="drawer" id="mw-drawer" aria-label="Mobile navigation"></nav>
+      <nav class="dnav mw-unified-nav" aria-label="Primary navigation"><div class="dnav-inner"></div></nav>
+    `;
+
+    const drawer = shell.querySelector("#mw-drawer");
+    const desktop = shell.querySelector(".dnav-inner");
+
+    for (const [href, label] of navItems) {
+      const mobile = document.createElement("a");
+      mobile.href = href;
+      mobile.textContent = label;
+      mobile.addEventListener("click", closeDrawer);
+      drawer.appendChild(mobile);
+
+      const link = document.createElement("a");
+      link.href = href;
+      link.textContent = label;
+      if (isActive(href)) link.setAttribute("aria-current", "page");
+      desktop.appendChild(link);
+    }
+
+    document.body.prepend(shell);
+    shell.querySelector("#mw-ham").addEventListener("click", toggleDrawer);
+    shell.querySelector("#mw-drawer-overlay").addEventListener("click", closeDrawer);
+  }
+
+  function hideOldNavigation() {
+    document
+      .querySelectorAll("body > header, body > nav.dnav, body > nav.drawer, body > .drawer-overlay")
+      .forEach((node) => {
+        if (!node.closest(".mw-unified-shell")) node.classList.add("mw-retired-ui");
+      });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    hideOldNavigation();
+    buildHeader();
+  });
+})();
+
+</script>
 </body>
 </html>
