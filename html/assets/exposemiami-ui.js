@@ -39,7 +39,8 @@
       const existing = document.querySelector(".mw-unified-shell");
       const drawer = existing.querySelector("#mw-drawer");
       const desktop = existing.querySelector(".dnav-inner");
-      if (drawer && !drawer.children.length) fillNav(drawer, desktop);
+      if (drawer && !drawer.children.length) fillNav(drawer, null);
+      if (desktop && !desktop.children.length) fillNav(null, desktop);
       existing.querySelectorAll("#mw-drawer a").forEach((link) => link.addEventListener("click", closeDrawer));
       existing.querySelectorAll(".dnav-inner a").forEach((link) => {
         if (isActive(link.getAttribute("href") || "")) link.setAttribute("aria-current", "page");
@@ -78,17 +79,21 @@
 
   function fillNav(drawer, desktop) {
     for (const [href, label] of navItems) {
-      const mobile = document.createElement("a");
-      mobile.href = href;
-      mobile.textContent = label;
-      mobile.addEventListener("click", closeDrawer);
-      drawer.appendChild(mobile);
+      if (drawer) {
+        const mobile = document.createElement("a");
+        mobile.href = href;
+        mobile.textContent = label;
+        mobile.addEventListener("click", closeDrawer);
+        drawer.appendChild(mobile);
+      }
 
-      const link = document.createElement("a");
-      link.href = href;
-      link.textContent = label;
-      if (isActive(href)) link.setAttribute("aria-current", "page");
-      desktop.appendChild(link);
+      if (desktop) {
+        const link = document.createElement("a");
+        link.href = href;
+        link.textContent = label;
+        if (isActive(href)) link.setAttribute("aria-current", "page");
+        desktop.appendChild(link);
+      }
     }
   }
 
