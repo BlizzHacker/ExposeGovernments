@@ -10,6 +10,7 @@
     ["/meetings/", "Transcripts"],
     ["/blog/", "Blog"],
     ["/ottawa-county.html", "Ottawa County"],
+    ["/follow-the-money.html", "Finance"],
     ["/youtube.html", "YouTube"],
     ["/videos.html", "Videos"],
     ["https://www.facebook.com/profile.php?id=61590391534875", "Facebook"],
@@ -39,8 +40,14 @@
       const existing = document.querySelector(".mw-unified-shell");
       const drawer = existing.querySelector("#mw-drawer");
       const desktop = existing.querySelector(".dnav-inner");
-      if (drawer && !drawer.children.length) fillNav(drawer, null);
-      if (desktop && !desktop.children.length) fillNav(null, desktop);
+      if (drawer) {
+        drawer.innerHTML = "";
+        fillNav(drawer, null);
+      }
+      if (desktop) {
+        desktop.innerHTML = "";
+        fillNav(null, desktop);
+      }
       existing.querySelectorAll("#mw-drawer a").forEach((link) => link.addEventListener("click", closeDrawer));
       existing.querySelectorAll(".dnav-inner a").forEach((link) => {
         if (isActive(link.getAttribute("href") || "")) link.setAttribute("aria-current", "page");
