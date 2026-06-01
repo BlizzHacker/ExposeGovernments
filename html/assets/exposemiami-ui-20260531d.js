@@ -1,19 +1,25 @@
 (function () {
   const navItems = [
     ["/", "Home"],
-    ["/resources/", "Resources"],
-    ["/meetings/", "Transcripts"],
+    ["/#resources", "City Resources"],
     ["/court-search/", "Court Search"],
+    ["/#utilities", "Utilities"],
+    ["/#media", "Media & Feed"],
+    ["/#corruption", "Corruption Archive"],
+    ["/#map", "Area Map"],
+    ["/meetings/", "Transcripts"],
     ["/blog/", "Blog"],
+    ["/ottawa-county.html", "Ottawa County"],
     ["/youtube.html", "YouTube"],
     ["/videos.html", "Videos"],
-    ["/ottawa-county.html", "Ottawa County"],
+    ["https://www.facebook.com/profile.php?id=61590391534875", "Facebook"],
+    ["/#about", "About"],
   ];
 
   function isActive(href) {
     const path = window.location.pathname;
     if (href === "/") return path === "/";
-    return path === href || path.startsWith(href.replace(/\.html$/, ""));
+    return path === href || path.startsWith(href.replace(/\/index\.html$/, "/").replace(/\.html$/, ""));
   }
 
   function closeDrawer() {
@@ -29,7 +35,15 @@
   }
 
   function buildHeader() {
-    if (document.querySelector(".mw-unified-shell")) return;
+    if (document.querySelector(".mw-unified-shell")) {
+      const existing = document.querySelector(".mw-unified-shell");
+      const drawer = existing.querySelector("#mw-drawer");
+      const desktop = existing.querySelector(".dnav-inner");
+      if (drawer && !drawer.children.length) fillNav(drawer, desktop);
+      existing.querySelector("#mw-ham")?.addEventListener("click", toggleDrawer);
+      existing.querySelector("#mw-drawer-overlay")?.addEventListener("click", closeDrawer);
+      return;
+    }
 
     const shell = document.createElement("div");
     shell.className = "mw-unified-shell";
@@ -37,7 +51,7 @@
       <header class="hdr mw-unified-header">
         <div class="hdr-inner">
           <a class="logo" href="/" aria-label="ExposeMiamiOK home">
-            <img src="/images/logo-120.png" alt="">
+            <img src="/images/logo-512.png" alt="">
             <div>
               <h1>ExposeMiamiOK</h1>
               <p>Community Resources & Transparency</p>
@@ -51,9 +65,14 @@
       <nav class="dnav mw-unified-nav" aria-label="Primary navigation"><div class="dnav-inner"></div></nav>
     `;
 
-    const drawer = shell.querySelector("#mw-drawer");
-    const desktop = shell.querySelector(".dnav-inner");
+    fillNav(shell.querySelector("#mw-drawer"), shell.querySelector(".dnav-inner"));
 
+    document.body.prepend(shell);
+    shell.querySelector("#mw-ham").addEventListener("click", toggleDrawer);
+    shell.querySelector("#mw-drawer-overlay").addEventListener("click", closeDrawer);
+  }
+
+  function fillNav(drawer, desktop) {
     for (const [href, label] of navItems) {
       const mobile = document.createElement("a");
       mobile.href = href;
@@ -67,22 +86,24 @@
       if (isActive(href)) link.setAttribute("aria-current", "page");
       desktop.appendChild(link);
     }
-
-    document.body.prepend(shell);
-    shell.querySelector("#mw-ham").addEventListener("click", toggleDrawer);
-    shell.querySelector("#mw-drawer-overlay").addEventListener("click", closeDrawer);
   }
 
   function hideOldNavigation() {
     document
-      .querySelectorAll("body > header, body > nav.dnav, body > nav.drawer, body > .drawer-overlay")
+      .querySelectorAll("body > header, body > nav.dnav, body > nav.drawer, body > .drawer-overlay, body > .nav")
       .forEach((node) => {
         if (!node.closest(".mw-unified-shell")) node.classList.add("mw-retired-ui");
       });
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
+  function init() {
     hideOldNavigation();
     buildHeader();
-  });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 })();
