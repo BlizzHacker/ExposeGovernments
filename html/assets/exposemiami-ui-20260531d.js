@@ -40,6 +40,10 @@
       const drawer = existing.querySelector("#mw-drawer");
       const desktop = existing.querySelector(".dnav-inner");
       if (drawer && !drawer.children.length) fillNav(drawer, desktop);
+      existing.querySelectorAll("#mw-drawer a").forEach((link) => link.addEventListener("click", closeDrawer));
+      existing.querySelectorAll(".dnav-inner a").forEach((link) => {
+        if (isActive(link.getAttribute("href") || "")) link.setAttribute("aria-current", "page");
+      });
       existing.querySelector("#mw-ham")?.addEventListener("click", toggleDrawer);
       existing.querySelector("#mw-drawer-overlay")?.addEventListener("click", closeDrawer);
       return;
@@ -51,7 +55,7 @@
       <header class="hdr mw-unified-header">
         <div class="hdr-inner">
           <a class="logo" href="/" aria-label="ExposeMiamiOK home">
-            <img src="/images/logo-512.png" alt="">
+            <img src="/images/logo-header.png" alt="">
             <div>
               <h1>ExposeMiamiOK</h1>
               <p>Community Resources & Transparency</p>
