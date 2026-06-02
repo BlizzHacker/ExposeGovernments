@@ -1,6 +1,8 @@
 (function () {
   const navItems = [
     ["/", "Home"],
+    ["/search.html", "Search"],
+    ["/local-news.html", "News"],
     ["/#resources", "City Resources"],
     ["/court-search/", "Court Search"],
     ["/#utilities", "Utilities"],
@@ -17,10 +19,18 @@
     ["/#about", "About"],
   ];
 
+  function normalizedPath() {
+    return window.location.pathname.replace(/\/index\.html$/, "/");
+  }
+
   function isActive(href) {
-    const path = window.location.pathname;
+    const path = normalizedPath();
+    if (!href || href.startsWith("http")) return false;
     if (href === "/") return path === "/";
-    return path === href || path.startsWith(href.replace(/\/index\.html$/, "/").replace(/\.html$/, ""));
+    if (href === "/follow-the-money.html" && (path.startsWith("/finance-transcripts") || path.startsWith("/agenda-packets"))) return true;
+    if (href.includes("#")) return path === "/" && href.startsWith("/#");
+    const base = href.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
+    return path === href || (base !== "/" && path.startsWith(base));
   }
 
   function closeDrawer() {
@@ -35,23 +45,34 @@
     document.getElementById("mw-ham")?.classList.toggle("active");
   }
 
+  function makeLink(href, label) {
+    const link = document.createElement("a");
+    link.href = href;
+    link.textContent = label;
+    if (href.startsWith("http")) {
+      link.target = "_blank";
+      link.rel = "noopener";
+    }
+    if (isActive(href)) link.setAttribute("aria-current", "page");
+    return link;
+  }
+
+  function fillLinks(container) {
+    container.innerHTML = "";
+    for (const [href, label] of navItems) {
+      const link = makeLink(href, label);
+      link.addEventListener("click", closeDrawer);
+      container.appendChild(link);
+    }
+  }
+
   function buildHeader() {
     if (document.querySelector(".mw-unified-shell")) {
       const existing = document.querySelector(".mw-unified-shell");
       const drawer = existing.querySelector("#mw-drawer");
       const desktop = existing.querySelector(".dnav-inner");
-      if (drawer) {
-        drawer.innerHTML = "";
-        fillNav(drawer, null);
-      }
-      if (desktop) {
-        desktop.innerHTML = "";
-        fillNav(null, desktop);
-      }
-      existing.querySelectorAll("#mw-drawer a").forEach((link) => link.addEventListener("click", closeDrawer));
-      existing.querySelectorAll(".dnav-inner a").forEach((link) => {
-        if (isActive(link.getAttribute("href") || "")) link.setAttribute("aria-current", "page");
-      });
+      if (drawer) fillLinks(drawer);
+      if (desktop) fillLinks(desktop);
       existing.querySelector("#mw-ham")?.addEventListener("click", toggleDrawer);
       existing.querySelector("#mw-drawer-overlay")?.addEventListener("click", closeDrawer);
       return;
@@ -77,31 +98,12 @@
       <nav class="dnav mw-unified-nav" aria-label="Primary navigation"><div class="dnav-inner"></div></nav>
     `;
 
-    fillNav(shell.querySelector("#mw-drawer"), shell.querySelector(".dnav-inner"));
+    fillLinks(shell.querySelector("#mw-drawer"));
+    fillLinks(shell.querySelector(".dnav-inner"));
 
     document.body.prepend(shell);
     shell.querySelector("#mw-ham").addEventListener("click", toggleDrawer);
     shell.querySelector("#mw-drawer-overlay").addEventListener("click", closeDrawer);
-  }
-
-  function fillNav(drawer, desktop) {
-    for (const [href, label] of navItems) {
-      if (drawer) {
-        const mobile = document.createElement("a");
-        mobile.href = href;
-        mobile.textContent = label;
-        mobile.addEventListener("click", closeDrawer);
-        drawer.appendChild(mobile);
-      }
-
-      if (desktop) {
-        const link = document.createElement("a");
-        link.href = href;
-        link.textContent = label;
-        if (isActive(href)) link.setAttribute("aria-current", "page");
-        desktop.appendChild(link);
-      }
-    }
   }
 
   function hideOldNavigation() {
