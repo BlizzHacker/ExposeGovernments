@@ -1,387 +1,304 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YouTube Channel | ExposeMiamiOK</title>
-<link rel="icon" type="image/x-icon" href="/favicon.ico">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta property="og:title" content="ExposeMiamiOK YouTube Channel">
-<meta property="og:description" content="Watch Miami, Oklahoma city council meetings and investigative reports with full AI transcripts">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YouTube Uploads | ExposeMiamiOK</title>
+<meta name="description" content="ExposeMiamiOK YouTube uploads pulled from the YouTube Data API with transcript links when matched locally.">
+<link rel="stylesheet" href="/assets/exposemiami-theme.css?v=20260601-unified-menu-agenda6">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a1a;color:#e0e0e0}
-.header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);padding:30px;border-bottom:3px solid #c41e3a;text-align:center}
-.header img{height:60px;margin-bottom:10px;border-radius:50%;background:white;padding:5px}
-.header h1{color:#c41e3a;font-size:1.8em}
-.header p{color:#aaa;margin-top:8px}
-.nav{background:#111;padding:12px 30px;border-bottom:1px solid #333;display:flex;flex-wrap:wrap;gap:15px}
-.nav a{color:#c41e3a;text-decoration:none;font-weight:600}
-.nav a:hover{color:#ff4466}
-.container{max-width:1200px;margin:0 auto;padding:20px}
-.channel-banner{background:linear-gradient(135deg,#cc0000 0%,#990000 100%);border-radius:12px;padding:40px;text-align:center;margin-bottom:30px}
-.channel-banner img{height:80px;border-radius:50%;background:white;padding:5px;margin-bottom:15px}
-.channel-banner h2{color:white;font-size:2em;margin-bottom:10px}
-.channel-banner p{color:rgba(255,255,255,0.8);font-size:1.1em}
-.channel-banner .stats{display:flex;justify-content:center;gap:40px;margin-top:20px;flex-wrap:wrap}
-.channel-banner .stat{text-align:center}
-.channel-banner .stat .num{font-size:1.5em;font-weight:bold;color:#ffd700}
-.channel-banner .stat .label{font-size:0.8em;color:rgba(255,255,255,0.7)}
-.subscribe-btn{display:inline-block;background:#ff0000;color:white;padding:14px 40px;border-radius:6px;text-decoration:none;font-weight:bold;margin-top:20px;font-size:1.1em;transition:all 0.3s}
-.subscribe-btn:hover{background:#cc0000;transform:scale(1.05)}
-.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;margin-bottom:40px}
-.video-card{background:#1a1a2e;border-radius:8px;overflow:hidden;border:1px solid #333;transition:transform 0.2s,border-color 0.2s;cursor:pointer}
-.video-card:hover{transform:translateY(-3px);border-color:#c41e3a}
-.video-card .thumb{position:relative;height:180px;background:#222;overflow:hidden}
-.video-card .thumb img{width:100%;height:100%;object-fit:cover}
-.video-card .thumb .duration{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.8);color:white;padding:2px 6px;border-radius:3px;font-size:0.75em}
-.video-card .info{padding:15px}
-.video-card .info h4{color:#e0e0e0;margin-bottom:8px;font-size:0.95em;line-height:1.4}
-.video-card .info .date{color:#888;font-size:0.8em}
-.video-card .badge{display:inline-block;background:#c41e3a;color:white;padding:2px 8px;border-radius:4px;font-size:0.75em;margin-top:8px}
-.loading{text-align:center;padding:60px;color:#888}
-.loading .spinner{display:inline-block;width:40px;height:40px;border:3px solid #333;border-top-color:#c41e3a;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:15px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.error{text-align:center;padding:40px;background:#1a1a2e;border-radius:12px;border:2px solid #c41e3a}
-.error h3{color:#c41e3a;margin-bottom:10px}
-.error p{color:#aaa}
-.section-title{color:#c41e3a;font-size:1.5em;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #333}
-.info-box{background:#0f3460;border-left:4px solid #c41e3a;padding:20px;margin:20px 0;border-radius:0 8px 8px 0}
-.info-box h3{color:#ffd700;margin-bottom:10px}
-.info-box p{color:#ccc;line-height:1.6}
-.footer{text-align:center;padding:30px;color:#555;border-top:1px solid #222;margin-top:40px}
-@media(max-width:768px){
-  .header{padding:20px}
-  .header h1{font-size:1.3em}
-  .container{padding:15px}
-  .channel-banner{padding:25px}
-  .channel-banner h2{font-size:1.4em}
-  .video-grid{grid-template-columns:1fr}
-  .nav{padding:10px 15px}
-}
-/* DRAWER NAV (mobile) */
-.drawer{position:fixed;top:0;left:0;width:280px;height:100vh;background:var(--bg2);transform:translateX(-100%);transition:transform .3s;z-index:1001;overflow-y:auto;border-right:1px solid var(--border);padding-top:70px}
-.drawer.open{transform:translateX(0)}
-.drawer a{display:block;padding:14px 20px;color:var(--text);font-weight:500;border-bottom:1px solid var(--border);font-size:.95rem}
-.drawer a:hover{background:var(--bg3);color:var(--accent);text-decoration:none}
-.drawer-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:1000;display:none}
-.drawer-overlay.show{display:block}
-/* DESKTOP NAV */
-.dnav{display:none;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;white-space:nowrap;scrollbar-width:none;position:sticky;top:64px;z-index:999;box-shadow:var(--shadow)}
-.dnav::-webkit-scrollbar{display:none}
-.dnav-inner{max-width:1200px;margin:0 auto;display:flex}
-.dnav a{padding:12px 16px;color:var(--text);font-weight:500;font-size:.85rem;border-bottom:3px solid transparent;white-space:nowrap}
-.dnav a:hover{color:var(--accent);border-bottom-color:var(--accent);text-decoration:none}
-@media(min-width:900px){.dnav{display:block}}
-.ham{display:flex;flex-direction:column;gap:5px;cursor:pointer;padding:8px;z-index:1002}
-.ham span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
-@media(min-width:900px){.ham{display:none}}
+  .yt-page { width:min(1200px, calc(100% - 32px)); margin:0 auto; padding:2rem 0 4rem; }
+  .yt-hero, .yt-panel { border:1px solid var(--mw-border); border-radius:8px; background:rgba(15,23,42,.78); padding:1rem; margin:1rem 0; }
+  .yt-hero { background:linear-gradient(135deg, rgba(127,29,29,.88), rgba(15,23,42,.96)); }
+  .yt-hero h1 { margin:.2rem 0 .55rem; font-size:clamp(2rem, 4vw, 3.2rem); line-height:1; }
+  .yt-actions, .links, .badges { display:flex; flex-wrap:wrap; gap:.5rem; }
+  .yt-actions a, .links a { border:1px solid var(--mw-border); border-radius:8px; padding:.55rem .72rem; background:rgba(30,41,59,.72); color:#fff; text-decoration:none; font-weight:850; }
+  .stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.75rem; margin:1rem 0; }
+  .stat { border:1px solid var(--mw-border); border-radius:8px; background:rgba(30,41,59,.68); padding:.85rem; }
+  .stat strong { display:block; color:#fff; font-size:1.45rem; }
+  .stat span, .meta, .fineprint { color:var(--mw-muted); }
+  .toolbar { display:flex; gap:.6rem; flex-wrap:wrap; margin:1rem 0; }
+  .toolbar input { flex:1; min-width:240px; border:1px solid var(--mw-border); border-radius:8px; background:#07101f; color:#fff; padding:.75rem .85rem; }
+  .gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:1rem; }
+  .video-card { border:1px solid var(--mw-border); border-radius:8px; overflow:hidden; background:rgba(15,23,42,.82); }
+  .thumb { position:relative; display:block; width:100%; aspect-ratio:16/9; border:0; padding:0; cursor:pointer; background:#050b14; color:#fff; }
+  .thumb img { width:100%; height:100%; object-fit:cover; display:block; opacity:.88; }
+  .thumb span { position:absolute; inset:auto 12px 12px auto; border-radius:8px; background:rgba(220,38,38,.92); padding:.5rem .7rem; font-weight:900; }
+  .thumb iframe { width:100%; height:100%; border:0; display:block; }
+  .video-info { padding:.9rem; }
+  .video-info h2 { font-size:1rem; line-height:1.28; margin:.55rem 0 .35rem; color:#fff; }
+  .badge { font-size:.68rem; font-weight:900; text-transform:uppercase; letter-spacing:.04em; border:1px solid var(--mw-border); border-radius:999px; padding:.25rem .5rem; color:#cbd5e1; }
+  .badge.source { color:#bfdbfe; border-color:rgba(96,165,250,.45); }
+  .badge.transcript { color:#bbf7d0; border-color:rgba(34,197,94,.45); }
+  .badge.captions { color:#fde68a; border-color:rgba(245,158,11,.5); }
+  .empty { display:none; color:var(--mw-muted); padding:1rem; }
+  .unavailable-table-wrap { overflow-x:auto; }
+  .unavailable-table { width:100%; border-collapse:collapse; min-width:760px; }
+  .unavailable-table th, .unavailable-table td { border-bottom:1px solid var(--mw-border); padding:.65rem; text-align:left; vertical-align:top; }
+  .unavailable-table th { background:rgba(15,23,42,.88); }
+  @media (max-width:760px) { .stats { grid-template-columns:1fr 1fr; } .gallery { grid-template-columns:1fr; } }
+  @media (max-width:520px) { .stats { grid-template-columns:1fr; } }
 </style>
-  <link rel="stylesheet" href="/assets/exposemiami-theme.css?v=20260601-unified-menu-agenda6">
 </head>
 <body>
 <div class="mw-unified-shell">
-  <header class="hdr mw-unified-header">
-    <div class="hdr-inner">
-      <a class="logo" href="/" aria-label="ExposeMiamiOK home">
-        <img src="/images/logo-header.png" alt="">
-        <div>
-          <h1>ExposeMiamiOK</h1>
-          <p>Community Resources &amp; Transparency</p>
-        </div>
-      </a>
-      <button class="ham" id="mw-ham" type="button" aria-label="Open navigation"><span></span><span></span><span></span></button>
-    </div>
-  </header>
+  <header class="hdr mw-unified-header"><div class="hdr-inner"><a class="logo" href="/" aria-label="ExposeMiamiOK home"><img src="/images/logo-header.png" alt=""><div><h1>ExposeMiamiOK</h1><p>Community Resources &amp; Transparency</p></div></a><button class="ham" id="mw-ham" type="button" aria-label="Open navigation"><span></span><span></span><span></span></button></div></header>
   <div class="drawer-overlay" id="mw-drawer-overlay"></div>
-  <nav class="drawer" id="mw-drawer" aria-label="Mobile navigation">
-    <a href="/">Home</a>
-    <a href="/#resources">City Resources</a>
-    <a href="/court-search/">Court Search</a>
-    <a href="/#utilities">Utilities</a>
-    <a href="/#media">Media & Feed</a>
-    <a href="/#corruption">Corruption Archive</a>
-    <a href="/#map">Area Map</a>
-    <a href="/meetings/">Transcripts</a>
-    <a href="/blog/">Blog</a>
-    <a href="/ottawa-county.html">Ottawa County</a>
-    <a href="/youtube.html">YouTube</a>
-    <a href="/videos.html">Videos</a>
-    <a href="https://www.facebook.com/profile.php?id=61590391534875">Facebook</a>
-    <a href="/#about">About</a>
-  </nav>
-  <nav class="dnav mw-unified-nav" aria-label="Primary navigation"><div class="dnav-inner">
-      <a href="/">Home</a><a href="/search.html">Search</a><a href="/local-news.html">News</a><a href="/#resources">City Resources</a><a href="/court-search/">Court Search</a><a href="/#utilities">Utilities</a><a href="/#media">Media & Feed</a><a href="/#corruption">Corruption Archive</a><a href="/#map">Area Map</a><a href="/meetings/">Transcripts</a><a href="/blog/">Blog</a><a href="/ottawa-county.html">Ottawa County</a><a href="/follow-the-money.html">Finance</a><a href="/youtube.html">YouTube</a><a href="/videos.html">Videos</a><a href="https://www.facebook.com/profile.php?id=61590391534875">Facebook</a><a href="/#about">About</a>
-  </div></nav>
+  <nav class="drawer" id="mw-drawer" aria-label="Mobile navigation"></nav>
+  <nav class="dnav mw-unified-nav" aria-label="Primary navigation"><div class="dnav-inner"><a href="/">Home</a><a href="/search.html">Search</a><a href="/local-news.html">News</a><a href="/#resources">City Resources</a><a href="/court-search/">Court Search</a><a href="/#utilities">Utilities</a><a href="/#media">Media & Feed</a><a href="/#corruption">Corruption Archive</a><a href="/#map">Area Map</a><a href="/meetings/">Transcripts</a><a href="/blog/">Blog</a><a href="/ottawa-county.html">Ottawa County</a><a href="/follow-the-money.html">Finance</a><a href="/youtube.html">YouTube</a><a href="/videos.html">Videos</a><a href="https://www.facebook.com/profile.php?id=61590391534875">Facebook</a><a href="/#about">About</a></div></nav>
 </div>
-
-<div class="header">
-  <img src="/images/logo-header.png" alt="ExposeMiamiOK">
-  <h1>📺 ExposeMiamiOK YouTube Channel</h1>
-  <p>City council meetings, investigative reports, and transparency content</p>
-</div>
-
-<div class="container">
-
-  <div class="channel-banner">
-    <img src="/images/logo-header.png" alt="ExposeMiamiOK">
-    <h2>Expose Miami Oklahoma</h2>
-    <p>Holding Power Accountable — Miami, Oklahoma</p>
-    <div class="stats">
-      <div class="stat"><div class="num" id="video-count">513</div><div class="label">Meetings</div></div>
-      <div class="stat"><div class="num">2015–2026</div><div class="label">Archive Span</div></div>
-      <div class="stat"><div class="num">AI</div><div class="label">Transcribed</div></div>
+<main class="yt-page">
+  <section class="yt-hero">
+    <p class="fineprint">Pulled directly from the YouTube Data API uploads playlist</p>
+    <h1>ExposeMiamiOK YouTube Uploads</h1>
+    <p>This page uses YouTube as the source of truth, not a short RSS proxy and not the local upload-marker list. Local records are only used to add transcript links when the YouTube video matches a meeting archive entry.</p>
+    <p class="fineprint">Important: YouTube currently returns 26 uploads-playlist entries, but only 15 are playable/public or unlisted. The unavailable entries are listed below so the missing-count problem is visible.</p>
+    <div class="yt-actions">
+      <a href="https://www.youtube.com/channel/UCPEzVd4eQtJyVtOMt327PVA" target="_blank" rel="noopener">Open YouTube channel</a>
+      <a href="https://www.youtube.com/channel/UCPEzVd4eQtJyVtOMt327PVA?sub_confirmation=1" target="_blank" rel="noopener">Subscribe</a>
+      <a href="/videos.html">All official city videos</a>
+      <a href="/api/youtube-videos.json">Raw YouTube pull JSON</a>
     </div>
-    <a href="https://www.youtube.com/channel/UCPEzVd4eQtJyVtOMt327PVA?sub_confirmation=1" class="subscribe-btn" target="_blank">
-      🔔 Subscribe on YouTube
-    </a>
+  </section>
+  <section class="stats">
+    <article class="stat"><strong>26</strong><span>YouTube playlist items pulled</span></article>
+    <article class="stat"><strong>15</strong><span>playable YouTube videos</span></article>
+    <article class="stat"><strong>11</strong><span>unavailable/deleted from YouTube</span></article>
+    <article class="stat"><strong>15</strong><span>matched to local transcripts</span></article>
+    <article class="stat"><strong>15</strong><span>YouTube channel video count</span></article>
+    <article class="stat"><strong>2026-06-02T19:11:09+00:00</strong><span>last pulled UTC</span></article>
+  </section>
+  <section class="yt-panel">
+    <h2>Playable Uploaded Videos</h2>
+    <div class="toolbar"><input id="q" type="search" placeholder="Search YouTube uploads by title, date, or clip..." oninput="filterVideos()"></div>
+    <div class="gallery" id="gallery">
+<article class="video-card" data-text="miami special utility authority (msua) - dec  2, 2025 | exposemiamiok 648 jun 02, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/E96v8enPKyc" data-title="Miami Special Utility Authority (MSUA) - Dec  2, 2025 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/E96v8enPKyc/maxresdefault.jpg" alt="Miami Special Utility Authority (MSUA) - Dec  2, 2025 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami Special Utility Authority (MSUA) - Dec  2, 2025 | ExposeMiamiOK</h2>
+    <p class="meta">Jun 02, 2026 - Clip #648</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=E96v8enPKyc" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/E96v8enPKyc" target="_blank" rel="noopener">Embed</a><a href="/meetings/648/">Transcript / record</a></div>
   </div>
+</article>
 
-  <div class="info-box">
-    <h3>📋 What You'll Find Here</h3>
-    <p>Every Miami, Oklahoma city council meeting from 2015–2026, fully transcribed with AI-powered search. New videos uploaded 5 per day automatically. Click any video to watch with full transcript and analysis.</p>
+<article class="video-card" data-text="miami special utility authority (msua) - dec 16, 2025 | exposemiamiok 650 jun 02, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/0Ak1zQb3968" data-title="Miami Special Utility Authority (MSUA) - Dec 16, 2025 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/0Ak1zQb3968/maxresdefault.jpg" alt="Miami Special Utility Authority (MSUA) - Dec 16, 2025 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami Special Utility Authority (MSUA) - Dec 16, 2025 | ExposeMiamiOK</h2>
+    <p class="meta">Jun 02, 2026 - Clip #650</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=0Ak1zQb3968" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/0Ak1zQb3968" target="_blank" rel="noopener">Embed</a><a href="/meetings/650/">Transcript / record</a></div>
   </div>
+</article>
 
-  <h2 class="section-title" id="videos-heading">📹 Uploaded Videos</h2>
-  <div id="video-container">
-    <div class="loading">
-      <div class="spinner"></div>
-      <p>Loading videos from YouTube...</p>
+<article class="video-card" data-text="miami special utility authority (msua) - jan  6, 2026 | exposemiamiok 652 jun 02, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/nnKoy_Eih9w" data-title="Miami Special Utility Authority (MSUA) - Jan  6, 2026 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/nnKoy_Eih9w/maxresdefault.jpg" alt="Miami Special Utility Authority (MSUA) - Jan  6, 2026 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami Special Utility Authority (MSUA) - Jan  6, 2026 | ExposeMiamiOK</h2>
+    <p class="meta">Jun 02, 2026 - Clip #652</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=nnKoy_Eih9w" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/nnKoy_Eih9w" target="_blank" rel="noopener">Embed</a><a href="/meetings/652/">Transcript / record</a></div>
+  </div>
+</article>
+
+<article class="video-card" data-text="miami city council - jan  6, 2026 | exposemiamiok 653 jun 01, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/RDm_Z82NZ1s" data-title="Miami City Council - Jan  6, 2026 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/RDm_Z82NZ1s/maxresdefault.jpg" alt="Miami City Council - Jan  6, 2026 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami City Council - Jan  6, 2026 | ExposeMiamiOK</h2>
+    <p class="meta">Jun 01, 2026 - Clip #653</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=RDm_Z82NZ1s" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/RDm_Z82NZ1s" target="_blank" rel="noopener">Embed</a><a href="/meetings/653/">Transcript / record</a></div>
+  </div>
+</article>
+
+<article class="video-card" data-text="miami special utility authority (msua) - jan 20, 2026 | exposemiamiok 654 jun 01, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/p5-CVNnQyy0" data-title="Miami Special Utility Authority (MSUA) - Jan 20, 2026 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/p5-CVNnQyy0/maxresdefault.jpg" alt="Miami Special Utility Authority (MSUA) - Jan 20, 2026 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami Special Utility Authority (MSUA) - Jan 20, 2026 | ExposeMiamiOK</h2>
+    <p class="meta">Jun 01, 2026 - Clip #654</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=p5-CVNnQyy0" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/p5-CVNnQyy0" target="_blank" rel="noopener">Embed</a><a href="/meetings/654/">Transcript / record</a></div>
+  </div>
+</article>
+
+<article class="video-card" data-text="miami city council - feb  3, 2026 | exposemiamiok 657 jun 01, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/YNu4Kh0bsTo" data-title="Miami City Council - Feb  3, 2026 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/YNu4Kh0bsTo/maxresdefault.jpg" alt="Miami City Council - Feb  3, 2026 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami City Council - Feb  3, 2026 | ExposeMiamiOK</h2>
+    <p class="meta">Jun 01, 2026 - Clip #657</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=YNu4Kh0bsTo" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/YNu4Kh0bsTo" target="_blank" rel="noopener">Embed</a><a href="/meetings/657/">Transcript / record</a></div>
+  </div>
+</article>
+
+<article class="video-card" data-text="miami special utility authority (msua) - feb 17, 2026 | exposemiamiok 658 may 31, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/ih33XfH4C_A" data-title="Miami Special Utility Authority (MSUA) - Feb 17, 2026 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/ih33XfH4C_A/maxresdefault.jpg" alt="Miami Special Utility Authority (MSUA) - Feb 17, 2026 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami Special Utility Authority (MSUA) - Feb 17, 2026 | ExposeMiamiOK</h2>
+    <p class="meta">May 31, 2026 - Clip #658</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=ih33XfH4C_A" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/ih33XfH4C_A" target="_blank" rel="noopener">Embed</a><a href="/meetings/658/">Transcript / record</a></div>
+  </div>
+</article>
+
+<article class="video-card" data-text="miami special utility authority (msua) - mar  3, 2026 | exposemiamiok 660 may 31, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/fH9XLb1xW6c" data-title="Miami Special Utility Authority (MSUA) - Mar  3, 2026 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/fH9XLb1xW6c/maxresdefault.jpg" alt="Miami Special Utility Authority (MSUA) - Mar  3, 2026 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami Special Utility Authority (MSUA) - Mar  3, 2026 | ExposeMiamiOK</h2>
+    <p class="meta">May 31, 2026 - Clip #660</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=fH9XLb1xW6c" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/fH9XLb1xW6c" target="_blank" rel="noopener">Embed</a><a href="/meetings/660/">Transcript / record</a></div>
+  </div>
+</article>
+
+<article class="video-card" data-text="miami special utility authority (msua) - mar 31, 2026 | exposemiamiok 664 may 31, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/l3o2Y_1jsE8" data-title="Miami Special Utility Authority (MSUA) - Mar 31, 2026 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/l3o2Y_1jsE8/maxresdefault.jpg" alt="Miami Special Utility Authority (MSUA) - Mar 31, 2026 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami Special Utility Authority (MSUA) - Mar 31, 2026 | ExposeMiamiOK</h2>
+    <p class="meta">May 31, 2026 - Clip #664</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=l3o2Y_1jsE8" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/l3o2Y_1jsE8" target="_blank" rel="noopener">Embed</a><a href="/meetings/664/">Transcript / record</a></div>
+  </div>
+</article>
+
+<article class="video-card" data-text="miami city council - mar 31, 2026 | exposemiamiok 665 may 31, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/w5Mfb47PgRU" data-title="Miami City Council - Mar 31, 2026 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/w5Mfb47PgRU/maxresdefault.jpg" alt="Miami City Council - Mar 31, 2026 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami City Council - Mar 31, 2026 | ExposeMiamiOK</h2>
+    <p class="meta">May 31, 2026 - Clip #665</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=w5Mfb47PgRU" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/w5Mfb47PgRU" target="_blank" rel="noopener">Embed</a><a href="/meetings/665/">Transcript / record</a></div>
+  </div>
+</article>
+
+<article class="video-card" data-text="miami special utility authority (msua) - apr 21, 2026 | exposemiamiok 668 may 31, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/QRkclHY3Mk4" data-title="Miami Special Utility Authority (MSUA) - Apr 21, 2026 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/QRkclHY3Mk4/maxresdefault.jpg" alt="Miami Special Utility Authority (MSUA) - Apr 21, 2026 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami Special Utility Authority (MSUA) - Apr 21, 2026 | ExposeMiamiOK</h2>
+    <p class="meta">May 31, 2026 - Clip #668</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=QRkclHY3Mk4" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/QRkclHY3Mk4" target="_blank" rel="noopener">Embed</a><a href="/meetings/668/">Transcript / record</a></div>
+  </div>
+</article>
+
+<article class="video-card" data-text="miami special utility authority (msua) - may  5, 2026 | exposemiamiok 670 may 31, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/FYFcOzVWhSA" data-title="Miami Special Utility Authority (MSUA) - May  5, 2026 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/FYFcOzVWhSA/maxresdefault.jpg" alt="Miami Special Utility Authority (MSUA) - May  5, 2026 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami Special Utility Authority (MSUA) - May  5, 2026 | ExposeMiamiOK</h2>
+    <p class="meta">May 31, 2026 - Clip #670</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=FYFcOzVWhSA" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/FYFcOzVWhSA" target="_blank" rel="noopener">Embed</a><a href="/meetings/670/">Transcript / record</a></div>
+  </div>
+</article>
+
+<article class="video-card" data-text="miami city council - may  5, 2026 | exposemiamiok 671 may 31, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/Kp_fMEyJE9U" data-title="Miami City Council - May  5, 2026 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/Kp_fMEyJE9U/maxresdefault.jpg" alt="Miami City Council - May  5, 2026 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami City Council - May  5, 2026 | ExposeMiamiOK</h2>
+    <p class="meta">May 31, 2026 - Clip #671</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=Kp_fMEyJE9U" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/Kp_fMEyJE9U" target="_blank" rel="noopener">Embed</a><a href="/meetings/671/">Transcript / record</a></div>
+  </div>
+</article>
+
+<article class="video-card" data-text="miami city council - may 19, 2026 | exposemiamiok 672 may 31, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/myMjm8Yvk_Y" data-title="Miami City Council - May 19, 2026 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/myMjm8Yvk_Y/maxresdefault.jpg" alt="Miami City Council - May 19, 2026 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami City Council - May 19, 2026 | ExposeMiamiOK</h2>
+    <p class="meta">May 31, 2026 - Clip #672</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=myMjm8Yvk_Y" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/myMjm8Yvk_Y" target="_blank" rel="noopener">Embed</a><a href="/meetings/672/">Transcript / record</a></div>
+  </div>
+</article>
+
+<article class="video-card" data-text="miami special utility authority (msua) - may 19, 2026 | exposemiamiok 673 may 29, 2026">
+  <button class="thumb" type="button" onclick="loadVideo(this)" data-embed="https://www.youtube.com/embed/LsC_9sl12sg" data-title="Miami Special Utility Authority (MSUA) - May 19, 2026 | ExposeMiamiOK">
+    <img src="https://i.ytimg.com/vi/LsC_9sl12sg/maxresdefault.jpg" alt="Miami Special Utility Authority (MSUA) - May 19, 2026 | ExposeMiamiOK" loading="lazy">
+    <span>Play YouTube</span>
+  </button>
+  <div class="video-info">
+    <div class="badges"><span class="badge source">Pulled from YouTube</span><span class="badge transcript">Transcript matched</span><span class="badge captions">Captions</span></div>
+    <h2>Miami Special Utility Authority (MSUA) - May 19, 2026 | ExposeMiamiOK</h2>
+    <p class="meta">May 29, 2026 - Clip #673</p>
+    <div class="links"><a href="https://www.youtube.com/watch?v=LsC_9sl12sg" target="_blank" rel="noopener">Watch on YouTube</a><a href="https://www.youtube.com/embed/LsC_9sl12sg" target="_blank" rel="noopener">Embed</a><a href="/meetings/673/">Transcript / record</a></div>
+  </div>
+</article></div>
+    <p class="empty" id="empty">No YouTube uploads match that search.</p>
+  </section>
+  <section class="yt-panel">
+    <h2>Unavailable YouTube Upload Entries</h2>
+    <p class="fineprint">These rows are not local guesses. They are upload playlist entries returned by YouTube that YouTube does not return as playable videos through videos.list.</p>
+    <div class="unavailable-table-wrap">
+      <table class="unavailable-table"><thead><tr><th>Published</th><th>YouTube ID</th><th>YouTube title</th><th>Status note</th></tr></thead><tbody><tr><td>2026-06-02</td><td><a href="https://www.youtube.com/watch?v=mU3hhvymYBs" target="_blank" rel="noopener">mU3hhvymYBs</a></td><td>Deleted video</td><td>YouTube API returned this uploads-playlist item, but videos.list did not return a playable video. YouTube labels it unavailable/deleted.</td></tr><tr><td>2026-06-02</td><td><a href="https://www.youtube.com/watch?v=QcZd9UEBmdw" target="_blank" rel="noopener">QcZd9UEBmdw</a></td><td>Deleted video</td><td>YouTube API returned this uploads-playlist item, but videos.list did not return a playable video. YouTube labels it unavailable/deleted.</td></tr><tr><td>2026-06-01</td><td><a href="https://www.youtube.com/watch?v=P__zRJWVKSs" target="_blank" rel="noopener">P__zRJWVKSs</a></td><td>Deleted video</td><td>YouTube API returned this uploads-playlist item, but videos.list did not return a playable video. YouTube labels it unavailable/deleted.</td></tr><tr><td>2026-06-01</td><td><a href="https://www.youtube.com/watch?v=jNdh8MBLgcg" target="_blank" rel="noopener">jNdh8MBLgcg</a></td><td>Deleted video</td><td>YouTube API returned this uploads-playlist item, but videos.list did not return a playable video. YouTube labels it unavailable/deleted.</td></tr><tr><td>2026-05-31</td><td><a href="https://www.youtube.com/watch?v=2Bxm0WTIlNY" target="_blank" rel="noopener">2Bxm0WTIlNY</a></td><td>Deleted video</td><td>YouTube API returned this uploads-playlist item, but videos.list did not return a playable video. YouTube labels it unavailable/deleted.</td></tr><tr><td>2026-05-31</td><td><a href="https://www.youtube.com/watch?v=uzcolvGsIUs" target="_blank" rel="noopener">uzcolvGsIUs</a></td><td>Deleted video</td><td>YouTube API returned this uploads-playlist item, but videos.list did not return a playable video. YouTube labels it unavailable/deleted.</td></tr><tr><td>2026-05-31</td><td><a href="https://www.youtube.com/watch?v=Dm9_uIkZwro" target="_blank" rel="noopener">Dm9_uIkZwro</a></td><td>Deleted video</td><td>YouTube API returned this uploads-playlist item, but videos.list did not return a playable video. YouTube labels it unavailable/deleted.</td></tr><tr><td>2026-05-31</td><td><a href="https://www.youtube.com/watch?v=c6itlR8wK0I" target="_blank" rel="noopener">c6itlR8wK0I</a></td><td>Deleted video</td><td>YouTube API returned this uploads-playlist item, but videos.list did not return a playable video. YouTube labels it unavailable/deleted.</td></tr><tr><td>2026-05-31</td><td><a href="https://www.youtube.com/watch?v=iyBhbcTX6Cg" target="_blank" rel="noopener">iyBhbcTX6Cg</a></td><td>Deleted video</td><td>YouTube API returned this uploads-playlist item, but videos.list did not return a playable video. YouTube labels it unavailable/deleted.</td></tr><tr><td>2026-05-31</td><td><a href="https://www.youtube.com/watch?v=GfU5biv0yEc" target="_blank" rel="noopener">GfU5biv0yEc</a></td><td>Deleted video</td><td>YouTube API returned this uploads-playlist item, but videos.list did not return a playable video. YouTube labels it unavailable/deleted.</td></tr><tr><td>2026-05-31</td><td><a href="https://www.youtube.com/watch?v=u3fR1zCQ5TM" target="_blank" rel="noopener">u3fR1zCQ5TM</a></td><td>Deleted video</td><td>YouTube API returned this uploads-playlist item, but videos.list did not return a playable video. YouTube labels it unavailable/deleted.</td></tr></tbody></table>
     </div>
-  </div>
-
-  <div class="info-box">
-    <h3>🤖 Automated Pipeline</h3>
-    <p>Videos are uploaded automatically from our archive of 513 city meetings at 5 per day. Each video includes burned-in captions and links to full AI-generated transcripts with search. The entire archive will be online within ~103 days.</p>
-  </div>
-
-</div>
-
-<div class="footer">
-  <p>ExposeMiamiOK — Community Transparency Project</p>
-  <p style="margin-top:8px"><a href="/" style="color:#c41e3a">Home</a> · <a href="/meetings/" style="color:#c41e3a">Transcripts</a> · <a href="https://www.facebook.com/profile.php?id=61590391534875" style="color:#c41e3a">Facebook</a></p>
-</div>
-
+  </section>
+</main>
+<script src="/assets/exposemiami-ui.js?v=20260601-unified-menu-agenda6" defer></script>
 <script>
-const CHANNEL_ID = 'UCPEzVd4eQtJyVtOMt327PVA';
-const RSS_URL = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id=' + CHANNEL_ID);
-
-async function loadVideos() {
-  const container = document.getElementById('video-container');
-  
-  try {
-    const resp = await fetch(RSS_URL);
-    const data = await resp.json();
-    
-    if (data.status !== 'ok' || !data.items || data.items.length === 0) {
-      // Try local fallback
-      await loadFromLocal();
-      return;
-    }
-    
-    const videos = data.items;
-    document.getElementById('video-count').textContent = videos.length + ' / 513';
-    
-    if (videos.length === 0) {
-      await loadFromLocal();
-      return;
-    }
-    
-    let html = '<div class="video-grid">';
-    
-    videos.forEach(v => {
-      const videoId = v.link ? v.link.split('v=')[1] || v.link.split('/').pop() : '';
-      const thumb = v.thumbnail || 'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg';
-      const title = v.title || 'Untitled';
-      const pubDate = v.pubDate ? new Date(v.pubDate).toLocaleDateString('en-US', {year:'numeric',month:'short',day:'numeric'}) : '';
-      const meetingUrl = '/meetings/' + videoId + '/';
-      
-      html += `
-        <div class="video-card" onclick="window.open('https://youtube.com/watch?v=${videoId}','_blank')">
-          <div class="thumb">
-            <img src="${thumb}" alt="${title}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${videoId}/hqdefault.jpg'">
-          </div>
-          <div class="info">
-            <h4>${title}</h4>
-            <div class="date">${pubDate}</div>
-            <span class="badge">📺 Watch</span>
-          </div>
-        </div>`;
-    });
-    
-    html += '</div>';
-    
-    if (videos.length < 10) {
-      html += '<p style="color:#888;text-align:center;margin-top:20px;font-size:0.9em">Showing ' + videos.length + ' of 513 total meetings. New videos added daily at 5 per day — check back soon!</p>';
-    }
-    
-    container.innerHTML = html;
-    
-  } catch(e) {
-    console.error('RSS fetch failed:', e);
-    await loadFromLocal();
-  }
-}
-
-async function loadFromLocal() {
-  const container = document.getElementById('video-container');
-  
-  try {
-    const resp = await fetch('/api/videos.json');
-    const videos = await resp.json();
-    
-    if (!videos || videos.length === 0) {
-      showEmbedFallback();
-      return;
-    }
-    
-    let html = '<div class="video-grid">';
-    videos.forEach(v => {
-      const videoId = v.video_id || v.id || '';
-      const title = v.title || 'Meeting';
-      const thumb = 'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg';
-      const date = v.uploaded_at ? new Date(v.uploaded_at).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) : '';
-      
-      html += `
-        <div class="video-card" onclick="window.open('https://youtube.com/watch?v=${videoId}','_blank')">
-          <div class="thumb"><img src="${thumb}" alt="${title}" loading="lazy"></div>
-          <div class="info">
-            <h4>${title}</h4>
-            <div class="date">${date}</div>
-            <span class="badge">📺 Watch</span>
-          </div>
-        </div>`;
-    });
-    html += '</div>';
-    html += '<p style="color:#888;text-align:center;margin-top:20px;font-size:0.9em">Showing ' + videos.length + ' uploaded. 513 total meetings — uploading 5/day.</p>';
-    container.innerHTML = html;
-    
-  } catch(e) {
-    showEmbedFallback();
-  }
-}
-
-function showEmbedFallback() {
-  const container = document.getElementById('video-container');
-  container.innerHTML = `
-    <div class="video-grid">
-      <div class="video-card" onclick="window.open('https://youtube.com/watch?v=LsC_9sl12sg','_blank')">
-        <div class="thumb"><img src="https://img.youtube.com/vi/LsC_9sl12sg/hqdefault.jpg" alt="MSUA May 19, 2026"></div>
-        <div class="info">
-          <h4>Miami Special Utility Authority (MSUA) - May 19, 2026 | ExposeMiamiOK</h4>
-          <div class="date">May 29, 2026</div>
-          <span class="badge">📺 Watch</span>
-          <a href="/meetings/673/" style="display:inline-block;margin-top:8px;color:#ffd700;font-size:0.85em">📄 View Transcript →</a>
-        </div>
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:30px">
-      <a href="https://www.youtube.com/channel/UCPEzVd4eQtJyVtOMt327PVA/videos" target="_blank" class="subscribe-btn" style="padding:12px 30px;font-size:1em">
-        View All Videos on YouTube →
-      </a>
-      <p style="color:#888;margin-top:15px;font-size:0.9em">513 meetings being uploaded 5 per day. Check back soon for more!</p>
-    </div>`;
-}
-
-loadVideos();
-</script>
-
-
-<script>
-function toggleDrawer(){document.getElementById('drawer').classList.toggle('open');document.getElementById('overlay').classList.toggle('show')}
-function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('overlay').classList.remove('show')}
-</script>
-
-<script>
-(function () {
-  const navItems = [
-    ["/", "Home"],
-    ["/resources/", "Directory"],
-    ["/meetings/", "Records & Media"],
-    ["/court-search/", "Court Search"],
-    ["/ottawa-county.html", "Ottawa County"],
-    ["/blog/", "Accountability"],
-  ];
-
-  function isActive(href) {
-    const path = window.location.pathname;
-    if (href === "/") return path === "/";
-    return path === href || path.startsWith(href.replace(/\.html$/, ""));
-  }
-
-  function closeDrawer() {
-    document.getElementById("mw-drawer")?.classList.remove("open");
-    document.getElementById("mw-drawer-overlay")?.classList.remove("show");
-    document.getElementById("mw-ham")?.classList.remove("active");
-  }
-
-  function toggleDrawer() {
-    document.getElementById("mw-drawer")?.classList.toggle("open");
-    document.getElementById("mw-drawer-overlay")?.classList.toggle("show");
-    document.getElementById("mw-ham")?.classList.toggle("active");
-  }
-
-  function buildHeader() {
-    if (document.querySelector(".mw-unified-shell")) return;
-
-    const shell = document.createElement("div");
-    shell.className = "mw-unified-shell";
-    shell.innerHTML = `
-      <header class="hdr mw-unified-header">
-        <div class="hdr-inner">
-          <a class="logo" href="/" aria-label="ExposeMiamiOK home">
-            <img src="/images/logo-header.png" alt="">
-            <div>
-              <h1>ExposeMiamiOK</h1>
-              <p>Community Resources & Transparency</p>
-            </div>
-          </a>
-          <button class="ham" id="mw-ham" type="button" aria-label="Open navigation"><span></span><span></span><span></span></button>
-        </div>
-      </header>
-      <div class="drawer-overlay" id="mw-drawer-overlay"></div>
-      <nav class="drawer" id="mw-drawer" aria-label="Mobile navigation"></nav>
-      <nav class="dnav mw-unified-nav" aria-label="Primary navigation"><div class="dnav-inner"><a href="/">Home</a><a href="/search.html">Search</a><a href="/local-news.html">News</a><a href="/#resources">City Resources</a><a href="/court-search/">Court Search</a><a href="/#utilities">Utilities</a><a href="/#media">Media & Feed</a><a href="/#corruption">Corruption Archive</a><a href="/#map">Area Map</a><a href="/meetings/">Transcripts</a><a href="/blog/">Blog</a><a href="/ottawa-county.html">Ottawa County</a><a href="/follow-the-money.html">Finance</a><a href="/youtube.html">YouTube</a><a href="/videos.html">Videos</a><a href="https://www.facebook.com/profile.php?id=61590391534875">Facebook</a><a href="/#about">About</a></div></nav>
-    `;
-
-    const drawer = shell.querySelector("#mw-drawer");
-    const desktop = shell.querySelector(".dnav-inner");
-
-    for (const [href, label] of navItems) {
-      const mobile = document.createElement("a");
-      mobile.href = href;
-      mobile.textContent = label;
-      mobile.addEventListener("click", closeDrawer);
-      drawer.appendChild(mobile);
-
-      const link = document.createElement("a");
-      link.href = href;
-      link.textContent = label;
-      if (isActive(href)) link.setAttribute("aria-current", "page");
-      desktop.appendChild(link);
-    }
-
-    document.body.prepend(shell);
-    shell.querySelector("#mw-ham").addEventListener("click", toggleDrawer);
-    shell.querySelector("#mw-drawer-overlay").addEventListener("click", closeDrawer);
-  }
-
-  function hideOldNavigation() {
-    document
-      .querySelectorAll("body > header, body > nav.dnav, body > nav.drawer, body > .drawer-overlay")
-      .forEach((node) => {
-        if (!node.closest(".mw-unified-shell")) node.classList.add("mw-retired-ui");
-      });
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
-    hideOldNavigation();
-    buildHeader();
+function filterVideos() {
+  const q = document.getElementById('q').value.trim().toLowerCase();
+  let shown = 0;
+  document.querySelectorAll('.video-card').forEach(card => {
+    const show = !q || card.dataset.text.includes(q);
+    card.style.display = show ? '' : 'none';
+    if (show) shown++;
   });
-})();
-
+  document.getElementById('empty').style.display = shown ? 'none' : 'block';
+}
+function loadVideo(button) {
+  const src = button.dataset.embed;
+  const title = button.dataset.title || 'YouTube video';
+  const iframe = document.createElement('iframe');
+  iframe.src = src + '?autoplay=1';
+  iframe.title = title;
+  iframe.allowFullscreen = true;
+  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+  button.replaceChildren(iframe);
+  button.disabled = true;
+}
 </script>
-  <script src="/assets/exposemiami-ui.js?v=20260601-unified-menu-agenda6" defer></script>
 </body>
 </html>
