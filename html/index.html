@@ -233,16 +233,58 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:2rem 1re
 
 <section class="hero">
   <div class="hero-inner">
-    <h2>Latest City Council Meeting</h2>
+    <h2 id="latest-meeting-title">Latest City Meeting</h2>
+    <p id="latest-meeting-meta" style="color:var(--text2);margin:.25rem 0 1rem;">June 2, 2026 - Miami City Council - Clip #675</p>
     <div class="hero-video">
-      <button type="button" class="hero-video-load" onclick="this.outerHTML='<iframe src=&quot;https://www.youtube.com/embed/LsC_9sl12sg&quot; allowfullscreen allow=&quot;accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture&quot;></iframe>'">Load latest video</button>
+      <button type="button" class="hero-video-load" id="latest-meeting-load" data-embed="https://miamiok.granicus.com/player/clip/675">Load latest official video</button>
     </div>
     <div class="hero-btns">
-      <a href="/meetings/673/" class="btn btn-red">View Transcript &amp; Analysis</a>
+      <a href="/meetings/675/" class="btn btn-red" id="latest-meeting-transcript">View Transcript &amp; Analysis</a>
+      <a href="https://miamiok.granicus.com/MediaPlayer.php?view_id=1&amp;clip_id=675" class="btn btn-ghost" id="latest-meeting-source" target="_blank" rel="noopener">Official Source</a>
       <a href="/videos.html" class="btn btn-ghost">All Meeting Videos</a>
     </div>
   </div>
 </section>
+<script>
+(function () {
+  const fallback = {
+    clip_id: "675",
+    title: "Miami City Council",
+    date: "Jun 2, 2026",
+    duration: "00h 26m",
+    official_video_url: "https://miamiok.granicus.com/MediaPlayer.php?view_id=1&clip_id=675",
+    primary_embed_url: "https://miamiok.granicus.com/player/clip/675"
+  };
+
+  function renderLatestMeeting(video) {
+    const clip = video.clip_id || fallback.clip_id;
+    const title = video.title || fallback.title;
+    const date = video.date || fallback.date;
+    const duration = video.duration || "";
+    const embed = video.primary_embed_url || video.official_embed_url || video.youtube_embed_url || fallback.primary_embed_url;
+    const source = video.official_video_url || video.youtube_url || fallback.official_video_url;
+    document.getElementById("latest-meeting-title").textContent = "Latest City Meeting: " + title;
+    document.getElementById("latest-meeting-meta").textContent = [date, duration, "Clip #" + clip, video.primary_source || "Official Miami Web TV"].filter(Boolean).join(" - ");
+    document.getElementById("latest-meeting-transcript").href = "/meetings/" + clip + "/";
+    document.getElementById("latest-meeting-source").href = source;
+    const load = document.getElementById("latest-meeting-load");
+    load.dataset.embed = embed;
+    load.textContent = "Load latest official video";
+    load.onclick = function () {
+      const iframe = document.createElement("iframe");
+      iframe.src = this.dataset.embed;
+      iframe.allowFullscreen = true;
+      iframe.setAttribute("allow", "accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture");
+      this.replaceWith(iframe);
+    };
+  }
+
+  fetch("/api/videos.json?homepage=" + Date.now())
+    .then((response) => response.ok ? response.json() : Promise.reject(new Error("videos json unavailable")))
+    .then((videos) => renderLatestMeeting((videos || []).find((video) => video.primary_embed_url || video.official_embed_url || video.youtube_embed_url) || fallback))
+    .catch(() => renderLatestMeeting(fallback));
+})();
+</script>
 
 <main class="main">
 
@@ -250,10 +292,42 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:2rem 1re
 <section id="automated-agenda-packets" class="section" style="border:1px solid var(--border);border-radius:8px;background:rgba(15,23,42,.84);padding:1rem;margin:1rem 0 1.4rem;">
   <p style="margin:0 0 .35rem;color:#cbd5e1;font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;">Automated packet watch</p>
   <h2 style="margin:.1rem 0 .55rem;">Latest agenda packet transcripts and audit leads</h2>
-  <ul><li><a href="/agenda-packets/miami-agenda-packet-2026-06-04-5919.html">Miami Agenda Packet 06/04/2026 #5919</a> <span>1 pages - 0 money refs</span></li><li><a href="/agenda-packets/miami-agenda-packet-2026-06-04-5918.html">Miami Agenda Packet 06/04/2026 #5918</a> <span>1 pages - 0 money refs</span></li><li><a href="/agenda-packets/miami-agenda-packet-2026-06-04-5917.html">Miami Agenda Packet 06/04/2026 #5917</a> <span>1 pages - 0 money refs</span></li><li><a href="/agenda-packets/miami-agenda-packet-2026-06-04-5916.html">Miami Agenda Packet 06/04/2026 #5916</a> <span>1 pages - 0 money refs</span></li><li><a href="/agenda-packets/miami-agenda-packet-2026-06-04-5915.html">Miami Agenda Packet 06/04/2026 #5915</a> <span>1 pages - 0 money refs</span></li></ul>
+  <ul><li><a href="/agenda-packets/miami-agenda-packet-2026-06-08-5928.html">Miami Agenda Packet 06/08/2026 #5928</a> <span>1 pages - 0 money refs</span></li><li><a href="/agenda-packets/miami-agenda-packet-2026-06-08-5927.html">Miami Agenda Packet 06/08/2026 #5927</a> <span>6 pages - 0 money refs</span></li><li><a href="/agenda-packets/miami-agenda-packet-2026-06-08-5926.html">Miami Agenda Packet 06/08/2026 #5926</a> <span>2 pages - 0 money refs</span></li><li><a href="/agenda-packets/miami-agenda-packet-2026-06-04-5919.html">Miami Agenda Packet 06/04/2026 #5919</a> <span>1 pages - 0 money refs</span></li><li><a href="/agenda-packets/miami-agenda-packet-2026-06-04-5918.html">Miami Agenda Packet 06/04/2026 #5918</a> <span>1 pages - 0 money refs</span></li></ul>
   <p><a href="/agenda-packets/" class="btn">Open all agenda packets</a> <a href="/automation-status.html" class="btn">Automation status</a></p>
 </section>
 <!-- AUTOMATED AGENDA PACKETS END -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
