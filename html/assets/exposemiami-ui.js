@@ -12,7 +12,7 @@
     ["/court-search/", "Court Search"],
     ["/#utilities", "Utilities"],
     ["/#media", "Media & Feed"],
-    ["/#corruption", "Corruption Archive"],
+    ["/#corruption", "Records Archive"],
     ["/#map", "Area Map"],
     ["/meetings/", "Transcripts"],
     ["/blog/", "Blog"],
@@ -92,7 +92,7 @@
             <img src="/images/logo-header.png" alt="">
             <div>
               <h1>ExposeMiamiOK</h1>
-              <p>Community Resources & Transparency</p>
+              <p>Public Records & Civic Tools</p>
             </div>
           </a>
           <button class="ham" id="mw-ham" type="button" aria-label="Open navigation"><span></span><span></span><span></span></button>

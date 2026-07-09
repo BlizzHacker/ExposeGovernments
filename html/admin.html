@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mayor Watch — Admin Dashboard — ExposeMiamiOK</title>
+<title>Operations Dashboard — ExposeMiamiOK</title>
 <style>
 :root{--bg:#0a0e14;--surface:#141b22;--surface2:#1c2430;--border:#2a3441;--text:#d4d9e0;--muted:#7a8494;--red:#e53e3e;--red-dim:#9b2c2c;--orange:#ed8936;--yellow:#ecc94b;--green:#38a169;--blue:#4299e1;--font:system-ui,-apple-system,sans-serif;--mono:'Cascadia Code',monospace}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -69,6 +69,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 .login-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:40px;text-align:center;max-width:400px;width:100%}
 .login-box h2{margin-bottom:8px}
 .login-box p{color:var(--muted);margin-bottom:20px;font-size:14px}
+.login-box input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--mono);font-size:13px;margin:0 0 10px;padding:10px}
 .login-box .btn{padding:12px 28px;font-size:14px}
 
 /* ═══ RESPONSIVE ═══ */
@@ -88,9 +89,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 <!-- ═══ LOGIN GATE ═══ -->
 <div id="loginGate" class="login-gate">
   <div class="login-box">
-    <h2>🔴 Mayor Watch Admin</h2>
-    <p>Authenticated access only. Login with Authentik SSO.</p>
+    <h2>Operations Dashboard</h2>
+    <p>Authenticated staff access for FOIA review, evidence queues, automation health, and public-content moderation.</p>
     <a href="#" class="btn btn-red" onclick="loginWithAuthentik()">Login with Authentik SSO</a>
+    <div style="margin:18px 0 10px;color:var(--muted);font-size:12px">or use a server-issued admin token</div>
+    <input id="manualToken" type="password" autocomplete="current-password" placeholder="Admin token">
+    <button class="btn btn-outline" type="button" onclick="loginWithManualToken()">Use admin token</button>
   </div>
 </div>
 
@@ -99,7 +103,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   
   <!-- TOP BAR -->
   <div class="topbar">
-    <h1>🔴 <span>MAYOR WATCH</span> ADMIN</h1>
+    <h1><span>EXPOSEMIAMIOK</span> OPS</h1>
     <div style="display:flex;align-items:center;gap:12px">
       <span class="user" id="userDisplay"></span>
       <a href="#" class="logout" onclick="logout()">Logout</a>
@@ -113,7 +117,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
       <a href="#" class="active" onclick="showTab('overview')">📊 Overview</a>
       <a href="#" onclick="showTab('evidence')">📸 Evidence Feed</a>
       <a href="#" onclick="showTab('foia')">📋 FOIA Queue</a>
-      <div class="section">TARGETS</div>
+      <div class="section">WATCHLIST</div>
       <a href="#" onclick="showTab('parker')">🎯 Bless Parker</a>
       <a href="#" onclick="showTab('durbin')">🟠 Ron Durbin</a>
       <a href="#" onclick="showTab('city')">🏛 City of Miami</a>
@@ -144,7 +148,13 @@ const CLIENT_ID = 'foia-admin';
 const REDIRECT_URI = 'https://exposemiamiok.com/admin';
 const TOKEN_KEY = 'mw_admin_token';
 const USER_KEY = 'mw_admin_user';
-const ADMIN_TOKEN = 'mwf-admin-2026-expose';
+const MANUAL_TOKEN_KEY = 'mw_admin_manual_token';
+let TOKEN = '';
+
+function authHeaders(extra = {}) {
+  const token = TOKEN || localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(MANUAL_TOKEN_KEY) || '';
+  return token ? Object.assign({'Authorization': 'Bearer ' + token}, extra) : extra;
+}
 
 async function checkAuth() {
   const params = new URLSearchParams(window.location.search);
@@ -187,6 +197,7 @@ async function checkAuth() {
   const savedToken = localStorage.getItem(TOKEN_KEY);
   const savedUser = localStorage.getItem(USER_KEY);
   if (savedToken && savedUser) {
+    TOKEN = savedToken;
     showDashboard(JSON.parse(savedUser));
     return;
   }
@@ -202,6 +213,27 @@ function loginWithAuthentik() {
     '&response_type=code&scope=openid+profile+email';
 }
 
+async function loginWithManualToken() {
+  const input = document.getElementById('manualToken');
+  const token = (input?.value || '').trim();
+  if (!token) {
+    alert('Enter the admin token.');
+    return;
+  }
+
+  TOKEN = token;
+  const r = await fetch('/api/foia/admin/pending', {headers: authHeaders()});
+  if (!r.ok) {
+    TOKEN = '';
+    sessionStorage.removeItem(MANUAL_TOKEN_KEY);
+    alert('Admin token was not accepted.');
+    return;
+  }
+
+  sessionStorage.setItem(MANUAL_TOKEN_KEY, token);
+  showDashboard({name: 'Admin'});
+}
+
 function showDashboard(user) {
   document.getElementById('loginGate').classList.add('hidden');
   document.getElementById('dashboard').classList.remove('hidden');
@@ -210,8 +242,10 @@ function showDashboard(user) {
 }
 
 function logout() {
+  TOKEN = '';
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
+  sessionStorage.removeItem(MANUAL_TOKEN_KEY);
   window.location.href = AUTHENTIK + '/application/o/end-session/';
 }
 
@@ -279,7 +313,7 @@ async function loadOverview() {
       wishlistCount = Array.isArray(wd) ? wd.length : 0;
     }
     // Pending count
-    const pr = await fetch('/api/foia/admin/pending', {headers: {'X-Admin-Token': ADMIN_TOKEN}});
+    const pr = await fetch('/api/foia/admin/pending', {headers: authHeaders()});
     if(pr.ok) {
       const pd = await pr.json();
       foiaStats.pending = pd.count || pd.pending?.length || 0;
@@ -295,18 +329,18 @@ async function loadOverview() {
       <div class="statcard"><div class="num green">${feedStats.evidence}</div><div class="label">Evidence Items</div></div>
       <div class="statcard"><div class="num blue">${screenshots}</div><div class="label">Screenshots</div></div>
       <div class="statcard"><div class="num" style="color:var(--yellow)">${foiaStats.sent}</div><div class="label">FOIAs Sent</div></div>
-      <div class="statcard"><div class="num" style="color:var(--yellow)">${wishlistCount}</div><div class="label">Parker Wishlist</div></div>
+      <div class="statcard"><div class="num" style="color:var(--yellow)">${wishlistCount}</div><div class="label">FOIA Ideas</div></div>
     </div>
     
     <div class="panel">
-      <div class="panel-header"><h3>🔴 Active Surveillance</h3><span class="badge badge-green">LIVE</span></div>
+      <div class="panel-header"><h3>Automation Status</h3><span class="badge badge-green">LIVE</span></div>
       <div class="panel-body">
         <table>
           <tr><td>Crawler (Graph API)</td><td>Every 30 min</td><td><span class="badge badge-green">RUNNING</span></td></tr>
           <tr><td>Playwright Deep Scrape</td><td>Every 2 hours</td><td><span class="badge badge-green">RUNNING</span></td></tr>
           <tr><td>Token Sync (promote4.me)</td><td>Every 4 hours</td><td><span class="badge badge-green">RUNNING</span></td></tr>
           <tr><td>Evidence Feed Rebuild</td><td>Every 30 min</td><td><span class="badge badge-green">RUNNING</span></td></tr>
-          <tr><td>Ron Durbin Auth Scrape</td><td>On demand</td><td><span class="badge badge-orange">WAITING 2FA</span></td></tr>
+          <tr><td>Authenticated public-source review</td><td>On demand</td><td><span class="badge badge-orange">WAITING 2FA</span></td></tr>
           <tr><td>FOIA Blitz</td><td>Weekly Sun 4AM</td><td><span class="badge badge-green">SCHEDULED</span></td></tr>
         </table>
       </div>
@@ -326,10 +360,10 @@ async function loadOverview() {
     </div>
     
     <div class="panel">
-      <div class="panel-header"><h3>🎯 Top Targets</h3></div>
+      <div class="panel-header"><h3>Review Watchlist</h3></div>
       <div class="panel-body">
         <table>
-          <tr><th>Target</th><th>Type</th><th>Posts</th><th>Priority</th><th>Status</th></tr>
+          <tr><th>Subject</th><th>Type</th><th>Items</th><th>Priority</th><th>Status</th></tr>
           <tr><td>Bless Parker (100063617378119)</td><td>FB Profile</td><td>2</td><td><span class="badge badge-red">P1</span></td><td>Active</td></tr>
           <tr><td>Bless Parker (werpar5)</td><td>FB Profile</td><td>1</td><td><span class="badge badge-red">P1</span></td><td>Active</td></tr>
           <tr><td>Guerrilla Publishing OK</td><td>FB Page</td><td>1</td><td><span class="badge badge-red">P1</span></td><td>Waiting Auth</td></tr>
@@ -395,9 +429,9 @@ async function loadFOIA() {
   
   let pending = [], all = [], stats = {};
   try {
-    const pr = await fetch('/api/foia/admin/pending', {headers: {'X-Admin-Token': ADMIN_TOKEN}});
+    const pr = await fetch('/api/foia/admin/pending', {headers: authHeaders()});
     if (pr.ok) { const d = await pr.json(); pending = d.pending || []; }
-    const ar = await fetch('/api/foia/admin/all', {headers: {'X-Admin-Token': ADMIN_TOKEN}});
+    const ar = await fetch('/api/foia/admin/all', {headers: authHeaders()});
     if (ar.ok) { const d = await ar.json(); all = d.requests || []; }
     const sr = await fetch('/api/foia/stats');
     if (sr.ok) stats = await sr.json();
@@ -467,7 +501,7 @@ async function loadFOIA() {
 
 async function approveFOIA(id) {
   try {
-    const r = await fetch('/api/foia/admin/approve/' + id, {method: 'POST', headers: {'X-Admin-Token': ADMIN_TOKEN, 'Content-Type': 'application/json'}, body: '{}'});
+    const r = await fetch('/api/foia/admin/approve/' + id, {method: 'POST', headers: authHeaders({'Content-Type': 'application/json'}), body: '{}'});
     const d = await r.json();
     alert(d.ok ? 'Approved and sent to city department!' : 'Error: ' + (d.error || 'unknown'));
     loadFOIA();
@@ -476,7 +510,7 @@ async function approveFOIA(id) {
 
 async function rejectFOIA(id) {
   try {
-    const r = await fetch('/api/foia/admin/reject/' + id, {method: 'POST', headers: {'X-Admin-Token': ADMIN_TOKEN, 'Content-Type': 'application/json'}, body: '{}'});
+    const r = await fetch('/api/foia/admin/reject/' + id, {method: 'POST', headers: authHeaders({'Content-Type': 'application/json'}), body: '{}'});
     const d = await r.json();
     alert(d.ok ? 'Rejected and archived.' : 'Error: ' + (d.error || 'unknown'));
     loadFOIA();
@@ -502,7 +536,7 @@ async function aiEditFOIA(id) {
   try {
     const r = await fetch('/api/foia/admin/ai-edit', {
       method: 'POST',
-      headers: {'X-Admin-Token': ADMIN_TOKEN, 'Content-Type': 'application/json'},
+      headers: authHeaders({'Content-Type': 'application/json'}),
       body: JSON.stringify({text: text})
     });
     const d = await r.json();
@@ -533,28 +567,28 @@ function loadTarget(target) {
   
   const briefs = {
     parker: {
-      title: '🎯 Bless Parker — Target Brief',
+      title: 'Bless Parker — Review Brief',
       profiles: '2 known FB profiles (100063617378119 + werpar5)',
       key: '"I have not stepped down as Mayor" — 498 reactions. Admits "new job requiring travel." Going through divorce. City official page had content deleted/hidden.',
-      status: 'ACTIVE SURVEILLANCE — Graph API + Playwright every 2 hours',
-      foias: '6 on wishlist — building ammo before engaging',
-      threat: 'HIGH — Outside employment, resignation rumors, divorce, deleted city content',
+      status: 'Automated public-source monitoring — Graph API + Playwright every 2 hours',
+      foias: '6 draft ideas — review evidence and scope before submission',
+      threat: 'High review priority — outside-employment questions, public statements, and deleted/hidden city content need sourcing notes',
     },
     durbin: {
-      title: '🟠 Ron Durbin / Guerrilla Publishing — Target Brief',
+      title: 'Ron Durbin / Guerrilla Publishing — Source Brief',
       profiles: 'Ron Durbin (ron.durbin.7) + Guerrilla Publishing OK',
-      key: '"Mike, will you take a drug test?" — 49 reactions, 22 comments. Active anti-corruption watchdog. Directly challenging local officials. Likely targeting Parker/city government.',
-      status: 'WAITING AUTH — Need 2FA approval to deep scrape as logged-in user',
-      foias: '0 — Durbin is an ally, not a target',
-      threat: 'ALLY — His content is ammunition, not enemy intel',
+      key: '"Mike, will you take a drug test?" — 49 reactions, 22 comments. Public watchdog content; preserve only sourced items and separate commentary from records.',
+      status: 'WAITING AUTH — Need 2FA approval before authenticated review',
+      foias: '0 — source monitoring only',
+      threat: 'Source context — useful leads still need independent public-record support',
     },
     city: {
-      title: '🏛 City of Miami — Target Brief',
+      title: 'City of Miami — Records Brief',
       profiles: 'miamiokla, miamiokpd, miamioknews, miamiokmainstreet',
       key: 'Official page DELETED/HIDDEN content captured. Power line resolution (128 comments). Animal Control blocks police after 4:30pm. City Attorney threatened citizen with prosecution.',
-      status: 'ACTIVE SURVEILLANCE — Graph API + Playwright',
+      status: 'Automated public-source monitoring — Graph API + Playwright',
       foias: '3 active (social media records, animal control, city attorney)',
-      threat: 'HIGH — Content deletion, policy failures, retaliatory threats',
+      threat: 'High review priority — content deletion, policy questions, and retaliation claims need clear sourcing',
     },
   };
   
@@ -564,17 +598,25 @@ function loadTarget(target) {
   main.innerHTML = `
     <h2 style="margin-bottom:16px">${b.title}</h2>
     <div class="panel"><div class="panel-header"><h3>Profiles</h3></div><div class="panel-body">${b.profiles}</div></div>
-    <div class="panel"><div class="panel-header"><h3>Key Intel</h3></div><div class="panel-body">${b.key}</div></div>
-    <div class="panel"><div class="panel-header"><h3>Surveillance Status</h3></div><div class="panel-body">${b.status}</div></div>
+    <div class="panel"><div class="panel-header"><h3>Key Context</h3></div><div class="panel-body">${b.key}</div></div>
+    <div class="panel"><div class="panel-header"><h3>Monitoring Status</h3></div><div class="panel-body">${b.status}</div></div>
     <div class="panel"><div class="panel-header"><h3>FOIA Status</h3></div><div class="panel-body">${b.foias}</div></div>
-    <div class="panel"><div class="panel-header"><h3>Threat Level</h3></div><div class="panel-body">${b.threat}</div></div>
+    <div class="panel"><div class="panel-header"><h3>Review Priority</h3></div><div class="panel-body">${b.threat}</div></div>
   `;
 }
 
 // ═══ SCREENSHOTS ═══
-function loadScreenshots() {
+async function loadScreenshots() {
   const main = document.getElementById('mainContent');
-  main.innerHTML = '<h2 style="margin-bottom:16px">🖼 Screenshot Gallery</h2><p style="color:var(--muted)">View all evidence screenshots in the <a href="/evidence-archive.html" style="color:var(--blue)">Evidence Archive</a>.</p><div class="panel"><div class="panel-body">${screenshots} screenshots preserved. All timestamped and organized by target.</div></div>';
+  let count = 'Archived';
+  try {
+    const r = await fetch('/api/mayor-watch/mayor-watch-feed.json');
+    if (r.ok) {
+      const d = await r.json();
+      count = d.stats?.screenshots || d.evidence?.length || 'Archived';
+    }
+  } catch(e) {}
+  main.innerHTML = '<h2 style="margin-bottom:16px">Screenshot Gallery</h2><p style="color:var(--muted)">View captured public-source screenshots in the <a href="/evidence-archive.html" style="color:var(--blue)">Evidence Archive</a>.</p><div class="panel"><div class="panel-body">' + count + ' screenshots preserved with timestamps and source notes where available.</div></div>';
 }
 
 // ═══ CRON ═══
@@ -602,7 +644,7 @@ async function loadInbox() {
   main.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   
   try {
-    const r = await fetch('/api/foia/admin/inbox', {headers: {'X-Admin-Token': ADMIN_TOKEN}});
+    const r = await fetch('/api/foia/admin/inbox', {headers: authHeaders()});
     const d = await r.json();
     
     let html = '<h2 style="margin-bottom:16px">📬 FOIA Inbox</h2>';
@@ -652,7 +694,7 @@ async function replyToFOIA(foiaId) {
   try {
     const r = await fetch('/api/foia/admin/inbox/reply', {
       method: 'POST',
-      headers: {'X-Admin-Token': ADMIN_TOKEN, 'Content-Type': 'application/json'},
+      headers: authHeaders({'Content-Type': 'application/json'}),
       body: JSON.stringify({to: to, subject: subject, body: body})
     });
     const d = await r.json();
