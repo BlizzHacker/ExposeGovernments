@@ -359,10 +359,15 @@ async function loadRequests() {
         ' | ' + (req.updates_count || 0) + ' updates</div>' +
         (req.bounty_total > 0 ? 
           '<div class="bounty-bar"><span class="amount">$' + req.bounty_total.toFixed(2) + '</span><span class="label">community bounty (' + req.bounty_count + ' pledges)</span></div>' : 
-          '<div class="bounty-bar"><span class="label">No bounty yet — </span><div class="pledge-form"><input type="number" id="pledge-' + req.id + '" placeholder="$5" min="1" step="1"><button onclick="pledge('' + req.id + '')">Pledge</button></div></div>'
+          '<div class="bounty-bar"><span class="label">No bounty yet — </span><div class="pledge-form"><input type="number" id="pledge-' + req.id + '" placeholder="$5" min="1" step="1"><button data-action="pledge" data-id="'+req.id+'">Pledge</button></div></div>'
         ) +
       '</div>';
     }).join('');
+  setTimeout(function() {
+    document.querySelectorAll('[data-action=pledge]').forEach(function(b) {
+      b.onclick = function() { pledge(this.dataset.id); };
+    });
+  }, 100);
   } catch(e) {
     document.getElementById('requests-list').innerHTML = '<p style="color:#f87171">Failed to load requests.</p>';
   }

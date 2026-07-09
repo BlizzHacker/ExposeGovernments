@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mayor Watch — Admin Dashboard — ExposeMiamiOK</title>
+<style>
+:root{--bg:#0a0e14;--surface:#141b22;--surface2:#1c2430;--border:#2a3441;--text:#d4d9e0;--muted:#7a8494;--red:#e53e3e;--red-dim:#9b2c2c;--orange:#ed8936;--yellow:#ecc94b;--green:#38a169;--blue:#4299e1;--font:system-ui,-apple-system,sans-serif;--mono:'Cascadia Code',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;min-height:100vh}
+
+/* ═══ TOP BAR ═══ */
+.topbar{background:var(--surface);border-bottom:2px solid var(--red);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.topbar h1{font-size:18px;font-weight:900}
+.topbar h1 span{color:var(--red)}
+.topbar .user{font-size:12px;color:var(--muted)}
+.topbar .logout{padding:6px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px;cursor:pointer;text-decoration:none}
+.topbar .logout:hover{background:var(--red);border-color:var(--red)}
+
+/* ═══ LAYOUT ═══ */
+.container{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 56px)}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:16px 0}
+.sidebar a{display:block;padding:10px 20px;color:var(--muted);text-decoration:none;font-size:13px;border-left:3px solid transparent;transition:all .15s}
+.sidebar a:hover,.sidebar a.active{color:var(--text);border-left-color:var(--red);background:rgba(229,62,62,.08)}
+.sidebar .section{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;padding:20px 20px 8px}
+.main{padding:24px;overflow-y:auto}
+
+/* ═══ STAT CARDS ═══ */
+.statgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:24px}
+.statcard{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px}
+.statcard .num{font-size:28px;font-weight:900;font-family:var(--mono)}
+.statcard .num.red{color:var(--red)}
+.statcard .num.orange{color:var(--orange)}
+.statcard .num.green{color:var(--green)}
+.statcard .num.blue{color:var(--blue)}
+.statcard .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+
+/* ═══ PANELS ═══ */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:16px}
+.panel-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.panel-header h3{font-size:14px;font-weight:700}
+.panel-body{padding:16px 18px}
+.panel-body table{width:100%;border-collapse:collapse;font-size:12px}
+.panel-body th{text-align:left;padding:8px 6px;border-bottom:1px solid var(--border);color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px}
+.panel-body td{padding:8px 6px;border-bottom:1px solid rgba(255,255,255,.03)}
+
+/* ═══ BADGES ═══ */
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:10px;font-weight:700}
+.badge-red{background:#3b1010;color:var(--red)}
+.badge-orange{background:#3b2010;color:var(--orange)}
+.badge-green{background:#102b10;color:var(--green)}
+.badge-blue{background:#10203b;color:var(--blue)}
+
+/* ═══ BUTTONS ═══ */
+.btn{padding:8px 16px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;border:none}
+.btn-red{background:var(--red);color:#fff}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-sm{padding:4px 10px;font-size:11px}
+
+/* ═══ FEED ═══ */
+.feed-item{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.03)}
+.feed-item:last-child{border:none}
+.feed-item .source{font-size:10px;color:var(--muted)}
+.feed-item .content{font-size:13px;margin:4px 0}
+.feed-item .meta{font-size:10px;color:var(--muted);display:flex;gap:12px}
+
+/* ═══ LOGIN GATE ═══ */
+.login-gate{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg)}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:40px;text-align:center;max-width:400px;width:100%}
+.login-box h2{margin-bottom:8px}
+.login-box p{color:var(--muted);margin-bottom:20px;font-size:14px}
+.login-box .btn{padding:12px 28px;font-size:14px}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:768px){.container{grid-template-columns:1fr}.sidebar{display:none}}
+
+/* ═══ LOADING ═══ */
+.loading{text-align:center;padding:40px;color:var(--muted)}
+.spinner{width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin .8s infinite linear;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ═══ HIDDEN ═══ */
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN GATE ═══ -->
+<div id="loginGate" class="login-gate">
+  <div class="login-box">
+    <h2>🔴 Mayor Watch Admin</h2>
+    <p>Authenticated access only. Login with Authentik SSO.</p>
+    <a href="#" class="btn btn-red" onclick="loginWithAuthentik()">Login with Authentik SSO</a>
+  </div>
+</div>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div id="dashboard" class="hidden">
+  
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <h1>🔴 <span>MAYOR WATCH</span> ADMIN</h1>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="user" id="userDisplay"></span>
+      <a href="#" class="logout" onclick="logout()">Logout</a>
+    </div>
+  </div>
+  
+  <div class="container">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="section">MAIN</div>
+      <a href="#" class="active" onclick="showTab('overview')">📊 Overview</a>
+      <a href="#" onclick="showTab('evidence')">📸 Evidence Feed</a>
+      <a href="#" onclick="showTab('foia')">📋 FOIA Queue</a>
+      <div class="section">TARGETS</div>
+      <a href="#" onclick="showTab('parker')">🎯 Bless Parker</a>
+      <a href="#" onclick="showTab('durbin')">🟠 Ron Durbin</a>
+      <a href="#" onclick="showTab('city')">🏛 City of Miami</a>
+      <div class="section">TOOLS</div>
+      <a href="#" onclick="showTab('screenshots')">🖼 Screenshots</a>
+      <a href="#" onclick="showTab('cron')">⏱ Cron Jobs</a>
+      <div class="section">EMAIL</div>
+      <a href="#" onclick="showTab('inbox')">📬 FOIA Inbox</a>
+      <div class="section">LINKS</div>
+      <a href="/mayor-watch" target="_blank">🌐 Public Mayor Watch</a>
+      <a href="/evidence-archive.html" target="_blank">📁 Evidence Archive</a>
+      <a href="/pi-report-bless-parker.html" target="_blank">📋 PI Report</a>
+      <a href="/foia/" target="_blank">📬 Submit FOIA</a>
+      <a href="/foia/admin" target="_blank">⚙ FOIA Admin</a>
+    </div>
+    
+    <!-- MAIN CONTENT -->
+    <div class="main" id="mainContent">
+      <div class="loading"><div class="spinner"></div><p>Loading dashboard...</p></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══ AUTH — Authentik OIDC ═══
+const AUTHENTIK = 'https://authentik.moveweight.com';
+const CLIENT_ID = 'foia-admin';
+const REDIRECT_URI = 'https://exposemiamiok.com/admin';
+const TOKEN_KEY = 'mw_admin_token';
+const USER_KEY = 'mw_admin_user';
+const ADMIN_TOKEN = 'mwf-admin-2026-expose';
+
+async function checkAuth() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  
+  if (code) {
+    // Exchange code for token
+    try {
+      const r = await fetch(AUTHENTIK + '/application/o/token/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({
+          grant_type: 'authorization_code',
+          code: code,
+          client_id: CLIENT_ID,
+          redirect_uri: REDIRECT_URI,
+        })
+      });
+      const data = await r.json();
+      if (data.access_token || data.id_token) {
+        // Extract user info from id_token JWT (avoids CORS on userinfo endpoint)
+        let user = {name: 'Admin'};
+        if (data.id_token) {
+          try {
+            const payload = JSON.parse(atob(data.id_token.split('.')[1]));
+            user = {name: payload.name || payload.preferred_username || payload.email || payload.sub, email: payload.email};
+          } catch(e) {}
+        }
+        TOKEN = data.access_token || data.id_token;
+        localStorage.setItem(TOKEN_KEY, TOKEN);
+        localStorage.setItem(USER_KEY, JSON.stringify(user));
+        window.history.replaceState({}, '', '/admin');
+        showDashboard(user);
+        return;
+      }
+    } catch(e) { console.error('Auth error:', e); }
+  }
+  
+  // Check saved session
+  const savedToken = localStorage.getItem(TOKEN_KEY);
+  const savedUser = localStorage.getItem(USER_KEY);
+  if (savedToken && savedUser) {
+    showDashboard(JSON.parse(savedUser));
+    return;
+  }
+  
+  // Show login gate
+  document.getElementById('loginGate').classList.remove('hidden');
+  document.getElementById('dashboard').classList.add('hidden');
+}
+
+function loginWithAuthentik() {
+  window.location.href = AUTHENTIK + '/application/o/authorize/?' +
+    'client_id=' + CLIENT_ID + '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) +
+    '&response_type=code&scope=openid+profile+email';
+}
+
+function showDashboard(user) {
+  document.getElementById('loginGate').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  document.getElementById('userDisplay').textContent = user.name || user.email || 'Admin';
+  loadOverview();
+}
+
+function logout() {
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
+  window.location.href = AUTHENTIK + '/application/o/end-session/';
+}
+
+// ═══ TABS ═══
+let currentTab = 'overview';
+
+function showTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+  document.querySelector(`.sidebar a[onclick*="${tab}"]`)?.classList.add('active');
+  
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  
+  switch(tab) {
+    case 'overview': loadOverview(); break;
+    case 'evidence': loadEvidence(); break;
+    case 'foia': loadFOIA(); break;
+    case 'parker': loadTarget('parker'); break;
+    case 'durbin': loadTarget('durbin'); break;
+    case 'city': loadTarget('city'); break;
+    case 'screenshots': loadScreenshots(); break;
+    case 'cron': loadCron(); break;
+    case 'inbox': loadInbox(); break;
+  }
+}
+
+// ═══ OVERVIEW ═══
+async function loadOverview() {
+  const main = document.getElementById('mainContent');
+  
+  // Fetch live stats
+  let feedStats = {total: '--', high: '--', evidence: '--'};
+  try {
+    const r = await fetch('/api/mayor-watch/mayor-watch-feed.json');
+    if(r.ok) {
+      const d = await r.json();
+      feedStats.total = d.stats?.total_posts || 0;
+      feedStats.high = d.stats?.high_priority || 0;
+      feedStats.evidence = d.evidence?.length || 0;
+    }
+  } catch(e) {}
+  
+  main.innerHTML = `
+    <h2 style="margin-bottom:16px">📊 Dashboard Overview</h2>
+    
+    <div class="statgrid">
+      <div class="statcard"><div class="num red">${feedStats.total}</div><div class="label">Posts Captured</div></div>
+      <div class="statcard"><div class="num orange">${feedStats.high}</div><div class="label">Priority 1</div></div>
+      <div class="statcard"><div class="num green">${feedStats.evidence}</div><div class="label">Evidence Items</div></div>
+      <div class="statcard"><div class="num blue">33</div><div class="label">Screenshots</div></div>
+      <div class="statcard"><div class="num" style="color:var(--yellow)">0</div><div class="label">FOIAs Sent</div></div>
+      <div class="statcard"><div class="num" style="color:var(--yellow)">6</div><div class="label">Parker Wishlist</div></div>
+    </div>
+    
+    <div class="panel">
+      <div class="panel-header"><h3>🔴 Active Surveillance</h3><span class="badge badge-green">LIVE</span></div>
+      <div class="panel-body">
+        <table>
+          <tr><td>Crawler (Graph API)</td><td>Every 30 min</td><td><span class="badge badge-green">RUNNING</span></td></tr>
+          <tr><td>Playwright Deep Scrape</td><td>Every 2 hours</td><td><span class="badge badge-green">RUNNING</span></td></tr>
+          <tr><td>Token Sync (promote4.me)</td><td>Every 4 hours</td><td><span class="badge badge-green">RUNNING</span></td></tr>
+          <tr><td>Evidence Feed Rebuild</td><td>Every 30 min</td><td><span class="badge badge-green">RUNNING</span></td></tr>
+          <tr><td>Ron Durbin Auth Scrape</td><td>On demand</td><td><span class="badge badge-orange">WAITING 2FA</span></td></tr>
+          <tr><td>FOIA Blitz</td><td>Weekly Sun 4AM</td><td><span class="badge badge-green">SCHEDULED</span></td></tr>
+        </table>
+      </div>
+    </div>
+    
+    <div class="panel">
+      <div class="panel-header"><h3>📋 Quick Actions</h3></div>
+      <div class="panel-body" style="display:flex;gap:8px;flex-wrap:wrap">
+        <a href="/foia-dispatch.html" class="btn btn-red" target="_blank">📬 Send FOIAs</a>
+        <a href="/evidence-archive.html" class="btn btn-outline" target="_blank">📁 Evidence Archive</a>
+        <a href="/pi-report-bless-parker.html" class="btn btn-outline" target="_blank">📋 PI Report</a>
+        <a href="/mayor-watch" class="btn btn-outline" target="_blank">🌐 Public Page</a>
+        <a href="/foia/review.html" class="btn btn-outline" target="_blank">📝 FOIA Review</a>
+        <button class="btn btn-outline" onclick="loadTarget('parker')">🎯 Parker Brief</button>
+        <button class="btn btn-outline" onclick="loadTarget('durbin')">🟠 Durbin Brief</button>
+      </div>
+    </div>
+    
+    <div class="panel">
+      <div class="panel-header"><h3>🎯 Top Targets</h3></div>
+      <div class="panel-body">
+        <table>
+          <tr><th>Target</th><th>Type</th><th>Posts</th><th>Priority</th><th>Status</th></tr>
+          <tr><td>Bless Parker (100063617378119)</td><td>FB Profile</td><td>2</td><td><span class="badge badge-red">P1</span></td><td>Active</td></tr>
+          <tr><td>Bless Parker (werpar5)</td><td>FB Profile</td><td>1</td><td><span class="badge badge-red">P1</span></td><td>Active</td></tr>
+          <tr><td>Guerrilla Publishing OK</td><td>FB Page</td><td>1</td><td><span class="badge badge-red">P1</span></td><td>Waiting Auth</td></tr>
+          <tr><td>Ron Durbin</td><td>FB Profile</td><td>1</td><td><span class="badge badge-red">P1</span></td><td>Waiting Auth</td></tr>
+          <tr><td>Miami OK Official</td><td>FB Page</td><td>1</td><td><span class="badge badge-orange">P2</span></td><td>Active</td></tr>
+          <tr><td>Miami OK PD</td><td>FB Page</td><td>1</td><td><span class="badge badge-orange">P2</span></td><td>Active</td></tr>
+          <tr><td>Miami OK News</td><td>FB Page</td><td>1</td><td><span class="badge badge-orange">P2</span></td><td>Active</td></tr>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// ═══ EVIDENCE ═══
+async function loadEvidence() {
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  
+  try {
+    const r = await fetch('/api/mayor-watch/mayor-watch-feed.json');
+    const d = await r.json();
+    
+    let html = '<h2 style="margin-bottom:16px">📸 Evidence Feed</h2>';
+    
+    if (!d.evidence?.length) {
+      html += '<div class="panel"><div class="panel-body">No evidence items yet. Crawlers are building the feed.</div></div>';
+    } else {
+      d.evidence.forEach((e, i) => {
+        const badge = e.type === 'corruption_allegation' ? 'badge-red' : 
+                      e.type === 'personal_conduct' ? 'badge-orange' : 'badge-blue';
+        html += `
+        <div class="panel">
+          <div class="panel-header">
+            <h3>#${i+1}: ${(e.title||'').substring(0,80)}</h3>
+            <span class="badge ${badge}">${e.type||'mention'}</span>
+          </div>
+          <div class="panel-body">
+            <p style="font-size:13px;margin-bottom:8px">${e.description||''}</p>
+            <div class="feed-item">
+              <div class="meta">
+                <span>Author: ${e.author||'Unknown'}</span>
+                <span>Posted: ${e.posted_at||'?'}</span>
+                <span>Captured: ${e.captured||'?'}</span>
+              </div>
+              ${e.url ? `<div class="source"><a href="${e.url}" target="_blank" style="color:var(--blue)">View Source →</a></div>` : ''}
+              ${e.keywords ? `<div class="source">Keywords: ${e.keywords}</div>` : ''}
+            </div>
+          </div>
+        </div>`;
+      });
+    }
+    
+    main.innerHTML = html;
+  } catch(e) {
+    main.innerHTML = '<div class="panel"><div class="panel-body">Evidence feed unavailable — crawlers may still be initializing.</div></div>';
+  }
+}
+
+// ═══ FOIA — Live Review Queue ═══
+async function loadFOIA() {
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  
+  let pending = [], all = [], stats = {};
+  try {
+    const pr = await fetch('/api/foia/admin/pending', {headers: {'X-Admin-Token': ADMIN_TOKEN}});
+    if (pr.ok) { const d = await pr.json(); pending = d.pending || []; }
+    const ar = await fetch('/api/foia/admin/all', {headers: {'X-Admin-Token': ADMIN_TOKEN}});
+    if (ar.ok) { const d = await ar.json(); all = d.requests || []; }
+    const sr = await fetch('/api/foia/stats');
+    if (sr.ok) stats = await sr.json();
+  } catch(e) { console.error(e); }
+  
+  const sent = all.filter(r => r.status === 'sent');
+  
+  let html = '<h2 style="margin-bottom:16px">📋 FOIA Review Queue</h2>';
+  
+  // Stats
+  html += '<div class="statgrid" style="margin-bottom:16px">';
+  html += `<div class="statcard"><div class="num orange">${pending.length}</div><div class="label">Pending Review</div></div>`;
+  html += `<div class="statcard"><div class="num green">${sent.length}</div><div class="label">Sent</div></div>`;
+  html += `<div class="statcard"><div class="num blue">${all.length}</div><div class="label">Total</div></div>`;
+  html += '</div>';
+  
+  // Pending Review
+  html += '<div class="panel"><div class="panel-header"><h3>🔴 Pending Review</h3><span class="badge badge-red">' + pending.length + '</span></div><div class="panel-body">';
+  
+  if (pending.length === 0) {
+    html += '<p style="color:var(--muted)">No pending FOIAs. All clear.</p>';
+  } else {
+    pending.forEach((r, idx) => {
+      const fullDesc = (r.description || '').replace(/'/g, "\\'").replace(/`/g, "\\`").replace(/\n/g, '<br>');
+      const shortDesc = (r.description || '').substring(0, 120);
+      html += '<div class="panel" style="margin:8px 0;border-left:3px solid var(--orange)">';
+      html += '<div class="panel-header"><h3 style="font-size:13px">#' + (idx+1) + ' — ' + shortDesc + (r.description && r.description.length > 120 ? '...' : '') + '</h3>';
+      html += '<span class="badge badge-orange">PENDING</span></div>';
+      html += '<div class="panel-body" style="max-height:400px;overflow-y:auto">';
+      html += '<div style="white-space:pre-wrap;font-size:13px;line-height:1.8;margin-bottom:12px">' + fullDesc + '</div>';
+      html += '<div class="meta" style="margin-bottom:8px"><span>ID: <code style="font-size:11px">' + r.id + '</code></span><span>Agency: ' + (r.agency || '') + '</span><span>Submitted: ' + (r.created_at || '').substring(0, 16) + '</span></div>';
+      html += '<div style="display:flex;gap:8px">';
+      html += '<button class="btn btn-red btn-sm" onclick="approveFOIA(\'' + r.id + '\')">✅ Approve & Send to City</button>';
+      html += '<button class="btn btn-outline btn-sm" onclick="rejectFOIA(\'' + r.id + '\')">❌ Reject & Archive</button>';
+      html += '<button class="btn btn-outline btn-sm" style="color:var(--blue);border-color:var(--blue)" onclick="aiEditFOIA(\'' + r.id + '\')">🤖 Edit with AI</button>';
+      html += '</div></div></div>';
+    });
+  }
+  html += '</div></div>';
+  
+  // Sent
+  html += '<div class="panel"><div class="panel-header"><h3>✅ Sent / Processed</h3><span class="badge badge-green">' + sent.length + '</span></div><div class="panel-body">';
+  if (sent.length === 0) {
+    html += '<p style="color:var(--muted)">Nothing processed yet.</p>';
+  } else {
+    sent.slice(0, 20).forEach((r, idx) => {
+      const fullDesc = (r.description || '').replace(/'/g, "\\'").replace(/\n/g, '<br>');
+      const statusBadge = r.status === 'sent' ? 'badge-green' : r.status === 'rejected' ? 'badge-red' : 'badge-blue';
+      html += '<details style="margin:8px 0"><summary style="cursor:pointer;padding:8px;background:var(--surface2);border-radius:6px;font-size:13px">';
+      html += '<span class="badge ' + statusBadge + '">' + (r.status || '') + '</span> ';
+      html += (r.description || '').substring(0, 100) + '...</summary>';
+      html += '<div style="padding:12px;white-space:pre-wrap;font-size:13px;line-height:1.7">' + fullDesc + '</div>';
+      html += '<div class="meta" style="padding:0 12px 12px"><span>ID: <code>' + r.id + '</code></span><span>' + (r.created_at || '').substring(0, 16) + '</span></div>';
+      html += '</details>';
+    });
+  }
+  html += '</div></div>';
+  
+  html += '<div style="display:flex;gap:8px;margin-top:16px">';
+  html += '<a href="/foia/" class="btn btn-red" target="_blank">📬 Submit New FOIA</a>';
+  html += '<a href="/foia/admin" class="btn btn-outline" target="_blank">⚙ FOIA Admin</a>';
+  html += '<button class="btn btn-outline" onclick="loadFOIA()">🔄 Refresh</button>';
+  html += '</div>';
+  
+  main.innerHTML = html;
+}
+
+async function approveFOIA(id) {
+  try {
+    const r = await fetch('/api/foia/admin/approve/' + id, {method: 'POST', headers: {'X-Admin-Token': ADMIN_TOKEN, 'Content-Type': 'application/json'}, body: '{}'});
+    const d = await r.json();
+    alert(d.ok ? 'Approved and sent to city department!' : 'Error: ' + (d.error || 'unknown'));
+    loadFOIA();
+  } catch(e) { alert('Error: ' + e); }
+}
+
+async function rejectFOIA(id) {
+  try {
+    const r = await fetch('/api/foia/admin/reject/' + id, {method: 'POST', headers: {'X-Admin-Token': ADMIN_TOKEN, 'Content-Type': 'application/json'}, body: '{}'});
+    const d = await r.json();
+    alert(d.ok ? 'Rejected and archived.' : 'Error: ' + (d.error || 'unknown'));
+    loadFOIA();
+  } catch(e) { alert('Error: ' + e); }
+}
+
+async function aiEditFOIA(id) {
+  // Find the pending FOIA text
+  const allEls = document.querySelectorAll('.panel-body');
+  let text = '';
+  allEls.forEach(el => {
+    const codeEl = el.querySelector('code');
+    if (codeEl && codeEl.textContent === id) {
+      const descDiv = el.querySelector('div[style*="white-space:pre-wrap"]');
+      if (descDiv) text = descDiv.textContent.trim();
+    }
+  });
+  if (!text) { alert('Could not find FOIA text.'); return; }
+  
+  const result = confirm('Send this FOIA to AI for professional editing? The AI will rewrite it with proper Open Records Act language while preserving all requests.');
+  if (!result) return;
+  
+  try {
+    const r = await fetch('/api/foia/admin/ai-edit', {
+      method: 'POST',
+      headers: {'X-Admin-Token': ADMIN_TOKEN, 'Content-Type': 'application/json'},
+      body: JSON.stringify({text: text})
+    });
+    const d = await r.json();
+    if (d.ok) {
+      // Show edited version in a modal for review
+      const modal = document.createElement('div');
+      modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:9999;display:flex;align-items:center;justify-content:center';
+      modal.innerHTML = '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;max-width:800px;max-height:80vh;overflow-y:auto;margin:20px">' +
+        '<h3 style="margin-bottom:4px">🤖 AI-Edited FOIA Request</h3>' +
+        '<p style="color:var(--muted);font-size:12px;margin-bottom:16px">chat.moveweight.com — Professional Open Records Act language</p>' +
+        '<div style="white-space:pre-wrap;font-size:13px;line-height:1.8;background:rgba(0,0,0,.2);padding:16px;border-radius:8px;margin-bottom:16px">' + 
+        d.edited.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>' +
+        '<div style="display:flex;gap:8px">' +
+        '<button class="btn btn-red" onclick="this.closest(\'div\').parentElement.remove()">Close</button>' +
+        '<button class="btn btn-outline" onclick="var t=this.parentElement.parentElement.querySelector(\'div[style]\').textContent;navigator.clipboard.writeText(t);alert(\'Copied!\')">📋 Copy to Clipboard</button>' +
+        '</div></div>';
+      document.body.appendChild(modal);
+      modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
+    } else {
+      alert('AI unavailable: ' + (d.error || 'chat.moveweight.com may be offline'));
+    }
+  } catch(e) { alert('AI edit error: ' + e); }
+}
+
+// ═══ TARGET BRIEFS ═══
+function loadTarget(target) {
+  const main = document.getElementById('mainContent');
+  
+  const briefs = {
+    parker: {
+      title: '🎯 Bless Parker — Target Brief',
+      profiles: '2 known FB profiles (100063617378119 + werpar5)',
+      key: '"I have not stepped down as Mayor" — 498 reactions. Admits "new job requiring travel." Going through divorce. City official page had content deleted/hidden.',
+      status: 'ACTIVE SURVEILLANCE — Graph API + Playwright every 2 hours',
+      foias: '6 on wishlist — building ammo before engaging',
+      threat: 'HIGH — Outside employment, resignation rumors, divorce, deleted city content',
+    },
+    durbin: {
+      title: '🟠 Ron Durbin / Guerrilla Publishing — Target Brief',
+      profiles: 'Ron Durbin (ron.durbin.7) + Guerrilla Publishing OK',
+      key: '"Mike, will you take a drug test?" — 49 reactions, 22 comments. Active anti-corruption watchdog. Directly challenging local officials. Likely targeting Parker/city government.',
+      status: 'WAITING AUTH — Need 2FA approval to deep scrape as logged-in user',
+      foias: '0 — Durbin is an ally, not a target',
+      threat: 'ALLY — His content is ammunition, not enemy intel',
+    },
+    city: {
+      title: '🏛 City of Miami — Target Brief',
+      profiles: 'miamiokla, miamiokpd, miamioknews, miamiokmainstreet',
+      key: 'Official page DELETED/HIDDEN content captured. Power line resolution (128 comments). Animal Control blocks police after 4:30pm. City Attorney threatened citizen with prosecution.',
+      status: 'ACTIVE SURVEILLANCE — Graph API + Playwright',
+      foias: '3 active (social media records, animal control, city attorney)',
+      threat: 'HIGH — Content deletion, policy failures, retaliatory threats',
+    },
+  };
+  
+  const b = briefs[target];
+  if (!b) { main.innerHTML = '<div class="panel"><div class="panel-body">Brief not found.</div></div>'; return; }
+  
+  main.innerHTML = `
+    <h2 style="margin-bottom:16px">${b.title}</h2>
+    <div class="panel"><div class="panel-header"><h3>Profiles</h3></div><div class="panel-body">${b.profiles}</div></div>
+    <div class="panel"><div class="panel-header"><h3>Key Intel</h3></div><div class="panel-body">${b.key}</div></div>
+    <div class="panel"><div class="panel-header"><h3>Surveillance Status</h3></div><div class="panel-body">${b.status}</div></div>
+    <div class="panel"><div class="panel-header"><h3>FOIA Status</h3></div><div class="panel-body">${b.foias}</div></div>
+    <div class="panel"><div class="panel-header"><h3>Threat Level</h3></div><div class="panel-body">${b.threat}</div></div>
+  `;
+}
+
+// ═══ SCREENSHOTS ═══
+function loadScreenshots() {
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '<h2 style="margin-bottom:16px">🖼 Screenshot Gallery</h2><p style="color:var(--muted)">View all evidence screenshots in the <a href="/evidence-archive.html" style="color:var(--blue)">Evidence Archive</a>.</p><div class="panel"><div class="panel-body">33 screenshots preserved. All timestamped and organized by target.</div></div>';
+}
+
+// ═══ CRON ═══
+function loadCron() {
+  const main = document.getElementById('mainContent');
+  main.innerHTML = `
+    <h2 style="margin-bottom:16px">⏱ Cron Jobs</h2>
+    <div class="panel"><div class="panel-body">
+      <table>
+        <tr><th>Job</th><th>Schedule</th><th>Status</th></tr>
+        <tr><td>Token Sync (promote4.me)</td><td>Every 4 hours</td><td>Active</td></tr>
+        <tr><td>Graph API Crawl</td><td>Every 30 min</td><td>Active</td></tr>
+        <tr><td>Playwright Deep Scrape</td><td>Every 2 hours</td><td>Active</td></tr>
+        <tr><td>Evidence Feed Rebuild</td><td>Every 30 min (:15, :45)</td><td>Active</td></tr>
+        <tr><td>FOIA Blitz (Parker)</td><td>Weekly Sun 4AM</td><td>Scheduled</td></tr>
+        <tr><td>mayor-watch-fb-crawl (Hermes)</td><td>Every 30 min</td><td>Active</td></tr>
+      </table>
+    </div></div>
+  `;
+}
+
+// ═══ INBOX ═══
+async function loadInbox() {
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  
+  try {
+    const r = await fetch('/api/foia/admin/inbox', {headers: {'X-Admin-Token': ADMIN_TOKEN}});
+    const d = await r.json();
+    
+    let html = '<h2 style="margin-bottom:16px">📬 FOIA Inbox</h2>';
+    
+    if (!d.threads || Object.keys(d.threads).length === 0) {
+      html += '<div class="panel"><div class="panel-body">No FOIA emails tracked yet. Replies from the city will appear here.</div></div>';
+    } else {
+      html += '<div class="statgrid" style="margin-bottom:16px"><div class="statcard"><div class="num orange">' + Object.keys(d.threads).length + '</div><div class="label">Threads</div></div></div>';
+      
+      for (const [foiaId, emails] of Object.entries(d.threads)) {
+        const latest = emails[emails.length - 1];
+        html += '<details class="panel" style="margin:8px 0"><summary style="cursor:pointer;padding:12px 16px;font-size:13px;font-weight:600">';
+        html += '📨 FOIA: <code>' + foiaId + '</code> — ' + emails.length + ' emails — Latest: ' + (latest.date || '?').substring(0, 25);
+        html += '</summary><div class="panel-body">';
+        
+        emails.forEach((em, i) => {
+          html += '<div style="margin:8px 0;padding:12px;background:rgba(0,0,0,.15);border-radius:6px">';
+          html += '<div style="display:flex;justify-content:space-between;margin-bottom:4px">';
+          html += '<strong>' + (em.subject || 'No Subject').substring(0, 80) + '</strong>';
+          html += '<span style="font-size:11px;color:var(--muted)">' + (em.date || '') + '</span></div>';
+          html += '<div style="font-size:11px;color:var(--muted);margin-bottom:4px">From: ' + (em.from || '') + '</div>';
+          html += '<div style="white-space:pre-wrap;font-size:13px;line-height:1.6;max-height:300px;overflow-y:auto">' + (em.body || '').replace(/</g,'&lt;') + '</div>';
+          html += '</div>';
+        });
+        
+        // Reply button
+        html += '<div style="padding:8px 0"><button class="btn btn-outline btn-sm" onclick="replyToFOIA(\'' + foiaId + '\')">📤 Reply to City</button></div>';
+        html += '</div></details>';
+      }
+    }
+    
+    html += '<div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-outline" onclick="loadInbox()">🔄 Refresh Inbox</button></div>';
+    main.innerHTML = html;
+  } catch(e) {
+    main.innerHTML = '<div class="panel"><div class="panel-body">Inbox unavailable: ' + e.message + '</div></div>';
+  }
+}
+
+async function replyToFOIA(foiaId) {
+  const to = prompt('Send reply to (email):', 'cityclerk@miamiok.gov');
+  if (!to) return;
+  const subject = prompt('Subject:', 'Re: FOIA Request ' + foiaId);
+  if (!subject) return;
+  const body = prompt('Reply body:');
+  if (!body) return;
+  
+  try {
+    const r = await fetch('/api/foia/admin/inbox/reply', {
+      method: 'POST',
+      headers: {'X-Admin-Token': ADMIN_TOKEN, 'Content-Type': 'application/json'},
+      body: JSON.stringify({to: to, subject: subject, body: body})
+    });
+    const d = await r.json();
+    alert(d.ok ? 'Reply sent!' : 'Error: ' + (d.error || ''));
+  } catch(e) { alert('Error: ' + e); }
+}
+
+// ═══ INIT ═══
+checkAuth();
+</script>
+</body>
+</html>
