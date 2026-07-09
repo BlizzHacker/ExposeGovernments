@@ -6,6 +6,7 @@ Deploy paths:
 
 - `foia-api.py` -> `/opt/foia-api.py`
 - `foia-ai-edit.py` -> `/opt/foia-ai-edit.py`
+- `evidence-api.py` -> `/opt/evidence-api.py`
 - `exposemiamiok_navigation_update.py` -> `/usr/local/bin/exposemiamiok_navigation_update.py`
 
 Runtime secrets are intentionally not committed:
@@ -14,3 +15,5 @@ Runtime secrets are intentionally not committed:
 - AI editor key, if the OpenAI-compatible backend is used: `/root/.foia_ai_key`
 
 The FOIA AI editor first tries the OpenAI-compatible LiteLLM endpoint and falls back to local Ollama on the chat LXC.
+
+The evidence API serves `/opt/evidence-private` only after admin authentication. It reads the manual admin token from `/root/.exposemiami_admin_token` and should never contain a hard-coded fallback token.

@@ -80,6 +80,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 .spinner{width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin .8s infinite linear;margin:0 auto 12px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* Evidence library */
+.evidence-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:16px}
+.evidence-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;min-width:0}
+.evidence-thumb{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:7px;background:var(--surface2);border:1px solid var(--border);display:block}
+.evidence-thumb.pending{opacity:.55}
+.evidence-error{min-height:155px;display:flex;align-items:center;justify-content:center;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:14px;text-align:center;font-size:12px}
+.evidence-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;font-size:11px;color:var(--muted)}
+.evidence-name{font-family:var(--mono);font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.evidence-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.evidence-card.low-detail{border-color:rgba(236,201,75,.65)}
+.evidence-card.low-detail .evidence-thumb{border-color:rgba(236,201,75,.7);opacity:.82}
+.evidence-quality{display:none;margin-top:8px;padding:6px 8px;border-radius:6px;background:#332b0b;color:var(--yellow);font-size:11px;line-height:1.3}
+.evidence-card.low-detail .evidence-quality{display:block}
+
 /* ═══ HIDDEN ═══ */
 .hidden{display:none!important}
 </style>
@@ -128,7 +142,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
       <a href="#" onclick="showTab('inbox')">📬 FOIA Inbox</a>
       <div class="section">LINKS</div>
       <a href="/mayor-watch" target="_blank">🌐 Public Mayor Watch</a>
-      <a href="/evidence-archive.html" target="_blank">📁 Evidence Archive</a>
+      <a href="#" onclick="showTab('screenshots')">Private Evidence Library</a>
       <a href="/pi-report-bless-parker.html" target="_blank">📋 PI Report</a>
       <a href="/foia/" target="_blank">📬 Submit FOIA</a>
       <a href="/foia/admin" target="_blank">⚙ FOIA Admin</a>
@@ -154,6 +168,16 @@ let TOKEN = '';
 function authHeaders(extra = {}) {
   const token = TOKEN || localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(MANUAL_TOKEN_KEY) || '';
   return token ? Object.assign({'Authorization': 'Bearer ' + token}, extra) : extra;
+}
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[ch]));
 }
 
 async function checkAuth() {
@@ -350,7 +374,7 @@ async function loadOverview() {
       <div class="panel-header"><h3>📋 Quick Actions</h3></div>
       <div class="panel-body" style="display:flex;gap:8px;flex-wrap:wrap">
         <a href="/foia-dispatch.html" class="btn btn-red" target="_blank">📬 Send FOIAs</a>
-        <a href="/evidence-archive.html" class="btn btn-outline" target="_blank">📁 Evidence Archive</a>
+        <button class="btn btn-outline" onclick="showTab('screenshots')">Private Evidence Library</button>
         <a href="/pi-report-bless-parker.html" class="btn btn-outline" target="_blank">📋 PI Report</a>
         <a href="/mayor-watch" class="btn btn-outline" target="_blank">🌐 Public Page</a>
         <a href="/foia/review.html" class="btn btn-outline" target="_blank">📝 FOIA Review</a>
@@ -608,18 +632,131 @@ function loadTarget(target) {
 // ═══ SCREENSHOTS ═══
 async function loadScreenshots() {
   const main = document.getElementById('mainContent');
-  let count = 'Archived';
+  main.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading private evidence...</p></div>';
+
   try {
-    const r = await fetch('/api/mayor-watch/mayor-watch-feed.json');
-    if (r.ok) {
-      const d = await r.json();
-      count = d.stats?.screenshots || d.evidence?.length || 'Archived';
+    const [screenshotsResponse, photosResponse] = await Promise.all([
+      fetch('/api/evidence/screenshots', {headers: authHeaders()}),
+      fetch('/api/evidence/photos', {headers: authHeaders()}),
+    ]);
+
+    if (!screenshotsResponse.ok || !photosResponse.ok) {
+      throw new Error('Evidence API authentication failed');
     }
-  } catch(e) {}
-  main.innerHTML = '<h2 style="margin-bottom:16px">Screenshot Gallery</h2><p style="color:var(--muted)">View captured public-source screenshots in the <a href="/evidence-archive.html" style="color:var(--blue)">Evidence Archive</a>.</p><div class="panel"><div class="panel-body">' + count + ' screenshots preserved with timestamps and source notes where available.</div></div>';
+
+    const screenshotsData = await screenshotsResponse.json();
+    const photosData = await photosResponse.json();
+    const items = [
+      ...(screenshotsData.screenshots || []).map(item => ({...item, kind: 'Screenshot'})),
+      ...(photosData.photos || []).map(item => ({...item, kind: 'Photo'})),
+    ];
+
+    let html = '<h2 style="margin-bottom:8px">Evidence Library</h2>';
+    html += '<p style="color:var(--muted);margin-bottom:16px">Private archive for staff review. Files are loaded through authenticated API requests and are not served from public web folders.</p>';
+    html += '<div class="statgrid" style="margin-bottom:16px">';
+    html += '<div class="statcard"><div class="num red">' + items.length + '</div><div class="label">Private Files</div></div>';
+    html += '<div class="statcard"><div class="num blue">' + (screenshotsData.count || 0) + '</div><div class="label">Screenshots</div></div>';
+    html += '<div class="statcard"><div class="num orange">' + (photosData.count || 0) + '</div><div class="label">Photos</div></div>';
+    html += '</div>';
+
+    if (!items.length) {
+      html += '<div class="panel"><div class="panel-body">No private evidence files are available yet.</div></div>';
+    } else {
+      html += '<div class="evidence-grid">';
+      items.forEach(item => {
+        const modified = item.modified ? new Date(item.modified * 1000).toLocaleString() : 'Unknown date';
+        const size = item.size ? Math.max(1, Math.round(item.size / 1024)) + ' KB' : 'Unknown size';
+        html += '<div class="evidence-card">';
+        html += '<img class="evidence-thumb pending" data-evidence-src="' + escapeHtml(item.url) + '" alt="' + escapeHtml(item.name) + '">';
+        html += '<div class="evidence-meta"><span>' + escapeHtml(item.kind) + '</span><span>' + escapeHtml(size) + '</span></div>';
+        html += '<div class="evidence-name" title="' + escapeHtml(item.name) + '">' + escapeHtml(item.name) + '</div>';
+        html += '<div class="evidence-meta"><span>' + escapeHtml(modified) + '</span></div>';
+        html += '<div class="evidence-actions">';
+        html += '<button class="btn btn-outline btn-sm" data-open-evidence="' + escapeHtml(item.url) + '">Open</button>';
+        html += '<button class="btn btn-outline btn-sm" data-copy-evidence="' + escapeHtml(item.name) + '">Copy Name</button>';
+        html += '</div>';
+        html += '<div class="evidence-quality">Low-detail capture - review source or recapture.</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    main.innerHTML = html;
+    hydrateEvidenceImages();
+    wireEvidenceActions();
+  } catch(e) {
+    main.innerHTML = '<h2 style="margin-bottom:16px">Evidence Library</h2><div class="panel"><div class="panel-body" style="color:var(--red)">Evidence requires admin authentication. Log in again, then reopen Screenshots.</div></div>';
+  }
 }
 
 // ═══ CRON ═══
+function hydrateEvidenceImages() {
+  document.querySelectorAll('img[data-evidence-src]').forEach(loadEvidenceImage);
+}
+
+async function loadEvidenceImage(img) {
+  try {
+    const r = await fetch(img.getAttribute('data-evidence-src'), {headers: authHeaders()});
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const blob = await r.blob();
+    const objectUrl = URL.createObjectURL(blob);
+    img.onload = () => {
+      markEvidenceQuality(img);
+      URL.revokeObjectURL(objectUrl);
+    };
+    img.src = objectUrl;
+    img.classList.remove('pending');
+  } catch(e) {
+    const fallback = document.createElement('div');
+    fallback.className = 'evidence-error';
+    fallback.textContent = 'Image unavailable. Refresh login and try again.';
+    img.replaceWith(fallback);
+  }
+}
+
+function markEvidenceQuality(img) {
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = 32;
+    canvas.height = 20;
+    const ctx = canvas.getContext('2d', {willReadFrequently: true});
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    let nonWhite = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i] < 245 || data[i + 1] < 245 || data[i + 2] < 245) nonWhite++;
+    }
+    const ratio = nonWhite / (data.length / 4);
+    if (ratio < 0.03) {
+      img.closest('.evidence-card')?.classList.add('low-detail');
+    }
+  } catch(e) {}
+}
+
+function wireEvidenceActions() {
+  document.querySelectorAll('[data-open-evidence]').forEach(btn => {
+    btn.addEventListener('click', () => openEvidenceFile(btn.getAttribute('data-open-evidence')));
+  });
+  document.querySelectorAll('[data-copy-evidence]').forEach(btn => {
+    btn.addEventListener('click', () => copyEvidenceName(btn.getAttribute('data-copy-evidence')));
+  });
+}
+
+async function openEvidenceFile(url) {
+  try {
+    const r = await fetch(url, {headers: authHeaders()});
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const blob = await r.blob();
+    window.open(URL.createObjectURL(blob), '_blank', 'noopener');
+  } catch(e) {
+    alert('Could not open evidence file. Refresh login and try again.');
+  }
+}
+
+function copyEvidenceName(name) {
+  navigator.clipboard.writeText(name);
+}
+
 function loadCron() {
   const main = document.getElementById('mainContent');
   main.innerHTML = `
