@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mayor Watch — ExposeMiamiOK</title>
+<meta name="description" content="Mayor Bless Parker Oversight — tracking every move, every meeting, every dollar. Miami, Oklahoma citizen watchdog.">
+<meta property="og:title" content="Mayor Watch — ExposeMiamiOK">
+<meta property="og:description" content="Citizen oversight of Miami, OK Mayor Bless Parker. Public records, meeting audits, budget tracking.">
+<meta property="og:type" content="website">
+<style>
+:root {
+  --bg: #0a0e14;
+  --surface: #141b22;
+  --surface2: #1c2430;
+  --border: #2a3441;
+  --text: #d4d9e0;
+  --text-muted: #7a8494;
+  --red: #e53e3e;
+  --red-dim: #9b2c2c;
+  --orange: #ed8936;
+  --yellow: #ecc94b;
+  --green: #38a169;
+  --blue: #4299e1;
+  --accent: #e53e3e;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:var(--font); line-height:1.6; min-height:100vh; }
+a { color:var(--blue); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+/* ─── HEADER ─── */
+.header {
+  background: linear-gradient(180deg, #1a0a0a 0%, var(--bg) 100%);
+  border-bottom: 3px solid var(--red);
+  padding: 40px 20px 30px;
+  text-align:center;
+}
+.header-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--red); color:#fff; padding:6px 16px; border-radius:20px;
+  font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px;
+  margin-bottom:16px;
+}
+.header-badge .dot { width:8px; height:8px; background:#fff; border-radius:50%; animation:pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.header h1 { font-size:clamp(28px,5vw,48px); font-weight:900; letter-spacing:-1px; margin-bottom:8px; }
+.header h1 .red { color:var(--red); }
+.header .subtitle { font-size:16px; color:var(--text-muted); max-width:600px; margin:0 auto; }
+.header .subtitle strong { color:var(--orange); }
+
+/* ─── STATS BAR ─── */
+.stats-bar {
+  display:flex; gap:20px; justify-content:center; flex-wrap:wrap;
+  padding:20px; max-width:900px; margin:0 auto;
+}
+.stat-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:16px 24px; min-width:140px; text-align:center;
+}
+.stat-card .number { font-size:32px; font-weight:900; font-family:var(--mono); color:var(--red); }
+.stat-card .label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
+
+/* ─── CONTENT ─── */
+.container { max-width:1100px; margin:0 auto; padding:0 20px; }
+
+.section-title {
+  font-size:22px; font-weight:800; margin:40px 0 16px;
+  padding-bottom:8px; border-bottom:2px solid var(--border);
+  display:flex; align-items:center; gap:10px;
+}
+.section-title .icon { font-size:24px; }
+
+/* ─── EVIDENCE TIMELINE ─── */
+.evidence-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:20px; margin-bottom:12px;
+  border-left:4px solid var(--border);
+  transition: border-color 0.2s;
+}
+.evidence-card.severity-high { border-left-color:var(--red); }
+.evidence-card.severity-medium { border-left-color:var(--orange); }
+.evidence-card.severity-low { border-left-color:var(--yellow); }
+
+.evidence-card .meta {
+  display:flex; gap:16px; align-items:center; flex-wrap:wrap;
+  font-size:12px; color:var(--text-muted); margin-bottom:8px;
+}
+.evidence-card .badge {
+  padding:2px 10px; border-radius:12px; font-size:11px; font-weight:700; text-transform:uppercase;
+}
+.badge-corruption { background:#3b1010; color:var(--red); }
+.badge-conduct { background:#3b1010; color:var(--orange); }
+.badge-investigation { background:#1a2a3b; color:var(--blue); }
+.badge-mention { background:#1a2b1a; color:var(--green); }
+.badge-transparency { background:#2a1a0a; color:var(--yellow); }
+
+.evidence-card h3 { font-size:16px; margin-bottom:6px; font-weight:700; }
+.evidence-card p { font-size:14px; color:var(--text-muted); line-height:1.5; }
+.evidence-card .source { font-size:12px; color:var(--text-muted); margin-top:8px; }
+.evidence-card .actions { margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
+.evidence-card .actions a {
+  display:inline-block; padding:6px 14px; border-radius:6px;
+  font-size:12px; font-weight:600; text-decoration:none;
+  background:var(--surface2); color:var(--text);
+  border:1px solid var(--border); transition:all 0.2s;
+}
+.evidence-card .actions a:hover { background:var(--red); border-color:var(--red); color:#fff; text-decoration:none; }
+.evidence-card .actions a.archive { background:var(--surface2); }
+.evidence-card .actions a.archive:hover { background:var(--blue); border-color:var(--blue); }
+
+/* ─── TARGET PROFILES GRID ─── */
+.target-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+  gap:12px; margin-bottom:40px;
+}
+.target-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:16px; display:flex; gap:12px; align-items:flex-start;
+}
+.target-card .priority-dot {
+  width:10px; height:10px; border-radius:50%; margin-top:4px; flex-shrink:0;
+}
+.priority-1 { background:var(--red); box-shadow:0 0 8px var(--red); }
+.priority-2 { background:var(--orange); }
+.priority-3 { background:var(--text-muted); }
+.target-card .info h4 { font-size:14px; font-weight:700; margin-bottom:2px; }
+.target-card .info .url-text { font-size:11px; color:var(--text-muted); font-family:var(--mono); word-break:break-all; }
+.target-card .info .status { font-size:11px; margin-top:4px; }
+.status-watching { color:var(--green); }
+.status-pending { color:var(--yellow); }
+
+/* ─── FOIA SECTION ─── */
+.foia-cta {
+  background:var(--surface); border:2px solid var(--red); border-radius:12px;
+  padding:30px; text-align:center; margin:30px 0;
+}
+.foia-cta h3 { font-size:20px; margin-bottom:8px; }
+.foia-cta p { color:var(--text-muted); margin-bottom:16px; }
+.foia-cta .btn {
+  display:inline-block; padding:12px 28px; border-radius:8px;
+  font-weight:700; font-size:14px; text-decoration:none;
+  background:var(--red); color:#fff; margin:4px;
+  transition:all 0.2s;
+}
+.foia-cta .btn:hover { background:#c53030; text-decoration:none; transform:translateY(-1px); }
+.foia-cta .btn.secondary { background:var(--surface2); border:1px solid var(--border); color:var(--text); }
+
+/* ─── LOADING ─── */
+.loading { text-align:center; padding:60px; color:var(--text-muted); }
+.loading .spinner { width:40px; height:40px; border:3px solid var(--border); border-top-color:var(--red); border-radius:50%; animation:spin 0.8s infinite linear; margin:0 auto 12px; }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+.empty-state { text-align:center; padding:40px; color:var(--text-muted); font-style:italic; }
+
+/* ─── FOOTER ─── */
+.footer {
+  text-align:center; padding:40px 20px; color:var(--text-muted);
+  font-size:12px; border-top:1px solid var(--border); margin-top:40px;
+}
+.footer strong { color:var(--red); }
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:600px) {
+  .stats-bar { gap:8px; }
+  .stat-card { min-width:100px; padding:12px; }
+  .stat-card .number { font-size:24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="header">
+  <div class="header-badge">
+    <span class="dot"></span> LIVE SURVEILLANCE ACTIVE
+  </div>
+  <h1><span class="red">MAYOR</span> WATCH</h1>
+  <p class="subtitle">
+    Citizen oversight of <strong>Mayor Bless Parker</strong> — Miami, Oklahoma.
+    Every meeting. Every dollar. Every decision. <strong>We're watching.</strong><br>
+ <a href="/evidence-archive.html" style="display:inline-block;margin-top:12px;padding:8px 18px;background:#e53e3e;color:#fff;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600">📁 View Evidence Archive (22 files)</a>
+ &nbsp;
+ <a href="/pi-report-bless-parker.html" style="display:inline-block;margin-top:12px;padding:8px 18px;background:#1c2430;border:1px solid #2a3441;color:#d4d9e0;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600">📋 Full PI Report</a>
+  </p>
+</header>
+
+<!-- ═══════════ STATS ═══════════ -->
+<div class="stats-bar">
+  <div class="stat-card">
+    <div class="number" id="stat-total">--</div>
+    <div class="label">Evidence Items</div>
+  </div>
+  <div class="stat-card">
+    <div class="number" id="stat-high">--</div>
+    <div class="label">High Severity</div>
+  </div>
+  <div class="stat-card">
+    <div class="number" id="stat-posts">--</div>
+    <div class="label">Posts Scraped</div>
+  </div>
+  <div class="stat-card">
+    <div class="number" id="stat-foias">--</div>
+    <div class="label">FOIAs Filed</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ═══════════ EVIDENCE TIMELINE ═══════════ -->
+<div class="section-title">
+  <span class="icon">🔴</span> EVIDENCE TIMELINE
+</div>
+
+<div id="evidence-feed">
+  <div class="loading">
+    <div class="spinner"></div>
+    <p>Loading evidence feed...</p>
+  </div>
+</div>
+
+<!-- ═══════════ TARGET WATCHLIST ═══════════ -->
+<div class="section-title">
+  <span class="icon">🎯</span> TARGET WATCHLIST
+</div>
+
+<div class="target-grid" id="target-grid">
+  <!-- Populated by JS -->
+</div>
+
+<!-- ═══════════ FOIA ACTION ═══════════ -->
+<div class="section-title">
+  <span class="icon">📋</span> TAKE ACTION
+</div>
+
+<div class="foia-cta">
+  <h3>🔴 File an Anonymous Open Records Request</h3>
+  <p>Target Mayor Parker's office, city council communications, financial records, and more. <strong>Your identity is NEVER revealed.</strong></p>
+  <a href="/foia/?target=mayor" class="btn">▶ File FOIA on Mayor Parker</a>
+  <a href="/foia/?target=city" class="btn secondary">▶ File FOIA on City Hall</a>
+  <a href="/foia/?target=police" class="btn secondary">▶ File FOIA on Miami PD</a>
+</div>
+
+<!-- ═══════════ ABOUT ═══════════ -->
+<div class="section-title">
+  <span class="icon">⚠️</span> ABOUT MAYOR WATCH
+</div>
+
+<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:40px;">
+  <p style="margin-bottom:12px;">
+    <strong>Mayor Bless Parker</strong> was elected to lead Miami, Oklahoma. Mayor Watch is a 
+    citizen-powered oversight project that monitors every public action, every city council vote, 
+    every budget decision, and every public statement made by the Mayor and his administration.
+  </p>
+  <p style="margin-bottom:12px;">
+    This project uses <strong>Oklahoma Open Records Act (51 O.S. § 24A.1)</strong> to obtain 
+    public documents, meeting recordings, financial records, and communications. All evidence 
+    is public record and published for citizen review.
+  </p>
+  <p style="margin-bottom:0;color:var(--red);font-weight:700;">
+    ⚠️ If you have evidence of misconduct, waste, fraud, or abuse by Mayor Parker or any 
+    Miami city official — <a href="/foia/" style="color:var(--red);text-decoration:underline;">submit it anonymously here</a>.
+  </p>
+</div>
+
+</div><!-- /container -->
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<div class="footer">
+  <strong>ExposeMiamiOK.com</strong> — Government Transparency Project<br>
+  Powered by <strong>Move Weight Foundation</strong> | Oklahoma Open Records Act 51 O.S. § 24A.1<br>
+  Last crawl: <span id="last-crawl">--</span>
+</div>
+
+<script>
+// ─── DATA ────────────────────────────────────
+const TARGETS = [
+  {id:"mayor-bless-parker", label:"Mayor Bless Parker", type:"Search/Monitor", url:"#", priority:1, status:"watching"},
+  {id:"miamiokla", label:"Miami Oklahoma (Official)", type:"Facebook Page", url:"https://facebook.com/miamiokla", priority:1, status:"watching"},
+  {id:"miamiokpd", label:"Miami OK Police Dept", type:"Facebook Page", url:"https://facebook.com/miamiokpd", priority:1, status:"watching"},
+  {id:"miamioknews", label:"Miami OK News", type:"Facebook Page", url:"https://facebook.com/miamioknews", priority:1, status:"watching"},
+  {id:"miamiokmainstreet", label:"Miami OK Main Street", type:"Facebook Page", url:"https://facebook.com/miamiokmainstreet", priority:2, status:"watching"},
+  {id:"guerrilla-publishing", label:"Guerrilla Publishing OK", type:"Facebook Page", url:"https://facebook.com/GuerrillaPublishingOK", priority:1, status:"watching"},
+  {id:"ron-durbin", label:"Ron Durbin", type:"Facebook Profile", url:"https://facebook.com/ron.durbin.7", priority:1, status:"watching"},
+  {id:"lisa-sowa", label:"Lisa Bad News Sowa", type:"Facebook Search", url:"https://facebook.com/search/top?q=lisa%20badnews%20sowa", priority:1, status:"watching"},
+  {id:"profile-100094585163771", label:"Facebook Profile 100094585163771", type:"Profile", url:"https://facebook.com/profile.php?id=100094585163771", priority:2, status:"watching"},
+  {id:"profile-100063617378119", label:"Facebook Profile 100063617378119", type:"Profile", url:"https://facebook.com/profile.php?id=100063617378119", priority:2, status:"watching"},
+  {id:"werpar5", label:"Facebook Profile werpar5", type:"Profile", url:"https://facebook.com/werpar5", priority:2, status:"watching"},
+];
+
+// ─── RENDER TARGETS ──────────────────────────
+function renderTargets() {
+  const grid = document.getElementById('target-grid');
+  grid.innerHTML = TARGETS.map(t => `
+    <div class="target-card">
+      <div class="priority-dot priority-${t.priority}"></div>
+      <div class="info">
+        <h4>${t.label}</h4>
+        <div class="url-text">${t.type} ${t.url !== '#' ? `· ${t.url}` : ''}</div>
+        <div class="status status-${t.status}">
+          ${t.status === 'watching' ? '● Active Monitoring' : '○ Pending'}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── LOAD EVIDENCE FEED ──────────────────────
+async function loadEvidence() {
+  const feed = document.getElementById('evidence-feed');
+  
+  try {
+    const resp = await fetch('/api/mayor-watch/feed.json');
+    if (!resp.ok) throw new Error('Feed not available');
+    const data = await resp.json();
+    
+    // Update stats
+    document.getElementById('stat-total').textContent = data.stats.total_posts || '0';
+    document.getElementById('stat-high').textContent = data.stats.high_severity || '0';
+    document.getElementById('stat-posts').textContent = data.stats.total_posts || '0';
+    document.getElementById('stat-foias').textContent = '0';
+    document.getElementById('last-crawl').textContent = new Date(data.generated).toLocaleString();
+    
+    if (!data.evidence || data.evidence.length === 0) {
+      feed.innerHTML = '<div class="empty-state">No evidence collected yet. Crawlers are running — check back soon.</div>';
+      return;
+    }
+    
+    const typeLabels = {
+      corruption_allegation: { label:'Corruption', cls:'badge-corruption' },
+      personal_conduct: { label:'Personal Conduct', cls:'badge-conduct' },
+      investigation: { label:'Investigation', cls:'badge-investigation' },
+      mention: { label:'Mention', cls:'badge-mention' },
+      transparency_concern: { label:'Transparency', cls:'badge-transparency' },
+    };
+    
+    feed.innerHTML = data.evidence.map(e => {
+      const t = typeLabels[e.type] || typeLabels.mention;
+      return `
+        <div class="evidence-card severity-${e.severity || 'medium'}">
+          <div class="meta">
+            <span class="badge ${t.cls}">${t.label}</span>
+            <span>${e.author || 'Unknown'}</span>
+            <span>${new Date(e.posted_at || e.captured).toLocaleDateString()}</span>
+          </div>
+          <h3>${e.title}</h3>
+          <p>${e.description || ''}</p>
+          ${e.keywords ? `<div class="source">Keywords: ${e.keywords}</div>` : ''}
+          <div class="actions">
+            ${e.url ? `<a href="${e.url}" target="_blank" rel="noopener">🔗 View Source</a>` : ''}
+            <a href="/foia/?ref=${e.id}" class="archive">📋 File FOIA</a>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+  } catch(err) {
+    console.error('Feed load error:', err);
+    feed.innerHTML = `
+      <div class="empty-state">
+        Evidence feed unavailable. Crawlers initializing.<br>
+        <small style="color:var(--text-muted)">Data will appear as monitoring begins.</small>
+      </div>`;
+    document.getElementById('last-crawl').textContent = 'Pending';
+  }
+}
+
+// ─── INIT ────────────────────────────────────
+renderTargets();
+loadEvidence();
+
+// Auto-refresh every 5 minutes
+setInterval(loadEvidence, 300000);
+</script>
+
+</body>
+</html>

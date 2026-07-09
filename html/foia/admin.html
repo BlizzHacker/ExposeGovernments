@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>FOIA Admin | Move Weight Foundation</title>
+  <link rel="stylesheet" href="/assets/exposemiami-theme.css">
+  <style>
+    body { background:#0a0a15; color:#e2e8f0; font-family:system-ui,sans-serif; }
+    .admin-page { width:min(1000px, calc(100% - 32px)); margin:0 auto; padding:2rem 0; }
+    .admin-header { border:2px solid rgba(245,158,11,0.4); border-radius:12px; background:linear-gradient(135deg, #1a0a0a, #0f172a); padding:1.5rem; margin:1rem 0; display:flex; justify-content:space-between; align-items:center; }
+    .admin-header h1 { color:#f59e0b; margin:0; font-size:1.5rem; }
+    .badge-pending { background:rgba(245,158,11,.15); color:#fbbf24; border:1px solid rgba(245,158,11,.3); padding:.3rem .8rem; border-radius:999px; font-size:.85rem; font-weight:700; }
+    .badge-live { background:rgba(34,197,94,.15); color:#4ade80; border:1px solid rgba(34,197,94,.3); padding:.3rem .8rem; border-radius:999px; font-size:.85rem; font-weight:700; }
+    .login-box { max-width:400px; margin:4rem auto; border:2px solid #334155; border-radius:12px; background:#1e293b; padding:2rem; text-align:center; }
+    .login-box h2 { color:#f59e0b; margin:0 0 1rem; }
+    .login-box input { width:100%; background:#0a0a1a; border:1px solid #334155; color:#e2e8f0; padding:.75rem; border-radius:8px; font-size:1rem; text-align:center; font-family:monospace; }
+    .login-box input:focus { border-color:#f59e0b; outline:none; }
+    .request-card { border:1px solid #334155; border-radius:10px; background:#1e293b; padding:1.25rem; margin:.75rem 0; }
+    .request-card.pending { border-left:3px solid #f59e0b; }
+    .request-card .header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:.75rem; }
+    .request-card .id { color:#f59e0b; font-family:monospace; font-size:.85rem; }
+    .request-card .agency { color:#94a3b8; font-size:.82rem; }
+    .request-card .desc { color:#cbd5e1; font-size:.95rem; line-height:1.5; margin:.5rem 0; }
+    .request-card .details { color:#64748b; font-size:.85rem; margin:.5rem 0; padding:.5rem; background:rgba(0,0,0,.2); border-radius:6px; }
+    .request-card .meta { color:#64748b; font-size:.8rem; }
+    .actions { display:flex; gap:.5rem; margin-top:.75rem; }
+    .btn { padding:.5rem 1.2rem; border-radius:6px; font-weight:700; font-size:.85rem; border:none; cursor:pointer; text-decoration:none; display:inline-block; }
+    .btn-approve { background:#059669; color:#fff; }
+    .btn-approve:hover { background:#10b981; }
+    .btn-reject { background:#991b1b; color:#fff; }
+    .btn-reject:hover { background:#b91c1c; }
+    .btn-outline { background:transparent; border:1px solid #334155; color:#94a3b8; }
+    .btn-outline:hover { border-color:#f59e0b; color:#f59e0b; }
+    .btn-blue { background:#2563eb; color:#fff; }
+    .btn-blue:hover { background:#3b82f6; }
+    .empty { text-align:center; padding:3rem; color:#64748b; }
+    .toast { position:fixed; top:1rem; right:1rem; padding:1rem 1.5rem; border-radius:8px; font-weight:700; z-index:999; animation:slideIn .3s ease; }
+    .toast-success { background:#059669; color:#fff; }
+    .toast-error { background:#991b1b; color:#fff; }
+    @keyframes slideIn { from { transform:translateX(100%); } to { transform:translateX(0); } }
+    .tabs { display:flex; gap:0; margin:1rem 0; }
+    .tab { padding:.5rem 1.5rem; border:1px solid #334155; background:#1e293b; color:#94a3b8; cursor:pointer; font-weight:600; font-size:.9rem; }
+    .tab:first-child { border-radius:8px 0 0 8px; }
+    .tab:last-child { border-radius:0 8px 8px 0; }
+    .tab.active { background:#f59e0b; color:#0f172a; border-color:#f59e0b; }
+    .reject-form { display:none; margin-top:.5rem; }
+    .reject-form textarea { width:100%; background:#0a0a1a; border:1px solid #334155; color:#e2e8f0; padding:.5rem; border-radius:6px; font-size:.85rem; resize:vertical; min-height:60px; }
+    .reject-form .btn { margin-top:.5rem; }
+    .divider { margin:1rem 0; color:#64748b; text-align:center; }
+  </style>
+</head>
+<body>
+<div class="admin-page" id="app">
+  <div id="login-screen">
+    <div class="login-box">
+      <h2>FOIA Admin</h2>
+      <p style="color:#94a3b8;margin-bottom:1rem">Move Weight Foundation</p>
+      <input type="password" id="admin-token" placeholder="Admin Token">
+      <button class="btn btn-approve" onclick="login()" style="margin-top:.5rem;width:100%">Access with Token</button>
+      <div class="divider">or</div>
+      <button class="btn btn-blue" onclick="loginWithAuthentik()" style="width:100%">Login with Authentik SSO</button>
+    </div>
+  </div>
+  <div id="dashboard" style="display:none">
+    <div class="admin-header">
+      <div>
+        <h1>FOIA Approval Dashboard</h1>
+        <p style="color:#94a3b8;margin:.25rem 0 0;font-size:.9rem">Move Weight Foundation</p>
+      </div>
+      <div style="text-align:right">
+        <span class="badge-pending" id="pending-count">0 pending</span>
+        <button class="btn btn-outline" onclick="logout()" style="margin-left:1rem;font-size:.8rem">Logout</button>
+      </div>
+    </div>
+    <div class="tabs">
+      <div class="tab active" id="tab-pending" onclick="showTab('pending')">Pending Review</div>
+      <div class="tab" id="tab-all" onclick="showTab('all')">All Requests</div>
+    </div>
+    <div id="pending-list"></div>
+    <div id="all-list" style="display:none"></div>
+  </div>
+</div>
+<script>
+var API = '/api/foia/admin';
+var TOKEN = '';
+var AUTHENTIK = 'https://authentik.moveweight.com';
+var CLIENT_ID = 'foia-admin';
+var REDIRECT_URI = window.location.origin + '/foia/admin';
+
+function login() {
+  TOKEN = document.getElementById('admin-token').value.trim();
+  if (!TOKEN) return;
+  fetch(API + '/pending', { headers: { 'Authorization': 'Bearer ' + TOKEN } })
+    .then(function(r) { if (!r.ok) throw new Error('Invalid'); return r.json(); })
+    .then(function(d) { showDashboard(); })
+    .catch(function() { toast('Invalid token', 'error'); });
+}
+
+async function loginWithAuthentik() {
+  var params = new URLSearchParams(window.location.search);
+  var code = params.get('code');
+  if (code) {
+    try {
+      var r = await fetch(AUTHENTIK + '/application/o/token/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({
+          client_id: CLIENT_ID, grant_type: 'authorization_code',
+          code: code, redirect_uri: REDIRECT_URI
+        })
+      });
+      var d = await r.json();
+      if (d.access_token || d.id_token) {
+        TOKEN = d.access_token || d.id_token;
+        window.history.replaceState({}, '', REDIRECT_URI);
+        showDashboard();
+      }
+    } catch(e) { toast('SSO login failed', 'error'); }
+  } else {
+    window.location.href = AUTHENTIK + '/application/o/authorize/?' +
+      'client_id=' + CLIENT_ID + '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) +
+      '&response_type=code&scope=openid+profile+email';
+  }
+}
+
+function showDashboard() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  loadPending();
+}
+
+function logout() {
+  TOKEN = '';
+  document.getElementById('login-screen').style.display = 'block';
+  document.getElementById('dashboard').style.display = 'none';
+}
+
+function showTab(tab) {
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('pending-list').style.display = tab === 'pending' ? 'block' : 'none';
+  document.getElementById('all-list').style.display = tab === 'all' ? 'block' : 'none';
+  if (tab === 'pending') loadPending();
+  if (tab === 'all') loadAll();
+}
+
+function loadPending() {
+  fetch(API + '/pending', { headers: { 'Authorization': 'Bearer ' + TOKEN } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      document.getElementById('pending-count').textContent = d.count + ' pending';
+      var list = document.getElementById('pending-list');
+      if (!d.pending || d.pending.length === 0) {
+        list.innerHTML = '<div class="empty">No pending requests.</div>';
+        return;
+      }
+      list.innerHTML = d.pending.map(function(r) {
+        var rid = escapeHtml(r.id).substring(0,14);
+        var agency = escapeHtml((r.agency || 'city_clerk').replace(/_/g,' '));
+        var desc = escapeHtml(r.description);
+        var details = r.details ? '<div class="details">' + escapeHtml(r.details) + '</div>' : '';
+        var date = formatDate(r.created_at);
+        return '<div class="request-card pending">' +
+          '<div class="header"><span class="id">#' + rid + '</span><span class="agency">' + agency + '</span></div>' +
+          '<div class="desc">' + desc + '</div>' + details +
+          '<div class="meta">Submitted: ' + date + '</div>' +
+          '<div class="actions">' +
+            '<button class="btn btn-approve" data-action="approve" data-id="' + r.id + '">Approve & Send</button>' +
+            '<button class="btn btn-reject" data-action="showReject" data-id="' + r.id + '">Reject</button>' +
+          '</div>' +
+          '<div class="reject-form" id="reject-' + r.id + '">' +
+            '<textarea id="reason-' + r.id + '" placeholder="Reason for rejection..."></textarea>' +
+            '<button class="btn btn-reject" data-action="reject" data-id="' + r.id + '">Confirm Reject</button>' +
+            '<button class="btn btn-outline" data-action="hideReject" data-id="' + r.id + '">Cancel</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+      // Attach event listeners (avoid inline onclick quote hell)
+      document.querySelectorAll('[data-action=approve]').forEach(function(el) {
+        el.onclick = function() { approve(this.dataset.id); };
+      });
+      document.querySelectorAll('[data-action=showReject]').forEach(function(el) {
+        el.onclick = function() { showReject(this.dataset.id); };
+      });
+      document.querySelectorAll('[data-action=reject]').forEach(function(el) {
+        el.onclick = function() { reject(this.dataset.id); };
+      });
+      document.querySelectorAll('[data-action=hideReject]').forEach(function(el) {
+        el.onclick = function() { hideReject(this.dataset.id); };
+      });
+    });
+}
+
+function loadAll() {
+  fetch(API + '/all', { headers: { 'Authorization': 'Bearer ' + TOKEN } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var list = document.getElementById('all-list');
+      if (!d.requests || d.requests.length === 0) {
+        list.innerHTML = '<div class="empty">No requests yet.</div>';
+        return;
+      }
+      list.innerHTML = d.requests.reverse().map(function(r) {
+        var sc = r.status === 'sent' ? 'badge-live' : 'badge-pending';
+        return '<div class="request-card">' +
+          '<div class="header"><span class="id">#' + escapeHtml(r.id).substring(0,14) + '</span>' +
+          '<span class="badge-pending" style="background:' + (r.status==='sent'?'rgba(34,197,94,.15)':'rgba(245,158,11,.15)') + ';color:' + (r.status==='sent'?'#4ade80':'#fbbf24') + '">' + escapeHtml(r.status.replace(/_/g,' ')) + '</span></div>' +
+          '<div class="desc">' + escapeHtml(r.description) + '</div>' +
+          '<div class="meta">' + formatDate(r.created_at) + ' | ' + escapeHtml(r.recipient_name || '') + '</div>' +
+          (r.updates && r.updates.length > 0 ? '<div class="meta" style="margin-top:.25rem">Last: ' + escapeHtml(r.updates[r.updates.length-1].note) + '</div>' : '') +
+        '</div>';
+      }).join('');
+    });
+}
+
+function approve(id) {
+  if (!confirm('Send this FOIA to the city? This will email immediately.')) return;
+  fetch(API + '/approve/' + id, { method: 'POST', headers: { 'Authorization': 'Bearer ' + TOKEN } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.ok) { toast('Approved and sent!', 'success'); loadPending(); loadAll(); }
+      else toast(d.error, 'error');
+    });
+}
+
+function showReject(id) { document.getElementById('reject-' + id).style.display = 'block'; }
+function hideReject(id) { document.getElementById('reject-' + id).style.display = 'none'; }
+
+function reject(id) {
+  var reason = document.getElementById('reason-' + id).value.trim() || 'Does not meet submission guidelines.';
+  fetch(API + '/reject/' + id, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN },
+    body: JSON.stringify({ reason: reason })
+  }).then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.ok) { toast('Rejected', 'success'); loadPending(); loadAll(); }
+      else toast(d.error, 'error');
+    });
+}
+
+function toast(msg, type) {
+  var t = document.createElement('div');
+  t.className = 'toast toast-' + type;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function() { t.remove(); }, 3000);
+}
+
+function escapeHtml(s) { var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function formatDate(d) { try { return new Date(d).toLocaleString(); } catch(e) { return d; } }
+
+// Auto-handle callback from Authentik
+if (new URLSearchParams(window.location.search).get('code')) {
+  loginWithAuthentik();
+}
+</script>
+</body>
+</html>
