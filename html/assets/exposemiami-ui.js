@@ -74,6 +74,8 @@
   function buildHeader() {
     if (document.querySelector(".mw-unified-shell")) {
       const existing = document.querySelector(".mw-unified-shell");
+      const tagline = existing.querySelector(".logo p");
+      if (tagline) tagline.textContent = "Public Records & Civic Tools";
       const drawer = existing.querySelector("#mw-drawer");
       const desktop = existing.querySelector(".dnav-inner");
       if (drawer) fillLinks(drawer);
