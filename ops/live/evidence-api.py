@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Serve evidence files only to authenticated admins."""
 import hmac
+import json
 import mimetypes
 import os
 from flask import Flask, request, send_file, jsonify, abort, after_this_request
@@ -11,6 +12,7 @@ app = Flask(__name__)
 CORS(app)
 
 EVIDENCE_DIR = Path("/opt/evidence-private")
+MAYOR_WATCH_FEED = Path("/opt/facebook-scrape/mayor-watch-feed.json")
 ADMIN_TOKEN_PATH = Path("/root/.exposemiami_admin_token")
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
 
@@ -125,6 +127,18 @@ def stats():
     sc = len(safe_files("screenshots"))
     ph = len(safe_files("photos"))
     return jsonify({"screenshots": sc, "photos": ph, "total": sc + ph})
+
+@app.route("/api/evidence/mayor-watch-feed", methods=["GET"])
+def mayor_watch_feed():
+    auth_error = require_auth()
+    if auth_error:
+        return auth_error
+    if not MAYOR_WATCH_FEED.exists():
+        return jsonify({"generated": None, "stats": {}, "evidence": []})
+    try:
+        return jsonify(json.loads(MAYOR_WATCH_FEED.read_text(encoding="utf-8")))
+    except Exception:
+        return jsonify({"error": "Feed unavailable"}), 500
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5070, debug=False)

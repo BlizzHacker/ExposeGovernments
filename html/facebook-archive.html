@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facebook Archive Review - ExposeMiamiOK</title>
+<meta name="description" content="Moderated status page for Facebook-connected public-source captures.">
+<style>
+:root{--bg:#0b1118;--panel:#131d2b;--line:#27364c;--text:#f5f7fb;--muted:#9fb0c6;--brand:#e95420;--gold:#f6a21a;--green:#41b883;--blue:#62a8ff;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#0b1118;color:var(--text);line-height:1.55}a{color:inherit}.wrap{width:min(1060px,calc(100% - 32px));margin:auto}.top{border-bottom:1px solid var(--line);background:#0e1520}.top-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 0}.brand{text-decoration:none;font-weight:900;font-size:24px}.brand span{display:block;color:var(--muted);font-size:13px;font-weight:500}.nav{display:flex;gap:10px;flex-wrap:wrap}.nav a,.btn{border:1px solid var(--line);border-radius:8px;padding:10px 13px;text-decoration:none;background:#111a27;font-weight:800;font-size:13px}.btn.primary{background:var(--brand);border-color:var(--brand)}.hero{padding:62px 0 24px}.panel{background:linear-gradient(180deg,#182437,#121b29);border:1px solid var(--line);border-radius:12px}.hero-card{padding:34px}.eyebrow{color:var(--gold);font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.hero h1{font-size:clamp(38px,6vw,64px);line-height:1;margin:12px 0 14px}.lead{color:#d9e3f0;font-size:18px;max-width:760px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0}.stat{padding:22px}.stat strong{display:block;font-size:36px;color:var(--blue);font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.stat span{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}.section{padding:18px 0}.section h2{margin:0 0 12px;font-size:28px}.body{padding:22px}.body p{color:var(--muted);margin:0 0 12px}.list{display:grid;gap:10px;margin-top:16px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(255,255,255,.08);border-radius:9px;padding:14px;background:rgba(255,255,255,.035)}.row small{color:var(--muted)}.badge{border:1px solid rgba(246,162,26,.35);background:rgba(246,162,26,.1);color:var(--gold);border-radius:999px;padding:5px 9px;font-size:12px;font-weight:900}.footer{border-top:1px solid var(--line);margin-top:34px;padding:24px 0;color:var(--muted);font-size:13px}@media(max-width:760px){.top-inner{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:1fr}.row{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-inner">
+    <a class="brand" href="/">ExposeMiamiOK<span>Public Records & Civic Tools</span></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/">Home</a>
+      <a href="/mayor-watch">Monitor</a>
+      <a href="/foia/">FOIA</a>
+      <a href="/admin.html">Admin</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="panel hero-card">
+      <div class="eyebrow">Moderated archive</div>
+      <h1>Facebook Archive Review</h1>
+      <p class="lead">This page replaces the dead archive link. Legacy Facebook captures and current Promote4.me/Facebook leads are retained for staff review, but raw names, screenshots, and personal claims are no longer indexed publicly without moderation.</p>
+      <p><a class="btn primary" href="/mayor-watch">Open public monitor</a> <a class="btn" href="/admin.html">Staff dashboard</a></p>
+    </div>
+  </section>
+
+  <section class="grid" aria-live="polite">
+    <div class="panel stat"><strong id="posts">--</strong><span>Monitored posts</span></div>
+    <div class="panel stat"><strong id="pending">--</strong><span>Pending review</span></div>
+    <div class="panel stat"><strong id="published">0</strong><span>Published allegations</span></div>
+  </section>
+
+  <section class="section">
+    <h2>What Happened To The Old Posts?</h2>
+    <div class="panel body">
+      <p>Older Facebook post pages may still exist as internal capture records, but the public archive now points here so visitors see the moderation policy first.</p>
+      <p>For public use, ExposeMiamiOK should publish records, official links, meeting clips, and reviewed summaries. For staff use, the admin dashboard can still review the raw queue and decide whether a lead deserves a FOIA request or public record note.</p>
+      <div class="list" id="queue"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"><div class="wrap">Raw social-media captures are not public evidence until reviewed. Use FOIA and official-source links for claims that need proof.</div></footer>
+
+<script>
+function fmtDate(value) {
+  if (!value) return 'Not available';
+  try { return new Date(value).toLocaleString(); } catch(e) { return value; }
+}
+async function loadArchive() {
+  try {
+    const r = await fetch('/api/mayor-watch/mayor-watch-feed.json', {cache: 'no-store'});
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const d = await r.json();
+    document.getElementById('posts').textContent = d.stats?.monitored_posts ?? 0;
+    document.getElementById('pending').textContent = d.stats?.items_pending_review ?? 0;
+    document.getElementById('published').textContent = d.stats?.published_allegations ?? 0;
+    const items = d.review_queue || [];
+    document.getElementById('queue').innerHTML = items.length ? items.map(item =>
+      '<div class="row"><div><strong>' + item.label + '</strong><br><small>Captured: ' + fmtDate(item.captured) + '</small></div><span class="badge">staff review</span></div>'
+    ).join('') : '<p>No public-source items are waiting for review right now.</p>';
+  } catch(e) {
+    document.getElementById('queue').innerHTML = '<p>Archive status is temporarily unavailable.</p>';
+  }
+}
+loadArchive();
+</script>
+</body>
+</html>
