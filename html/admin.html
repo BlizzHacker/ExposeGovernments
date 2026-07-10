@@ -180,6 +180,22 @@ function escapeHtml(value) {
   }[ch]));
 }
 
+function cleanFeedText(value) {
+  return String(value ?? '')
+    .replace(/\u00a0/g, ' ')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/(Public)(?=[A-Z])/g, 'Public ')
+    .replace(/(account)(\d+h)/ig, '$1 - $2')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function reviewHeading(item, index) {
+  const source = cleanFeedText(item.author || 'Unknown source');
+  const type = cleanFeedText(item.type || 'public source').replace(/_/g, ' ');
+  return '#' + (index + 1) + ': ' + source + ' - ' + type;
+}
+
 async function checkAuth() {
   const params = new URLSearchParams(window.location.search);
   const code = params.get('code');
@@ -428,10 +444,11 @@ async function loadEvidence() {
       evidence.forEach((e, i) => {
         const badge = e.type === 'corruption_allegation' ? 'badge-red' : 
                       e.type === 'personal_conduct' ? 'badge-orange' : 'badge-blue';
+        const description = cleanFeedText(e.description || '');
         html += `
         <div class="panel">
           <div class="panel-header">
-            <h3>#${i+1}: ${escapeHtml((e.title || 'Untitled capture').substring(0, 100))}</h3>
+            <h3>${escapeHtml(reviewHeading(e, i))}</h3>
             <span class="badge ${badge}">${escapeHtml(e.type || 'mention')}</span>
           </div>
           <div class="panel-body">
@@ -439,7 +456,7 @@ async function loadEvidence() {
               <span class="badge badge-orange">Moderator Review Required</span>
               <span class="badge badge-blue">Do Not Publish Raw</span>
             </div>
-            <p style="font-size:13px;margin-bottom:8px;white-space:pre-wrap">${escapeHtml(e.description || '')}</p>
+            <p style="font-size:13px;margin-bottom:8px;white-space:pre-wrap">${escapeHtml(description)}</p>
             <div class="feed-item">
               <div class="meta">
                 <span>Author: ${escapeHtml(e.author || 'Unknown')}</span>
