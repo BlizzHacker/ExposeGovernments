@@ -363,6 +363,16 @@ footer {{ text-align: center; padding: 20px; color: #666; font-size: 0.85em; }}
 </style>
 </head>
 <body>
+<div class="chapterbar" data-mw-chapterbar>
+  <div class="chapterbar-in">
+    <span class="cb-label">A chapter of the <a href="https://foundation.moveweight.com">Move Weight Foundation</a></span>
+    <nav class="cb-links" aria-label="Foundation chapters">
+      <a href="https://exposemiamiok.com" class="cur" aria-current="true">Miami, OK</a>
+      <a href="https://exposesanangelo.com">San Angelo, TX</a>
+      <a href="https://exposemississippi.com">Southaven, MS</a>
+    </nav>
+  </div>
+</div>
 <a href="/meetings/" class="back">← Back to All Meetings</a>
 <header>
 <h1>{htmlmod.escape(name)}</h1>
