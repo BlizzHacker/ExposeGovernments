@@ -1,0 +1,135 @@
+<!--meta
+out: tips.html
+title: Send an anonymous tip
+description: A confidential tip line for anyone with information about local government in {{city}}, {{state}}. We do not log IP addresses and we do not publish who sent us anything.
+-->
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Confidential</span>
+    <h1>Send a tip</h1>
+    <p class="lede">
+      If you work for the City, the County, the State, a contractor, or on the site itself and
+      something is not right &mdash; this is the place. You do not have to give us your name, and we
+      will not ask for it.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="grid2">
+      <div>
+        <form class="form-card" id="tip-form" novalidate>
+          <div class="field">
+            <label for="tip-subject">Subject <span class="req">*</span></label>
+            <input type="text" id="tip-subject" name="subject" required maxlength="140"
+                   placeholder="A few words on what this is about">
+          </div>
+          <div class="field">
+            <label for="tip-body">What do you want us to know? <span class="req">*</span></label>
+            <textarea id="tip-body" name="message" required style="min-height:220px"
+                      placeholder="Dates, document names, meeting numbers, account numbers and job titles are far more useful than adjectives. If a record exists, tell us what it is called and who holds it — we can request it without ever saying where the idea came from."></textarea>
+          </div>
+          <div class="field">
+            <label for="tip-contact">A way to reach you <em>(optional)</em></label>
+            <input type="text" id="tip-contact" name="contact"
+                   placeholder="Email, Signal number, or leave blank">
+            <div class="hint">
+              Leave it blank and we have no way to identify you. If you want us to be able to ask a
+              follow-up question, consider a fresh email address created for this purpose only.
+            </div>
+          </div>
+          <button class="btn btn-red btn-lg" type="submit">Send securely</button>
+          <div class="formmsg" id="tip-msg" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+
+      <div>
+        <h2>What happens to what you send</h2>
+        <div class="callout">
+          <span class="co-label">What we log</span>
+          <p class="mb0">
+            The text you type, and nothing else. <strong>We do not store your IP address</strong>
+            with a tip, we do not set tracking cookies, and there is no third-party analytics script
+            on this site &mdash; you can check that by viewing the page source.
+          </p>
+        </div>
+        <div class="callout">
+          <span class="co-label">Where it goes</span>
+          <p class="mb0">
+            Straight to <span class="mono">foia@moveweight.com</span>, read by the Foundation. It is
+            not forwarded to the City, the County, the State, or any company mentioned on this site.
+          </p>
+        </div>
+        <div class="callout gold">
+          <span class="co-label">How we use it</span>
+          <p class="mb0">
+            Usually as a <em>pointer</em>, not as a publication. If you tell us a document exists,
+            the best thing we can do is file a public records request for it and publish the copy
+            the government hands over &mdash; which protects you completely, because the record then
+            comes from them, not from you.
+          </p>
+        </div>
+        <div class="callout red">
+          <span class="co-label">Please read this</span>
+          <p>
+            <strong>Do not send anything from a work computer, a work phone, or a work network.</strong>
+            Employers can and do log those. Use a personal device on your home or mobile connection.
+          </p>
+          <p class="mb0">
+            We are not lawyers and this is not legal advice. {{state}} and federal whistleblower
+            protections exist but they are narrow and fact-specific. If you are considering
+            disclosing something that could put your job at risk, talking to an employment lawyer
+            first is worth it.
+          </p>
+        </div>
+        <div class="callout">
+          <span class="co-label">Prefer paper?</span>
+          <p class="mb0">
+            Move Weight Foundation, 1028 I St NW, Miami, OK 74354. A letter with no return address
+            is still the most private channel that exists.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--CHAPTER_ASKS-->
+
+<script>
+(function () {
+  var f = document.getElementById('tip-form');
+  var m = document.getElementById('tip-msg');
+  if (!f) return;
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = f.querySelector('button[type=submit]');
+    btn.disabled = true;
+    m.className = 'formmsg show';
+    m.textContent = 'Sending…';
+    fetch('/api/tip', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        subject: f.subject.value,
+        message: f.message.value,
+        contact: f.contact.value
+      })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (d.ok) {
+        m.className = 'formmsg show ok';
+        m.textContent = 'Received. Thank you — we read every one of these.';
+        f.reset();
+      } else {
+        m.className = 'formmsg show err';
+        m.textContent = d.error || 'That did not go through. Please try again.';
+      }
+    }).catch(function () {
+      m.className = 'formmsg show err';
+      m.textContent = 'Could not reach the server. If it keeps failing, use the postal address.';
+    }).finally(function () { btn.disabled = false; });
+  });
+})();
+</script>

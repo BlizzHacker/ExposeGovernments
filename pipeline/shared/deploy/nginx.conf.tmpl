@@ -1,0 +1,53 @@
+server {
+    listen 80 default_server;
+    server_name {{hosts_nginx}};
+
+    root {{infra.web_root}};
+    index index.html;
+
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()" always;
+
+    client_max_body_size 4m;
+
+    # Public records API
+    location /api/pra/ {
+        proxy_pass http://127.0.0.1:{{infra.records_port}}/api/pra/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
+        proxy_read_timeout 60s;
+    }
+
+    # Signup + anonymous tips
+    location = /api/signup { proxy_pass http://127.0.0.1:{{infra.signup_port}}/api/signup; include /etc/nginx/snippets/mw-proxy.conf; }
+    location = /api/tip    { proxy_pass http://127.0.0.1:{{infra.signup_port}}/api/tip;    include /etc/nginx/snippets/mw-proxy.conf; }
+
+    # Documents are the point of the site — serve them, don't cache-bust them
+    location /documents/files/   { expires 30d; add_header Cache-Control "public"; }
+    location /documents/letters/ { expires 30d; add_header Cache-Control "public"; }
+
+    # The search page fetches this; keep the rest of /data/ closed. An exact
+    # location beats the prefix block, so order does not matter here — but the
+    # prefix block MUST exist or a chapter leaks its working data directory.
+    location = /data/site-search-index.json {
+        expires 1h;
+        add_header Cache-Control "public";
+    }
+    location /data/ { return 404; }
+
+    location ~* \.(?:css|js|svg|png|jpg|webp|ico)$ {
+        expires 7d;
+        add_header Cache-Control "public";
+    }
+
+    location / {
+        try_files $uri $uri/ $uri.html =404;
+    }
+
+    error_page 404 /404.html;
+}
