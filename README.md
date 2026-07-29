@@ -37,25 +37,35 @@ which is generated from the chapters themselves and cannot drift from them.
 
 ## What is in this repository
 
-This repository is the **Miami, Oklahoma** chapter — the first one, and the only
-one whose site is hand-maintained rather than generated from the shared
-template. The other thirteen are built by a separate generator and are not here.
+The published site of every chapter.
 
 ```
-html/     the published site: meetings, agenda packets, transcripts, FOIA archive
-mirror/   a dated copy of the City's own pages, kept because a city can retire a
-          page and the public loses it — each carries a banner naming it a copy
-          and linking the live original
-data/     the indexes the site is built from
-ops/      operational scripts
+html/        Miami, Oklahoma — the first chapter, and the only one whose site is
+             hand-maintained rather than generated from the shared template
+mirror/      a dated copy of the City of Miami's own pages, kept because a city
+             can retire a page and the public loses it — each carries a banner
+             naming it a copy and linking the live original
+data/, ops/  Miami's indexes and operational scripts
+chapters/    the other thirteen, one directory per city, synced from the
+             containers that serve them
+
 rebuild_meetings_page.py, rebuild_all.py
-          rebuild the meeting archive and the per-meeting pages
+             rebuild Miami's meeting archive and its per-meeting pages
 ```
 
-Commits titled "Rebuild meetings index" are automated. The archive refreshes on
-a timer and the site publishes its own staleness at
-[/automation-status.html](https://miami.exposeoklahoma.com/automation-status.html)
-— including the jobs that failed.
+Miami sits at the root rather than under `chapters/` for a blunt reason: this
+repository's root **is** its live webroot, and `html/` is the directory nginx
+serves. Moving it for the sake of a tidier tree would move the files being
+served. The asymmetry is honest about how the thing is actually deployed.
+
+**Media is excluded** — no mp4, wav, mp3 or pdf. Miami's webroot alone is 84 GB,
+almost all of it meeting video; what belongs in version control is the published
+record, not the raw footage. Transcripts of that video are here.
+
+Commits titled "Rebuild meetings index" are automated. Archives refresh on
+timers and each site publishes its own staleness — Miami's is at
+[/automation-status.html](https://miami.exposeoklahoma.com/automation-status.html),
+including the jobs that failed.
 
 ## How we handle the records
 
