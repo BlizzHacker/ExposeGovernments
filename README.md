@@ -1,7 +1,7 @@
 # ExposeGovernments
 
-A project of the [Move Weight Foundation](https://foundation.moveweight.com), a
-501(c)(3).
+A project of the [Move Weight Foundation](https://foundation.moveweight.com), an
+Oklahoma non-profit corporation with 501(c)(3) status pending.
 
 Fourteen city chapters across Oklahoma, Texas and Mississippi. Each one indexes
 what its local government actually did — the meeting, the agenda packet, the
