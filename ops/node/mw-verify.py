@@ -62,6 +62,10 @@ SCHEDULES = [
     ("170", "timer", "mw-standardize.timer"),
     ("170", "timer", "miami-refresh.timer"),
     ("170", "cron", "exposemiamiok-automation"),
+    # Publishes chapters and source to GitHub. If this stops, the repo silently
+    # rots back into "Miami only, no code" without anything else noticing.
+    ("node", "timer", "mw-sync-chapters.timer"),
+    ("node", "timer", "mw-verify.timer"),
 ]
 
 failures = []
@@ -87,8 +91,15 @@ def pct(ct, script):
 
 
 def pct_sh(ct, cmd, timeout=600):
-    r = subprocess.run(["pct", "exec", ct, "--", "bash", "-lc", cmd],
-                       capture_output=True, text=True, timeout=timeout)
+    """Run a shell command in a container, or on the node itself for "node".
+
+    Some of what has to be checked - the publish timer, the estate-wide sync -
+    lives on the node, because only the node has `pct` and can reach every
+    container.
+    """
+    argv = (["bash", "-lc", cmd] if ct == "node"
+            else ["pct", "exec", ct, "--", "bash", "-lc", cmd])
+    r = subprocess.run(argv, capture_output=True, text=True, timeout=timeout)
     return r.returncode, r.stdout, r.stderr
 
 
