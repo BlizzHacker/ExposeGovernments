@@ -60,6 +60,17 @@ never starts collection work.
   `b64e2b5c26f01cf5fb1c363db353bb10b2f9984a`.
 - Live browser checks found the Miami homepage and private dashboard login
   rendered and reachable over HTTPS.
+- The repaired weekly run completed eleven maintained chapter pipelines and
+  their deployments with zero failed steps. Its internal-link crawl checked
+  299 links across eighteen hosts and found zero broken links.
+- Miami's video generator now skips and reports malformed upload markers rather
+  than aborting the full hourly run. The verification run rebuilt 528 video
+  records and finished with zero failed jobs.
+- San Angelo's nginx policy now exposes only the public automation-status JSON
+  alongside the search index while keeping the rest of `/data/` closed.
+- The final collector pass reported fourteen of fourteen chapter homepages
+  healthy and fourteen of fourteen automation reports available with no active
+  issue.
 
 ## Queue review
 
