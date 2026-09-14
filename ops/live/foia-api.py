@@ -20,11 +20,20 @@ import hmac
 import json
 import os
 import secrets
+import sqlite3
 import smtplib
 import subprocess
+import threading
 import time
 from datetime import datetime, timezone
 from email.mime.text import MIMEText
+
+# PDF generation for official ORR form (city no longer accepts email FOIAs)
+import sys as _sys
+_sys.path.insert(0, "/opt")
+from importlib import import_module as _import_module
+_or_gen = _import_module("orr-pdf-generator")
+generate_orr_pdf = _or_gen.generate_orr_pdf
 from pathlib import Path
 from urllib.parse import urlencode
 
@@ -69,11 +78,35 @@ def check_rate_limit(ip):
     return True
 
 
-DATA_DIR = Path("/var/www/exposemiamiok/data/foia")
+DATA_DIR = Path(os.environ.get("EXPOSE_DATA_DIR", "/var/www/exposemiamiok/data/foia"))
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 DB_PATH = DATA_DIR / "requests.json"
 PLEDGES_PATH = DATA_DIR / "pledges.json"
-ADMIN_TOKEN_PATH = Path("/root/.exposemiami_admin_token")
+ADMIN_TOKEN_PATH = Path(os.environ.get("EXPOSE_ADMIN_TOKEN_PATH", "/root/.exposemiami_admin_token"))
+TRIAGE_DB_PATH = DATA_DIR / "admin-triage.sqlite3"
+NETWORK_SNAPSHOT_PATH = DATA_DIR / "network-status.json"
+INVESTIGATION_DIR = Path(
+    os.environ.get("EXPOSE_INVESTIGATION_DIR", "/var/www/exposemiamiok/data/investigations")
+)
+DB_WRITE_LOCK = threading.Lock()
+
+CHAPTERS = (
+    ("miamiok", "Miami, OK", "miami.exposeoklahoma.com"),
+    ("okc", "Oklahoma City, OK", "okc.exposeoklahoma.com"),
+    ("tulsa", "Tulsa, OK", "tulsa.exposeoklahoma.com"),
+    ("claremore", "Claremore, OK", "claremore.exposeoklahoma.com"),
+    ("sanangelo", "San Angelo, TX", "sanangelo.exposetexas.org"),
+    ("houston", "Houston, TX", "houston.exposetexas.org"),
+    ("dallas", "Dallas, TX", "dallas.exposetexas.org"),
+    ("austin", "Austin, TX", "austin.exposetexas.org"),
+    ("sanantonio", "San Antonio, TX", "sanantonio.exposetexas.org"),
+    ("lubbock", "Lubbock, TX", "lubbock.exposetexas.org"),
+    ("abilene", "Abilene, TX", "abilene.exposetexas.org"),
+    ("mississippi", "Southaven, MS", "southaven.exposemississippi.com"),
+    ("jackson", "Jackson, MS", "jackson.exposemississippi.com"),
+    ("olivebranch", "Olive Branch, MS", "olivebranch.exposemississippi.com"),
+)
+REVIEW_STATUSES = {"new", "in_review", "needs_records", "ready", "closed"}
 
 # ─── City of Miami Records Contacts ────────────────────────────────────
 CITY_CONTACTS = {
@@ -184,8 +217,12 @@ def load_db():
 
 
 def save_db(db):
-    with open(DB_PATH, "w") as f:
+    temporary = DB_PATH.with_suffix(".json.tmp")
+    with open(temporary, "w", encoding="utf-8") as f:
         json.dump(db, f, indent=2, default=str)
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(temporary, DB_PATH)
 
 
 def load_pledges():
@@ -196,8 +233,71 @@ def load_pledges():
 
 
 def save_pledges(data):
-    with open(PLEDGES_PATH, "w") as f:
+    temporary = PLEDGES_PATH.with_suffix(".json.tmp")
+    with open(temporary, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, default=str)
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(temporary, PLEDGES_PATH)
+
+
+def triage_connection():
+    connection = sqlite3.connect(TRIAGE_DB_PATH, timeout=2)
+    connection.row_factory = sqlite3.Row
+    connection.execute("PRAGMA busy_timeout = 2000")
+    connection.execute("PRAGMA journal_mode = WAL")
+    connection.execute(
+        """
+        CREATE TABLE IF NOT EXISTS reviews (
+            item_id TEXT PRIMARY KEY,
+            status TEXT NOT NULL,
+            notes TEXT NOT NULL DEFAULT '',
+            version INTEGER NOT NULL DEFAULT 1,
+            updated_at TEXT NOT NULL
+        )
+        """
+    )
+    for path in (TRIAGE_DB_PATH, Path(str(TRIAGE_DB_PATH) + "-wal"), Path(str(TRIAGE_DB_PATH) + "-shm")):
+        try:
+            path.chmod(0o600)
+        except OSError:
+            pass
+    return connection
+
+
+def load_reviews(item_ids):
+    if not item_ids:
+        return {}
+    placeholders = ",".join("?" for _ in item_ids)
+    with triage_connection() as connection:
+        rows = connection.execute(
+            "SELECT item_id, status, notes, version, updated_at FROM reviews "
+            "WHERE item_id IN ({})".format(placeholders),
+            item_ids,
+        ).fetchall()
+    return {
+        row["item_id"]: {
+            "status": row["status"],
+            "notes": row["notes"],
+            "version": row["version"],
+            "updated_at": row["updated_at"],
+        }
+        for row in rows
+    }
+
+
+def default_review():
+    return {"status": "new", "notes": "", "version": 0, "updated_at": None}
+
+
+def load_network_snapshot():
+    try:
+        data = json.loads(NETWORK_SNAPSHOT_PATH.read_text(encoding="utf-8"))
+        if isinstance(data, dict):
+            return data
+    except (OSError, ValueError):
+        pass
+    return {"generated_at": None, "chapters": [], "errors": ["No collector snapshot available."]}
 
 
 def generate_id():
@@ -311,10 +411,11 @@ def submit_foia():
     })
 
     # Save
-    db = load_db()
-    db["requests"].append(request_data)
-    db["last_id"] = len(db["requests"])
-    save_db(db)
+    with DB_WRITE_LOCK:
+        db = load_db()
+        db["requests"].append(request_data)
+        db["last_id"] = len(db["requests"])
+        save_db(db)
 
     # Also send a confirmation to the foundation
     confirm_body = """
@@ -377,27 +478,32 @@ def pledge_bounty(req_id):
     if amount <= 0:
         return jsonify({"ok": False, "error": "Amount must be positive"}), 400
 
-    db = load_db()
-    for r in db.get("requests", []):
-        if r["id"] == req_id:
-            r["bounty_total"] = r.get("bounty_total", 0) + amount
-            r["bounty_count"] = r.get("bounty_count", 0) + 1
+    with DB_WRITE_LOCK:
+        db = load_db()
+        for record in db.get("requests", []):
+            if record["id"] != req_id:
+                continue
+            record["bounty_total"] = record.get("bounty_total", 0) + amount
+            record["bounty_count"] = record.get("bounty_count", 0) + 1
             save_db(db)
 
-            # Save pledge
             pledges = load_pledges()
-            pledges["pledges"].append({
-                "request_id": req_id,
-                "amount": amount,
-                "date": datetime.now(timezone.utc).isoformat(),
-            })
+            pledges["pledges"].append(
+                {
+                    "request_id": req_id,
+                    "amount": amount,
+                    "date": datetime.now(timezone.utc).isoformat(),
+                }
+            )
             save_pledges(pledges)
 
-            return jsonify({
-                "ok": True,
-                "message": "Pledge of ${:.2f} recorded. Thank you for supporting transparency!".format(amount),
-                "bounty_total": r["bounty_total"],
-            })
+            return jsonify(
+                {
+                    "ok": True,
+                    "message": "Pledge of ${:.2f} recorded. Thank you for supporting transparency!".format(amount),
+                    "bounty_total": record["bounty_total"],
+                }
+            )
 
     return jsonify({"ok": False, "error": "Request not found"}), 404
 
@@ -406,7 +512,11 @@ def pledge_bounty(req_id):
 def get_stats():
     db = load_db()
     total = len(db.get("requests", []))
-    submitted = sum(1 for r in db.get("requests", []) if r["status"] in ("submitted", "sent", "queued"))
+    submitted = sum(
+        1
+        for r in db.get("requests", [])
+        if r["status"] in ("submitted", "sent", "queued", "prepared_for_delivery")
+    )
     fulfilled = sum(1 for r in db.get("requests", []) if r["status"] == "fulfilled")
     denied = sum(1 for r in db.get("requests", []) if r["status"] == "denied")
     total_bounties = sum(r.get("bounty_total", 0) for r in db.get("requests", []))
@@ -429,7 +539,6 @@ def health():
 
 
 # ─── Admin Endpoints ────────────────────────────────────────────────────
-AUTHENTIK_ISSUER = "https://authentik.moveweight.com/application/o/foia-admin/"
 
 def read_admin_token():
     """Read the manual admin token from env or a root-only file."""
@@ -443,30 +552,19 @@ def read_admin_token():
         pass
     return ""
 
-def send_backup(subject, body): pass
 def check_admin():
+    """Require the server-issued admin secret.
+
+    OIDC support stays disabled until the server verifies the signature, issuer,
+    audience, expiry, and operator role. Decoding a browser-supplied JWT without
+    verifying its signature is never authentication.
+    """
     admin_token = request.headers.get("X-Admin-Token", "")
     manual_token = read_admin_token()
     if admin_token and manual_token and hmac.compare_digest(admin_token, manual_token):
         return True
-    """Authenticate via Authentik JWT or fallback token."""
     token = request.headers.get("Authorization", "").replace("Bearer ", "")
-    if not token:
-        return False
-    # Manual fallback token, supplied by an authenticated admin and never by page source.
-    if manual_token and hmac.compare_digest(token, manual_token):
-        return True
-    # Try Authentik JWT validation (accepts any valid Authentik-issued JWT)
-    try:
-        import jwt
-        # Just check it's a valid JWT from our Authentik instance (skip signature if no key)
-        payload = jwt.decode(token, options={"verify_signature": False})
-        issuer = payload.get("iss", "")
-        if "authentik" in issuer.lower() or "moveweight" in issuer.lower():
-            return True
-    except:
-        pass
-    return False
+    return bool(token and manual_token and hmac.compare_digest(token, manual_token))
 
 @app.route("/api/foia/admin/pending", methods=["GET"])
 def admin_pending():
@@ -481,41 +579,42 @@ def admin_pending():
 def admin_approve(req_id):
     if not check_admin():
         return jsonify({"ok": False, "error": "Unauthorized"}), 401
-    
-    db = load_db()
-    for r in db.get("requests", []):
-        if r["id"] == req_id:
-            if r["status"] != "pending_review":
+
+    with DB_WRITE_LOCK:
+        db = load_db()
+        for record in db.get("requests", []):
+            if record["id"] != req_id:
+                continue
+            if record["status"] != "pending_review":
                 return jsonify({"ok": False, "error": "Request is not pending review"}), 400
-            
-            # Build and send the actual FOIA email
-            email_body = build_foia_email(r)
-            subject = "Oklahoma Open Records Act Request — {}".format(req_id)
-            email_sent = send_email(r["recipient_email"], subject, email_body)
-            
-            if email_sent:
-                r["status"] = "sent"
-                r["updates"].append({
+
+            # Generate official ORR PDF form (city only accepts in-person/mail)
+            pdf_path = generate_orr_pdf(record)
+            pdf_url = "/foia/generated/" + pdf_path.name
+
+            record["status"] = "prepared_for_delivery"
+            record["pdf_url"] = pdf_url
+            record["updates"].append(
+                {
                     "date": datetime.now(timezone.utc).isoformat(),
-                    "status": "sent",
-                    "note": "APPROVED — Formal request emailed to {}.".format(r["recipient_email"]),
-                })
-            else:
-                r["status"] = "approved_pending_send"
-                r["updates"].append({
-                    "date": datetime.now(timezone.utc).isoformat(),
-                    "status": "approved_pending_send",
-                    "note": "APPROVED — Email queued for delivery to {}.".format(r["recipient_email"]),
-                })
-            
+                    "status": "prepared_for_delivery",
+                    "note": (
+                        "APPROVED: Official ORR form generated. Delivery has not yet been "
+                        "recorded. Print and deliver to {}."
+                    ).format(record.get("recipient_name", "City Clerk")),
+                }
+            )
             save_db(db)
-            
-            # Notify admin of approval
-            send_backup("FOIA APPROVED: " + req_id, 
-                "Request {} has been approved and sent to {}.".format(req_id, r["recipient_email"]))
-            
-            return jsonify({"ok": True, "status": r["status"], "request_id": req_id})
-    
+            print("FOIA PREPARED: {}: PDF generated at {}".format(req_id, pdf_url))
+            return jsonify(
+                {
+                    "ok": True,
+                    "status": record["status"],
+                    "request_id": req_id,
+                    "pdf_url": pdf_url,
+                }
+            )
+
     return jsonify({"ok": False, "error": "Request not found"}), 404
 
 @app.route("/api/foia/admin/reject/<req_id>", methods=["POST"])
@@ -524,20 +623,26 @@ def admin_reject(req_id):
         return jsonify({"ok": False, "error": "Unauthorized"}), 401
     
     data = request.json or {}
-    reason = data.get("reason", "Request does not meet submission guidelines.")
-    
-    db = load_db()
-    for r in db.get("requests", []):
-        if r["id"] == req_id:
-            r["status"] = "rejected"
-            r["updates"].append({
-                "date": datetime.now(timezone.utc).isoformat(),
-                "status": "rejected",
-                "note": "REJECTED — {}".format(reason),
-            })
+    reason = str(data.get("reason") or "Request does not meet submission guidelines.").strip()
+    if len(reason) > 500:
+        return jsonify({"ok": False, "error": "Rejection reason is limited to 500 characters"}), 400
+
+    with DB_WRITE_LOCK:
+        db = load_db()
+        for record in db.get("requests", []):
+            if record["id"] != req_id:
+                continue
+            record["status"] = "rejected"
+            record["updates"].append(
+                {
+                    "date": datetime.now(timezone.utc).isoformat(),
+                    "status": "rejected",
+                    "note": "REJECTED: {}".format(reason),
+                }
+            )
             save_db(db)
             return jsonify({"ok": True, "status": "rejected", "request_id": req_id})
-    
+
     return jsonify({"ok": False, "error": "Request not found"}), 404
 
 @app.route("/api/foia/admin/all", methods=["GET"])
@@ -547,6 +652,206 @@ def admin_all():
     
     db = load_db()
     return jsonify({"ok": True, "requests": db.get("requests", [])})
+
+
+@app.route("/api/foia/admin/mark-delivered/<req_id>", methods=["POST"])
+def admin_mark_delivered(req_id):
+    if not check_admin():
+        return jsonify({"ok": False, "error": "Unauthorized"}), 401
+
+    data = request.json or {}
+    delivery_note = (data.get("delivery_note") or "").strip()
+    if len(delivery_note) < 5 or len(delivery_note) > 500:
+        return jsonify({"ok": False, "error": "Record how and when the request was delivered."}), 400
+
+    with DB_WRITE_LOCK:
+        db = load_db()
+        for record in db.get("requests", []):
+            if record["id"] != req_id:
+                continue
+            if record["status"] != "prepared_for_delivery":
+                return jsonify({"ok": False, "error": "Request is not prepared for delivery"}), 400
+            now = datetime.now(timezone.utc).isoformat()
+            record["status"] = "sent"
+            record["delivered_at"] = now
+            record["updates"].append(
+                {"date": now, "status": "sent", "note": "Delivery recorded: " + delivery_note}
+            )
+            save_db(db)
+            return jsonify({"ok": True, "request_id": req_id, "status": "sent"})
+
+    return jsonify({"ok": False, "error": "Request not found"}), 404
+
+
+@app.route("/api/foia/admin/network", methods=["GET"])
+def admin_network():
+    if not check_admin():
+        return jsonify({"ok": False, "error": "Unauthorized"}), 401
+
+    try:
+        limit = min(100, max(1, int(request.args.get("limit", "100"))))
+    except ValueError:
+        return jsonify({"ok": False, "error": "Invalid limit"}), 400
+
+    snapshot = load_network_snapshot()
+    by_key = {
+        chapter.get("key"): chapter
+        for chapter in snapshot.get("chapters", [])
+        if isinstance(chapter, dict) and chapter.get("key")
+    }
+    chapters = []
+    for key, label, host in CHAPTERS:
+        collected = by_key.get(key, {})
+        chapters.append(
+            {
+                "key": key,
+                "label": label,
+                "host": host,
+                "health": collected.get("health", {"status": "unknown", "detail": "Not collected"}),
+                "automation": collected.get(
+                    "automation", {"status": "unknown", "detail": "Not collected"}
+                ),
+                "requests": collected.get("requests", {"total": 0, "pending": 0}),
+            }
+        )
+
+    db = load_db()
+    items = []
+    for record in db.get("requests", []):
+        items.append(
+            {
+                "id": "foia:miamiok:" + record["id"],
+                "source_id": record["id"],
+                "chapter": "miamiok",
+                "kind": "foia",
+                "status": record.get("status", "unknown"),
+                "created_at": record.get("created_at"),
+                "title": record.get("recipient_name") or record.get("agency") or "Records request",
+                "description": record.get("description", "")[:4000],
+                "pdf_url": record.get("pdf_url"),
+            }
+        )
+
+    emails_path = DATA_DIR / "emails.json"
+    try:
+        email_data = json.loads(emails_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        email_data = {"threads": {}}
+    for foia_id, messages in email_data.get("threads", {}).items():
+        if not isinstance(messages, list) or not messages:
+            continue
+        latest = messages[-1]
+        items.append(
+            {
+                "id": "inbox:miamiok:" + str(foia_id),
+                "source_id": str(foia_id),
+                "chapter": "miamiok",
+                "kind": "inbox",
+                "status": "received",
+                "created_at": latest.get("date") or latest.get("fetched_at"),
+                "title": latest.get("subject") or "Records correspondence",
+                "description": latest.get("body", "")[:4000],
+                "message_count": len(messages),
+            }
+        )
+
+    for draft_path in INVESTIGATION_DIR.glob("*-records-drafts.json"):
+        try:
+            draft_data = json.loads(draft_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        for draft in draft_data.get("drafts", []):
+            source_id = str(draft.get("id") or "")
+            if not source_id:
+                continue
+            items.append(
+                {
+                    "id": "submission:{}:{}".format(draft.get("chapter", "miamiok"), source_id),
+                    "source_id": source_id,
+                    "chapter": draft.get("chapter", "miamiok"),
+                    "kind": "submission",
+                    "status": draft.get("status", "draft"),
+                    "created_at": draft_data.get("updated_at"),
+                    "title": draft.get("title") or draft.get("target") or "Records-request draft",
+                    "description": draft.get("text", "")[:4000],
+                    "target": draft.get("target"),
+                }
+            )
+
+    items.sort(key=lambda item: item.get("created_at") or "", reverse=True)
+    items = items[:limit]
+    reviews = load_reviews([item["id"] for item in items])
+    for item in items:
+        item["review"] = reviews.get(item["id"], default_review())
+
+    return jsonify(
+        {
+            "ok": True,
+            "generated_at": snapshot.get("generated_at"),
+            "chapters": chapters,
+            "items": items,
+            "errors": snapshot.get("errors", []),
+        }
+    )
+
+
+@app.route("/api/foia/admin/review/<path:item_id>", methods=["POST"])
+def admin_review(item_id):
+    if not check_admin():
+        return jsonify({"ok": False, "error": "Unauthorized"}), 401
+
+    data = request.json or {}
+    status = (data.get("status") or "").strip()
+    notes = (data.get("notes") or "").strip()
+    expected_version = data.get("expected_version")
+    if status not in REVIEW_STATUSES:
+        return jsonify({"ok": False, "error": "Invalid review status"}), 400
+    if len(notes) > 4000:
+        return jsonify({"ok": False, "error": "Review notes are limited to 4,000 characters"}), 400
+    if not item_id.startswith(("foia:", "inbox:", "tip:", "submission:")):
+        return jsonify({"ok": False, "error": "Invalid item id"}), 400
+    try:
+        expected_version = int(expected_version)
+    except (TypeError, ValueError):
+        return jsonify({"ok": False, "error": "Expected version is required"}), 400
+
+    now = datetime.now(timezone.utc).isoformat()
+    try:
+        connection = triage_connection()
+        connection.execute("BEGIN IMMEDIATE")
+        current = connection.execute(
+            "SELECT version FROM reviews WHERE item_id = ?", (item_id,)
+        ).fetchone()
+        current_version = current["version"] if current else 0
+        if current_version != expected_version:
+            connection.rollback()
+            return jsonify({"ok": False, "error": "Review changed in another session"}), 409
+        new_version = current_version + 1
+        connection.execute(
+            """
+            INSERT INTO reviews (item_id, status, notes, version, updated_at)
+            VALUES (?, ?, ?, ?, ?)
+            ON CONFLICT(item_id) DO UPDATE SET
+                status = excluded.status,
+                notes = excluded.notes,
+                version = excluded.version,
+                updated_at = excluded.updated_at
+            """,
+            (item_id, status, notes, new_version, now),
+        )
+        connection.commit()
+    except sqlite3.OperationalError:
+        return jsonify({"ok": False, "error": "Review store is busy; retry shortly"}), 503
+    finally:
+        if "connection" in locals():
+            connection.close()
+
+    return jsonify(
+        {
+            "ok": True,
+            "review": {"status": status, "notes": notes, "version": new_version, "updated_at": now},
+        }
+    )
 
 @app.route("/api/foia/admin/inbox", methods=["GET"])
 def admin_inbox():
@@ -606,6 +911,25 @@ def admin_ai_edit():
         return jsonify({"ok": False, "error": edited or "AI editor returned no text."}), 502
 
     return jsonify({"ok": True, "edited": edited})
+
+
+@app.route("/api/foia/pdf/<req_id>", methods=["GET"])
+def download_pdf(req_id):
+    """Download the generated ORR PDF for a FOIA request."""
+    with DB_WRITE_LOCK:
+        db = load_db()
+        for record in db.get("requests", []):
+            if record["id"] != req_id:
+                continue
+            pdf_url = record.get("pdf_url", "")
+            if pdf_url:
+                return jsonify({"ok": True, "pdf_url": pdf_url, "request_id": req_id})
+            pdf_path = generate_orr_pdf(record)
+            pdf_url = "/foia/generated/" + pdf_path.name
+            record["pdf_url"] = pdf_url
+            save_db(db)
+            return jsonify({"ok": True, "pdf_url": pdf_url, "request_id": req_id})
+    return jsonify({"ok": False, "error": "Request not found or not yet approved"}), 404
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5060, debug=False)

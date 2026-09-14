@@ -1,7 +1,7 @@
 # ExposeGovernments
 
-A project of the [Move Weight Foundation](https://foundation.moveweight.com), an
-Oklahoma non-profit corporation with 501(c)(3) status pending.
+A project of the [Move Weight Foundation](https://foundation.moveweight.com), a
+501(c)(3).
 
 Fourteen city chapters across Oklahoma, Texas and Mississippi. Each one indexes
 what its local government actually did — the meeting, the agenda packet, the
@@ -66,6 +66,25 @@ Commits titled "Rebuild meetings index" are automated. Archives refresh on
 timers and each site publishes its own staleness — Miami's is at
 [/automation-status.html](https://miami.exposeoklahoma.com/automation-status.html),
 including the jobs that failed.
+
+The private network desk is served at `/admin`. It reads one bounded status
+snapshot for all fourteen chapters and the Miami records-request and inbox
+queues. The node collector refreshes that snapshot every fifteen minutes; a
+dashboard page never starts SSH, `pct`, crawling, or a deployment.
+
+Operational source mappings:
+
+- `ops/live/foia-api.py` -> CT 170 `/opt/foia-api.py`
+- `ops/node/expose-network-collector.py` -> entry node
+  `/opt/expose-network-collector.py`
+- `ops/node/sync-chapters.py` -> entry node `/opt/sync-chapters.py`
+- `ops/node/provision.py` -> entry node
+  `/opt/expose-template/shared/deploy/provision.py`
+
+The approved infrastructure entry point is `root@192.168.0.6` (`Slimmm`). CT
+170 is local to that node. CTs 175 and 176 currently live on cluster node
+`slimmer`; node jobs relay their fixed `pct` commands through the cluster SSH
+link. Do not connect directly to a guest address.
 
 ## How we handle the records
 

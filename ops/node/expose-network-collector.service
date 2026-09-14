@@ -1,0 +1,11 @@
+[Unit]
+Description=Collect Expose network dashboard status
+After=network-online.target pve-guests.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/flock -n /run/expose-network-collector.lock /usr/bin/python3 /opt/expose-network-collector.py
+TimeoutStartSec=120
+Nice=10
+IOSchedulingClass=idle
