@@ -33,6 +33,7 @@ import argparse
 import io
 import json
 import os
+import shlex
 import subprocess
 import sys
 import tarfile
@@ -49,6 +50,8 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 CHAPTERS = ROOT / "chapters"
 NODE = os.environ.get("EXPOSE_NODE", "root@192.168.0.6")
 ORIGIN_IP = "173.207.168.55"
+VMID_NODES = {"175": "root@slimmer", "176": "root@slimmer"}
+SSH_OPTIONS = ["-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=accept-new"]
 
 STATE_HUB = {
     "oklahoma": ("exposeoklahoma.com", 170),
@@ -111,13 +114,37 @@ def ssh(cmd, **kw):
     # surfaces as "can't lock file '/run/lock/lxc/pve-config-175.lock' - got
     # timeout" and exit 4. It is transient by definition, so it is retried
     # rather than failing a whole weekly run.
+    parts = shlex.split(cmd) if isinstance(cmd, str) else []
+    remote_pve = None
+    if len(parts) >= 3 and parts[0] == "pct" and parts[1] in {
+            "exec", "push", "pull", "status", "start", "stop", "reboot"}:
+        remote_pve = VMID_NODES.get(parts[2])
+
     attempts = 4 if isinstance(cmd, str) and " pct " in f" {cmd} " else 1
     last = None
     for i in range(attempts):
         try:
+            if remote_pve:
+                remote_cmd = cmd
+                if parts[1] == "push" and len(parts) >= 5:
+                    source = parts[3]
+                    if NODE == "local":
+                        run(["scp", *SSH_OPTIONS, source, remote_pve + ":" + source])
+                    else:
+                        stage = "scp {} {}".format(
+                            shlex.quote(source), shlex.quote(remote_pve + ":" + source)
+                        )
+                        run(["ssh", *SSH_OPTIONS, NODE, stage])
+                    remote_cmd = cmd + "; rm -f " + shlex.quote(source)
+                if NODE == "local":
+                    return run(["ssh", *SSH_OPTIONS, remote_pve, remote_cmd], **kw)
+                nested = "ssh {} {} {}".format(
+                    " ".join(SSH_OPTIONS), shlex.quote(remote_pve), shlex.quote(remote_cmd)
+                )
+                return run(["ssh", *SSH_OPTIONS, NODE, nested], **kw)
             if NODE == "local":
                 return run(cmd, **kw)
-            return run(["ssh", "-o", "BatchMode=yes", NODE, cmd], **kw)
+            return run(["ssh", *SSH_OPTIONS, NODE, cmd], **kw)
         except SystemExit as e:
             last = e
             if i == attempts - 1 or "lock" not in str(e).lower():
