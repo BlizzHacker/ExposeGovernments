@@ -30,6 +30,7 @@ import argparse
 import json
 import pathlib
 import re
+import shlex
 import subprocess
 import sys
 import time
@@ -39,6 +40,10 @@ from datetime import datetime, timezone
 
 MIAMI_CT = "170"
 CHAPTER_CTS = {"170": "Oklahoma", "175": "Texas", "176": "Mississippi"}
+REMOTE_CT_NODES = {
+    "175": "root@192.168.0.9",
+    "176": "root@192.168.0.9",
+}
 MIAMI_HOST = "https://miami.exposeoklahoma.com"
 ASSETS = "/var/www/exposemiamiok/html/assets"
 
@@ -81,9 +86,21 @@ def ok(check, detail=""):
     print(f"  ok    {check}{(': ' + detail) if detail else ''}")
 
 
+def pct_argv(ct, argv):
+    """Build a local or remote pct command for the container's current node."""
+    node = REMOTE_CT_NODES.get(ct)
+    if node:
+        remote_cmd = shlex.join(["pct", "exec", ct, "--", *argv])
+        return [
+            "ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=5",
+            node, remote_cmd,
+        ]
+    return ["pct", "exec", ct, "--", *argv]
+
+
 def pct(ct, script):
     """Run python inside a container and return stdout."""
-    r = subprocess.run(["pct", "exec", ct, "--", "python3", "-c", script],
+    r = subprocess.run(pct_argv(ct, ["python3", "-c", script]),
                        capture_output=True, text=True, timeout=300)
     if r.returncode != 0:
         raise RuntimeError(f"pct exec {ct} failed: {r.stderr.strip()[:300]}")
@@ -98,7 +115,7 @@ def pct_sh(ct, cmd, timeout=600):
     container.
     """
     argv = (["bash", "-lc", cmd] if ct == "node"
-            else ["pct", "exec", ct, "--", "bash", "-lc", cmd])
+            else pct_argv(ct, ["bash", "-lc", cmd]))
     r = subprocess.run(argv, capture_output=True, text=True, timeout=timeout)
     return r.returncode, r.stdout, r.stderr
 

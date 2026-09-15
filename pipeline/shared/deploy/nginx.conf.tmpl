@@ -31,11 +31,20 @@ server {
     location /documents/files/   { expires 30d; add_header Cache-Control "public"; }
     location /documents/letters/ { expires 30d; add_header Cache-Control "public"; }
 
-    # The search page fetches this; keep the rest of /data/ closed. An exact
+    # The search and automation pages fetch these; keep the rest of /data/
+    # closed. An exact
     # location beats the prefix block, so order does not matter here — but the
     # prefix block MUST exist or a chapter leaks its working data directory.
     location = /data/site-search-index.json {
         expires 1h;
+        add_header Cache-Control "public";
+    }
+    location = /data/automation.json {
+        expires 5m;
+        add_header Cache-Control "public";
+    }
+    location = /data/link-check.json {
+        expires 5m;
         add_header Cache-Control "public";
     }
     location /data/ { return 404; }
