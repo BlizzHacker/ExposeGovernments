@@ -515,7 +515,7 @@ def get_stats():
     submitted = sum(
         1
         for r in db.get("requests", [])
-        if r["status"] in ("submitted", "sent", "queued", "prepared_for_delivery")
+        if r["status"] in ("submitted", "sent", "partial_response", "queued", "prepared_for_delivery")
     )
     fulfilled = sum(1 for r in db.get("requests", []) if r["status"] == "fulfilled")
     denied = sum(1 for r in db.get("requests", []) if r["status"] == "denied")
