@@ -24,7 +24,7 @@ def main():
         raise SystemExit("records status homepage markers missing")
     if updated != html:
         OUT.write_text(updated, encoding="utf-8")
-    print("records status current: 28 Sep 2026 partial Animal Control response")
+    print("records status current: 26 Oct 2026 six-request review")
 
 if __name__ == "__main__":
     main()
