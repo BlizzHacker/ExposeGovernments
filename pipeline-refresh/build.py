@@ -177,6 +177,10 @@ XML_HEAD = ('<?xml version="1.0" encoding="UTF-8"?>' + NL
 
 def build(key, out_dir=None, quiet=False, force=False):
     cfg = load_chapter(key)
+    _cf = Path("/opt/expose-template/generated/feeds") / f"city-feed-{key}.html"
+    _cr = Path("/opt/expose-template/generated/feeds") / f"city-records-{key}.html"
+    cfg["network_feed_html"] = _cf.read_text(encoding="utf-8") if _cf.exists() else ""
+    cfg["state_records_html"] = _cr.read_text(encoding="utf-8") if _cr.exists() else ""
 
     # Some chapters predate this template and are maintained by their own
     # generators. Building one from shared fragments alone would emit a nearly

@@ -344,7 +344,7 @@ def directory(chapters):
 {chr(10).join(blocks)}
     <p class="section-sub" style="margin-top:28px;font-size:.85rem;opacity:.7;">Generated {date.today().isoformat()}.</p>
   </div>
-</section>'''
+</section>''' + ((ROOT / "generated" / "feeds" / "foundation-network-block.html").read_text(encoding="utf-8") if (ROOT / "generated" / "feeds" / "foundation-network-block.html").exists() else "")
 
 
 def volunteer_section(t):

@@ -345,6 +345,10 @@ def derive(cfg):
     cfg["links_nav_html"] = links_nav_html(cfg)
     cfg["oversight_html"] = oversight_html(cfg)
     cfg["news_html"] = news_html(cfg)
+    _cf = ROOT / "generated" / "feeds" / f"city-feed-{cfg['key']}.html"
+    _cr = ROOT / "generated" / "feeds" / f"city-records-{cfg['key']}.html"
+    cfg["network_feed_html"] = _cf.read_text(encoding="utf-8") if _cf.exists() else ""
+    cfg["state_records_html"] = _cr.read_text(encoding="utf-8") if _cr.exists() else ""
     cfg["link_count"] = link_count(cfg)
     portal = cfg.get("portal", {})
     cfg["portal_url"] = portal.get("portal_url", "")

@@ -26,9 +26,7 @@ def inject_block(path, start, end, block, anchor="</main>"):
             flags=re.S,
         )
     elif anchor in html:
-        updated = html.replace(anchor, "
-" + block + "
-" + anchor, 1)
+        updated = html.replace(anchor, "\n" + block + "\n" + anchor, 1)
     else:
         return
     if updated != html:

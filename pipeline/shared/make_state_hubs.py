@@ -131,6 +131,8 @@ description: The Move Weight Foundation's {state} chapters, the expansion queue,
   </div>
 </section>
 
+{network_sections}
+
 <section id="queue">
   <div class="wrap">
     <div class="section-head">
@@ -282,9 +284,12 @@ def main():
         src_dir = (ROOT / cfg["source_dir"]).resolve() if cfg.get("source_dir")             else ROOT.parent / f"expose{cfg['key']}"
         out = src_dir / "src" / "pages" / "01-state.html"
         out.parent.mkdir(parents=True, exist_ok=True)
+        nf_path = ROOT / "generated" / "feeds" / f"state-hub-{key}.html"
+        net_sec = nf_path.read_text(encoding="utf-8") if nf_path.exists() else ""
         out.write_text(PAGE.format(
             site_name=cfg["site_name"], state=cfg["state"], why=t["why"],
             map_svg=svg, chapter_cards=chapter_cards, queue_cards=queue_cards,
+            network_sections=net_sec,
         ), encoding="utf-8")
         manifest[key] = cfg["key"]
         print(f"  {cfg['state']:14s} hub in {cfg['key']:12s} "

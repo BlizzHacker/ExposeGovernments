@@ -261,7 +261,8 @@ def main():
     print("\n== hubs")
     # Maps first: both hubs embed the SVG, so regenerating them in the other
     # order would publish last week's pin set for a week.
-    for name, argv in (("Maps", ["shared/make_maps.py"]),
+    for name, argv in (("Network feeds", ["shared/make_network_feeds.py"]),
+                       ("Maps", ["shared/make_maps.py"]),
                        # Emitted every week and deployed to Miami's standardiser,
                        # which is the only chapter that cannot render the bar
                        # itself. Without this its copy freezes and drifts - which
