@@ -442,20 +442,34 @@ Track: https://exposemiamiok.com/foia/request/{id}
 @app.route("/api/foia/requests", methods=["GET"])
 def list_requests():
     db = load_db()
-    # Return public-safe data (no emails)
+    # Policy: publish received public records (fulfilled, partial_response) plus overdue sent
+    # requests (published to draw completion). Unfiled pending_review/queued/rejected stay in Admin.
     public = []
+    now_dt = datetime.now(timezone.utc)
     for r in db.get("requests", []):
+        if r.get("status") not in ("fulfilled", "partial_response", "sent"):
+            continue
+        days_open = None
+        try:
+            dt = datetime.fromisoformat(str(r.get("created_at", "")).replace("Z", "+00:00"))
+            days_open = max(0, (now_dt - dt).days)
+        except Exception:
+            pass
+        updates = r.get("updates", [])
         public.append({
             "id": r["id"],
             "type": r.get("type", "standard"),
-            "description": r["description"][:200],
-            "agency": r.get("agency", "city_clerk"),
+            "description": r["description"][:400],
+            "agency": r.get("recipient_name") or r.get("agency", "city_clerk"),
             "status": r["status"],
             "created_at": r["created_at"],
+            "days_open": days_open,
             "estimated_cost": r.get("estimated_cost", "Unknown"),
             "bounty_total": r.get("bounty_total", 0),
             "bounty_count": r.get("bounty_count", 0),
-            "updates_count": len(r.get("updates", [])),
+            "updates_count": len(updates),
+            "latest_update": updates[-1] if updates else None,
+            "response_files": r.get("response_files", []),
         })
     return jsonify({"ok": True, "requests": public, "total": len(public)})
 
@@ -784,12 +798,69 @@ def admin_network():
     for item in items:
         item["review"] = reviews.get(item["id"], default_review())
 
+    for idx, umsg in enumerate(email_data.get("unmatched", [])):
+        if not isinstance(umsg, dict):
+            continue
+        subj = str(umsg.get("subject") or "")
+        # Hide historical July probe/bounce noise from top-level triage while keeping real people & tips
+        if any(skip in subj.lower() for skip in ("timing ", "post-tune", "reliability ", "probe-", "fullaudit", "audit-1785", "verify-run", "pdfcheck", "mail delivery failed", "delay in message", "receive test", "test receiving", "post-maintenance", "deploy-test", "submission pipeline test", "vps-inbound", "inbound delivery probe", "undelivered mail")):
+            continue
+        uid = str(umsg.get("uid") or idx)
+        items.append(
+            {
+                "id": "mail:network:" + re.sub(r"[^A-Za-z0-9_.:-]", "_", uid)[:80],
+                "source_id": uid,
+                "chapter": "mississippi" if "mississippi" in (subj + str(umsg.get("to",""))).lower() else ("sanangelo" if "sanangelo" in str(umsg.get("from","")).lower() else "miamiok"),
+                "kind": "tip" if "[tip " in subj.lower() else "inbox",
+                "status": "received",
+                "created_at": umsg.get("date") or umsg.get("fetched_at"),
+                "title": subj or "Mailbox correspondence",
+                "from": umsg.get("from", ""),
+                "to": umsg.get("to", ""),
+                "folder": umsg.get("folder", "INBOX"),
+                "description": (umsg.get("body") or "")[:4000],
+                "message_count": 1,
+            }
+        )
+
+    items.sort(key=lambda item: item.get("created_at") or "", reverse=True)
+    items = items[:limit]
+    reviews = load_reviews([item["id"] for item in items])
+    for item in items:
+        item["review"] = reviews.get(item["id"], default_review())
+
+    net_records = {}
+    nf_path = DATA_DIR / "network-foias.json"
+    if nf_path.exists():
+        try:
+            net_records = json.loads(nf_path.read_text(encoding="utf-8"))
+        except Exception:
+            net_records = {}
+
+    q_out = ""
+    try:
+        q_out = subprocess.check_output(["mailq"], text=True, timeout=5).strip().splitlines()[-1]
+    except Exception:
+        q_out = "unknown"
+
+    mailbox_health = {
+        "imap_last_checked": email_data.get("last_checked_at"),
+        "thread_count": len(email_data.get("threads", {})),
+        "unmatched_count": len(email_data.get("unmatched", [])),
+        "postfix_queue": q_out,
+        "smtp_relay": "192.168.0.161:587 (CT 160)",
+    }
+
     return jsonify(
         {
             "ok": True,
             "generated_at": snapshot.get("generated_at"),
             "chapters": chapters,
             "items": items,
+            "requests": db.get("requests", []),
+            "emails": email_data,
+            "network_records": net_records,
+            "mailbox_health": mailbox_health,
             "errors": snapshot.get("errors", []),
         }
     )
@@ -853,6 +924,53 @@ def admin_review(item_id):
         }
     )
 
+
+@app.route("/api/foia/admin/update-status/<req_id>", methods=["POST"])
+def admin_update_status(req_id):
+    if not check_admin():
+        return jsonify({"ok": False, "error": "Unauthorized"}), 401
+    data = request.json or {}
+    new_status = str(data.get("status") or "").strip()
+    note = str(data.get("note") or "").strip()
+    cost = data.get("estimated_cost")
+    allowed = {"pending_review", "queued", "prepared_for_delivery", "sent", "partial_response", "fulfilled", "denied", "rejected"}
+    if new_status not in allowed:
+        return jsonify({"ok": False, "error": "Invalid status"}), 400
+    if len(note) > 2000:
+        return jsonify({"ok": False, "error": "Note too long"}), 400
+    with DB_WRITE_LOCK:
+        db = load_db()
+        for record in db.get("requests", []):
+            if record["id"] != req_id:
+                continue
+            record["status"] = new_status
+            if cost is not None and str(cost).strip():
+                record["estimated_cost"] = str(cost).strip()[:200]
+            if note:
+                record.setdefault("updates", []).append({
+                    "date": datetime.now(timezone.utc).isoformat(),
+                    "status": new_status,
+                    "note": note,
+                })
+            save_db(db)
+            try:
+                subprocess.run(["/bin/bash", "/opt/sync-foia-queues.sh"], timeout=15, check=False)
+            except Exception:
+                pass
+            return jsonify({"ok": True, "request": record})
+    return jsonify({"ok": False, "error": "Request not found"}), 404
+
+
+@app.route("/api/foia/admin/inbox/sync", methods=["POST"])
+def admin_inbox_sync():
+    if not check_admin():
+        return jsonify({"ok": False, "error": "Unauthorized"}), 401
+    try:
+        res = subprocess.run(["python3", "/opt/foia-inbox.py"], capture_output=True, text=True, timeout=60)
+        return jsonify({"ok": res.returncode == 0, "output": (res.stdout or res.stderr or "").strip()})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
 @app.route("/api/foia/admin/inbox", methods=["GET"])
 def admin_inbox():
     if not check_admin():
@@ -877,7 +995,10 @@ def admin_reply():
     if not to or not body:
         return jsonify({"ok": False, "error": "Missing to/subject/body"}), 400
     import subprocess
-    result = subprocess.run(["python3", "/opt/foia-inbox.py", "reply", to, subject, body], capture_output=True, text=True, timeout=30)
+    req_id = str(data.get("request_id") or "").strip()
+    result = subprocess.run(["python3", "/opt/foia-inbox.py", "reply", to, subject, body, req_id], capture_output=True, text=True, timeout=60)
+    if result.returncode != 0:
+        return jsonify({"ok": False, "error": (result.stderr or result.stdout or "Send failed").strip()}), 502
     return jsonify({"ok": True, "output": result.stdout.strip()})
 
 @app.route("/api/foia/admin/ai-edit", methods=["POST"])

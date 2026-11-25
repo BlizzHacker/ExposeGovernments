@@ -4,105 +4,139 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>Expose Network Desk</title>
-  <link rel="stylesheet" href="/assets/network-admin.css">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "GovernmentOrganization",
-  "name": "ExposeMiamiOK",
-  "description": "Miami, Oklahoma government transparency and community resources. Public records, city council meeting transcripts, crime watch, Ottawa County court records, and citizen tools.",
-  "url": "https://exposemiamiok.com",
-  "areaServed": {
-    "@type": "City",
-    "name": "Miami",
-    "containedInPlace": {
-      "@type": "County",
-      "name": "Ottawa County"
-    },
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Miami",
-      "addressRegion": "OK",
-      "postalCode": "74354",
-      "addressCountry": "US"
-    }
-  },
-  "knowsAbout": [
-    "Miami Oklahoma government",
-    "Ottawa County public records",
-    "City council meetings",
-    "Crime reports Miami OK",
-    "Court records Ottawa County",
-    "Property tax Miami Oklahoma",
-    "Miami OK obituaries",
-    "Oklahoma Open Records Act"
-  ],
-  "sameAs": [
-    "https://www.facebook.com/profile.php?id=61590391534875",
-    "https://www.youtube.com/@exposemiamiok"
-  ]
-}
-</script>
+  <title>ExposeGovernments Command Center</title>
+  <link rel="stylesheet" href="/assets/network-admin.css?v=20261125">
 </head>
 <body>
-  <section class="login" id="login">
-    <form class="login-card" id="login-form">
-      <p class="kicker">Move Weight Foundation</p>
-      <h1>Expose Network Desk</h1>
-      <p>Private review for all chapters, records requests, replies, and reporting leads.</p>
-      <label for="token">Server-issued admin token</label>
-      <input id="token" type="password" autocomplete="current-password" required>
-      <button type="submit">Open desk</button>
-      <p class="error" id="login-error" role="alert"></p>
-    </form>
+  <section id="login-view" class="gate">
+    <div class="gate-card">
+      <p class="kicker">Move Weight Foundation &middot; Private Operator Desk</p>
+      <h1>ExposeGovernments Command Center</h1>
+      <p class="muted">Manage all 14 city chapters, 3 state hubs, public records requests (ORA / TPIA / MPRA / FOIA), unified mailboxes, replies, and citizen tips.</p>
+      <label class="field">
+        <span>Admin token</span>
+        <input id="token-input" type="password" autocomplete="current-password" placeholder="Paste admin token">
+      </label>
+      <button id="login-btn" class="btn btn-primary" type="button">Unlock Command Center</button>
+      <p id="login-error" class="error hidden" role="alert"></p>
+    </div>
   </section>
 
-  <div class="app hidden" id="app">
-    <header>
+  <div id="app" class="app hidden">
+    <header class="topbar">
       <div>
         <p class="kicker">Move Weight Foundation</p>
-        <h1>Expose Network Desk</h1>
+        <h1>ExposeGovernments Command Center</h1>
+        <p id="snapshot-time" class="muted">Loading network snapshot&hellip;</p>
       </div>
-      <div class="header-actions">
-        <span id="snapshot-time">Snapshot pending</span>
-        <button class="secondary" id="refresh" type="button">Refresh</button>
-        <button class="secondary" id="logout" type="button">Lock</button>
+      <div class="topbar-actions">
+        <button id="sync-inbox-btn" class="btn" type="button">Sync Mailboxes</button>
+        <button id="compose-btn" class="btn btn-primary" type="button">Compose / Reply</button>
+        <button id="refresh-btn" class="btn" type="button">Refresh</button>
+        <button id="logout-btn" class="btn btn-ghost" type="button">Lock</button>
       </div>
     </header>
 
+    <div id="error-banner" class="banner error hidden" role="alert"></div>
+    <div id="toast-banner" class="banner ok hidden" role="status"></div>
+
+    <section class="kpis" id="kpi-bar"></section>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="overview" type="button">14 Chapters &amp; Hubs</button>
+      <button class="tab" data-tab="records" type="button">Records Requests (<span id="cnt-records">0</span>)</button>
+      <button class="tab" data-tab="mailboxes" type="button">Mailboxes &amp; Replies (<span id="cnt-mail">0</span>)</button>
+      <button class="tab" data-tab="triage" type="button">Editorial Triage (<span id="cnt-triage">0</span>)</button>
+    </nav>
+
     <main>
-      <div class="error-banner hidden" id="error-banner" role="alert"></div>
-
-      <section aria-labelledby="summary-title">
-        <div class="section-title">
-          <div><p class="kicker">At a glance</p><h2 id="summary-title">Network workload</h2></div>
+      <section id="panel-overview" class="panel">
+        <div class="panel-head">
+          <h2>State Hubs &amp; Mailbox Health</h2>
+          <div id="hub-links" class="pill-row"></div>
         </div>
-        <div class="metrics" id="metrics" aria-live="polite"></div>
+        <div id="mailbox-health" class="health-strip"></div>
+        <h2 style="margin-top:1.4rem">All 14 City Chapters</h2>
+        <div id="chapters-grid" class="chapters-grid"></div>
       </section>
 
-      <section aria-labelledby="chapters-title">
-        <div class="section-title">
-          <div><p class="kicker">Fourteen chapters</p><h2 id="chapters-title">Site and automation health</h2></div>
-        </div>
-        <div class="chapter-grid" id="chapters"></div>
-      </section>
-
-      <section aria-labelledby="queue-title">
-        <div class="section-title queue-heading">
-          <div><p class="kicker">Editorial queue</p><h2 id="queue-title">Submissions and correspondence</h2></div>
-          <div class="filters">
-            <label>Chapter<select id="chapter-filter"><option value="">All chapters</option></select></label>
-            <label>Type<select id="kind-filter"><option value="">All types</option><option value="foia">Records requests</option><option value="inbox">Inbox</option><option value="tip">Tips</option><option value="submission">Submissions</option></select></label>
-            <label>Review<select id="review-filter"><option value="">All review states</option><option value="new">New</option><option value="in_review">In review</option><option value="needs_records">Needs records</option><option value="ready">Ready</option><option value="closed">Closed</option></select></label>
+      <section id="panel-records" class="panel hidden">
+        <div class="panel-head">
+          <h2>Public Records Control (ORA / TPIA / MPRA / FOIA)</h2>
+          <div class="controls">
+            <select id="rec-status-filter">
+              <option value="">All statuses</option>
+              <option value="pending_review">Pending review (Private)</option>
+              <option value="queued">Queued / Prepared (Private)</option>
+              <option value="sent">Sent / Overdue (Public Delay Tracker)</option>
+              <option value="partial_response">Partial response (Public)</option>
+              <option value="fulfilled">Fulfilled / Received (Public)</option>
+              <option value="rejected">Rejected (Private)</option>
+            </select>
+            <input id="rec-search" type="search" placeholder="Search ID, agency, topic&hellip;">
           </div>
         </div>
-        <p class="empty hidden" id="queue-empty">No items match these filters.</p>
-        <div class="queue" id="queue"></div>
+        <div id="records-list" class="stack"></div>
       </section>
 
+      <section id="panel-mailboxes" class="panel hidden">
+        <div class="panel-head">
+          <h2>Unified Mailboxes (foia@moveweight.com &middot; State &amp; Chapter Aliases)</h2>
+          <div class="controls">
+            <select id="mail-filter">
+              <option value="">All correspondence</option>
+              <option value="unmatched">Inbox &amp; Volunteers / Tips</option>
+              <option value="threads">Matched Records Threads</option>
+            </select>
+            <input id="mail-search" type="search" placeholder="Filter sender, subject, body&hellip;">
+          </div>
+        </div>
+        <div id="mail-list" class="stack"></div>
+      </section>
+
+      <section id="panel-triage" class="panel hidden">
+        <div class="panel-head">
+          <h2>Editorial Triage Queue</h2>
+          <div class="controls">
+            <select id="kind-filter">
+              <option value="">All types</option>
+              <option value="foia">Records requests</option>
+              <option value="inbox">Inbox</option>
+              <option value="tip">Tips</option>
+              <option value="submission">Submissions</option>
+            </select>
+            <select id="review-filter">
+              <option value="">All review states</option>
+              <option value="new">New</option>
+              <option value="in_review">In review</option>
+              <option value="needs_records">Needs records</option>
+              <option value="ready">Ready</option>
+              <option value="closed">Closed</option>
+            </select>
+          </div>
+        </div>
+        <div id="triage-list" class="stack"></div>
+      </section>
     </main>
   </div>
-  <script src="/assets/network-admin.js" defer></script>
+
+  <div id="compose-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="panel-head">
+        <h2>Send Email via foia@moveweight.com</h2>
+        <button id="compose-close" class="btn btn-ghost" type="button">Close</button>
+      </div>
+      <label class="field"><span>To</span><input id="cmp-to" type="email" placeholder="recipient@example.com"></label>
+      <label class="field"><span>Subject</span><input id="cmp-subj" type="text" placeholder="Re: ..."></label>
+      <label class="field"><span>Link to Request ID (optional)</span><input id="cmp-reqid" type="text" placeholder="e.g. def17eeb2ea59c2f"></label>
+      <label class="field"><span>Message</span><textarea id="cmp-body" rows="10" placeholder="Write a professional reply..."></textarea></label>
+      <div class="topbar-actions">
+        <button id="cmp-send" class="btn btn-primary" type="button">Send Email Now</button>
+        <span id="cmp-status" class="muted"></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/network-admin.js?v=20261125" defer></script>
 </body>
 </html>
