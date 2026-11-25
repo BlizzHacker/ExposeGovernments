@@ -37,7 +37,7 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
 # answer 403 to anything that is not a full browser). A 403 from a host we have
 # already confirmed by hand is not a broken link, so it is reported as WARN and
 # does not fail the run.
-SOFT = {403, 405, 429, 503}
+SOFT = {402, 403, 405, 429, 503}  # 402: Gannett/USA Today papers return 402 to non-browser clients
 
 # Hosts that answer a bot with an error regardless of how the request is dressed.
 # Facebook returns 400 to anything without a session. The link is still the one
