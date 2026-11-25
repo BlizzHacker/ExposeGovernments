@@ -14,7 +14,7 @@ try:
     pending = []
     rejected = []
     for req in data.get('requests', []):
-        if req['status'] in ('sent', 'partial_response'):
+        if req['status'] in ('sent', 'partial_response', 'fulfilled'):
             sent.append(req)
         elif req['status'] == 'pending_review':
             pending.append(req)
